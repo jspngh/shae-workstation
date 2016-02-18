@@ -13,11 +13,3 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_helloWorldButton_clicked()
-{
-    count ++;
-    if(count%2 == 1)
-        ui->helloWorldLabel->setText("Hello World!");
-    else
-        ui->helloWorldLabel->setText("Bye World!");
-}
