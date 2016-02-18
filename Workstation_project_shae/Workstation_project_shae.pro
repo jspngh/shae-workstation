@@ -11,6 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Workstation_project_shae
 TEMPLATE = app
 
+release: DESTDIR = build/release
+debug: DESTDIR = build/debug
+
 SOURCES += main.cpp
 
 RESOURCES = application.qrc
