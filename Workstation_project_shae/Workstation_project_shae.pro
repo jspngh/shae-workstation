@@ -11,12 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Workstation_project_shae
 TEMPLATE = app
 
-
-SOURCES += main.cpp\
-        mainwindow.cpp
-
-HEADERS  += mainwindow.h
-
-FORMS    += mainwindow.ui
+SOURCES += main.cpp
 
 RESOURCES = application.qrc
+
+include(ui/ui.pri)
+
