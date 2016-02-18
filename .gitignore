@@ -1,4 +1,4 @@
-# add files to ignore
-workstation/Workstation_project_shae/Workstation_project_shae.pro.user*
-workstation/build-*
-*.user
+
+# ignore builds from Qt Creator
+build-Workstation_project_shae*/
+
