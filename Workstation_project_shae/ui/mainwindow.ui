@@ -189,7 +189,7 @@
      <x>0</x>
      <y>0</y>
      <width>936</width>
-     <height>26</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOur_app">
@@ -197,6 +197,8 @@
      <string>Me&amp;nu</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="actionConnect"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuOur_app"/>
   </widget>
@@ -209,6 +211,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -1,7 +1,9 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-  <qresource>
-    <file>styles/main.qss</file>
-  </qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>styles/main.qss</file>
+        <file>ui/map.png</file>
+        <file>ui/gradient.png</file>
+        <file>ui/battery_318-665.jpg</file>
+        <file>ui/wireless-xxl.png</file>
+    </qresource>
 </RCC>
-
