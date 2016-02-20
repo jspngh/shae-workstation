@@ -6,190 +6,185 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>936</width>
-    <height>631</height>
+    <width>1072</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Configuration window</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="startSearchButton">
-    <property name="geometry">
-     <rect>
-      <x>770</x>
-      <y>490</y>
-      <width>121</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start search</string>
-    </property>
-   </widget>
-   <widget class="QTableWidget" name="dronesTable">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>320</y>
-      <width>381</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <property name="gridStyle">
-     <enum>Qt::NoPen</enum>
-    </property>
-    <property name="sortingEnabled">
-     <bool>false</bool>
-    </property>
-    <property name="rowCount">
-     <number>3</number>
-    </property>
-    <attribute name="horizontalHeaderCascadingSectionResizes">
-     <bool>false</bool>
-    </attribute>
-    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-     <bool>false</bool>
-    </attribute>
-    <attribute name="horizontalHeaderStretchLastSection">
-     <bool>true</bool>
-    </attribute>
-    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-     <bool>false</bool>
-    </attribute>
-    <row/>
-    <row/>
-    <row/>
-    <column>
-     <property name="text">
-      <string>Drone status</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Sensors</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Max. flight time</string>
-     </property>
-    </column>
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <property name="text">
-      <string/>
-     </property>
+     <layout class="QFormLayout" name="searchParameters">
+      <property name="verticalSpacing">
+       <number>25</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="nrOfDronesLabel">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Number of drones:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="nrOfDronesSpinBox">
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="precisionLabel">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Precision:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSlider" name="precisionSlider">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="sarchStrategyLabel">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Search strategy:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="searchStrategyComboBox"/>
+      </item>
+     </layout>
     </item>
     <item row="0" column="1">
-     <property name="text">
-      <string>Camera + Thermal sensor</string>
-     </property>
+     <layout class="QVBoxLayout" name="searchArea">
+      <item>
+       <widget class="QLabel" name="searchAreaLabel">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Select the search area:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGraphicsView" name="searchAreaMap"/>
+      </item>
+     </layout>
     </item>
-    <item row="0" column="2">
-     <property name="text">
-      <string>90 min.</string>
-     </property>
-    </item>
-    <item row="1" column="1">
-     <property name="text">
-      <string>Camera</string>
-     </property>
-    </item>
-    <item row="1" column="2">
-     <property name="text">
-      <string>15 min.</string>
-     </property>
-    </item>
-    <item row="2" column="1">
-     <property name="text">
-      <string>-</string>
-     </property>
-    </item>
-    <item row="2" column="2">
-     <property name="text">
-      <string>20 min.</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>50</y>
-      <width>441</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="searchArea">
-     <item>
-      <widget class="QLabel" name="searchAreaLabel">
+    <item row="5" column="0">
+     <widget class="QTableWidget" name="dronesTable">
+      <property name="gridStyle">
+       <enum>Qt::NoPen</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+      <property name="rowCount">
+       <number>3</number>
+      </property>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <row/>
+      <row/>
+      <row/>
+      <column>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Select the search area:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Drone status</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGraphicsView" name="searchAreaMap"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>60</y>
-      <width>381</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="searchParameters">
-     <property name="verticalSpacing">
-      <number>25</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="nrOfDronesLabel">
+      </column>
+      <column>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Number of drones:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Sensors</string>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSpinBox" name="nrOfDronesSpinBox"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="precisionLabel">
+      </column>
+      <column>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Precision:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Max. flight time</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSlider" name="precisionSlider">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="sarchStrategyLabel">
+      </column>
+      <item row="0" column="0">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Search strategy:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string/>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="searchStrategyComboBox"/>
-     </item>
-    </layout>
-   </widget>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>Camera + Thermal sensor</string>
+       </property>
+      </item>
+      <item row="0" column="2">
+       <property name="text">
+        <string>90 min.</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>Camera</string>
+       </property>
+      </item>
+      <item row="1" column="2">
+       <property name="text">
+        <string>15 min.</string>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </item>
+      <item row="2" column="2">
+       <property name="text">
+        <string>20 min.</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="startSearchButton">
+        <property name="text">
+         <string>Start search</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>936</width>
-     <height>27</height>
+     <width>1072</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOur_app">
