@@ -5,11 +5,11 @@
 #-------------------------------------------------
 
 # QT constraints
-QT       += core gui
+QT  += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # Project properties
-TARGET = Workstation_project_shae
+TARGET = frontend
 TEMPLATE = app
 
 # Put all releases in build-folder
@@ -29,6 +29,7 @@ RESOURCES = application.qrc
 
 # Put subdirectories here
 include(ui/ui.pri)
+include(core/core.pri)
 
 DISTFILES +=
 
