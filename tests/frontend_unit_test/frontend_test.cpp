@@ -33,7 +33,7 @@ void Frontend_Test::cleanupTestCase()
 void Frontend_Test::testCase1()
 {
     QString str = "Hello";
-    QCOMPARE(str.toUpper(), QString("HELO"));
+    QCOMPARE(str.toUpper(), QString("HELLO"));
 }
 
 void Frontend_Test::testCase2()
