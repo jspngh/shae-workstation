@@ -41,5 +41,4 @@ Makefile*
 CMakeLists.txt.user
 
 #Documentation
-Documentation
-
+docs
