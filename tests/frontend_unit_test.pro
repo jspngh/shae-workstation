@@ -8,9 +8,9 @@ QT += core gui
 TEMPLATE = app
 TARGET = frontend_unit_test
 INCLUDEPATH += .
-INCLUDEPATH += ../../src
+INCLUDEPATH += ../src
 
 
 # Input
 SOURCES += frontend_test.cpp
-include(../../src/core/core.pri)
+include(../src/core/core.pri)
