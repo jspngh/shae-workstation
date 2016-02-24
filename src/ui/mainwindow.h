@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMMapView.h>
 
 namespace Ui {
 class MainWindow;
@@ -16,8 +17,8 @@ public:
     ~MainWindow();
 
 private:
-    int count =0;
     Ui::MainWindow *ui;
+    QMMapView *mapView;
 };
 
 #endif // MAINWINDOW_H

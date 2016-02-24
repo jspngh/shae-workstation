@@ -102,9 +102,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QGraphicsView" name="searchAreaMap"/>
-      </item>
      </layout>
     </item>
     <item row="0" column="0">

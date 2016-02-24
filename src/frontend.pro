@@ -1,16 +1,14 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-02-14T18:06:46
-#
-#-------------------------------------------------
-
 # QT constraints
-QT  += core gui
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT  += core gui webkit
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
 # Project properties
 TARGET = frontend
 TEMPLATE = app
+
+# Libraries
+LIBS += -L"../libs/bin/libqtmapkit.so.1.0.0" -lqtmapkit
+INCLUDEPATH += "../libs/include/qtmapkit"
 
 # Put all releases in build-folder
 release: DESTDIR = build/release

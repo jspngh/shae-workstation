@@ -7,9 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    scene->addPixmap(QPixmap(":/img/map.png"));
-    ui->searchAreaMap->setScene(scene);
+
+    mapView = new QMMapView(QMMapView::RoadMap,
+                            QMCoordinate(51.02, 3.73),
+                            11);
+    ui->searchArea->addWidget(mapView, 2);
 }
 
 MainWindow::~MainWindow()
