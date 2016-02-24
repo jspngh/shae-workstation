@@ -6,6 +6,8 @@
 */
 class Drone{
 public:
+    double visionWidth; //!< This attribute tells how wide the vision of the drone is. This is useful to calculate the waypoints. it should use the same sale as the coordinates used.
+
     Drone();
 };
 
