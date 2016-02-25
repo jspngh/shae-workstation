@@ -16,6 +16,11 @@ public:
         latitude =la;
         longitude = lo;
     }
+    Coordinate(){
+        latitude=0.0;
+        longitude=0.0;
+    }
+
     static Coordinate goDirection(Coordinate start, Direction direction, double distance);
 };
 
@@ -46,8 +51,15 @@ class PathAlgorithm {
 
 public:
     Coordinate start; //!< We will need this to efficiently divide search areas over the available drones, and to plan the beginning of the path as close to the start as possible.
+    PathAlgorithm() {
+        this->start = Coordinate(0.0,0.0);
+    }
 
-    virtual std::list<Coordinate> calculateWaypoints(Area area, double visionWidth) = 0;
+    PathAlgorithm(Coordinate start){
+        this->start=start;
+    }
+
+    virtual std::list<Coordinate> calculateWaypoints(RectangleArea area, double visionWidth) = 0;
     void divideArea(Area area, std::list<Drone> drones);
 
 
@@ -57,6 +69,14 @@ public:
 //! A simple path algoritn
 class SimplePathAlgorithm: public PathAlgorithm{
     public:
+        SimplePathAlgorithm(){
+            this->start = Coordinate(0.0,0.0);
+        }
+
+        SimplePathAlgorithm(Coordinate start){
+            this->start =start;
+        }
+
         std::list<Coordinate> calculateWaypoints(RectangleArea area, double visionWidth);
     private:
         double calculateDistance(Coordinate a, Coordinate b);
