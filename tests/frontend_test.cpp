@@ -81,17 +81,12 @@ void Frontend_Test::testSimplePathAlgorithm()
     testList.push_back(Coordinate(10.0,10.0));
     testList.push_back(Coordinate(0.0,10.0));
 
-    Coordinate calculated = *calculatedList.begin();
-    Coordinate test = *testList.begin();
+//Do the checks
+    int listSize = 12;
+    for(int i=0; i<listSize; i++){
+        Coordinate calculated = calculatedList.front();
+        Coordinate test = testList.front();
 
-    QVERIFY(calculated.latitude == test.latitude);
-
-    /*
-    for(int i=0; i<testList.size(); i++){
-        Coordinate calculated = *calculatedList.begin();
-        Coordinate test = *testList.begin();
-
-        //pop
         calculatedList.pop_front();
         testList.pop_front();
 
@@ -101,7 +96,7 @@ void Frontend_Test::testSimplePathAlgorithm()
 
 
     }
-    */
+
 
 
 

@@ -37,16 +37,26 @@ std::list<Coordinate> SimplePathAlgorithm::calculateWaypoints(RectangleArea area
     //Go all the way south, until most south coordinate reached. Go 1 step in direction again.
     //Go north again, and so forth, until all area is covered.
 
-    while(list.back().longitude<area.northEast.longitude && list.back().longitude>area.northWest.longitude ){
+    while(list.back().longitude < area.northEast.longitude && list.back().longitude > area.northWest.longitude ){
         //go South
         list.push_back(  Coordinate(area.southEast.latitude, list.back().longitude));
         //go direction
         list.push_back(Coordinate::goDirection((list.back()), direction, visionWidth));
-        //go north
-        list.push_back(  Coordinate(area.northEast.latitude, list.back().longitude));
-        //go direction
-        list.push_back(Coordinate::goDirection((list.back()), direction, visionWidth));
+        if(list.back().longitude < area.northEast.longitude && list.back().longitude > area.northWest.longitude ){
+            //go north
+            list.push_back(  Coordinate(area.northEast.latitude, list.back().longitude));
+            //go direction
+            list.push_back(Coordinate::goDirection((list.back()), direction, visionWidth));
+        }
     }
+    //Go South or North for the last time
+    if(list.back().latitude == area.northEast.latitude)
+        //Go south
+        list.push_back(Coordinate(area.southEast.latitude, list.back().longitude));
+    else
+        //Go north
+        list.push_back(Coordinate(area.northEast.latitude, list.back().longitude));
+
 
 
     //return list
