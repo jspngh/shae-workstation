@@ -7,8 +7,9 @@ TARGET = frontend
 TEMPLATE = app
 
 # Libraries
-LIBS += -L"../libs/bin/libqtmapkit.so.1.0.0" -lqtmapkit
+LIBS += -lqtmapkit
 INCLUDEPATH += "../libs/include/qtmapkit"
+INCLUDEPATH += "../libs/bin"
 
 # Put all releases in build-folder
 release: DESTDIR = build/release
