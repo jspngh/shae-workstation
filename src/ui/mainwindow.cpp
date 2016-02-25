@@ -8,14 +8,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    mapView = new QMMapView(QMMapView::RoadMap,
-                            QMCoordinate(51.02, 3.73),
-                            11);
-    ui->searchArea->addWidget(mapView, 2);
+    initializeMap();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::initializeMap() {
+    mapView = new QMMapView(QMMapView::RoadMap,
+                            QMCoordinate(51.02, 3.73),
+                            11);
+    ui->searchArea->addWidget(mapView, 2);
 }
 

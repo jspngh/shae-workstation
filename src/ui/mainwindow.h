@@ -19,6 +19,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QMMapView *mapView;
+    void initializeMap();
 };
 
 #endif // MAINWINDOW_H
