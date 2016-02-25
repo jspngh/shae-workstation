@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QLabel>
 #include <QMainWindow>
 #include <QMMapView.h>
 
@@ -19,7 +20,11 @@ public:
 private:
     Ui::MainWindow *ui;
     QMMapView *mapView;
+
     void initializeMap();
+
+public slots:
+    void onMapLoaded();
 };
 
 #endif // MAINWINDOW_H
