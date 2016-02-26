@@ -25,8 +25,13 @@ std::list<Coordinate> SimplePathAlgorithm::calculateWaypoints(RectangleArea area
          list.push_back(area.southEast);
     else
         list.push_back(area.southWest);
-    //go up until most north coordinate reached,
-    list.push_back(Coordinate(area.northEast.latitude,list.back().longitude));
+
+    //go up until most north coordinate reached if started south
+    if(list.back().latitude == area.southEast.latitude)
+        list.push_back(Coordinate(area.northEast.latitude,list.back().longitude));
+    else
+        //go south because started north
+        list.push_back(Coordinate(area.southEast.latitude, list.back().longitude));
 
     //then try to go 1 step(=visionWidth) in direction (=first west). If going west exceeds the most western coordinate of the rectangle, set direction to east and go 1 step east.
     Direction direction = WEST;
@@ -38,17 +43,23 @@ std::list<Coordinate> SimplePathAlgorithm::calculateWaypoints(RectangleArea area
     //Go north again, and so forth, until all area is covered.
 
     while(list.back().longitude < area.northEast.longitude && list.back().longitude > area.northWest.longitude ){
-        //go South
-        list.push_back(  Coordinate(area.southEast.latitude, list.back().longitude));
+        //go south or north depending on location
+        if(list.back().latitude == area.northEast.latitude)
+            list.push_back(  Coordinate(area.southEast.latitude, list.back().longitude));
+        else
+             list.push_back(  Coordinate(area.northEast.latitude, list.back().longitude));
         //go direction
         list.push_back(Coordinate::goDirection((list.back()), direction, visionWidth));
+        /*
         if(list.back().longitude < area.northEast.longitude && list.back().longitude > area.northWest.longitude ){
             //go north
             list.push_back(  Coordinate(area.northEast.latitude, list.back().longitude));
             //go direction
             list.push_back(Coordinate::goDirection((list.back()), direction, visionWidth));
         }
+        */
     }
+
     //Go South or North for the last time
     if(list.back().latitude == area.northEast.latitude)
         //Go south
@@ -56,7 +67,6 @@ std::list<Coordinate> SimplePathAlgorithm::calculateWaypoints(RectangleArea area
     else
         //Go north
         list.push_back(Coordinate(area.northEast.latitude, list.back().longitude));
-
 
 
     //return list
@@ -69,6 +79,7 @@ double SimplePathAlgorithm::calculateDistance(Coordinate a, Coordinate b){
     double d2 = (a.longitude-b.longitude);
     return d1*d1+d2*d2;
 }
+
 
 Coordinate Coordinate::goDirection(Coordinate start, Direction direction, double distance){
     switch(direction){

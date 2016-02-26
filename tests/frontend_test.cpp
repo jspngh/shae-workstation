@@ -18,6 +18,7 @@ private Q_SLOTS:
     void testCase2();
     void testCase3();
     void testSimplePathAlgorithm();
+    void testSimplePathAlgorithm2();
 };
 
 Frontend_Test::Frontend_Test()
@@ -82,6 +83,7 @@ void Frontend_Test::testSimplePathAlgorithm()
     testList.push_back(Coordinate(0.0,10.0));
 
 //Do the checks
+    double epsilon = 0.000001;
     int listSize = 12;
     for(int i=0; i<listSize; i++){
         Coordinate calculated = calculatedList.front();
@@ -91,8 +93,60 @@ void Frontend_Test::testSimplePathAlgorithm()
         testList.pop_front();
 
         //vergelijk
-        QVERIFY(calculated.latitude == test.latitude);
-        QVERIFY(calculated.longitude == test.longitude);
+        QVERIFY(abs(calculated.latitude- test.latitude)<epsilon);
+        QVERIFY(abs(calculated.longitude- test.longitude)<epsilon);
+
+    }
+
+
+
+
+}
+void Frontend_Test::testSimplePathAlgorithm2()
+{
+    RectangleArea area = RectangleArea();
+    area.northEast= Coordinate(1.0,1.0);
+    area.northWest= Coordinate(1.0,-1.0);
+    area.southEast= Coordinate(-1.0,1.0);
+    area.southWest= Coordinate(-1.0,-1.0);
+    Coordinate start = Coordinate(20.0,20.0);
+    SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
+
+    std::list<Coordinate> calculatedList = algorithm.calculateWaypoints(area, 0.3);
+    std::list<Coordinate> testList = std::list<Coordinate>();
+
+    testList.push_back(Coordinate(1.0,1.0));
+
+    testList.push_back(Coordinate(-1.0,1.0));
+    testList.push_back(Coordinate(-1.0,0.7));
+    testList.push_back(Coordinate(1.0,0.7));
+    testList.push_back(Coordinate(1.0,0.4));
+    testList.push_back(Coordinate(-1.0,0.4));
+    testList.push_back(Coordinate(-1.0,0.1));
+    testList.push_back(Coordinate(1.0,0.1));
+    testList.push_back(Coordinate(1.0,-0.2));
+    testList.push_back(Coordinate(-1.0,-0.2));
+    testList.push_back(Coordinate(-1.0,-0.5));
+    testList.push_back(Coordinate(1.0,-0.5));
+    testList.push_back(Coordinate(1.0,-0.8));
+    testList.push_back(Coordinate(-1.0,-0.8));
+    testList.push_back(Coordinate(-1.0,-1.1));
+    testList.push_back(Coordinate(1.0,-1.1));
+
+
+//Do the checks
+    double epsilon = 0.000001;
+    int listSize = testList.size();
+    for(int i=0; i<listSize; i++){
+        Coordinate calculated = calculatedList.front();
+        Coordinate test = testList.front();
+
+        calculatedList.pop_front();
+        testList.pop_front();
+
+        //vergelijk
+        QVERIFY(abs(calculated.latitude- test.latitude)<epsilon);
+        QVERIFY(abs(calculated.longitude- test.longitude)<epsilon);
 
 
     }
