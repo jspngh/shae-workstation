@@ -20,8 +20,10 @@
 #define QMMAPVIEW_H
 
 #include <QWidget>
+#include <QGeoCoordinate>
+#include <QGeoRectangle>
 #include "QtMapKit.h"
-#include "QMCoordinateRegion.h"
+
 class QMMapViewPrivate;
 
 class QMMapView : public QWidget
@@ -41,7 +43,7 @@ public:
               QWidget *parent = 0);
     MapType mapType() const;
 
-    QMCoordinateRegion region() const;
+    QGeoRectangle region() const;
     QGeoCoordinate center() const;
 
     uint zoomLevel() const;
@@ -53,8 +55,8 @@ public:
     void setCenter(QGeoCoordinate center, bool animated = true);
     void setZoomLevel(uint zoom);
 
-    void makeRegionVisible(QMCoordinateRegion &region);
-    void fitRegion(QMCoordinateRegion &region);
+    void makeRegionVisible(QGeoRectangle &region);
+    void fitRegion(QGeoRectangle &region);
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
 //    void setTilt(qreal tile);
@@ -71,7 +73,7 @@ protected:
 signals:
     void mapLoaded();
     void mapBecameIdle();
-    void regionChanged(QMCoordinateRegion region);
+    void regionChanged(QGeoRectangle region);
     void centerChanged(QGeoCoordinate center);
     void mouseClicked(QGeoCoordinate coordinate);
     void mouseDoubleClicked(QGeoCoordinate coordinate);

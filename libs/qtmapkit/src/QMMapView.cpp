@@ -19,7 +19,6 @@
 #include "QMMapView.h"
 #include <QHBoxLayout>
 #include <QHash>
-#include <QGeoCoordinate>
 #include <QVariantMap>
 #include <QWebFrame>
 #include <QWebView>
@@ -166,10 +165,10 @@ QMMapView::MapType QMMapView::mapType() const
  * signal is sent. The result of any invocation of this method before that is
  * undifined.
  */
-QMCoordinateRegion QMMapView::region() const
+QGeoRectangle QMMapView::region() const
 {
     QVariantMap result = d_ptr->evaluateJavaScript("getMapBounds();").toMap();
-    return QMCoordinateRegion(QGeoCoordinate(result["south"].toReal(),
+    return QGeoRectangle(QGeoCoordinate(result["south"].toReal(),
                                            result["west"].toReal()),
                               QGeoCoordinate(result["north"].toReal(),
                                            result["east"].toReal()));
@@ -221,28 +220,28 @@ void QMMapView::setZoomLevel(uint zoom)
     d->evaluateJavaScript(QString("map.setZoom(%1);").arg(zoom));
 }
 
-void QMMapView::makeRegionVisible(QMCoordinateRegion &region)
+void QMMapView::makeRegionVisible(QGeoRectangle &region)
 {
     Q_D(QMMapView);
     QString format = QString("panMapToBounds(%1, %2, %3, %4);");
-    QString js = format.arg(region.north(), region.south(),
-                            region.east(), region.west());
+    QString js = format.arg(region.topLeft().latitude(), region.bottomLeft().latitude(),
+                            region.topRight().longitude(), region.topLeft().longitude());
     d->evaluateJavaScript(js);
 }
 
-void QMMapView::fitRegion(QMCoordinateRegion &region)
+void QMMapView::fitRegion(QGeoRectangle &region)
 {
     Q_D(QMMapView);
     QString format = QString("fitMapToBounds(%1, %2, %3, %4);");
-    QString js = format.arg(region.north(), region.south(),
-                            region.east(), region.west());
+    QString js = format.arg(region.topLeft().latitude(), region.bottomLeft().latitude(),
+                            region.topRight().longitude(), region.topLeft().longitude());
     d->evaluateJavaScript(js);
 }
 
 void QMMapView::regionDidChangeTo(qreal north, qreal south,
                                   qreal east, qreal west)
 {
-    emit regionChanged(QMCoordinateRegion(north, south, east, west));
+    emit regionChanged(QGeoRectangle(QGeoCoordinate(north, west), QGeoCoordinate(south, east)));
 }
 
 void QMMapView::centerDidChangeTo(qreal latitude, qreal longitude)
