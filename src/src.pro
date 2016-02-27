@@ -1,5 +1,5 @@
 # QT constraints
-QT  += core gui webkit
+QT  += core gui webkit positioning
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
 # Project properties

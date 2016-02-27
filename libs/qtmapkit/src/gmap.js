@@ -22,15 +22,15 @@ function initialize(lng, lat, type, zoom)
         qMapView.centerDidChangeTo(center.lat(), center.lng());
     });
     google.maps.event.addListener(map, "click", function(e) {
-        var p = e.latLng();
+        var p = e.latLng;
         qMapView.mouseDidClickAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "dblclick", function(e) {
-        var p = e.latLng();
+        var p = e.latLng;
         qMapView.mouseDidDoubleClickAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "rightclick", function(e) {
-        var p = e.latLng();
+        var p = e.latLng;
         qMapView.mouseDidRightClickAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "drag", function() {

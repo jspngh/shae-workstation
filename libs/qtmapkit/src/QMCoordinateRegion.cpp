@@ -24,8 +24,8 @@ QMCoordinateRegion::QMCoordinateRegion() :
 {
 }
 
-QMCoordinateRegion::QMCoordinateRegion(QMCoordinate southWest,
-                                       QMCoordinate northEast) :
+QMCoordinateRegion::QMCoordinateRegion(QGeoCoordinate southWest,
+                                       QGeoCoordinate northEast) :
     _east(northEast.longitude()),
     _west(southWest.longitude()),
     _north(northEast.latitude()),
@@ -39,7 +39,7 @@ QMCoordinateRegion::QMCoordinateRegion(qreal north, qreal south,
 {
 }
 
-QMCoordinateRegion::QMCoordinateRegion(QMCoordinate center,
+QMCoordinateRegion::QMCoordinateRegion(QGeoCoordinate center,
                                        QMCoordinateSpan span) :
     _east(center.longitude() + span.longitudeDelta() / 2),
     _west(center.longitude() - span.longitudeDelta() / 2),
@@ -48,7 +48,7 @@ QMCoordinateRegion::QMCoordinateRegion(QMCoordinate center,
 {
 }
 
-bool QMCoordinateRegion::contains(QMCoordinate &point, bool proper) const
+bool QMCoordinateRegion::contains(QGeoCoordinate &point, bool proper) const
 {
     qreal lng = point.longitude();
     qreal lat = point.latitude();
@@ -114,29 +114,29 @@ void QMCoordinateRegion::setSouth(qreal value)
     _south = value;
 }
 
-QMCoordinate QMCoordinateRegion::southWest() const
+QGeoCoordinate QMCoordinateRegion::southWest() const
 {
-    return QMCoordinate(south(), west());
+    return QGeoCoordinate(south(), west());
 }
 
-QMCoordinate QMCoordinateRegion::northEast() const
+QGeoCoordinate QMCoordinateRegion::northEast() const
 {
-    return QMCoordinate(north(), east());
+    return QGeoCoordinate(north(), east());
 }
 
-QMCoordinate QMCoordinateRegion::southEast() const
+QGeoCoordinate QMCoordinateRegion::southEast() const
 {
-    return QMCoordinate(south(), east());
+    return QGeoCoordinate(south(), east());
 }
 
-QMCoordinate QMCoordinateRegion::northWest() const
+QGeoCoordinate QMCoordinateRegion::northWest() const
 {
-    return QMCoordinate(north(), west());
+    return QGeoCoordinate(north(), west());
 }
 
-QMCoordinate QMCoordinateRegion::center() const
+QGeoCoordinate QMCoordinateRegion::center() const
 {
-    return QMCoordinate((north() + south()) / 2, (east() + west()) / 2);
+    return QGeoCoordinate((north() + south()) / 2, (east() + west()) / 2);
 }
 
 QMCoordinateSpan QMCoordinateRegion::span() const

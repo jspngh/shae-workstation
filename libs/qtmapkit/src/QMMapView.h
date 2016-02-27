@@ -21,7 +21,6 @@
 
 #include <QWidget>
 #include "QtMapKit.h"
-#include "QMCoordinate.h"
 #include "QMCoordinateRegion.h"
 class QMMapViewPrivate;
 
@@ -38,12 +37,12 @@ public:
         Terrain
     };
 
-    QMMapView(MapType mapType, QMCoordinate center, uint zoomLevel,
+    QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
               QWidget *parent = 0);
     MapType mapType() const;
 
     QMCoordinateRegion region() const;
-    QMCoordinate center() const;
+    QGeoCoordinate center() const;
 
     uint zoomLevel() const;
     qreal heading() const;
@@ -51,7 +50,7 @@ public:
 
     void setMapType(MapType type);
 
-    void setCenter(QMCoordinate center, bool animated = true);
+    void setCenter(QGeoCoordinate center, bool animated = true);
     void setZoomLevel(uint zoom);
 
     void makeRegionVisible(QMCoordinateRegion &region);
@@ -73,16 +72,16 @@ signals:
     void mapLoaded();
     void mapBecameIdle();
     void regionChanged(QMCoordinateRegion region);
-    void centerChanged(QMCoordinate center);
-    void mouseClicked(QMCoordinate coordinate);
-    void mouseDoubleClicked(QMCoordinate coordinate);
-    void mouseRightClicked(QMCoordinate coordinate);
+    void centerChanged(QGeoCoordinate center);
+    void mouseClicked(QGeoCoordinate coordinate);
+    void mouseDoubleClicked(QGeoCoordinate coordinate);
+    void mouseRightClicked(QGeoCoordinate coordinate);
     void mouseDragged();
     void mouseDragStarted();
     void mouseDragEnded();
-    void cursorMoved(QMCoordinate coordinate);
-    void cursorEntered(QMCoordinate coordinate);
-    void cursorLeaved(QMCoordinate coordinate);
+    void cursorMoved(QGeoCoordinate coordinate);
+    void cursorEntered(QGeoCoordinate coordinate);
+    void cursorLeaved(QGeoCoordinate coordinate);
     void headingChanged();
     void mapTypeChanged(MapType type);
 //    void projectionChanged();

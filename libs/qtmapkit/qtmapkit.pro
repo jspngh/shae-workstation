@@ -1,4 +1,4 @@
-QT       += webkit
+QT       += webkit positioning
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
 TARGET = qtmapkit
@@ -15,7 +15,6 @@ UI_DIR = $$PWD/build/
 
 SOURCES += \
     $$PWD/src/QMMapView.cpp \
-    $$PWD/src/QMCoordinate.cpp \
     $$PWD/src/QMCoordinateRegion.cpp \
     $$PWD/src/QMCoordinateSpan.cpp
 
@@ -23,7 +22,6 @@ HEADERS += \
     $$PWD/src/QtMapKit.h \
     $$PWD/src/qtmapkit_global.h \
     $$PWD/src/QMMapView.h \
-    $$PWD/src/QMCoordinate.h \
     $$PWD/src/QMCoordinateRegion.h \
     $$PWD/src/QMCoordinateSpan.h
 

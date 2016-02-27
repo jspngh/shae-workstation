@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 void MainWindow::initializeMap()
 {
     mapView = new QMMapView(QMMapView::Satellite,
-                            QMCoordinate(51.02, 3.73),
+                            QGeoCoordinate(51.02, 3.73),
                             11);
     connect(mapView, SIGNAL(tilesLoaded()),
             this, SLOT(onMapLoaded()));

@@ -19,22 +19,22 @@
 #ifndef QMCOORDINATEREGION_H
 #define QMCOORDINATEREGION_H
 
-#include "QMCoordinate.h"
+#include <QGeoCoordinate>
 #include "QMCoordinateSpan.h"
 
 class QMCoordinateRegion
 {
 public:
     QMCoordinateRegion();
-    QMCoordinateRegion(QMCoordinate southWest, QMCoordinate northEast);
+    QMCoordinateRegion(QGeoCoordinate southWest, QGeoCoordinate northEast);
     QMCoordinateRegion(qreal north, qreal south, qreal east, qreal west);
-    QMCoordinateRegion(QMCoordinate center, QMCoordinateSpan span);
+    QMCoordinateRegion(QGeoCoordinate center, QMCoordinateSpan span);
 
-    bool contains(QMCoordinate &point, bool proper = false) const;
+    bool contains(QGeoCoordinate &point, bool proper = false) const;
     bool intersects(QMCoordinateRegion &span) const;
     bool isEmpty() const;
 
-    void extend(const QMCoordinate &point);
+    void extend(const QGeoCoordinate &point);
     void unite(const QMCoordinateRegion &other);
 
     qreal east() const;
@@ -47,12 +47,12 @@ public:
     void setNorth(qreal value);
     void setSouth(qreal value);
 
-    QMCoordinate southWest() const;
-    QMCoordinate northEast() const;
-    QMCoordinate southEast() const;
-    QMCoordinate northWest() const;
+    QGeoCoordinate southWest() const;
+    QGeoCoordinate northEast() const;
+    QGeoCoordinate southEast() const;
+    QGeoCoordinate northWest() const;
 
-    QMCoordinate center() const;
+    QGeoCoordinate center() const;
     QMCoordinateSpan span() const;
 
     bool operator ==(const QMCoordinateRegion &other);

@@ -19,11 +19,11 @@
 #include "QMMapView.h"
 #include <QHBoxLayout>
 #include <QHash>
+#include <QGeoCoordinate>
 #include <QVariantMap>
 #include <QWebFrame>
 #include <QWebView>
 #include <QtDebug>
-#include <QFileInfo>
 
 class CustomWebPage : public QWebPage
 {
@@ -58,7 +58,7 @@ public:
     bool loaded;
     QWebView *webView;
     struct {
-        QMCoordinate centerCoordinate;
+        QGeoCoordinate centerCoordinate;
         QMMapView::MapType mapType;
         uint zoomLevel;
     } initialValues;
@@ -108,7 +108,7 @@ public:
     }
 };
 
-QMMapView::QMMapView(MapType mapType, QMCoordinate center, uint zoomLevel,
+QMMapView::QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
                      QWidget *parent) :
     QWidget(parent), d_ptr(new QMMapViewPrivate(this))
 {
@@ -136,7 +136,7 @@ void QMMapView::insertNativeObject()
 void QMMapView::initializeMap()
 {
     Q_D(QMMapView);
-    QMCoordinate &center = d->initialValues.centerCoordinate;
+    QGeoCoordinate &center = d->initialValues.centerCoordinate;
     QString js = QString("initialize(%1, %2, %3, %4);").arg(
                 QString::number(center.longitude()),
                 QString::number(center.latitude()),
@@ -169,16 +169,16 @@ QMMapView::MapType QMMapView::mapType() const
 QMCoordinateRegion QMMapView::region() const
 {
     QVariantMap result = d_ptr->evaluateJavaScript("getMapBounds();").toMap();
-    return QMCoordinateRegion(QMCoordinate(result["south"].toReal(),
+    return QMCoordinateRegion(QGeoCoordinate(result["south"].toReal(),
                                            result["west"].toReal()),
-                              QMCoordinate(result["north"].toReal(),
+                              QGeoCoordinate(result["north"].toReal(),
                                            result["east"].toReal()));
 }
 
-QMCoordinate QMMapView::center() const
+QGeoCoordinate QMMapView::center() const
 {
     QVariantMap result = d_ptr->evaluateJavaScript("getMapCenter();").toMap();
-    return QMCoordinate(result["latitude"].toReal(),
+    return QGeoCoordinate(result["latitude"].toReal(),
                         result["longitude"].toReal());
 }
 
@@ -205,7 +205,7 @@ void QMMapView::setMapType(MapType type)
     d->evaluateJavaScript(script);
 }
 
-void QMMapView::setCenter(QMCoordinate center, bool animated)
+void QMMapView::setCenter(QGeoCoordinate center, bool animated)
 {
     Q_D(QMMapView);
     QString format = QString("setMapCenter(%1, %2, %3);");
@@ -247,7 +247,7 @@ void QMMapView::regionDidChangeTo(qreal north, qreal south,
 
 void QMMapView::centerDidChangeTo(qreal latitude, qreal longitude)
 {
-    emit centerChanged(QMCoordinate(latitude, longitude));
+    emit centerChanged(QGeoCoordinate(latitude, longitude));
 }
 
 void QMMapView::mapTypeDidChangeTo(QString typeString)
@@ -258,30 +258,30 @@ void QMMapView::mapTypeDidChangeTo(QString typeString)
 
 void QMMapView::mouseDidClickAt(qreal latitude, qreal longitude)
 {
-    emit mouseClicked(QMCoordinate(latitude, longitude));
+    emit mouseClicked(QGeoCoordinate(latitude, longitude));
 }
 
 void QMMapView::mouseDidDoubleClickAt(qreal latitude, qreal longitude)
 {
-    emit mouseDoubleClicked(QMCoordinate(latitude, longitude));
+    emit mouseDoubleClicked(QGeoCoordinate(latitude, longitude));
 }
 
 void QMMapView::mouseDidRightClickAt(qreal latitude, qreal longitude)
 {
-    emit mouseRightClicked(QMCoordinate(latitude, longitude));
+    emit mouseRightClicked(QGeoCoordinate(latitude, longitude));
 }
 
 void QMMapView::cursorDidMoveTo(qreal latitude, qreal longitude)
 {
-    emit cursorMoved(QMCoordinate(latitude, longitude));
+    emit cursorMoved(QGeoCoordinate(latitude, longitude));
 }
 
 void QMMapView::cursorDidEnterTo(qreal latitude, qreal longitude)
 {
-    emit cursorEntered(QMCoordinate(latitude, longitude));
+    emit cursorEntered(QGeoCoordinate(latitude, longitude));
 }
 
 void QMMapView::cursorDidLeaveFrom(qreal latitude, qreal longitude)
 {
-    emit cursorLeaved(QMCoordinate(latitude, longitude));
+    emit cursorLeaved(QGeoCoordinate(latitude, longitude));
 }
