@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testCase3();
     void testSimplePathAlgorithm();
     void testSimplePathAlgorithm2();
+    void testSimplePathAlgorithm3();
 };
 
 Frontend_Test::Frontend_Test()
@@ -53,7 +54,8 @@ void Frontend_Test::testCase3()
 
 }
 
-/*! This tests the SimplePathAlgorithm in a basic example. This is not an exhaustive test.
+/*! \brief This tests the SimplePathAlgorithm in a basic example.
+ *  The first waypoint is in the lower left corner. The starting point is inside the search area.
 
 */
 void Frontend_Test::testSimplePathAlgorithm()
@@ -65,10 +67,10 @@ void Frontend_Test::testSimplePathAlgorithm()
     area.southWest= Coordinate(0.0,0.0);
     Coordinate start = Coordinate(2.0,2.0);
     SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
-
     std::list<Coordinate> calculatedList = algorithm.calculateWaypoints(area, 2.0);
-    std::list<Coordinate> testList = std::list<Coordinate>();
 
+    //Create testlist
+    std::list<Coordinate> testList = std::list<Coordinate>();
     testList.push_back(Coordinate(0.0,0.0));
     testList.push_back(Coordinate(10.0,0.0));
     testList.push_back(Coordinate(10.0,2.0));
@@ -92,7 +94,7 @@ void Frontend_Test::testSimplePathAlgorithm()
         calculatedList.pop_front();
         testList.pop_front();
 
-        //vergelijk
+        //compare
         QVERIFY(abs(calculated.latitude- test.latitude)<epsilon);
         QVERIFY(abs(calculated.longitude- test.longitude)<epsilon);
 
@@ -102,8 +104,17 @@ void Frontend_Test::testSimplePathAlgorithm()
 
 
 }
+
+/*!
+ * \brief Almost the same test as the previous one.
+ * Now the width of the area is not an integer times the visionWidth of the drone.
+ * Also, the starting point of the drone is way outside the search area, instead of in the search area as is the case in the previous test. The first wayoint is in the the upperright corner.
+ */
+
 void Frontend_Test::testSimplePathAlgorithm2()
 {
+
+    //initiate area, start point and algorithm.
     RectangleArea area = RectangleArea();
     area.northEast= Coordinate(1.0,1.0);
     area.northWest= Coordinate(1.0,-1.0);
@@ -113,10 +124,10 @@ void Frontend_Test::testSimplePathAlgorithm2()
     SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
 
     std::list<Coordinate> calculatedList = algorithm.calculateWaypoints(area, 0.3);
+
+    //Create testlist
     std::list<Coordinate> testList = std::list<Coordinate>();
-
     testList.push_back(Coordinate(1.0,1.0));
-
     testList.push_back(Coordinate(-1.0,1.0));
     testList.push_back(Coordinate(-1.0,0.7));
     testList.push_back(Coordinate(1.0,0.7));
@@ -144,13 +155,59 @@ void Frontend_Test::testSimplePathAlgorithm2()
         calculatedList.pop_front();
         testList.pop_front();
 
-        //vergelijk
+        //Compare
         QVERIFY(abs(calculated.latitude- test.latitude)<epsilon);
         QVERIFY(abs(calculated.longitude- test.longitude)<epsilon);
 
 
     }
 
+}
+
+void Frontend_Test::testSimplePathAlgorithm3()
+{
+
+        //initiate area, start point and algorithm.
+        RectangleArea area = RectangleArea();
+        area.northEast= Coordinate(1.0,1.0);
+        area.northWest= Coordinate(1.0,-1.0);
+        area.southEast= Coordinate(-1.0,1.0);
+        area.southWest= Coordinate(-1.0,-1.0);
+        Coordinate start = Coordinate(-20.0,20.0);
+        SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
+
+        std::list<Coordinate> calculatedList = algorithm.calculateWaypoints(area, 0.6);
+
+        //Create testlist
+        std::list<Coordinate> testList = std::list<Coordinate>();
+        testList.push_back(Coordinate(-1.0,1.0));
+        testList.push_back(Coordinate(1.0,1.0));
+        testList.push_back(Coordinate(1.0,0.4));
+        testList.push_back(Coordinate(-1.0,0.4));
+        testList.push_back(Coordinate(-1.0,-0.2));
+        testList.push_back(Coordinate(1.0,-0.2));
+        testList.push_back(Coordinate(1.0,-0.8));
+        testList.push_back(Coordinate(-1.0,-0.8));
+        testList.push_back(Coordinate(-1.0,-1.4));
+        testList.push_back(Coordinate(1.0,-1.4));
+
+
+    //Do the checks
+        double epsilon = 0.000001;
+        int listSize = testList.size();
+        for(int i=0; i<listSize; i++){
+            Coordinate calculated = calculatedList.front();
+            Coordinate test = testList.front();
+
+            calculatedList.pop_front();
+            testList.pop_front();
+
+            //Compare
+            QVERIFY(abs(calculated.latitude- test.latitude)<epsilon);
+            QVERIFY(abs(calculated.longitude- test.longitude)<epsilon);
+
+
+        }
 
 
 
