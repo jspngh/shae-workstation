@@ -6,19 +6,20 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 TARGET = frontend
 TEMPLATE = app
 
-# Libraries
-LIBS += -lqtmapkit
-INCLUDEPATH += "../libs/include/qtmapkit"
-INCLUDEPATH += "../libs/bin"
-
 # Put all releases in build-folder
-release: DESTDIR = build/release
-debug: DESTDIR = build/debug
+release: DESTDIR = $$PWD/../bin/release
+debug: DESTDIR = $$PWD/../bin/debug
 
-OBJECTS_DIR = $$DESTDIR/.obj
-MOC_DIR = $$DESTDIR/.moc
-RCC_DIR = $$DESTDIR/.qrc
-UI_DIR = $$DESTDIR/.ui
+OBJECTS_DIR = $$PWD/../build/bin/.obj
+MOC_DIR = $$PWD/../build/bin/.moc
+RCC_DIR = $$PWD/../build/bin/.qrc
+UI_DIR = $$PWD/../build/bin/.ui
+
+# Libraries
+LIBS += \
+    -L"$$PWD/../bin/lib/" -lqtmapkit
+INCLUDEPATH += \
+    "$$PWD/../build/include"
 
 # Main source
 SOURCES += main.cpp
