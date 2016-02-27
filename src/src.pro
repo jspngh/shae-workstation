@@ -10,16 +10,16 @@ TEMPLATE = app
 release: DESTDIR = $$PWD/../bin/release
 debug: DESTDIR = $$PWD/../bin/debug
 
-OBJECTS_DIR = $$PWD/../build/bin/.obj
-MOC_DIR = $$PWD/../build/bin/.moc
-RCC_DIR = $$PWD/../build/bin/.qrc
-UI_DIR = $$PWD/../build/bin/.ui
+OBJECTS_DIR = $$PWD/build/.obj
+MOC_DIR = $$PWD/build/.moc
+RCC_DIR = $$PWD/build/.qrc
+UI_DIR = $$PWD/build/.ui
 
 # Libraries
 LIBS += \
-    -L"$$PWD/../bin/lib/" -lqtmapkit
+    -L"$$PWD/../libs/qtmapkit/bin/" -lqtmapkit
 INCLUDEPATH += \
-    "$$PWD/../build/include"
+    "$$PWD/../libs/qtmapkit/include/"
 
 # Main source
 SOURCES += main.cpp

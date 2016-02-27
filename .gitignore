@@ -1,8 +1,10 @@
-# the binary
-Workstation_project_shae
+# binary files
+bin/*
+
+# included files
+libs/*/include
 
 # C++ objects and libs
-
 *.slo
 *.lo
 *.o
@@ -14,7 +16,6 @@ Workstation_project_shae
 *.dylib
 
 # Qt-es
-
 /.qmake.cache
 /.qmake.stash
 *.pro.user

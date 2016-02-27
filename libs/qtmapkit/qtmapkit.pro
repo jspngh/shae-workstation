@@ -7,12 +7,11 @@ CONFIG += staticlib
 
 DEFINES += QTMAPKIT_LIBRARY
 
-ROOTDIR = $$PWD/../../
-DESTDIR = $$ROOTDIR/bin/lib/
-OBJECTS_DIR = $$ROOTDIR/build/lib/
-MOC_DIR = $$ROOTDIR/build/lib/
-RCC_DIR = $$ROOTDIR/build/lib/
-UI_DIR = $$ROOTDIR/build/lib/
+DESTDIR = $$PWD/bin
+OBJECTS_DIR = $$PWD/build/
+MOC_DIR = $$PWD/build/
+RCC_DIR = $$PWD/build/
+UI_DIR = $$PWD/build/
 
 SOURCES += \
     $$PWD/src/QMMapView.cpp \
@@ -38,6 +37,6 @@ OTHER_FILES += \
 # Send headers to include-folder
 QMAKE_EXTRA_TARGETS += public_headers
 POST_TARGETDEPS += public_headers
-public_headers.commands += "mkdir -p $$ROOTDIR/build/include;"
-public_headers.commands += "cp $$HEADERS $$ROOTDIR/build/include;"
+public_headers.commands += "mkdir -p $$PWD/include;"
+public_headers.commands += "cp $$HEADERS $$PWD/include;"
 
