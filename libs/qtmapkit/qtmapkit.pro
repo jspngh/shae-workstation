@@ -15,15 +15,13 @@ UI_DIR = $$PWD/build/
 
 SOURCES += \
     $$PWD/src/QMMapView.cpp \
-    $$PWD/src/QMCoordinateRegion.cpp \
-    $$PWD/src/QMCoordinateSpan.cpp
+    $$PWD/src/QMCoordinateRegion.cpp
 
 HEADERS += \
     $$PWD/src/QtMapKit.h \
     $$PWD/src/qtmapkit_global.h \
     $$PWD/src/QMMapView.h \
-    $$PWD/src/QMCoordinateRegion.h \
-    $$PWD/src/QMCoordinateSpan.h
+    $$PWD/src/QMCoordinateRegion.h
 
 RESOURCES += \
     $$PWD/src/qtmapkit_resources.qrc

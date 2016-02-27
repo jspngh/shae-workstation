@@ -1,5 +1,5 @@
 /*****************************************************************************
- * QMCoordinateSpan.h
+ * QMCoordinateRegion.h
  *
  * Created: 08/7 2013 by uranusjr
  *
@@ -20,7 +20,6 @@
 #define QMCOORDINATEREGION_H
 
 #include <QGeoCoordinate>
-#include "QMCoordinateSpan.h"
 
 class QMCoordinateRegion
 {
@@ -28,7 +27,6 @@ public:
     QMCoordinateRegion();
     QMCoordinateRegion(QGeoCoordinate southWest, QGeoCoordinate northEast);
     QMCoordinateRegion(qreal north, qreal south, qreal east, qreal west);
-    QMCoordinateRegion(QGeoCoordinate center, QMCoordinateSpan span);
 
     bool contains(QGeoCoordinate &point, bool proper = false) const;
     bool intersects(QMCoordinateRegion &span) const;
@@ -53,7 +51,6 @@ public:
     QGeoCoordinate northWest() const;
 
     QGeoCoordinate center() const;
-    QMCoordinateSpan span() const;
 
     bool operator ==(const QMCoordinateRegion &other);
 

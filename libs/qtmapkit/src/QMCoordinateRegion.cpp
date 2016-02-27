@@ -39,15 +39,6 @@ QMCoordinateRegion::QMCoordinateRegion(qreal north, qreal south,
 {
 }
 
-QMCoordinateRegion::QMCoordinateRegion(QGeoCoordinate center,
-                                       QMCoordinateSpan span) :
-    _east(center.longitude() + span.longitudeDelta() / 2),
-    _west(center.longitude() - span.longitudeDelta() / 2),
-    _north(center.latitude() + span.latitudeDelta() / 2),
-    _south(center.latitude() - span.latitudeDelta() / 2)
-{
-}
-
 bool QMCoordinateRegion::contains(QGeoCoordinate &point, bool proper) const
 {
     qreal lng = point.longitude();
@@ -60,13 +51,6 @@ bool QMCoordinateRegion::contains(QGeoCoordinate &point, bool proper) const
         r = lat >= west() && lat <= east() && lng >= south() && lng <= north();
 
     return r;
-}
-
-bool QMCoordinateRegion::intersects(QMCoordinateRegion &span) const
-{
-    Q_UNUSED(span)
-    qWarning("QMCoordinateRegion::intersects not implemented; false returned");
-    return false;
 }
 
 bool QMCoordinateRegion::isEmpty() const
@@ -137,11 +121,6 @@ QGeoCoordinate QMCoordinateRegion::northWest() const
 QGeoCoordinate QMCoordinateRegion::center() const
 {
     return QGeoCoordinate((north() + south()) / 2, (east() + west()) / 2);
-}
-
-QMCoordinateSpan QMCoordinateRegion::span() const
-{
-    return QMCoordinateSpan(north() - south(), east() - west());
 }
 
 bool QMCoordinateRegion::operator ==(const QMCoordinateRegion &other)
