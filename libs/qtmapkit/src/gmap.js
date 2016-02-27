@@ -7,7 +7,8 @@ function initialize(lng, lat, type, zoom)
     var mapOptions = {
         "center": new google.maps.LatLng(lat, lng),
         "mapTypeId": type,
-        "zoom": zoom
+        "zoom": zoom,
+        "streetViewControl": false
     };
     map = new google.maps.Map(document.getElementById("map_canvas"),
                               mapOptions);
