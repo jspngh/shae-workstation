@@ -6,6 +6,7 @@
 
 # QT constraints
 QT  += core gui
+QT  += positioning
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # Project properties
