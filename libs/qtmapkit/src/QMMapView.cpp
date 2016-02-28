@@ -238,6 +238,16 @@ void QMMapView::fitRegion(QGeoRectangle &region)
     d->evaluateJavaScript(js);
 }
 
+void QMMapView::shiftKeyPressed(bool down)
+{
+    Q_D(QMMapView);
+    if(down) {
+        d->evaluateJavaScript("shiftKeyDown();");
+    } else {
+        d->evaluateJavaScript("shiftKeyUp();");
+    }
+}
+
 void QMMapView::regionDidChangeTo(qreal north, qreal south,
                                   qreal east, qreal west)
 {

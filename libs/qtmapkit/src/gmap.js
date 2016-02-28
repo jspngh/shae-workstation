@@ -137,19 +137,15 @@ function initialize(lng, lat, type, zoom)
 }
 
 
-function keyUp(e)
+function shiftKeyUp()
 {
-    if(!e.shiftKey) selectionMode.shiftPressed = false;
+    selectionMode.shiftPressed = false;
 }
 
-function keyDown(e)
+function shiftKeyDown()
 {
-    if(e.shiftKey) selectionMode.shiftPressed = true;
+    selectionMode.shiftPressed = true;
 }
-
-/*TODO: use eventlisteners in Qt, as these eventlisteners first need focus on the map widget */
-window.addEventListener? document.addEventListener('keydown', keyDown) : document.attachEvent('keydown', keyDown);
-window.addEventListener? document.addEventListener('keyup', keyUp) : document.attachEvent('keyup', keyUp);
 
 function appendMarker(name, latitude, longitude)
 {

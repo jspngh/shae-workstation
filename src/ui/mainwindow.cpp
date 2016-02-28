@@ -31,3 +31,20 @@ void MainWindow::onMapLoaded()
     ui->searchArea->replaceWidget(ui->searchAreaLoadingLabel, mapView);
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Shift) {
+        if(mapView != NULL)
+            mapView->shiftKeyPressed(true);
+    }
+    QMainWindow::keyPressEvent(event);
+}
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Shift) {
+        if(mapView != NULL)
+            mapView->shiftKeyPressed(false);
+    }
+    QMainWindow::keyReleaseEvent(event);
+}
+

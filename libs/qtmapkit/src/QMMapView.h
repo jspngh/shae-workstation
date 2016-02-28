@@ -57,6 +57,8 @@ public:
 
     void makeRegionVisible(QGeoRectangle &region);
     void fitRegion(QGeoRectangle &region);
+
+    void shiftKeyPressed(bool down);
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
 //    void setTilt(qreal tile);
