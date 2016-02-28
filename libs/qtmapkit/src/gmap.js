@@ -1,6 +1,10 @@
 var map = null;
 var markers = {};
 var markerIndex = 0;
+var shiftIsPressed = false;
+var mouseDown = false;
+var selectedArea = null;
+var selectedBounds = null;
 
 function initialize(lng, lat, type, zoom)
 {
@@ -55,6 +59,39 @@ function initialize(lng, lat, type, zoom)
     google.maps.event.addListener(map, "mousemove", function(e) {
         var p = e.latLng;
         qMapView.cursorDidMoveTo(p.lat(), p.lng());
+        if(mouseDown && shiftIsPressed) {
+            if(selectedArea != null) {
+                bounds.extend(e.latLng);
+                selectedArea.setBounds(bounds);
+            } else {
+                bounds = new google.maps.LatLngBounds();
+                bounds.extend(e.latLng);
+                selectedArea = new google.maps.Rectangle({
+                    map: map,
+                    clickable: false,
+                    editable: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.8,
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.25
+                });
+            }
+
+        }
+    });
+    google.maps.event.addListener(map, "mousedown", function(e) {
+        if(shiftIsPressed) {
+            mouseDown = true;
+            map.setOptions({draggable: false});
+        }
+    });
+    google.maps.event.addListener(map, "mouseup", function(e) {
+        if(mouseDown && shiftIsPressed) {
+            mouseDown = false;
+            map.setOptions({draggable: true});
+            //selectedArea.setMap(null);
+            //selectedArea = null;
+        }
     });
     google.maps.event.addListener(map, "mouseover", function(e) {
         var p = e.latLng;
@@ -73,7 +110,26 @@ function initialize(lng, lat, type, zoom)
     google.maps.event.addListener(map, "zoom_changed", function() {
         qMapView.zoomLevelChanged(map.getZoom());
     });
+
 }
+
+function keyUp(e)
+{
+    if(!e.shiftKey) {
+        shiftIsPressed = false;
+    }
+}
+
+function keyDown(e)
+{
+    if(e.shiftKey) {
+        shiftIsPressed = true;
+    }
+}
+
+window.addEventListener? document.addEventListener('keydown', keyDown) : document.attachEvent('keydown', keyDown);
+window.addEventListener? document.addEventListener('keyup', keyUp) : document.attachEvent('keyup', keyUp);
+
 
 function appendMarker(name, latitude, longitude)
 {
