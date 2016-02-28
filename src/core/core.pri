@@ -1,6 +1,7 @@
 INCLUDEPATH += "core"
 DEPENDPATH += "core"
 
+
 SOURCES += $$PWD/communication.cpp \
     $$PWD/drone.cpp \
     $$PWD/simplepathalgorithm.cpp \

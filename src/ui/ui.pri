@@ -1,9 +1,14 @@
 INCLUDEPATH += "ui"
 DEPENDPATH += "ui"
 
-SOURCES += $$PWD/mainwindow.cpp
-HEADERS += $$PWD/mainwindow.h
-FORMS += $$PWD/mainwindow.ui \
+SOURCES += \
+    $$PWD/mainwindow.cpp
+
+HEADERS += \
+    $$PWD/mainwindow.h
+
+FORMS += \
+    $$PWD/mainwindow.ui \
     $$PWD/overviewwindow.ui
 
 DISTFILES += \
