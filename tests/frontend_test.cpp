@@ -111,7 +111,6 @@ void Frontend_Test::testSimplePathAlgorithm()
  * Now the width of the area is not an integer times the visionWidth of the drone.
  * Also, the starting point of the drone is way outside the search area, instead of in the search area as is the case in the previous test. The first wayoint is in the the upperright corner.
  */
-
 void Frontend_Test::testSimplePathAlgorithm2()
 {
 
