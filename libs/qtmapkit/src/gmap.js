@@ -63,6 +63,10 @@ function initialize(lng, lat, type, zoom)
             if(selectedArea != null) {
                 bounds.extend(e.latLng);
                 selectedArea.setBounds(bounds);
+                qMapView.selectedAreaDidChangeTo(
+                    bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
+                    bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
+                );
             } else {
                 bounds = new google.maps.LatLngBounds();
                 bounds.extend(e.latLng);
@@ -75,6 +79,10 @@ function initialize(lng, lat, type, zoom)
                     fillColor: "#FF0000",
                     fillOpacity: 0.25
                 });
+                qMapView.selectedAreaWasCreated(
+                    bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
+                    bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
+                );
             }
 
         }

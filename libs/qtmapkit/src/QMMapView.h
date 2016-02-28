@@ -75,6 +75,13 @@ signals:
     void mapBecameIdle();
     void regionChanged(QGeoRectangle region);
     void centerChanged(QGeoCoordinate center);
+    void headingChanged();
+    void mapTypeChanged(MapType type);
+//    void projectionChanged();
+    void tilesLoaded();
+    void tilesChanged();
+    void zoomLevelChanged(uint level);
+    // Mouse signals
     void mouseClicked(QGeoCoordinate coordinate);
     void mouseDoubleClicked(QGeoCoordinate coordinate);
     void mouseRightClicked(QGeoCoordinate coordinate);
@@ -84,12 +91,10 @@ signals:
     void cursorMoved(QGeoCoordinate coordinate);
     void cursorEntered(QGeoCoordinate coordinate);
     void cursorLeaved(QGeoCoordinate coordinate);
-    void headingChanged();
-    void mapTypeChanged(MapType type);
-//    void projectionChanged();
-    void tilesLoaded();
-    void tilesChanged();
-    void zoomLevelChanged(uint level);
+    // Selected area signals
+    void selectedAreaCreated(QGeoRectangle region);
+    void selectedAreaChanged(QGeoRectangle region);
+    void selectedAreaDeleted();
 
 protected slots:
     void initializeMap();
@@ -97,12 +102,19 @@ protected slots:
     void regionDidChangeTo(qreal north, qreal south, qreal east, qreal west);
     void centerDidChangeTo(qreal latitude, qreal longitude);
     void mapTypeDidChangeTo(QString typeString);
+    // Mouse slots
     void mouseDidClickAt(qreal latitude, qreal longitude);
     void mouseDidDoubleClickAt(qreal latitude, qreal longitude);
     void mouseDidRightClickAt(qreal latitude, qreal longitude);
     void cursorDidMoveTo(qreal latitude, qreal longitude);
     void cursorDidEnterTo(qreal latitude, qreal longitude);
     void cursorDidLeaveFrom(qreal latitude, qreal longitude);
+    // Selected area slots
+    void selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
+                                qreal bottomRightLat, qreal bottomRightLong);
+    void selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
+                                qreal bottomRightLat, qreal bottomRightLong);
+    void selectedAreaWasDeleted();
 
 private:
     QMMapViewPrivate *d_ptr;

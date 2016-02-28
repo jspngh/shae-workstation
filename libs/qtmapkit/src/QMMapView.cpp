@@ -284,3 +284,29 @@ void QMMapView::cursorDidLeaveFrom(qreal latitude, qreal longitude)
 {
     emit cursorLeaved(QGeoCoordinate(latitude, longitude));
 }
+
+void QMMapView::selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
+                                       qreal bottomRightLat, qreal bottomRightLong)
+{
+    QGeoRectangle selectedArea = QGeoRectangle(
+        QGeoCoordinate(topLeftLat, topLeftLong),
+        QGeoCoordinate(bottomRightLat, bottomRightLong)
+    );
+    emit selectedAreaCreated(selectedArea);
+}
+
+void QMMapView::selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
+                                        qreal bottomRightLat, qreal bottomRightLong)
+{
+    QGeoRectangle selectedArea = QGeoRectangle(
+        QGeoCoordinate(topLeftLat, topLeftLong),
+        QGeoCoordinate(bottomRightLat, bottomRightLong)
+    );
+    emit selectedAreaChanged(selectedArea);
+}
+
+void QMMapView::selectedAreaWasDeleted()
+{
+    emit selectedAreaDeleted();
+}
+
