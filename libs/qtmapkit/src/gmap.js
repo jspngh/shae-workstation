@@ -1,10 +1,47 @@
 var map = null;
 var markers = {};
 var markerIndex = 0;
-var shiftIsPressed = false;
-var mouseDown = false;
-var selectedArea = null;
-var selectedBounds = null;
+
+var selectionMode = {
+    selectedArea: null,
+    shiftPressed: false,
+    mouseDown: false,
+    isSelecting: false,
+
+    keysPressed: function() {
+        return this.shiftPressed && this.mouseDown;
+    },
+    createSelectedArea: function(bounds) {
+        if(this.selectedArea != null) this.removeSelectedArea();
+
+        this.selectedArea = new google.maps.Rectangle({
+            map: map,
+            clickable: false,
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            fillColor: "#FF0000",
+            fillOpacity: 0.25,
+            bounds: bounds
+        });
+
+        qMapView.selectedAreaWasCreated(
+            bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
+            bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
+        );
+    },
+    editSelectedArea: function(bounds) {
+        selectionMode.selectedArea.setBounds(bounds);
+        qMapView.selectedAreaDidChangeTo(
+            bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
+            bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
+        );
+    },
+    removeSelectedArea: function() {
+        this.selectedArea.setMap(null);
+        this.selectedArea = null;
+        qMapView.selectedAreaWasDeleted();
+    }
+};
 
 function initialize(lng, lat, type, zoom)
 {
@@ -14,8 +51,7 @@ function initialize(lng, lat, type, zoom)
         "zoom": zoom,
         "streetViewControl": false
     };
-    map = new google.maps.Map(document.getElementById("map_canvas"),
-                              mapOptions);
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     google.maps.event.addListener(map, "bounds_changed", function() {
         var bounds = map.getBounds();
         var ne = bounds.getNorthEast();
@@ -59,47 +95,26 @@ function initialize(lng, lat, type, zoom)
     google.maps.event.addListener(map, "mousemove", function(e) {
         var p = e.latLng;
         qMapView.cursorDidMoveTo(p.lat(), p.lng());
-        if(mouseDown && shiftIsPressed) {
-            if(selectedArea != null) {
-                bounds.extend(e.latLng);
-                selectedArea.setBounds(bounds);
-                qMapView.selectedAreaDidChangeTo(
-                    bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
-                    bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
-                );
-            } else {
-                bounds = new google.maps.LatLngBounds();
-                bounds.extend(e.latLng);
-                selectedArea = new google.maps.Rectangle({
-                    map: map,
-                    clickable: false,
-                    editable: true,
-                    strokeColor: "#FF0000",
-                    strokeOpacity: 0.8,
-                    fillColor: "#FF0000",
-                    fillOpacity: 0.25
-                });
-                qMapView.selectedAreaWasCreated(
-                    bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
-                    bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
-                );
-            }
 
+        if(selectionMode.keysPressed() && selectionMode.isSelecting) {
+            bounds.extend(e.latLng);
+            selectionMode.editSelectedArea(bounds);
         }
     });
     google.maps.event.addListener(map, "mousedown", function(e) {
-        if(shiftIsPressed) {
-            mouseDown = true;
+        selectionMode.mouseDown = true;
+        if(selectionMode.keysPressed()) {
             map.setOptions({draggable: false});
+            bounds = new google.maps.LatLngBounds();
+            bounds.extend(e.latLng);
+            selectionMode.createSelectedArea(bounds);
+            selectionMode.isSelecting = true;
         }
     });
     google.maps.event.addListener(map, "mouseup", function(e) {
-        if(mouseDown && shiftIsPressed) {
-            mouseDown = false;
-            map.setOptions({draggable: true});
-            //selectedArea.setMap(null);
-            //selectedArea = null;
-        }
+        selectionMode.mouseDown = false;
+        selectionMode.isSelecting = false;
+        map.setOptions({draggable: true});
     });
     google.maps.event.addListener(map, "mouseover", function(e) {
         var p = e.latLng;
@@ -121,23 +136,20 @@ function initialize(lng, lat, type, zoom)
 
 }
 
+
 function keyUp(e)
 {
-    if(!e.shiftKey) {
-        shiftIsPressed = false;
-    }
+    if(!e.shiftKey) selectionMode.shiftPressed = false;
 }
 
 function keyDown(e)
 {
-    if(e.shiftKey) {
-        shiftIsPressed = true;
-    }
+    if(e.shiftKey) selectionMode.shiftPressed = true;
 }
 
+/*TODO: use eventlisteners in Qt, as these eventlisteners first need focus on the map widget */
 window.addEventListener? document.addEventListener('keydown', keyDown) : document.attachEvent('keydown', keyDown);
 window.addEventListener? document.addEventListener('keyup', keyUp) : document.attachEvent('keyup', keyUp);
-
 
 function appendMarker(name, latitude, longitude)
 {
