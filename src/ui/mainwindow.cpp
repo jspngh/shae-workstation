@@ -28,7 +28,7 @@ void MainWindow::initializeMap()
 
 void MainWindow::onMapLoaded()
 {
-    ui->searchArea->replaceWidget(ui->searchAreaLoadingLabel, mapView);
+    //ui->searchArea->replaceWidget(ui->searchAreaLoadingLabel, mapView);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
