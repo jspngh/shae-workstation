@@ -28,9 +28,23 @@ OTHER_FILES += \
     $$PWD/src/gmap.html \
     $$PWD/src/gmap.js
 
-# Send headers to include-folder
+# Copy headers to include-folder
 QMAKE_EXTRA_TARGETS += public_headers
 POST_TARGETDEPS += public_headers
-public_headers.commands += "mkdir -p $$PWD/include;"
-public_headers.commands += "cp $$HEADERS $$PWD/include;"
+INCLUDEDIR = $${PWD}/include
+
+win32 {
+    INCLUDEDIR_WIN = $${INCLUDEDIR}
+    INCLUDEDIR_WIN ~= s,/,\\,g
+    public_headers.commands += $$quote(cmd /c if not exist $${INCLUDEDIR_WIN} mkdir $${INCLUDEDIR_WIN}$$escape_expand(\\n\\t))
+    for(HEADER, HEADERS) {
+        HEADER_WIN = $${HEADER}
+        HEADER_WIN ~= s,/,\\,g
+        public_headers.commands += $$quote(cmd /c copy /y $${HEADER_WIN} $${INCLUDEDIR_WIN}$$escape_expand(\\n\\t))
+    }
+}
+unix {
+    public_headers.commands += $$quote(mkdir -p $${INCLUDEDIR}$$escape_expand(\\n\\t))
+    public_headers.commands += $$quote(cp $$HEADERS $${INCLUDEDIR}$$escape_expand(\\n\\t))
+}
 
