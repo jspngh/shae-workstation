@@ -38,7 +38,7 @@ win32 {
     INCLUDEDIR_WIN ~= s,/,\\,g
     public_headers.commands += $$quote(cmd /c if not exist $${INCLUDEDIR_WIN} mkdir $${INCLUDEDIR_WIN}$$escape_expand(\\n\\t))
     for(HEADER, HEADERS) {
-        HEADER_WIN = $${HEADER}
+        HEADER_WIN = \"$${HEADER}\"
         HEADER_WIN ~= s,/,\\,g
         public_headers.commands += $$quote(cmd /c copy /y $${HEADER_WIN} $${INCLUDEDIR_WIN}$$escape_expand(\\n\\t))
     }
