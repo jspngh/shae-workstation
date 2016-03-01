@@ -44,7 +44,9 @@ win32 {
     }
 }
 unix {
-    HEADERS_UNIX = \"$${HEADERS}\"
-    public_headers.commands += $$quote(mkdir -p $${INCLUDEDIR}$$escape_expand(\\n\\t))
-    public_headers.commands += $$quote(cp $${HEADERS_UNIX} $${INCLUDEDIR}$$escape_expand(\\n\\t))
+    for(HEADER, HEADERS) {
+        HEADER_UNIX = \"$${HEADER}\"
+        public_headers.commands += $$quote(mkdir -p $${INCLUDEDIR}$$escape_expand(\\n\\t))
+        public_headers.commands += $$quote(cp $${HEADER_UNIX} $${INCLUDEDIR}$$escape_expand(\\n\\t))
+    }
 }
