@@ -4,6 +4,7 @@
 
 QT += testlib
 QT += core gui
+QT += positioning
 
 TEMPLATE = app
 TARGET = frontend_unit_test
