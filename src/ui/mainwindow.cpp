@@ -8,43 +8,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    welcome_widget = new WelcomeWidget(this);
+    config_widget = new ConfigWidget(this);
+    overview_widget = new OverviewWidget(this);
 
-    initializeMap();
+    ui->stackedWidget->addWidget(welcome_widget);
+    ui->stackedWidget->addWidget(config_widget);
+    ui->stackedWidget->addWidget(overview_widget);
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
 {
+    delete welcome_widget;
+    delete config_widget;
+    delete overview_widget;
     delete ui;
 }
 
-void MainWindow::initializeMap()
-{
-    mapView = new QMMapView(QMMapView::Satellite,
-                            QGeoCoordinate(51.02, 3.73),
-                            11);
-    connect(mapView, SIGNAL(tilesLoaded()),
-            this, SLOT(onMapLoaded()));
-}
-
-void MainWindow::onMapLoaded()
-{
-    ui->searchArea->replaceWidget(ui->searchAreaLoadingLabel, mapView);
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Shift) {
-        if(mapView != NULL)
-            mapView->shiftKeyPressed(true);
-    }
-    QMainWindow::keyPressEvent(event);
-}
-void MainWindow::keyReleaseEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Shift) {
-        if(mapView != NULL)
-            mapView->shiftKeyPressed(false);
-    }
-    QMainWindow::keyReleaseEvent(event);
+QWidget* MainWindow::getWelcomeWidget(){
+    return welcome_widget;
 }
 
