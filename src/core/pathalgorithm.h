@@ -6,12 +6,14 @@
 #include <QGeoRectangle>
 
 
-enum Direction{
+enum Direction
+{
     NORTH, SOUTH, EAST, WEST
 };
 
 //! PathAlgorithm is an abstract class which can be extended by implementations of an algorithm.
-class PathAlgorithm {
+class PathAlgorithm
+{
 
 public:
 

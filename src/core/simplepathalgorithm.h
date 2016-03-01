@@ -5,7 +5,8 @@
 #include <QGeoRectangle>
 
 //! A simple path algoritm that extends PathAlgorithm
-class SimplePathAlgorithm : public PathAlgorithm{
+class SimplePathAlgorithm : public PathAlgorithm
+{
 public:
     SimplePathAlgorithm();
     SimplePathAlgorithm(QGeoCoordinate start);
