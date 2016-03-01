@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QMainWindow>
 #include <QMMapView.h>
+#include <QFile>
 
 namespace Ui {
 class ConfigWidget;
@@ -29,6 +30,7 @@ private:
 
 public slots:
     void onMapLoaded();
+    void initConfScreen(QString);
 
 private slots:
     void startButtonPush();

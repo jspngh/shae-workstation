@@ -1,5 +1,6 @@
 #include "configwidget.h"
 #include "ui_configwidget.h"
+#include "mainwindow.h"
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -21,6 +22,8 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     ui->precisionSlider->setMaximum(100);
 
     //setup connections
+    //welcomewidget
+    connect(((MainWindow*) parent)->getWelcomeWidget(),SIGNAL(configFileSignal(QString)),this,SLOT(initConfScreen(QString)));
     //lowerbuttons:
     connect(ui->startButton,SIGNAL(clicked()),this, SLOT(startButtonPush()));
     connect(ui->backButton,SIGNAL(clicked()),this, SLOT(backButtonPush()));
@@ -66,6 +69,28 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
             mapView->shiftKeyPressed(false);
     }
     QWidget::keyReleaseEvent(event);
+}
+
+void ConfigWidget::initConfScreen(QString f){
+    QFile file(f);
+    if (file.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&file);
+       while (!in.atEnd())
+       {
+          QString line = in.readLine();
+          QStringList splitLine = line.split(" ");
+          for(int i = 0; i < splitLine.size(); i++){
+              if(splitLine.at(i) == "Precision:")
+              {
+                  ui->PrecisionValueLabel->setText(splitLine.at(i+1));
+                  ui->precisionSlider->setValue((((QString)splitLine.at(i+1).split("%").at(0)).toInt()));
+                  break;
+              }
+          }
+       }
+       file.close();
+    }
 }
 
 void ConfigWidget::sliderChanged(int value){

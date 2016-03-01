@@ -22,6 +22,9 @@ public:
     explicit WelcomeWidget(QWidget *parent = 0);
     ~WelcomeWidget();
 
+signals:
+    configFileSignal(QString);
+
 private slots:
     void continueButtonPush();
     void browse();

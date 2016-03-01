@@ -8,14 +8,14 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     ui->setupUi(this);
 
     ui->configTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->configTable->verticalHeader()->hide();
+    ui->configTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     ui->browseEdit->setText(QDir::currentPath());
 
     connect(ui->continueButton,SIGNAL(clicked()),this, SLOT(continueButtonPush()));
     connect(ui->browseButton, SIGNAL(clicked()), this, SLOT(browse()));
     connect(ui->findButton,SIGNAL(clicked()),this, SLOT(find()));
-    connect(ui->configTable, SIGNAL(cellActivated(int,int)),
-                this, SLOT(openFileOfItem(int,int)));
-
 }
 
 WelcomeWidget::~WelcomeWidget()
@@ -24,9 +24,10 @@ WelcomeWidget::~WelcomeWidget()
 }
 
 void WelcomeWidget::continueButtonPush(){
-    if(ui->configTable->selectedItems().size() == 1)
+    if(ui->configTable->selectedItems().size() == 3)
     {
-        //todo load item
+        QString ss = ui->configTable->selectedItems().at(0)->text();
+        emit configFileSignal(ss);
     }
     ((QStackedWidget*) this->parent())->setCurrentIndex(1);
 }
@@ -93,6 +94,7 @@ void WelcomeWidget::showFiles(const QStringList &files)
         QTableWidgetItem *fileNameItem = new QTableWidgetItem(files[i]);
         fileNameItem->setFlags(fileNameItem->flags() ^ Qt::ItemIsEditable);
         QTableWidgetItem *dateItem = new QTableWidgetItem(dateString);
+        dateItem->setFlags(fileNameItem->flags() ^ Qt::ItemIsEditable);
         QTableWidgetItem *sizeItem = new QTableWidgetItem(tr("%1 KB")
                                              .arg(int((size + 1023) / 1024)));
         sizeItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);

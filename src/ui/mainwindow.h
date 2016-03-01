@@ -3,6 +3,7 @@
 
 #include <QKeyEvent>
 #include <QLabel>
+#include <QWidget>
 #include <QMainWindow>
 #include <QMMapView.h>
 #include <QStackedWidget>
@@ -21,6 +22,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    QWidget* getWelcomeWidget();
 
 private:
     Ui::MainWindow *ui;
