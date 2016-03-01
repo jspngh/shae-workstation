@@ -23,7 +23,7 @@ public:
     ~WelcomeWidget();
 
 signals:
-    configFileSignal(QString);
+    configFileSignal(QString fileName);
 
 private slots:
     void continueButtonPush();
