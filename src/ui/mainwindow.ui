@@ -16,14 +16,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QStackedWidget" name="stackedWidget">
-      <widget class="QWidget" name="page"/>
-      <widget class="QWidget" name="page_2"/>
-     </widget>
+     <widget class="QStackedWidget" name="stackedWidget"/>
     </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -33,6 +33,9 @@
     </rect>
    </property>
    <widget class="QMenu" name="menuOur_app">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Me&amp;nu</string>
     </property>
@@ -43,6 +46,9 @@
    <addaction name="menuOur_app"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>
    </attribute>
@@ -50,7 +56,11 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+  </widget>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>

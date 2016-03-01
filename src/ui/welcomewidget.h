@@ -2,6 +2,7 @@
 #define WELCOMEWIDGET_H
 
 #include <QWidget>
+#include <QStackedWidget>
 
 namespace Ui {
 class WelcomeWidget;
@@ -14,6 +15,9 @@ class WelcomeWidget : public QWidget
 public:
     explicit WelcomeWidget(QWidget *parent = 0);
     ~WelcomeWidget();
+
+private slots:
+    void nextButtonPush();
 
 private:
     Ui::WelcomeWidget *ui;
