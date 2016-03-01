@@ -31,10 +31,10 @@ OTHER_FILES += \
 # Copy headers to include-folder
 QMAKE_EXTRA_TARGETS += public_headers
 POST_TARGETDEPS += public_headers
-INCLUDEDIR = $${PWD}/include
+INCLUDEDIR = \"$${PWD}/include\"
 
 win32 {
-    INCLUDEDIR_WIN = \"$${INCLUDEDIR}\"
+    INCLUDEDIR_WIN = $${INCLUDEDIR}
     INCLUDEDIR_WIN ~= s,/,\\,g
     public_headers.commands += $$quote(cmd /c if not exist $${INCLUDEDIR_WIN} mkdir $${INCLUDEDIR_WIN}$$escape_expand(\\n\\t))
     for(HEADER, HEADERS) {
@@ -44,7 +44,9 @@ win32 {
     }
 }
 unix {
-    public_headers.commands += $$quote(mkdir -p $${INCLUDEDIR}$$escape_expand(\\n\\t))
-    public_headers.commands += $$quote(cp $$HEADERS $${INCLUDEDIR}$$escape_expand(\\n\\t))
+    for(HEADER, HEADERS) {
+        HEADER_UNIX = \"$${HEADER}\"
+        public_headers.commands += $$quote(mkdir -p $${INCLUDEDIR}$$escape_expand(\\n\\t))
+        public_headers.commands += $$quote(cp $${HEADER_UNIX} $${INCLUDEDIR}$$escape_expand(\\n\\t))
+    }
 }
-
