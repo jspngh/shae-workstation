@@ -18,6 +18,7 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     ui->droneTable->setColumnWidth(2,110);
     ui->droneTable->setColumnWidth(3,50);
     ui->droneTable->setColumnWidth(4,40);
+    ui->precisionSlider->setMaximum(100);
 
     //setup connections
     //lowerbuttons:
@@ -68,7 +69,7 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
 }
 
 void ConfigWidget::sliderChanged(int value){
-    ui->PrecisionValueLabel->setText(value + "%");
+    ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
 }
 
 void ConfigWidget::startButtonPush(){
@@ -103,7 +104,7 @@ void ConfigWidget::startButtonPush(){
     //    }
     //}
 
-    if(mapView->region().isEmpty() != true)
+    if(mapView->region().bottomLeft().longitude() != NULL)
     {
         outfile << "Selected region coorindates: " << std::endl;
         outfile << "Bottom left: " << mapView->region().bottomLeft().toString().toStdString() << std::endl;

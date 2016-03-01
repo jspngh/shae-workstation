@@ -3,6 +3,12 @@
 
 #include <QWidget>
 #include <QStackedWidget>
+#include <QProgressDialog>
+#include <QFileDialog>
+#include <QDir>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
 
 namespace Ui {
 class WelcomeWidget;
@@ -17,10 +23,18 @@ public:
     ~WelcomeWidget();
 
 private slots:
-    void nextButtonPush();
+    void continueButtonPush();
+    void browse();
+    void find();
+    //void openFileOfItem(int row, int column);
 
 private:
     Ui::WelcomeWidget *ui;
+
+    QStringList findFiles(const QStringList &files, const QString &text);
+    void showFiles(const QStringList &files);
+
+    QDir currentDir;
 };
 
 #endif // WELCOMEWIDGET_H

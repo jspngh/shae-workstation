@@ -2,6 +2,7 @@
 #define OVERVIEWWIDGET_H
 
 #include <QWidget>
+#include <QStackedWidget>
 
 namespace Ui {
 class OverviewWidget;
@@ -17,6 +18,12 @@ public:
 
 private:
     Ui::OverviewWidget *ui;
+    int count;
+
+private slots:
+    void clickButtonPush();
+    void backButtonPush();
+
 };
 
 #endif // OVERVIEWWIDGET_H
