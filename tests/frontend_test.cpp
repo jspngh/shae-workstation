@@ -18,12 +18,12 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testCase1();
     void testCase2();
-    void testCase3();
     void testSimplePathAlgorithm();
     void testSimplePathAlgorithm2();
     void testSimplePathAlgorithm3();
     void testSimplePathAlgorithmWithMultipleDrones();
     void testSimplePathAlgorithmWithMultipleDrones2();
+    void communicationTest();
 };
 
 Frontend_Test::Frontend_Test()
@@ -48,14 +48,6 @@ void Frontend_Test::testCase2()
 {
     QString str = "Hello";
     QVERIFY(str.toUpper() == "HELLO");
-}
-
-void Frontend_Test::testCase3()
-{
-    Communication* comm = new Communication();
-    QVERIFY(comm->send_data() == "test");
-
-
 }
 
 /*! \brief This tests the SimplePathAlgorithm in a basic example.
@@ -325,12 +317,16 @@ void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones2()
         //Compare
         QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
         QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
-
-
     }
+}
 
-
-
+void Frontend_Test::communicationTest()
+{
+    Communication* comm = new Communication("127.0.0.1", 6330);
+    int res = comm->openConnection();
+    QVERIFY(res == 0);
+    res = comm->sendData("hello world!", 13);
+    QVERIFY(res == 0);
 }
 
 
