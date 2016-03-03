@@ -60,7 +60,7 @@
     <rect>
      <x>10</x>
      <y>20</y>
-     <width>351</width>
+     <width>361</width>
      <height>71</height>
     </rect>
    </property>
@@ -73,7 +73,13 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QComboBox" name="searchStrategyComboBox"/>
+     <widget class="QComboBox" name="searchStrategyComboBox">
+      <item>
+       <property name="text">
+        <string>Simple Boustrophedon</string>
+       </property>
+      </item>
+     </widget>
     </item>
     <item row="2" column="1">
      <widget class="QSlider" name="precisionSlider">
