@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <QGeoRectangle>
+#include <QDebug>
 
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
@@ -27,6 +28,7 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     //lowerbuttons:
     connect(ui->startButton,SIGNAL(clicked()),this, SLOT(startButtonPush()));
     connect(ui->backButton,SIGNAL(clicked()),this, SLOT(backButtonPush()));
+    connect(ui->locateButton,SIGNAL(clicked()),this, SLOT(locateButtonPush()));
     //slider
     connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
@@ -156,4 +158,17 @@ void ConfigWidget::backButtonPush(){
     ((QStackedWidget*) this->parent())->setCurrentIndex(0);
 }
 
+void ConfigWidget::locateButtonPush(){
+    QString choice = ui->locateComboBox->currentText();
+    if(choice == "Location") {
+        // TODO
+    } else if(choice == "Coordinates") {
+        mapView->setCenter(QGeoCoordinate(
+            ui->latitudeField->text().toDouble(),
+            ui->longitudeField->text().toDouble()
+        ));
+    } else {
+        //herpaderp, this shouldn't happen
+    }
+}
 

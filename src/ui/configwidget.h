@@ -36,6 +36,7 @@ public slots:
 private slots:
     void startButtonPush();
     void backButtonPush();
+    void locateButtonPush();
     void sliderChanged(int);
 
 };
