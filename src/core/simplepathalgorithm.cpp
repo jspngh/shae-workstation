@@ -14,10 +14,7 @@ SimplePathAlgorithm::~SimplePathAlgorithm()
 
 }
 
-/*! \brief This function calculates the waypoints for a drone to cover an area.
- * This is done in a very simple way, just going north and south while incrementally
- * going west or east.
- */
+
 std::list<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area, double visionWidth)
 {
     //create empty list of Coordinates that will contain the waypoints
