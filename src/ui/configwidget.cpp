@@ -43,6 +43,8 @@ void ConfigWidget::initializeMap()
     mapView = new QMMapView(QMMapView::Satellite,
                             QGeoCoordinate(51.02, 3.73),
                             11);
+    connect(mapView, SIGNAL(mapFailedToLoad()),
+            this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(tilesLoaded()),
             this, SLOT(onMapLoaded()));
 }
@@ -51,6 +53,13 @@ void ConfigWidget::onMapLoaded()
 {
     ui->searchArea->replaceWidget(ui->searchAreaLoadingLabel, mapView);
     ui->searchAreaLoadingLabel->hide();
+}
+
+void ConfigWidget::onMapFailedToLoad()
+{
+    ui->searchAreaLoadingLabel->setText(QString(
+        "Error loading map.\nPlease check your internet connection."
+    ));
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)

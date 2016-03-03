@@ -141,10 +141,14 @@ void QMMapView::initializeMap()
                 QString::number(center.latitude()),
                 d->toJsMapType(d->initialValues.mapType),
                 QString::number(d->initialValues.zoomLevel));
-    d->evaluateJavaScript(js, true);
+    bool success = d->evaluateJavaScript(js, true).toBool();
 
-    d->loaded = true;
-    emit mapLoaded();
+    if(success) {
+        d->loaded = true;
+        emit mapLoaded();
+    } else {
+        emit mapFailedToLoad();
+    }
 }
 
 void QMMapView::resizeEvent(QResizeEvent *)

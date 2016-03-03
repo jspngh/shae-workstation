@@ -74,6 +74,7 @@ protected:
 
 signals:
     void mapLoaded();
+    void mapFailedToLoad();
     void mapBecameIdle();
     void regionChanged(QGeoRectangle region);
     void centerChanged(QGeoCoordinate center);

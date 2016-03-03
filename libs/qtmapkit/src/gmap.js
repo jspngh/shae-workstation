@@ -45,6 +45,11 @@ var selectionMode = {
 
 function initialize(lng, lat, type, zoom)
 {
+    // Check if map failed to load first (due to e.g. connection errors)
+    if(typeof google !== 'object') {
+        return false;
+    }
+
     var mapOptions = {
         "center": new google.maps.LatLng(lat, lng),
         "mapTypeId": type,
@@ -134,6 +139,7 @@ function initialize(lng, lat, type, zoom)
         qMapView.zoomLevelChanged(map.getZoom());
     });
 
+    return true;
 }
 
 

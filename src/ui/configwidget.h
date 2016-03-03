@@ -30,6 +30,7 @@ private:
 
 public slots:
     void onMapLoaded();
+    void onMapFailedToLoad();
     void initConfScreen(QString);
 
 private slots:
