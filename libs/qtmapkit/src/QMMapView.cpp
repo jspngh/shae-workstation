@@ -218,6 +218,15 @@ void QMMapView::setCenter(QGeoCoordinate center, bool animated)
     d->evaluateJavaScript(js);
 }
 
+void QMMapView::setCenter(QString address, bool animated)
+{
+    Q_D(QMMapView);
+    QString format = QString("setMapCenterByAddress(\"%1\", %2);");
+    QString js = format.arg(address,
+                            animated ? "true" : "false");
+    d->evaluateJavaScript(js);
+}
+
 void QMMapView::setZoomLevel(uint zoom)
 {
     Q_D(QMMapView);

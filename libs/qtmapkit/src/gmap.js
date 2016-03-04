@@ -1,4 +1,5 @@
 var map = null;
+var geocoder = null;
 var markers = {};
 var markerIndex = 0;
 
@@ -43,13 +44,31 @@ var selectionMode = {
     }
 };
 
+/*
+ * @returns {boolean} Whether the initialization succeeded.
+ */
 function initialize(lng, lat, type, zoom)
 {
-    // Check if map failed to load first (due to e.g. connection errors)
+    // Check if scripts failed to load first (due to e.g. connection errors)
     if(typeof google !== 'object') {
         return false;
     }
 
+    initializeMap(lng, lat, type, zoom);
+    initializeGeocoder();
+
+    return true;
+}
+
+/*
+ * Initialize google maps
+ * @param {double} lng    The longitude of the map center
+ * @param {double} lat    The latitude of the map center
+ * @param {string} type   The type of map (one of "HYBRID", "ROADMAP", "SATELLITE", "TERRAIN")
+ * @param {int}    zoom   The level of zooming (sane values are something in [0..20])
+ */
+function initializeMap(lng, lat, type, zoom)
+{
     var mapOptions = {
         "center": new google.maps.LatLng(lat, lng),
         "mapTypeId": type,
@@ -138,10 +157,33 @@ function initialize(lng, lat, type, zoom)
     google.maps.event.addListener(map, "zoom_changed", function() {
         qMapView.zoomLevelChanged(map.getZoom());
     });
-
-    return true;
 }
 
+/*
+ * Initizalizes the Geocoder, which is responsible for the conversion of
+ * addresses to coordinates.
+ */
+function initializeGeocoder()
+{
+    geocoder = new google.maps.Geocoder();
+}
+
+/*
+ * Translates an address into a pair of coordinates.
+ * @param {string} address The address you want to translate.
+ * @returns {LatLng} The coordinates of the best match, or null if none were found.
+ */
+function geocode(address, successCallback)
+{
+    geocoder.geocode( {"address": address}, function(results, status) {
+        if(status == google.maps.GeocoderStatus.OK) {
+            var bestGuess = results[0];
+            successCallback(bestGuess.geometry);
+        } else {
+            return null;
+        }
+    });
+}
 
 function shiftKeyUp()
 {
@@ -212,6 +254,15 @@ function setMapCenter(lat, lng, animated)
         map.setCenter(latlng);
 }
 
+function setMapCenterByAddress(address, animated)
+{
+    geocode(address, function(geometry) {
+        if (animated)
+            map.panToBounds(geometry.bounds);
+        map.fitBounds(geometry.bounds);
+    });
+}
+
 function boundsFromCoordinates(north, south, east, west)
 {
     var ne = new google.maps.LatLng(north, east);
@@ -228,3 +279,4 @@ function fitMapToBounds(north, south, east, west)
 {
     map.fitBounds(boundsFromCoordinates(north, south, east, west));
 }
+

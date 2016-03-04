@@ -161,7 +161,7 @@ void ConfigWidget::backButtonPush(){
 void ConfigWidget::locateButtonPush(){
     QString choice = ui->locateComboBox->currentText();
     if(choice == "Location") {
-        // TODO
+        mapView->setCenter(ui->locateField->text());
     } else if(choice == "Coordinates") {
         mapView->setCenter(QGeoCoordinate(
             ui->latitudeField->text().toDouble(),
