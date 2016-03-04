@@ -12,6 +12,12 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 # Input
-SOURCES += frontend_test.cpp
+HEADERS += \
+    core/simplepathalgorithm_test.h
+
+SOURCES += \
+    core/simplepathalgorithm_test.cpp
+
+
 include(../../src/core/core.pri)
 

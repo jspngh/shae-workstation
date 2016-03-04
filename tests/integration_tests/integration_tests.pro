@@ -12,6 +12,12 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 # Input
-SOURCES += qtmapkit_test.cpp
+HEADERS += \
+    qtmapkit_test.h
+
+SOURCES += \
+    qtmapkit_test.cpp
+
+
 include(../../src/core/core.pri)
 

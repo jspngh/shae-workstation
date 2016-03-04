@@ -4,5 +4,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    unit_tests
+    unit_tests \
+    integration_tests
 
