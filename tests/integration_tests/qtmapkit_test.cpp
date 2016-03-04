@@ -4,6 +4,7 @@
 #include "core/communication.h"
 #include "core/pathalgorithm.h"
 #include "core/simplepathalgorithm.h"
+#include "core/drone.h"
 
 
 class Frontend_Test : public QObject
@@ -16,9 +17,6 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testCase1();
-    void testCase2();
-    void testCase3();
     void testSimplePathAlgorithm();
     void testSimplePathAlgorithm2();
     void testSimplePathAlgorithm3();
@@ -36,26 +34,6 @@ void Frontend_Test::initTestCase()
 
 void Frontend_Test::cleanupTestCase()
 {
-}
-
-void Frontend_Test::testCase1()
-{
-    QString str = "Hello";
-    QCOMPARE(str.toUpper(), QString("HELLO"));
-}
-
-void Frontend_Test::testCase2()
-{
-    QString str = "Hello";
-    QVERIFY(str.toUpper() == "HELLO");
-}
-
-void Frontend_Test::testCase3()
-{
-    Communication* comm = new Communication();
-    QVERIFY(comm->send_data() == "test");
-
-
 }
 
 /*! \brief This tests the SimplePathAlgorithm in a basic example.
