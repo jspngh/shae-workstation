@@ -1,3 +1,6 @@
+#ifndef SIMPLEPATHALGORITHM_TEST_H
+#define SIMPLEPATHALGORITHM_TEST_H
+
 #include <QString>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
@@ -32,4 +35,6 @@ private Q_SLOTS:
     void testSimplePathAlgorithmWithMultipleDrones();
     void testSimplePathAlgorithmWithMultipleDrones2();
 };
+
+#endif // SIMPLEPATHALGORITHM_TEST_H
 
