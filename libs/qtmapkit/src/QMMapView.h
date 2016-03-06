@@ -53,6 +53,7 @@ public:
     void setMapType(MapType type);
 
     void setCenter(QGeoCoordinate center, bool animated = true);
+    void setCenter(QString address, bool animated = true);
     void setZoomLevel(uint zoom);
 
     void makeRegionVisible(QGeoRectangle &region);
@@ -74,6 +75,7 @@ protected:
 
 signals:
     void mapLoaded();
+    void mapFailedToLoad();
     void mapBecameIdle();
     void regionChanged(QGeoRectangle region);
     void centerChanged(QGeoCoordinate center);

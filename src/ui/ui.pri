@@ -23,6 +23,5 @@ DISTFILES += \
     $$PWD/OverviewwindowForm.ui.qml \
     $$PWD/Overviewwindow.qml
 
-RESOURCES += \
-    $$PWD/mapplaceholder.qrc
+RESOURCES +=
 

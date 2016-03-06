@@ -4,57 +4,27 @@
 #include "core/communication.h"
 #include "core/pathalgorithm.h"
 #include "core/simplepathalgorithm.h"
+#include "core/drone.h"
+#include "simplepathalgorithm_test.h"
 
 
-class Frontend_Test : public QObject
-{
-    Q_OBJECT
-
-public:
-    Frontend_Test();
-
-private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-    void testCase1();
-    void testCase2();
-    void testSimplePathAlgorithm();
-    void testSimplePathAlgorithm2();
-    void testSimplePathAlgorithm3();
-    void testSimplePathAlgorithmWithMultipleDrones();
-    void testSimplePathAlgorithmWithMultipleDrones2();
-    void communicationTest();
-};
-
-Frontend_Test::Frontend_Test()
+SimplePathAlgorithm_Test::SimplePathAlgorithm_Test()
 {
 }
 
-void Frontend_Test::initTestCase()
+SimplePathAlgorithm_Test::~SimplePathAlgorithm_Test()
 {
 }
 
-void Frontend_Test::cleanupTestCase()
+void SimplePathAlgorithm_Test::initTestCase()
 {
 }
 
-void Frontend_Test::testCase1()
+void SimplePathAlgorithm_Test::cleanupTestCase()
 {
-    QString str = "Hello";
-    QCOMPARE(str.toUpper(), QString("HELLO"));
 }
 
-void Frontend_Test::testCase2()
-{
-    QString str = "Hello";
-    QVERIFY(str.toUpper() == "HELLO");
-}
-
-/*! \brief This tests the SimplePathAlgorithm in a basic example.
- *  The first waypoint is in the lower left corner. The starting point is inside the search area.
-
-*/
-void Frontend_Test::testSimplePathAlgorithm()
+void SimplePathAlgorithm_Test::testSimplePathAlgorithm()
 {
     //initiate area, start point and algorithm.
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(10.0,0.0),QGeoCoordinate(0.0,10.0));
@@ -98,12 +68,7 @@ void Frontend_Test::testSimplePathAlgorithm()
 
 }
 
-/*!
- * \brief Almost the same test as the previous one.
- * Now the width of the area is not an integer times the visionWidth of the drone.
- * Also, the starting point of the drone is way outside the search area, instead of in the search area as is the case in the previous test. The first wayoint is in the the upperright corner.
- */
-void Frontend_Test::testSimplePathAlgorithm2()
+void SimplePathAlgorithm_Test::testSimplePathAlgorithm2()
 {
 
     //initiate area, start point and algorithm.
@@ -151,7 +116,7 @@ void Frontend_Test::testSimplePathAlgorithm2()
 
 }
 
-void Frontend_Test::testSimplePathAlgorithm3()
+void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
 {
 
     //initiate area, start point and algorithm.
@@ -193,7 +158,7 @@ void Frontend_Test::testSimplePathAlgorithm3()
     }
 }
 
-void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones()
+void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 {
     std::list<Drone> drones = std::list<Drone>();
     drones.push_back(Drone(2.0));
@@ -258,7 +223,7 @@ void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones()
 
 }
 
-void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones2()
+void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 {
     std::list<Drone> drones = std::list<Drone>();
     drones.push_back(Drone(1.5));
@@ -317,18 +282,12 @@ void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones2()
         //Compare
         QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
         QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+
+
     }
+
+
+
 }
 
-void Frontend_Test::communicationTest()
-{
-    Communication* comm = new Communication("127.0.0.1", 6330);
-    int res = comm->openConnection();
-    QVERIFY(res == 0);
-    res = comm->sendData("hello world!", 13);
-    QVERIFY(res == 0);
-}
-
-
-QTEST_MAIN(Frontend_Test)
-#include "frontend_test.moc"
+QTEST_MAIN(SimplePathAlgorithm_Test)
