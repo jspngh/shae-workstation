@@ -28,6 +28,8 @@ void WelcomeWidget::continueButtonPush(){
     {
         QString ss = ui->configTable->selectedItems().at(0)->text();
         emit configFileSignal(ss);
+    } else {
+        emit configFileSignal("");
     }
     ((QStackedWidget*) this->parent())->setCurrentIndex(1);
 }
