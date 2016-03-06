@@ -2,7 +2,7 @@ import socket
 import json
 
 HOST = "127.0.0.1"
-PORT = 6330
+PORT = 45896
 
 serversocket = socket.socket(socket.AF_INET,  # Internet
                              socket.SOCK_STREAM)  # TCP
@@ -14,3 +14,6 @@ while True:
     client, address = serversocket.accept()
     data = client.recv(1024)  # buffer size is 1024 bytes
     print "received message:", data
+    response = "Roger that golden eagle"
+    client.send(format(len(response), '#04x') + response)
+    # client.close()

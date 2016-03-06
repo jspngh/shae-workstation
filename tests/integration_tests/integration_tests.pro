@@ -1,4 +1,4 @@
-QT += core gui widgets positioning testlib
+QT += core gui widgets positioning testlib network
 
 TEMPLATE = app
 TARGET = integration_tests

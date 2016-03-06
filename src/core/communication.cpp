@@ -1,37 +1,29 @@
+#include <QtDebug>
+
 #include "communication.h"
 
-using namespace std;
-
-Communication::Communication(string _hostIp, int _portNr)
-    : hostIp(_hostIp.c_str()), portNr(_portNr)
+Communication::Communication(QString serverIp, int portNr)
+    : serverIp(serverIp), portNr(portNr)
 {
+    connect(&drone, SIGNAL(droneResponse(QString)),
+            this, SLOT(processResponse(QString)));
+    connect(&drone, SIGNAL(error(int,QString)),
+            this, SLOT(processError(int,QString)));
 }
 
-int Communication::openConnection()
+int Communication::doRequest(const QString &message)
 {
-    clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (clientSocket < 0) {
-        perror("ERROR opening socket");
-        // return error;
-    }
-    bzero((char *) &serverAddress, sizeof(serverAddress));
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = inet_addr(hostIp);
-    serverAddress.sin_port = htons(portNr);
-    return 0;
+    drone.droneRequest(serverIp, (quint16) portNr, message);
+    qDebug() << "After drone Request";
 }
 
-int Communication::sendData(string data, int len)
+void Communication::processResponse(const QString &response)
 {
-    if (connect(clientSocket,(struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
-        perror("ERROR connecting");
-        // return error;
-    }
-    int n = write(clientSocket, data.c_str(), len);
-    if (n < 0) {
-         perror("ERROR writing to socket");
-         // return error;
-    }
-    close(clientSocket);
-    return 0;
+    qDebug() << "In processResponse";
+    qDebug() << response;
+}
+
+void Communication::processError(int socketError, const QString &message)
+{
+    qDebug() << message;
 }

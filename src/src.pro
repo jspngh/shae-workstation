@@ -1,5 +1,5 @@
 # QT constraints
-QT  += core gui webkit positioning
+QT  += core gui network webkit positioning
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
 # Project properties
