@@ -101,7 +101,7 @@ void ConfigWidget::initConfScreen(QString f){
             } else if (splitLine.at(0) == "Longitude") {
                 ui->longitudeField->setText((QString) splitLine.at(3));
             } else if (splitLine.at(0) == "Latitude") {
-                ui->LatitudeField->setText((QString) splitLine.at(3));
+                ui->latitudeField->setText((QString) splitLine.at(3));
             } else if (splitLine.at(0) == "Center") {
                 mapView->setCenter(QGeoCoordinate(splitLine.at(5).toDouble(),splitLine.at(4).toDouble(),splitLine.at(6).toDouble()));
             } else if (splitLine.at(0) == "Bottom") {
@@ -117,7 +117,7 @@ void ConfigWidget::initConfScreen(QString f){
         ui->searchStrategyComboBox->setCurrentIndex(0);
         ui->locateField->setText("0");
         ui->longitudeField->setText("0");
-        ui->LatitudeField->setText("0");
+        ui->latitudeField->setText("0");
         mapView->setCenter(QGeoCoordinate(55.75 , 37.33));
     }
 }
@@ -161,8 +161,8 @@ void ConfigWidget::startButtonPush(){
         outfile << "Location search field: " << ui->locateField->text().toStdString() << std::endl;
     }
 
-    if(ui->LatitudeField->text().size() != 0) {
-        outfile << "Latitude search field: " << ui->LatitudeField->text().toStdString() << std::endl;
+    if(ui->latitudeField->text().size() != 0) {
+        outfile << "Latitude search field: " << ui->latitudeField->text().toStdString() << std::endl;
     }
 
     if(ui->longitudeField->text().size() != 0) {
