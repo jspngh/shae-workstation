@@ -141,10 +141,14 @@ void QMMapView::initializeMap()
                 QString::number(center.latitude()),
                 d->toJsMapType(d->initialValues.mapType),
                 QString::number(d->initialValues.zoomLevel));
-    d->evaluateJavaScript(js, true);
+    bool success = d->evaluateJavaScript(js, true).toBool();
 
-    d->loaded = true;
-    emit mapLoaded();
+    if(success) {
+        d->loaded = true;
+        emit mapLoaded();
+    } else {
+        emit mapFailedToLoad();
+    }
 }
 
 void QMMapView::resizeEvent(QResizeEvent *)
@@ -210,6 +214,15 @@ void QMMapView::setCenter(QGeoCoordinate center, bool animated)
     QString format = QString("setMapCenter(%1, %2, %3);");
     QString js = format.arg(QString::number(center.latitude()),
                             QString::number(center.longitude()),
+                            animated ? "true" : "false");
+    d->evaluateJavaScript(js);
+}
+
+void QMMapView::setCenter(QString address, bool animated)
+{
+    Q_D(QMMapView);
+    QString format = QString("setMapCenterByAddress(\"%1\", %2);");
+    QString js = format.arg(address,
                             animated ? "true" : "false");
     d->evaluateJavaScript(js);
 }
