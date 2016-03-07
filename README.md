@@ -3,7 +3,12 @@
 ## Dependencies
 Make sure you have these installed when trying the commands below.
 * Qt (version 5.2 or higher)
+* libqtwebkit
 * Doxygen (for the documentation)
+On an Ubuntu machine, these can be installed using the following commands:
+```
+sudo apt-get install qt5-default qttools5-dev-tools libqt5webkit5 doxygen
+```
 
 ## How to get started
 First of all, you will need the following commands:
