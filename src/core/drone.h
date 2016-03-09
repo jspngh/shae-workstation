@@ -13,7 +13,7 @@ public:
     std::list<QGeoCoordinate> waypoints;
 
     Drone();
-    Drone(double visonWidth);
+    Drone(double visionWidth);
     ~Drone();
 
 private:
