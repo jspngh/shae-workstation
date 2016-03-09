@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "Starting";
     Communication* comm = new Communication("127.0.0.1", 45896);
-    comm->doRequest("Can yet fuel melt steal beams?");
+    comm->doRequest("This is a request for the drone");
     qDebug() << "Request sent";
 
     MainWindow w;

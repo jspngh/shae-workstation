@@ -55,12 +55,8 @@ void DroneConnection::run()
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_0);
 
-        // First send the lenght of the message, then the actual message
-        out << (quint16)0;
         out << message;
         socket.write(block);
-        out.device()->seek(0);
-        out << (quint16)(block.size() - sizeof(quint16));
 
         while (socket.bytesAvailable() < (int)sizeof(quint16)) {
             if (!socket.waitForReadyRead(Timeout)) {
@@ -73,6 +69,7 @@ void DroneConnection::run()
         QDataStream in(&socket);
         in.setVersion(QDataStream::Qt_4_0);
         in >> blockSize;
+        qDebug() << blockSize;
 
         while (socket.bytesAvailable() < blockSize) {
             if (!socket.waitForReadyRead(Timeout)) {
@@ -82,8 +79,9 @@ void DroneConnection::run()
         }
 
         mutex.lock();
-        QString response;
-        in >> response;
+        QByteArray raw;
+        in >> raw;
+        QString response = QString::fromStdString(raw.toStdString());
         emit droneResponse(response);
 
         cond.wait(&mutex);
