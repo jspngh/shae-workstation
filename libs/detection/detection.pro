@@ -8,12 +8,38 @@ QT       -= core gui
 
 TARGET = detection
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG +=   staticlib
 
-SOURCES += detection.cpp
+QMAKE_CXXFLAGS += -std=c++11
 
-HEADERS += detection.h
+INCLUDEPATH += /usr/local/include/opencv2
+
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
+
+SOURCES += \
+    $$PWD/core/*.cpp \
+    $$PWD/detection/*.cpp \
+    $$PWD/detection/detectors/HOG/*.cpp \
+    $$PWD/detection/suppression/*.cpp \
+    $$PWD/detection/window_selection/*.cpp \
+    $$PWD/testframework/*.cpp \
+    $$PWD/utils/*.cpp \
+
+HEADERS += \
+    $$PWD/core/*.h \
+    $$PWD/detection/*.h \
+    $$PWD/detection/detectors/HOG/*.h \
+    $$PWD/detection/suppression/*.h \
+    $$PWD/detection/window_selection/*.h \
+    $$PWD/testframework/*.h \
+    $$PWD/utils/*.h \
+
+
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+
+
+
