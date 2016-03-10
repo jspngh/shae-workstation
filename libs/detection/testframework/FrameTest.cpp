@@ -30,6 +30,7 @@ void FrameTest::test(bool debug) {
     DetectionList detectorResult;
     DetectionList groundTruth;
 
+
     //variables for test measurements
     double elapsedTime = 0;
     double surfacePixels = 0;
@@ -41,15 +42,27 @@ void FrameTest::test(bool debug) {
 
         //read the image
         cv::Mat frame = cv::imread(this->filesData[i]);
+        WindowSelection *sliding;
+        //set the sliding window (required since each frame has different sizes)
+        if(this->detectorManager->getDetectorType().compare("band")==0) {
+            sliding = new SlidingWindow(frame.size().height, frame.size().width, 190, 100, 300, frame.size().width, frame.size().width, 20, 20);
+            this->detectorManager->setWindowSelection(sliding);
+        }
+        if(this->detectorManager->getDetectorType().compare("windows")==0){
+            sliding = new SlidingWindow(frame.size().height, frame.size().width, 190, 100, 300, 50, 150, 20, 20);
+            this->detectorManager->setWindowSelection(sliding);
+        }
 
-        //measure time of detector execution
+
+
+            //measure time of detector execution
         clock_t beginTime = clock();
         detectorResult = this->detectorManager->applyDetector(frame);
-        NonMaximumSuppression NMS;
-        detectorResult = NMS.dollarNMS(detectorResult);
         clock_t endTime = clock();
         double elapsedSecs = double(endTime - beginTime) / CLOCKS_PER_SEC;
 
+        //clean sliding window
+        delete sliding;
 
         //draw results in debug mode
         if(debug){

@@ -16,6 +16,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "../detection/DetectorManager.h"
 #include "../detection/suppression/NonMaximumSuppression.h"
+#include "../detection/window_selection/SlidingWindow.h"
 
 
 

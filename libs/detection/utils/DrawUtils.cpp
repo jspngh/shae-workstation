@@ -22,6 +22,7 @@ void drawDetectionLists(std::vector<DetectionList> L1, std::vector<cv::Scalar> c
 
         }
         cv::imshow("Frame", frame);
+        cv::moveWindow("Frame", 10, 50);
         cv::waitKey(waitKeyEvent);
     }
 }

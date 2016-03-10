@@ -19,7 +19,11 @@ public:
     std::string getName() const { return "HOG"; }
 
     bool applyDetectorOnWindow(const cv::Mat &Frame) const;
-    DetectionList applyDetector(const cv::Mat &Frame) const;
+    DetectionList applyDetectorOnBand(const cv::Mat &Frame) const;
+    DetectionList applyDetectorOnFrame(const cv::Mat &Frame) const;
+
+    std::string getType() const;
+    void setType(std::string type);
 private:
     cv::HOGDescriptor hog;
 };

@@ -20,6 +20,7 @@ SOURCES += \
     $$PWD/core/*.cpp \
     $$PWD/detection/*.cpp \
     $$PWD/detection/detectors/HOG/*.cpp \
+    $$PWD/detection/detectors/ACF/*.cpp \
     $$PWD/detection/suppression/*.cpp \
     $$PWD/detection/window_selection/*.cpp \
     $$PWD/testframework/*.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     $$PWD/core/*.h \
     $$PWD/detection/*.h \
     $$PWD/detection/detectors/HOG/*.h \
+    $$PWD/detection/detectors/ACF/*.h \
     $$PWD/detection/suppression/*.h \
     $$PWD/detection/window_selection/*.h \
     $$PWD/testframework/*.h \

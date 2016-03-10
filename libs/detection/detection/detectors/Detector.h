@@ -24,14 +24,20 @@ public:
     virtual bool applyDetectorOnWindow(const cv::Mat &roi) const = 0;
 
     /*!
-     * \brief Returns a list of detections. The complete frame is searched for human presence.
+     * \brief Returns a list of detections. The complete band is searched for human presence.
      */
-    virtual DetectionList applyDetector(const cv::Mat &frame) const = 0;
+    virtual DetectionList applyDetectorOnBand(const cv::Mat &frame) const = 0;
+    virtual DetectionList applyDetectorOnFrame(const cv::Mat &frame) const = 0;
 
     /*!
      * \brief Return the name of the detector
      */
     virtual std::string getName() const = 0;
+
+    virtual std::string getType() const = 0;
+    virtual void setType(std::string type) = 0;
+protected:
+    std::string type;
 
 };
 #endif // DETECTOR_H

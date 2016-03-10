@@ -5,7 +5,13 @@ using namespace cv;
 HOGDetector::HOGDetector() {
     // set the default OpenCV PeopleDetector (note: this detector works on frames of size 64 x 128)
     hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
+    this->type="windows";
 }
+
+ std::string HOGDetector::getType() const {
+     return type;
+ }
+
 
 bool HOGDetector::applyDetectorOnWindow(const cv::Mat &roi) const {
     cv::Mat window;
@@ -18,8 +24,11 @@ bool HOGDetector::applyDetectorOnWindow(const cv::Mat &roi) const {
     // if found is not empty, a person was detected in the roi.
     return !found.empty();
 }
+DetectionList HOGDetector::applyDetectorOnFrame(const cv::Mat &Frame) const{
+    return applyDetectorOnBand(Frame);
+}
 
-DetectionList HOGDetector::applyDetector(const cv::Mat &Frame) const{
+DetectionList HOGDetector::applyDetectorOnBand(const cv::Mat &Frame) const{
 DetectionList DL;
 
     float Upscale = 1.0;
@@ -49,4 +58,9 @@ DetectionList DL;
     DL.resizeDetections(Upscale);
 
     return DL;
+}
+
+
+void HOGDetector::setType(std::string type){
+    this->type = type;
 }

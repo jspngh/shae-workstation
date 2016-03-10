@@ -36,6 +36,7 @@ public:
      * Note: the dimension of the frame must be equal to the dimension set in the WindowSelection object
      */
     DetectionList applyDetector(cv::Mat &frame);
+    string getDetectorType();
 
 private:
     Detector *detector;

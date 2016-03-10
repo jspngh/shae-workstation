@@ -294,8 +294,6 @@ void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones2()
     testList2.push_back(QGeoCoordinate(8.0,8.0));
     testList2.push_back(QGeoCoordinate(0.0,8.0));
 
-
-
     //drones.front().waypoints == testList1
     double epsilon = 0.000001;
     int listSize = testList1.size();
@@ -326,11 +324,7 @@ void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones2()
         QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
         QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
 
-
     }
-
-
-
 }
 
 
