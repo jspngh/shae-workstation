@@ -2,6 +2,7 @@
 
 #include "communication.h"
 
+
 Communication::Communication(QString serverIp, int portNr)
     : serverIp(serverIp), portNr(portNr)
 {

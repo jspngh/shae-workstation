@@ -10,6 +10,8 @@
      Q_OBJECT
 
  public:
+
+
      /**
       * ... todo ...
       */
