@@ -11,6 +11,12 @@ On an Ubuntu machine, these can be installed using the following commands:
 sudo apt-get install qt5-default qttools5-dev-tools libqt5webkit5 doxygen
 ```
 
+Additionally, OpenCV needs to be installed:
+```
+http://docs.opencv.org/trunk/d7/d9f/tutorial_linux_install.html#gsc.tab=0
+```
+
+
 ## How to get started
 First of all, you will need the following commands:
 ```bash
