@@ -3,5 +3,6 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = qtmapkit
+SUBDIRS = qtmapkit \
+    detection
 
