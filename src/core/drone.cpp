@@ -32,7 +32,7 @@ void Drone::startFlight()
     QJsonDocument jsondoc(json);
 
     //send the json message
-    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Compact));
+    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
 
 
 }
@@ -46,7 +46,7 @@ void Drone::stopFlight()
     QJsonDocument jsondoc(json);
 
     //send the json message
-    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Compact));
+    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
 
 
 }
@@ -60,11 +60,36 @@ void Drone::emergencyLanding()
     QJsonDocument jsondoc(json);
 
     //send the json message
-    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Compact));
+    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
 }
 
-//Still to do
+
 void Drone::sendWaypoints()
 {
+    //Create json message
+    QJsonObject json = QJsonObject();
+    json["MessageType"]= "control";
+    json["Message"]= "path";
 
+    QJsonArray coordinates = QJsonArray();
+    foreach (const QGeoCoordinate waypoint, this->waypoints) {
+            QJsonObject coordinate = QJsonObject();
+
+            QJsonObject location = QJsonObject();
+            location["Latitude"]= waypoint.latitude();
+            location["Longitude"]= waypoint.longitude();
+
+            coordinate["Location"] = location;
+            coordinate["Order"]= 1;
+
+            coordinates.append(coordinate);
+    }
+    json["Waypoints"] = coordinates;
+
+
+
+    QJsonDocument jsondoc(json);
+
+    //send the json message
+    communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
 }

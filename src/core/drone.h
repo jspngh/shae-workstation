@@ -5,6 +5,7 @@
 #include "communication.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonArray>
 
 /*! \brief This is the class that represents a drone on the workstation.
  * This class can be used to send messages to the drone.

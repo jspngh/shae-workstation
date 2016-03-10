@@ -21,8 +21,12 @@ int main(int argc, char *argv[])
     Communication* comm = new Communication("127.0.0.1", 45896);
     //comm->doRequest("This is a request for the drone");
     Drone drone =Drone();
+    drone.waypoints = std::list<QGeoCoordinate>();
+    drone.waypoints.push_back(QGeoCoordinate(1.0,1.0));
+    drone.waypoints.push_back(QGeoCoordinate(0.0,0.0));
+    drone.waypoints.push_back(QGeoCoordinate(-1.0,-1.0));
 
-    drone.stopFlight();
+    drone.sendWaypoints();
     qDebug() << "Request sent";
 
     MainWindow w;

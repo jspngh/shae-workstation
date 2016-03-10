@@ -16,8 +16,9 @@ while True:
     client, address = serversocket.accept()
     length = client.recv(4)
     if length is not None:
-        buffersize = length[0] * pow(256, 3) + length[1] * pow(256, 2) + length[2] * 256 + length[3]
-    data = client.recv(1024)  # buffer size is 1024 bytes
+        buffersize = struct.unpack(">I", length)[0]
+	#print buffersize
+    data = client.recv(buffersize)  # buffer size is 1024 bytes
     print "received message:", data
     response = "Roger that golden eagle"
     print "responding"
