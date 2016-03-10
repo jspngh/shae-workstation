@@ -36,7 +36,6 @@ HEADERS += \
     $$PWD/testframework/*.h \
     $$PWD/utils/*.h \
 
-
 unix {
     target.path = /usr/lib
     INSTALLS += target
