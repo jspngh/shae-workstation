@@ -9,8 +9,8 @@ QT       -= core gui
 TARGET = detection
 TEMPLATE = lib
 CONFIG +=   staticlib
-
-QMAKE_CXXFLAGS += -std=c++11
+CONFIG +=   c++11
+# QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += /usr/local/include/opencv2
 
