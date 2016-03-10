@@ -5,9 +5,12 @@ DEPENDPATH += "core"
 SOURCES += $$PWD/communication.cpp \
     $$PWD/drone.cpp \
     $$PWD/simplepathalgorithm.cpp \
-    $$PWD/pathalgorithm.cpp
+    $$PWD/pathalgorithm.cpp \
+    $$PWD/mediator.cpp
+
 HEADERS += $$PWD/communication.h \
     $$PWD/drone.h \
     $$PWD/pathalgorithm.h \
-    $$PWD/simplepathalgorithm.h
+    $$PWD/simplepathalgorithm.h \
+    $$PWD/mediator.h
 
