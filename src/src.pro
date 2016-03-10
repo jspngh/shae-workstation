@@ -30,6 +30,7 @@ RESOURCES = application.qrc
 # Put subdirectories here
 include(ui/ui.pri)
 include(core/core.pri)
+include(communication/communication.pri)
 
 DISTFILES +=
 

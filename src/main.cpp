@@ -1,6 +1,7 @@
-#include "mainwindow.h"
 #include <QApplication>
 #include <QFile>
+#include "controller.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,8 +13,12 @@ int main(int argc, char *argv[])
         file.close();
     }
 
-    MainWindow w;
+    Controller controller = Controller(a);
+    controller.run();
+
+    MainWindow w = MainWindow(controller);
     w.show();
 
     return a.exec();
 }
+

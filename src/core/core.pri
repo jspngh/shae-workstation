@@ -2,13 +2,15 @@ INCLUDEPATH += "core"
 DEPENDPATH += "core"
 
 
-SOURCES += $$PWD/communication.cpp \
+SOURCES += \
+    $$PWD/controller.cpp \
     $$PWD/drone.cpp \
     $$PWD/simplepathalgorithm.cpp \
     $$PWD/pathalgorithm.cpp \
     $$PWD/mediator.cpp
 
 HEADERS += $$PWD/communication.h \
+    $$PWD/controller.h \
     $$PWD/drone.h \
     $$PWD/pathalgorithm.h \
     $$PWD/simplepathalgorithm.h \
