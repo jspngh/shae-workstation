@@ -84,7 +84,7 @@ public:
     /*! \brief Sends a Json message to set certain settings to a certain values.
      * See Dronestatus enum to see which settings can be set.
     */
-    void setSettings(std::list<DroneSetting> settings, std::List<int> values);
+    void setSettings(std::list<DroneSetting> settings, std::list<int> values);
 
 
 
