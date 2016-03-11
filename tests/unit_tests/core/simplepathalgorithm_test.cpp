@@ -160,13 +160,13 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
 
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 {
-    std::list<Drone> drones = std::list<Drone>();
-    drones.push_back(Drone(2.0));
-    drones.push_back(Drone(2.0));
+    std::list<Drone*>* drones = new std::list<Drone*>();
+    drones->push_back(new Drone(2.0));
+    drones->push_back(new Drone(2.0));
 
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(8.0,0.0),QGeoCoordinate(0.0,8.0));
     SimplePathAlgorithm algorithm = SimplePathAlgorithm(QGeoCoordinate(1.0,1.0));
-    algorithm.setWaypointsForDrones(area, &drones);
+    algorithm.setWaypointsForDrones(area, drones);
     std::list<QGeoCoordinate> testList1 = std::list<QGeoCoordinate>();
     std::list<QGeoCoordinate> testList2 = std::list<QGeoCoordinate>();
 
@@ -186,14 +186,14 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 
 
 
-    //drones.front().waypoints == testList1
+    //drones->front().waypoints == testList1
     double epsilon = 0.000001;
     int listSize = testList1.size();
     for(int i=0; i<listSize; i++){
-        QGeoCoordinate calculated = drones.front().waypoints.front();
+        QGeoCoordinate calculated = drones->front()->waypoints.front();
         QGeoCoordinate test = testList1.front();
 
-        drones.front().waypoints.pop_front();
+        drones->front()->waypoints.pop_front();
         testList1.pop_front();
 
         //Compare
@@ -203,13 +203,13 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 
     }
 
-    //drones.back().waypoints == testList2
+    //drones->back().waypoints == testList2
     listSize = testList2.size();
     for(int i=0; i<listSize; i++){
-        QGeoCoordinate calculated = drones.back().waypoints.front();
+        QGeoCoordinate calculated = drones->back()->waypoints.front();
         QGeoCoordinate test = testList2.front();
 
-        drones.back().waypoints.pop_front();
+        drones->back()->waypoints.pop_front();
         testList2.pop_front();
 
         //Compare
@@ -225,13 +225,13 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 {
-    std::list<Drone> drones = std::list<Drone>();
-    drones.push_back(Drone(1.5));
-    drones.push_back(Drone(2.0));
+    std::list<Drone*>* drones = new std::list<Drone*>();
+    drones->push_back(new Drone(1.5));
+    drones->push_back(new Drone(2.0));
 
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(8.0,0.0),QGeoCoordinate(0.0,8.0));
     SimplePathAlgorithm algorithm = SimplePathAlgorithm(QGeoCoordinate(5.0,5.0));
-    algorithm.setWaypointsForDrones(area, &drones);
+    algorithm.setWaypointsForDrones(area, drones);
     std::list<QGeoCoordinate> testList1 = std::list<QGeoCoordinate>();
     std::list<QGeoCoordinate> testList2 = std::list<QGeoCoordinate>();
 
@@ -253,14 +253,14 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 
 
 
-    //drones.front().waypoints == testList1
+    //drones->front().waypoints == testList1
     double epsilon = 0.000001;
     int listSize = testList1.size();
     for(int i=0; i<listSize; i++){
-        QGeoCoordinate calculated = drones.front().waypoints.front();
+        QGeoCoordinate calculated = drones->front()->waypoints.front();
         QGeoCoordinate test = testList1.front();
 
-        drones.front().waypoints.pop_front();
+        drones->front()->waypoints.pop_front();
         testList1.pop_front();
 
         //Compare
@@ -270,13 +270,13 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 
     }
 
-    //drones.back().waypoints == testList2
+    //drones->back().waypoints == testList2
     listSize = testList2.size();
     for(int i=0; i<listSize; i++){
-        QGeoCoordinate calculated = drones.back().waypoints.front();
+        QGeoCoordinate calculated = drones->back()->waypoints.front();
         QGeoCoordinate test = testList2.front();
 
-        drones.back().waypoints.pop_front();
+        drones->back()->waypoints.pop_front();
         testList2.pop_front();
 
         //Compare

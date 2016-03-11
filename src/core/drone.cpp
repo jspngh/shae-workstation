@@ -8,6 +8,13 @@ Drone::Drone(): communicationLink(new Communication("127.0.0.1",45896))
 
 }
 
+Drone::Drone(Communication* commlink, double vision): communicationLink(commlink)
+{
+    visionWidth = vision;
+
+
+}
+
 Drone::Drone(double visionWidth)
 {
     Drone();

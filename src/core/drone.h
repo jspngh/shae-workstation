@@ -29,6 +29,8 @@ public:
     Drone();
     //! Constructor that sets the visionWidth of the drone
     Drone(double visionWidth);
+    //! Constructor that sets the visionWidth of the drone
+    Drone(Communication* commlink, double visionWidth);
     //! Destructor
     ~Drone();
 

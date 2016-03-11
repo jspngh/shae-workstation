@@ -76,16 +76,28 @@ std::list<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle 
     return list;
 }
 
-void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, std::list<Drone>* drones)
+void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, std::list<Drone*>* drones)
 {
     int numberOfDrones = drones->size();
-    std::_List_iterator<Drone> it = drones->begin();
+    /*
+    std::_List_iterator<Drone*> it = drones->begin();
     for(int i=0;i<numberOfDrones;i++){
-
-        it->waypoints= calculateWaypoints(QGeoRectangle(QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i*(area.width() / numberOfDrones)),
-                                                            QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i+1)*(area.width() / numberOfDrones))),
-                                              it->visionWidth);
-        it++;
+        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i*(area.width() / numberOfDrones));
+        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i+1)*(area.width() / numberOfDrones));
+        QGeoRectangle areaPerDrone = QGeoRectangle(topleft,bottomright);
+        double visionPerDrone = (*it)->visionWidth;
+        (*it)->waypoints= calculateWaypoints(areaPerDrone,visionPerDrone);
+        (*it)++;
+    }*/
+    int i=0;
+    foreach(Drone* drone, *drones){
+        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i*(area.width() / numberOfDrones));
+        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i+1)*(area.width() / numberOfDrones));
+        QGeoRectangle areaPerDrone = QGeoRectangle(topleft,bottomright);
+        double visionPerDrone = drone->visionWidth;
+        drone->waypoints= calculateWaypoints(areaPerDrone,visionPerDrone);
+        i++;
     }
+
 }
 

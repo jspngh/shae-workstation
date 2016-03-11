@@ -18,15 +18,20 @@ int main(int argc, char *argv[])
     }
 
     qDebug() << "Starting";
+    //Communication* comm = new Communication("10.1.1.10", 6330);
     Communication* comm = new Communication("127.0.0.1", 45896);
     //comm->doRequest("This is a request for the drone");
-    Drone drone =Drone();
-    drone.waypoints = std::list<QGeoCoordinate>();
-    drone.waypoints.push_back(QGeoCoordinate(1.0,1.0));
-    drone.waypoints.push_back(QGeoCoordinate(0.0,0.0));
-    drone.waypoints.push_back(QGeoCoordinate(-1.0,-1.0));
-
-    drone.sendWaypoints();
+    // Drone drone =Drone(0.000005);
+    Drone* drone = new Drone(comm, 0.00001);
+    //drone.waypoints = std::list<QGeoCoordinate>();
+    //drone.waypoints.push_back(QGeoCoordinate(1.0,1.0));
+    //drone.waypoints.push_back(QGeoCoordinate(0.0,0.0));
+    //drone.waypoints.push_back(QGeoCoordinate(-1.0,-1.0));
+    std::list<Drone*>* l= new std::list<Drone*>();
+    l->push_back(drone);
+    SimplePathAlgorithm algo = SimplePathAlgorithm(QGeoCoordinate(51.022668,3.709749));
+    algo.setWaypointsForDrones(QGeoRectangle(QGeoCoordinate(51.022668,3.709749),QGeoCoordinate(51.022401,3.709868)),l);
+    drone->sendWaypoints();
     qDebug() << "Request sent";
 
     MainWindow w;

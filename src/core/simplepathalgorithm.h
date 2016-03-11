@@ -27,7 +27,7 @@ public:
      * This function splits the area in smaller areas so that each drone has its own area. Then it calculates the waypoints for each drone,
      * based on their area, using the calculateWaypoints() method.
     */
-    void setWaypointsForDrones(QGeoRectangle area, std::list<Drone>* drones);
+    void setWaypointsForDrones(QGeoRectangle area, std::list<Drone*>* drones);
 
 };
 
