@@ -13,5 +13,6 @@ INCLUDEPATH += ../src
 
 
 # Input
-SOURCES += frontend_test.cpp
+SOURCES += frontend_test.cpp \
+    detection_test.cpp
 include(../src/core/core.pri)
