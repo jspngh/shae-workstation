@@ -11,8 +11,16 @@ TARGET = frontend_unit_test
 INCLUDEPATH += .
 INCLUDEPATH += ../src
 
+CONFIG += testlib
+
+MOC_DIR = $$PWD
+
+QMAKE_POST_LINK += ./${TARGET}
+
+CONFIG +=   c++11
 
 # Input
-SOURCES += frontend_test.cpp \
-    detection_test.cpp
+SOURCES += detection_test.cpp \
+        frontend_test.cpp
+
 include(../src/core/core.pri)

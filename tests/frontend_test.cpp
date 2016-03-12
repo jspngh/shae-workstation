@@ -11,7 +11,7 @@ class Frontend_Test : public QObject
     Q_OBJECT
 
 public:
-    Frontend_Test();
+    Frontend_Test() {}
 
 private Q_SLOTS:
     void initTestCase();
@@ -25,10 +25,6 @@ private Q_SLOTS:
     void testSimplePathAlgorithmWithMultipleDrones();
     void testSimplePathAlgorithmWithMultipleDrones2();
 };
-
-Frontend_Test::Frontend_Test()
-{
-}
 
 void Frontend_Test::initTestCase()
 {
@@ -327,6 +323,3 @@ void Frontend_Test::testSimplePathAlgorithmWithMultipleDrones2()
     }
 }
 
-
-QTEST_MAIN(Frontend_Test)
-#include "frontend_test.moc"

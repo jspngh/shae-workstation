@@ -5,17 +5,21 @@
 #include <QDebug>
 
 #include "utils/queue.h"
-#include "../../libs/detection/detection/DetectorManager.h"
+#include "detection/detection/DetectorManager.h"
 
-class DetectionController : public QThread
+class DetectionController : public QObject
 {
     Q_OBJECT
 
 public:
-    DetectionController() = default;
+    DetectionController(QObject *parent=0);
+    ~DetectionController(){
+        delete this->wndSelector;
+        delete this->detector;
+    }
 
     QString smallTest(){
-        QDebug << QString("Hello");
+        qDebug() << "Hello";
         return QString("Hello");
     }
 
@@ -26,13 +30,13 @@ signals:
     void newDetection();
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    // void run() Q_DECL_OVERRIDE;
 
 private:
-    Queue<QString> sequencesQueue; //!< Thread safe queue containing the sequences that needs to be processed by the detector
+    // Queue<QString> sequencesQueue; //!< Thread safe queue containing the sequences that needs to be processed by the detector
     DetectorManager manager;
-    WindowSelection wndSelector;
-    Detector detector;
+    WindowSelection* wndSelector;
+    Detector* detector;
 };
 
 #endif // DETECTIONCONTROLLER_H

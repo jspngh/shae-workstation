@@ -1,6 +1,17 @@
 INCLUDEPATH += "core"
 DEPENDPATH += "core"
 
+CONFIG += c++11
+
+LIBS +=  -L"$$PWD/../../libs/detection/bin/" -ldetection
+INCLUDEPATH +=  "$$PWD/../../libs/"
+INCLUDEPATH +=  "$$PWD/../../libs/detection"
+
+DEPENDPATH +=  "$$PWD/../../libs/"
+DEPENDPATH +=  "$$PWD/../../libs/detection"
+
+CONFIG += link_pkgconfig
+PKGCONFIG += opencv
 
 SOURCES += $$PWD/communication.cpp \
     $$PWD/drone.cpp \
@@ -15,4 +26,7 @@ HEADERS += $$PWD/communication.h \
     $$PWD/simplepathalgorithm.h \
     $$PWD/detectioncontroller.h \
     $$PWD/utils/queue.h
+
+
+
 

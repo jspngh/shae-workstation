@@ -6,3 +6,5 @@ TEMPLATE = subdirs
 SUBDIRS = qtmapkit \
     detection
 
+CONFIG += c++11
+
