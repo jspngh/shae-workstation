@@ -69,7 +69,7 @@ void DroneConnection::run()
         QDataStream in(&socket);
         in.setVersion(QDataStream::Qt_4_0);
         in >> blockSize;
-        qDebug() << blockSize;
+        //qDebug() << blockSize;
 
         while (socket.bytesAvailable() < blockSize) {
             if (!socket.waitForReadyRead(Timeout)) {
