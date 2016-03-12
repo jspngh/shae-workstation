@@ -5,13 +5,7 @@ CONFIG += c++11
 
 LIBS +=  -L"$$PWD/../../libs/detection/bin/" -ldetection
 INCLUDEPATH +=  "$$PWD/../../libs/"
-INCLUDEPATH +=  "$$PWD/../../libs/detection"
 
-DEPENDPATH +=  "$$PWD/../../libs/"
-DEPENDPATH +=  "$$PWD/../../libs/detection"
-
-# CONFIG += link_pkgconfig
-# PKGCONFIG += opencv
 INCLUDEPATH += /usr/local/include/
 LIBS += -L"/usr/local/lib" -lopencv_core -lopencv_objdetect -lopencv_highgui -lopencv_imgproc
 

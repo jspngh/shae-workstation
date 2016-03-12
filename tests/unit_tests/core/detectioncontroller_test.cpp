@@ -8,7 +8,7 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 void DetectionController_Test::test1(){
     DetectionController c;
     int g = c.smallTest();
-    std::cout << g << std::endl;
+    std::cout << (g + 2) << std::endl;
     QVERIFY(g == 5);
 }
 
