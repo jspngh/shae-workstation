@@ -2,9 +2,9 @@
 #define DETECTIONCONTROLLER_TEST_H
 
 #include <QObject>
-#include <QtTest/QtTest>
 #include <iostream>
 #include <QDebug>
+#include <QtTest>
 
 #include "core/detectioncontroller.h"
 
