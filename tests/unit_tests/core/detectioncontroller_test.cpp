@@ -6,8 +6,10 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 }
 
 void DetectionController_Test::test1(){
-    DetectorManager manager;
-    QVERIFY(1 == 0);
+    DetectionController c;
+    int g = c.smallTest();
+    std::cout << g << std::endl;
+    QVERIFY(g == 5);
 }
 
-// QTEST_MAIN(DetectionController_Test)
+

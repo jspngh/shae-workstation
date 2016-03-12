@@ -18,11 +18,7 @@ DESTDIR = $$PWD/bin
 OBJECTS_DIR = $$PWD/build/
 
 INCLUDEPATH += /usr/local/include/
-INCLUDEPATH += /usr/local/include/opencv2
-
-# LIBS += -L"/usr/local/lib" -lopencv_core -lopencv_objdetect -lopencv_highgui -lopencv_imgproc
-CONFIG += link_pkgconfig
-PKGCONFIG += opencv
+LIBS += -L"/usr/local/lib" -lopencv_core -lopencv_objdetect -lopencv_highgui -lopencv_imgproc
 
 SOURCES += \
     $$PWD/core/*.cpp \

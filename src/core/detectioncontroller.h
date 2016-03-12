@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDebug>
+#include <QObject>
 
 #include "utils/queue.h"
 #include "detection/detection/DetectorManager.h"
@@ -14,13 +15,11 @@ class DetectionController : public QObject
 public:
     DetectionController(QObject *parent=0);
     ~DetectionController(){
-        delete this->wndSelector;
-        delete this->detector;
+
     }
 
-    QString smallTest(){
-        qDebug() << "Hello";
-        return QString("Hello");
+    int smallTest(){
+        return 5;
     }
 
 public slots:
@@ -34,9 +33,9 @@ protected:
 
 private:
     // Queue<QString> sequencesQueue; //!< Thread safe queue containing the sequences that needs to be processed by the detector
-    DetectorManager manager;
-    WindowSelection* wndSelector;
-    Detector* detector;
+    // DetectorManager manager;
+    // WindowSelection* wndSelector;
+    // Detector* detector;
 };
 
 #endif // DETECTIONCONTROLLER_H

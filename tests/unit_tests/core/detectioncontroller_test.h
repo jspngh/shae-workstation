@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
+#include <iostream>
+#include <QDebug>
 
-#include "detection/DetectorManager.h"
+#include "core/detectioncontroller.h"
 
 class DetectionController_Test : public QObject
 {
