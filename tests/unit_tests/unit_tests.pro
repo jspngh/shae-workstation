@@ -18,7 +18,8 @@ HEADERS += \
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
-    core/json_messages_test.cpp
+    core/json_messages_test.cpp \
+    core/main.cpp
 
 
 include(../../src/core/core.pri)

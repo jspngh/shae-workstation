@@ -19,6 +19,7 @@ enum DroneSetting
 
 /*! \brief This is the class that represents a drone on the workstation.
  * This class can be used to send messages to the drone.
+ *  Note that each message methods sends a message, but returns a QJsondoc as well for testing and debugging purposes.
 
 */
 class Drone
@@ -45,19 +46,19 @@ public:
     ~Drone();
 
     /***********************
-    Control message methods
+    Navigation message methods
     ************************/
     //! Sends a Json message to the drone that contains all waypoints.
-    void sendWaypoints();
+    QJsonDocument sendWaypoints();
 
     //! Sends a Json message to the drone to start the flight.
-    void startFlight();
+    QJsonDocument startFlight();
 
     //! Sends a Json message to the drone to stop the flight.
-    void stopFlight();
+    QJsonDocument stopFlight();
 
     //! Sends a Json message to the drone to make an emergency landing.
-    void emergencyLanding();
+    QJsonDocument emergencyLanding();
 
     /**************************
     Status messages method
@@ -65,12 +66,12 @@ public:
     /*! \brief Sends a Json message to the drone to request a certain status.
      *  See DroneStatus enum to see which statuses can be requested.
      * This method actually uses the method to request multiple statuses, namely requestStatuses(). */
-    void requestStatus(DroneStatus status);
+    QJsonDocument requestStatus(DroneStatus status);
     /*! \brief Sends a Json message to the drone to request certain multiple statuses.
      *  See DroneStatus enum to see which statuses can be requested. */
-    void requestStatuses(std::list<DroneStatus> statuses);
+    QJsonDocument requestStatuses(std::list<DroneStatus> statuses);
     //! Sends a Json message that asks for the heartbeat.
-    void requestHeartbeat();
+    QJsonDocument requestHeartbeat();
 
     /**************************
     Setting messages methods
@@ -79,12 +80,12 @@ public:
      *  See DroneStatus enum to see which settings can be set.
      * This method actually uses the method to set mulitple settings, namely setSettings().
     */
-    void setSetting(DroneSetting setting, int value);
+    QJsonDocument setSetting(DroneSetting setting, int value);
 
     /*! \brief Sends a Json message to set certain settings to a certain values.
      * See Dronestatus enum to see which settings can be set.
     */
-    void setSettings(std::list<DroneSetting> settings, std::list<int> values);
+    QJsonDocument setSettings(std::list<DroneSetting> settings, std::list<int> values);
 
 
 

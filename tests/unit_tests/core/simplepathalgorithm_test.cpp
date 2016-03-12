@@ -58,8 +58,8 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm()
         testList.pop_front();
 
         //compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude()- test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude()- test.longitude())<epsilon);
 
     }
 
@@ -108,8 +108,8 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm2()
         testList.pop_front();
 
         //Compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude()- test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude()- test.longitude())<epsilon);
 
 
     }
@@ -151,8 +151,8 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
         testList.pop_front();
 
         //Compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude()- test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude()- test.longitude())<epsilon);
 
 
     }
@@ -200,8 +200,8 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
         testList1.pop_front();
 
         //Compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude()- test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude()- test.longitude())<epsilon);
 
 
     }
@@ -216,8 +216,8 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
         testList2.pop_front();
 
         //Compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude()- test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude()- test.longitude())<epsilon);
 
 
     }
@@ -271,8 +271,8 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
         testList1.pop_front();
 
         //Compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude()- test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude()- test.longitude())<epsilon);
 
 
     }
@@ -287,11 +287,12 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
         testList2.pop_front();
 
         //Compare
-        QVERIFY(abs(calculated.latitude()- test.latitude())<epsilon);
-        QVERIFY(abs(calculated.longitude()- test.longitude())<epsilon);
+        QVERIFY(fabs(calculated.latitude() - test.latitude())<epsilon);
+        QVERIFY(fabs(calculated.longitude() - test.longitude())<epsilon);
 
 
     }
+
     delete droneA;
     delete droneB;
     delete drones;
@@ -299,4 +300,4 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 
 }
 
-QTEST_MAIN(SimplePathAlgorithm_Test)
+//QTEST_MAIN(SimplePathAlgorithm_Test)

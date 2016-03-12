@@ -30,60 +30,62 @@ Drone::~Drone()
 }
 
 /***********************
-Control message methods
+Navigation message methods
 ************************/
 
-void Drone::startFlight()
+QJsonDocument Drone::startFlight()
 {
     //Create json message to start the flight conform the interface of the wiki
     QJsonObject json = QJsonObject();
 
     json["Message"]= "start";
-    json["MessageType"]= "control";
+    json["MessageType"]= "navigation";
     QJsonDocument jsondoc(json);
+
 
     //send the json message
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
 
-
+    return jsondoc;
 }
 
-void Drone::stopFlight()
+QJsonDocument Drone::stopFlight()
 {
     //Create json message to stop the flight conform the interface of the wiki
     QJsonObject json = QJsonObject();
 
     json["Message"]= "stop";
-    json["MessageType"]= "control";
+    json["MessageType"]= "navigation";
     QJsonDocument jsondoc(json);
 
     //send the json message
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
 
-
+    return jsondoc;
 }
 
-void Drone::emergencyLanding()
+QJsonDocument Drone::emergencyLanding()
 {
     //Create json message to make an emergency landing conform the interface of the wiki
     QJsonObject json = QJsonObject();
 
     json["Message"]= "emergency";
-    json["MessageType"]= "control";
+    json["MessageType"]= "navigation";
     QJsonDocument jsondoc(json);
 
     //send the json message
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
+    return jsondoc;
 }
 
 
-void Drone::sendWaypoints()
+QJsonDocument Drone::sendWaypoints()
 {
     //Create json message
     QJsonObject json = QJsonObject();
 
     json["Message"]= "path";
-    json["MessageType"]= "control";
+    json["MessageType"]= "navigation";
 
     QJsonArray coordinates = QJsonArray();
     int i=0;
@@ -106,20 +108,21 @@ void Drone::sendWaypoints()
 
     //send the json message
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
+    return jsondoc;
 }
 
 /**************************
 Status messages method
 **************************/
-void Drone::requestStatus(DroneStatus status)
+QJsonDocument Drone::requestStatus(DroneStatus status)
 {
     std::list<DroneStatus> list = std::list<DroneStatus>();
     list.push_back(status);
-    requestStatuses(list);
+    return requestStatuses(list);
 
 }
 
-void Drone::requestStatuses(std::list<DroneStatus> statuses)
+QJsonDocument Drone::requestStatuses(std::list<DroneStatus> statuses)
 {
     //Create json message
     QJsonObject json = QJsonObject();
@@ -153,10 +156,11 @@ void Drone::requestStatuses(std::list<DroneStatus> statuses)
 
     //send
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
+    return jsondoc;
 
 }
 
-void Drone::requestHeartbeat()
+QJsonDocument Drone::requestHeartbeat()
 {
     //Create json message
     QJsonObject json = QJsonObject();
@@ -166,6 +170,7 @@ void Drone::requestHeartbeat()
 
     //send
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
+    return jsondoc;
 }
 
 
@@ -173,24 +178,24 @@ void Drone::requestHeartbeat()
 Setting messages methods
 **************************/
 
-void Drone::setSetting(DroneSetting setting, int value)
+QJsonDocument Drone::setSetting(DroneSetting setting, int value)
 {
     std::list<DroneSetting> settingList = std::list<DroneSetting>();
     settingList.push_back(setting);
     std::list<int> valueList = std::list<int>();
     valueList.push_back(value);
 
-    setSettings(settingList, valueList);
+    return setSettings(settingList, valueList);
 }
 
-void Drone::setSettings(std::list<DroneSetting> settings, std::list<int> values)
+QJsonDocument Drone::setSettings(std::list<DroneSetting> settings, std::list<int> values)
 {
     //Create json message
     QJsonObject json = QJsonObject();
     json["MessageType"]= "settings";
     QJsonArray settingsToSet = QJsonArray();
-
-    for(int i=0; i<settings.size(); i++){
+    int size = settings.size();
+    for(int i=0; i < size ; i++){
         QJsonObject settingToSet = QJsonObject();
         QString key;
         DroneSetting setting = settings.front();
@@ -225,4 +230,5 @@ void Drone::setSettings(std::list<DroneSetting> settings, std::list<int> values)
 
     //send
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
+    return jsondoc;
 }
