@@ -60,7 +60,7 @@
     <rect>
      <x>10</x>
      <y>20</y>
-     <width>361</width>
+     <width>351</width>
      <height>71</height>
     </rect>
    </property>
@@ -185,7 +185,7 @@
      </spacer>
     </item>
     <item>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="locateComboBox">
       <property name="minimumSize">
        <size>
         <width>100</width>
@@ -237,7 +237,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="LatitudeField"/>
+     <widget class="QLineEdit" name="latitudeField"/>
     </item>
     <item>
      <widget class="QLabel" name="longitudeLabel">

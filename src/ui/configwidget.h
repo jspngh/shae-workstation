@@ -30,11 +30,13 @@ private:
 
 public slots:
     void onMapLoaded();
+    void onMapFailedToLoad();
     void initConfScreen(QString);
 
 private slots:
     void startButtonPush();
     void backButtonPush();
+    void locateButtonPush();
     void sliderChanged(int);
 
 };
