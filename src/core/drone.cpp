@@ -1,9 +1,9 @@
 #include "drone.h"
 
 
-Drone::Drone(): communicationLink(new Communication("127.0.0.1",45896))
+Drone::Drone()
 {
-    visionWidth = 1.0;
+    visionWidth = 0.000001;
 
 
 }
@@ -26,7 +26,7 @@ Drone::Drone(double visionWidth)
 
 Drone::~Drone()
 {
-    delete communicationLink;
+
 }
 
 /***********************

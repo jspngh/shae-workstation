@@ -16,6 +16,8 @@
       * ... todo ...
       */
      Communication(QString serverIp, int portNr);
+
+     ~Communication();
      /**
       * ... todo ...
       * returns 0 when everything is correct

@@ -27,7 +27,7 @@ public:
     /*********
     Attributes
     **********/
-    QString ID; //!< The ID of the drone.
+    //QString ID; //!< The ID of the drone.
     double visionWidth; //!< This attribute tells how wide the vision of the drone is. This is useful to calculate the waypoints. It should use the same scale as the coordinates used in the waypointplanning algorithms.
     std::list<QGeoCoordinate> waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     Communication* communicationLink;
@@ -35,11 +35,11 @@ public:
     /***********************
     Constructors/Destructors
     *************************/
-    //! Empty constructor
+    //! Empty constructor that sets visionwidth = 0.000001.
     Drone();
-    //! Constructor that sets the visionWidth of the drone
+    //! Constructor that sets the visionWidth of the drone.
     Drone(double visionWidth);
-    //! Constructor that sets the visionWidth of the drone
+    //! Constructor that sets the visionWidth of the drone and the Communication object
     Drone(Communication* commlink, double visionWidth);
     //! Destructor
     ~Drone();

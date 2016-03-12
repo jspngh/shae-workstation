@@ -1,7 +1,11 @@
-#include <QtDebug>
+#include <QDebug>
 
 #include "communication.h"
 
+Communication::~Communication()
+{
+
+}
 
 Communication::Communication(QString serverIp, int portNr)
     : serverIp(serverIp), portNr(portNr)

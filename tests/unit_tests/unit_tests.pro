@@ -13,10 +13,12 @@ UI_DIR = $$PWD/build/.ui
 
 # Input
 HEADERS += \
-    core/simplepathalgorithm_test.h
+    core/simplepathalgorithm_test.h \
+    core/json_messages_test.h
 
 SOURCES += \
-    core/simplepathalgorithm_test.cpp
+    core/simplepathalgorithm_test.cpp \
+    core/json_messages_test.cpp
 
 
 include(../../src/core/core.pri)
