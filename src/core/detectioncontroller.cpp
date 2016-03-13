@@ -5,9 +5,7 @@
 
 DetectionController::DetectionController(QObject *parent):QObject(parent)
 {
-    // this->detector = new HOGDetector();
-    // this->wndSelector = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150,20, 20);
-    // this->manager = DetectorManager(this->detector, this->wndSelector);
+
 }
 
 void DetectionController::addSequence(QString sequence)

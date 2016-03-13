@@ -1,20 +1,24 @@
 #include "DetectorManager.h"
 #include "suppression/NonMaximumSuppression.h"
+#include "detectors/HOG/HOGDetector.h"
+#include "window_selection/SlidingWindow.h"
 
+#include <iostream>
 
-DetectorManager::DetectorManager(Detector *detector, WindowSelection *windowSelection) {
-    this->detector = detector;
-    this->windowSelection = windowSelection;
+DetectorManager::DetectorManager() {
+    std::cout << "here3" << std::endl;
+    // this->detector = new HOGDetector();
+    this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150,20, 20);
+    std::cout << "here2" << std::endl;
 }
 
-DetectorManager::DetectorManager() {}
-
 DetectorManager::~DetectorManager() {
-    // nothing needs to be deleted because nothing was created in the constructor
+    // delete this->detector;
+    delete this->windowSelection;
 }
 
 string DetectorManager::getDetectorType() {
-    return this->detector->getType();
+    return "hello"; // this->detector->getType();
 }
 
 void DetectorManager::setDetector(Detector *detector) {

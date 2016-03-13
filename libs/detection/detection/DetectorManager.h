@@ -14,21 +14,25 @@
 class DetectorManager {
 public:
     /*!
-     * Constructor
-     * \brief Initialises a DetectorManager with the desired Detector and WindowSelection
+     * No-args (default) constructor
+     * \brief Initialises a default DetectorManager
      * */
-    DetectorManager(Detector *detector, WindowSelection *windowSelection);
-
-    /*!
-     * No-args (default) constructor will leave detector and windowSelection to NULL.
-     * The members will have to be set via the appropriate setters.
-     */
     DetectorManager();
-    virtual ~DetectorManager();
+    ~DetectorManager();
 
     // setters
     void setDetector(Detector *detector);
     void setWindowSelection(WindowSelection *windowSelection);
+
+
+    // getters
+    Detector* getDetector(){
+        return this->detector;
+    }
+
+    WindowSelection* getWindowSelector(){
+        return this->windowSelection;
+    }
 
     /*!
      * \brief Searches for human presence in a frame
@@ -37,6 +41,7 @@ public:
      */
     DetectionList applyDetector(cv::Mat &frame);
     string getDetectorType();
+
 
 private:
     Detector *detector;

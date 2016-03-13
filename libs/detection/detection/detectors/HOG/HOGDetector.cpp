@@ -4,7 +4,7 @@ using namespace cv;
 
 HOGDetector::HOGDetector() {
     // set the default OpenCV PeopleDetector (note: this detector works on frames of size 64 x 128)
-    hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
+    // this->hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
     this->type="windows";
 }
 

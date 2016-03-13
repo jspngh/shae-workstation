@@ -23,6 +23,8 @@ HEADERS += $$PWD/communication.h \
     $$PWD/detectioncontroller.h \
     $$PWD/utils/queue.h
 
+# If something has changed in libdetection: first rebuild the lib and then build the application
+PRE_TARGETDEPS += "$$PWD/../../libs/detection/bin/libdetection.a"
 
 
 

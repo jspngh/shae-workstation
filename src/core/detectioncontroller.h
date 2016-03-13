@@ -31,11 +31,9 @@ signals:
 protected:
     // void run() Q_DECL_OVERRIDE;
 
-private:
+public:
     Queue<QString> sequencesQueue; //!< Thread safe queue containing the sequences that needs to be processed by the detector
     DetectorManager manager;
-    WindowSelection* wndSelector;
-    Detector* detector;
 };
 
 #endif // DETECTIONCONTROLLER_H
