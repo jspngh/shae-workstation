@@ -10,6 +10,7 @@
 class Communication : public QObject
 {
   public:
+    Communication(QObject *parent = 0);
     QString send();
 
 };

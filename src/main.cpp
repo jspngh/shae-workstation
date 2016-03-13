@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
         file.close();
     }
 
-    Controller controller = Controller(a);
-    controller.run();
-
-    MainWindow w = MainWindow(controller);
+    MainWindow w;
     w.show();
+
+    Controller *controller = new Controller(&w);
+    controller->run();
 
     return a.exec();
 }

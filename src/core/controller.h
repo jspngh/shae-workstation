@@ -2,12 +2,11 @@
 #define CONTROLLER_H
 
 #include <QThread>
+#include <QSet>
 #include "mediator.h"
 #include "communication.h"
 #include "mainwindow.h"
-#include "welcomewidget.h"
-#include "configwidget.h"
-#include "overviewwidget.h"
+#include "drone.h"
 
 namespace Core {
     class Controller;
@@ -20,8 +19,10 @@ class Controller : public QThread
     Q_OBJECT
 
 private:
-    Mediator* mediator;
-    Communication* communication;
+    MainWindow *mainWindow;
+    Mediator *mediator;
+    Communication *communication;
+    QSet<Drone*> *drones;
 
     QThread mediatorThread;
     QThread communicationThread;
@@ -29,16 +30,17 @@ private:
     QThread persistenceThread;
 
 public:
-    explicit Controller(QObject *parent = 0);
+    explicit Controller(MainWindow *window, QObject *parent = 0);
     ~Controller();
-    void setUiWidgets(MainWindow *window,
-                      WelcomeWidget *welcomeWidget,
-                      ConfigWidget *configWidget,
-                      OverviewWidget *overviewWidget);
+    /*!
+     * Creates all the components.
+     */
+    void run() Q_DECL_OVERRIDE;
 
 private:
     void createMediator();
     void createCommunication();
+    void createDrone();
     void createDetection();
     void createPersistence();
 

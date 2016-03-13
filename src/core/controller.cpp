@@ -1,50 +1,49 @@
 #include "controller.h"
 
-Controller::Controller(QObject *parent) :
-    QObject(parent)
+Controller::Controller(MainWindow *window, QObject *parent) :
+    QThread(parent)
 {
-    createCommunication();
-    createDetection();
-    createPersistence();
-    createMediator();
+    mainWindow = window;
+
+    drones = new QSet<Drone*>();
 }
 
 Controller::~Controller()
 {
 }
 
-void Controller::setUiWidgets(MainWindow *window,
-                              WelcomeWidget *welcomeWidget,
-                              ConfigWidget *configWidget,
-                              OverviewWidget *overviewWidget)
+void Controller::run()
 {
-    mediator->setWelcomeWidget(welcomeWidget);
-    mediator->setConfigWidget(configWidget);
-    mediator->setOverviewWidget(overviewWidget);
+    createPersistence();
+    createCommunication();
+    createDrone();
+    createDetection();
+    createMediator();
 }
 
 void Controller::createMediator()
 {
-    this->mediator = new Mediator(this);
-    this->mediator->moveToThread(this->mediatorThread);
-
-    /* this->mediator->setCommunication(communication); */
-    /* this->mediator->setDetection(communication); */
-    /* this->mediator->setMediator(communication); */
+    mediator = new Mediator(mainWindow);
+    mediator->moveToThread(&mediatorThread);
 }
 
 void Controller::createCommunication()
 {
-    this->communication = new Communication(this);
-    this->communication->moveToThread(this->communicationThread);
+    communication = new Communication();
+    communication->moveToThread(&communicationThread);
 }
 
 void Controller::createDetection()
 {
 }
 
+//! this should ideally be done by the communication module
+void Controller::createDrone()
+{
+    drones->insert(new Drone());
+}
+
 void Controller::createPersistence()
 {
 }
-
 

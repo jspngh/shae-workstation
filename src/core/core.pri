@@ -9,7 +9,7 @@ SOURCES += \
     $$PWD/pathalgorithm.cpp \
     $$PWD/mediator.cpp
 
-HEADERS += $$PWD/communication.h \
+HEADERS += \
     $$PWD/controller.h \
     $$PWD/drone.h \
     $$PWD/pathalgorithm.h \

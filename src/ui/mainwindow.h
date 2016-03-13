@@ -1,11 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QKeyEvent>
 #include <QLabel>
 #include <QWidget>
 #include <QMainWindow>
-#include <QMMapView.h>
 #include <QStackedWidget>
 #include "configwidget.h"
 #include "overviewwidget.h"
@@ -22,7 +20,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    QWidget* getWelcomeWidget();
+    WelcomeWidget* getWelcomeWidget();
+    ConfigWidget* getConfigWidget();
+    OverviewWidget* getOverviewWidget();
 
 private:
     Ui::MainWindow *ui;

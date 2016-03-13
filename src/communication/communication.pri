@@ -3,8 +3,8 @@ DEPENDPATH += "communication"
 
 
 SOURCES += \
-    $$PWD/controller.cpp
+    $$PWD/communication.cpp
 
-HEADERS +=\
+HEADERS += \
     $$PWD/communication.h
 
