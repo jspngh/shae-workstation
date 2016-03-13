@@ -1,5 +1,7 @@
 #include "detectioncontroller_test.h"
 
+using namespace std;
+
 DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(parent)
 {
 
@@ -7,10 +9,8 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::test1(){
     DetectionController c;
-    std::cout << c.manager.getDetectorType() << std::endl;
-    // int g = c.smallTest();
-    // std::cout << (g) << std::endl;
-    QVERIFY(10 == 10);
+    string detectorType = c.manager.getDetectorType();
+    QVERIFY(detectorType == "windows");
 }
 
 

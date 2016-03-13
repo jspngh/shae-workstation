@@ -8,10 +8,8 @@
 #include <iostream>
 
 DetectorManager::DetectorManager() {
-    std::cout << "here3" << std::endl;
     this->detector = new HOGDetector();
     this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150,20, 20);
-    std::cout << "here2" << std::endl;
 }
 
 DetectorManager::~DetectorManager() {
@@ -20,7 +18,7 @@ DetectorManager::~DetectorManager() {
 }
 
 string DetectorManager::getDetectorType() {
-    return "hello"; // this->detector->getType();
+    return this->detector->getType();
 }
 
 void DetectorManager::setDetector(Detector *detector) {

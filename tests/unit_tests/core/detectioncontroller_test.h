@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QtTest>
+#include <string>
 
 #include "core/detectioncontroller.h"
 
