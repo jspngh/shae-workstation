@@ -1,6 +1,7 @@
 #include "queue.h"
 
-template <typename T> T Queue<T>::pop()
+//template <typename T> T Queue<T>::pop()
+QString Queue::pop()
 {
   std::unique_lock<std::mutex> mlock(mutex_);
   while (queue_.empty())
@@ -12,7 +13,7 @@ template <typename T> T Queue<T>::pop()
   return val;
 }
 
-template <typename T> void Queue<T>::pop(T& item)
+void Queue::pop(QString& item)
 {
   std::unique_lock<std::mutex> mlock(mutex_);
   while (queue_.empty())
@@ -23,7 +24,7 @@ template <typename T> void Queue<T>::pop(T& item)
   queue_.pop();
 }
 
-template <typename T> void Queue<T>::push(const T& item)
+void Queue::push(const QString& item)
 {
   std::unique_lock<std::mutex> mlock(mutex_);
   queue_.push(item);

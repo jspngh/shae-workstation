@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QtTest>
 #include <string>
+#include <QThread>
 
 #include "core/detectioncontroller.h"
 
@@ -16,7 +17,7 @@ public:
     explicit DetectionController_Test(QObject *parent = 0);
 
 private Q_SLOTS:
-    void test1();
+    void testQueue();
 };
 
 #endif // DETECTIONCONTROLLER_TEST_H

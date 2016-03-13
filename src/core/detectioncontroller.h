@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
+#include <iostream>
 
 #include "utils/queue.h"
 #include "detection/detection/DetectorManager.h"
@@ -14,25 +15,17 @@ class DetectionController : public QObject
 
 public:
     DetectionController(QObject *parent=0);
-    ~DetectionController(){
-
-    }
-
-    int smallTest(){
-        return 5;
-    }
+    ~DetectionController(){}
 
 public slots:
+    void startProcessing();
     void addSequence(QString sequenceName);
 
 signals:
     void newDetection();
 
-protected:
-    // void run() Q_DECL_OVERRIDE;
-
-public:
-    Queue<QString> sequencesQueue; //!< Thread safe queue containing the sequences that needs to be processed by the detector
+private:
+    Queue sequencesQueue; //!< Thread safe queue containing the sequences that needs to be processed by the detector
     DetectorManager manager;
 };
 
