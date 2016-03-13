@@ -2,9 +2,11 @@
 #define DETECTION_H
 #include <iostream>
 #include <string>
+#include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
 
 /*!
  * Detection is a data class containing information about detections made by the detector in a frame

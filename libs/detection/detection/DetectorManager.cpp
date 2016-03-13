@@ -1,13 +1,15 @@
 #include "DetectorManager.h"
 #include "suppression/NonMaximumSuppression.h"
 #include "detectors/HOG/HOGDetector.h"
+#include "detectors/ACF/ACFDetector.h"
 #include "window_selection/SlidingWindow.h"
 
+#include <opencv2/opencv.hpp>
 #include <iostream>
 
 DetectorManager::DetectorManager() {
     std::cout << "here3" << std::endl;
-    // this->detector = new HOGDetector();
+    this->detector = new HOGDetector();
     this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150,20, 20);
     std::cout << "here2" << std::endl;
 }

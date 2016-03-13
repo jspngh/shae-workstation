@@ -8,7 +8,6 @@
 #include "ACFDetector.h"
 #include "ACFFeaturePyramid.h"
 
-
 ACFDetector::ACFDetector() {
     ReadModel("../src/detection/detectors/ACF/Model/INRIA_ACF.xml");
     this->type="frame";

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <opencv2/opencv.hpp>
 
 #include "../Detector.h"
 #include "../../DetectionList.h"
