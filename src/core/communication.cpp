@@ -20,6 +20,7 @@ int Communication::doRequest(const QString &message)
 {
     drone.droneRequest(serverIp, (quint16) portNr, message);
     //qDebug() << "After drone Request";
+    return 0;
 }
 
 void Communication::processResponse(const QString &response)
