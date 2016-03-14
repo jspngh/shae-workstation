@@ -38,25 +38,14 @@ void DetectorManager::setWindowSelection(WindowSelection *windowSelection) {
 
 DetectionList DetectorManager::process(std::string seq){
     DetectionList detections;
-
-    // read the sequence
-    cv::VideoCapture capture(seq);
+    FrameFromVideo producer(seq, this->fps);
     cv::Mat frame;
-    double numFrames = capture.get(CV_CAP_PROP_FRAME_COUNT);
-    double fpsOriginal = (double) capture.get(CV_CAP_PROP_FPS);
-    // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
-    double frameHop = fpsOriginal / (double) this->fps;
-    double currentFrame = 0.0;
-    while(currentFrame < numFrames)
-    {
-        capture.set(CV_CAP_PROP_POS_FRAMES, currentFrame);
-        capture >> frame;
-        std::cout << "detecting humans in frame: " << currentFrame << std::endl;
-        // TODO: check if frame contains meaningful value
-        detections = this->applyDetector(frame);
 
-        // update the currentFrame
-        currentFrame += frameHop;
+    while(producer.frameAvailable())
+    {
+        frame = producer.giveFrame();
+        detections = this->applyDetector(frame);
+        // std::cout << "#: " << detections.getSize() << std::endl;
     }
 
     return detections;
@@ -81,7 +70,7 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame) {
     while(this->windowSelection->nextWindow(win)) {
         // select the window from the complete frame
         roi = frame(win);
-        //drawRectOnFrame(frame, win, COLOR_WHITE, 0);
+        // drawRectOnFrame(frame, win, COLOR_WHITE, 0);
         if (this->detector->getType().compare("window") == 0) {
             if (this->detector->applyDetectorOnWindow(roi)) {
                 // the detector detected a person in the roi

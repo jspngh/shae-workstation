@@ -1,32 +1,28 @@
-//============================================================================
-// Author      : F. De Smedt @ EAVISE
-// Copyright   : This code is written for the publication of  "Open Framework for Combined Pedestrian detection". This code is for research and educational purposes only. For a different license, please contact the contributors directly. More information about the license can be fount in license.txt
-//============================================================================
-
-
 #include "FrameFromVideo.h"
 
 
+FrameFromVideo::FrameFromVideo(std::string sequence, int fps) {
+    this->capture = cv::VideoCapture(sequence);
+    this->fps = fps;
 
-
-FrameFromVideo::FrameFromVideo(std::string directory) {
-    cap = cv::VideoCapture(directory);
+    this->numFrames = capture.get(CV_CAP_PROP_FRAME_COUNT);
+    this->fpsOriginal = (double) capture.get(CV_CAP_PROP_FPS);
+    // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
+    this->frameHop = fpsOriginal / (double) this->fps;
+    this->currentFrame = 0.0;
 }
 
 
-FrameFromVideo::~FrameFromVideo() {
-}
+FrameFromVideo::~FrameFromVideo() {}
 
 cv::Mat FrameFromVideo::giveFrame() {
     cv::Mat frame;
-
-    if(cap.get(CV_CAP_PROP_POS_FRAMES)  < cap.get(CV_CAP_PROP_FRAME_COUNT)) {
-        cap >>frame;
-    }
-
+    capture.set(CV_CAP_PROP_POS_FRAMES, currentFrame);
+    capture >> frame;
+    currentFrame += frameHop;
     return frame;
 }
 
-bool FrameFromVideo::isend() {
-    return cap.get(CV_CAP_PROP_POS_FRAMES)  >= cap.get(CV_CAP_PROP_FRAME_COUNT);
+bool FrameFromVideo::frameAvailable() {
+    return this->currentFrame < this->numFrames;
 }

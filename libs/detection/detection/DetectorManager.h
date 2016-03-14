@@ -5,6 +5,7 @@
 #include "window_selection/WindowSelection.h"
 #include "detectors/Detector.h"
 #include "../utils/DrawUtils.h"
+#include "../core/FrameFromVideo.h"
 
 /*
  * DetectorManager is a builder/Broker class
