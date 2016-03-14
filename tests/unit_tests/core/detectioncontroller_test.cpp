@@ -9,18 +9,18 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase(){
     this->controller = new DetectionController();
-    this->controllerThread = new QThread();
-    this->controller->moveToThread(this->controllerThread);
-    this->controllerThread->start(/*specify priority*/);
+//    this->controllerThread = new QThread();
+//    this->controller->moveToThread(this->controllerThread);
+//    this->controllerThread->start(/*specify priority*/);
 
-    // this is the behaviour we need, the slot function 'processSequence' will be executed in a different thread
-    QObject::connect(this, &DetectionController_Test::newSequence,
-                     this->controller, &DetectionController::processSequence,
-                     Qt::ConnectionType::QueuedConnection);
+//    // this is the behaviour we need, the slot function 'processSequence' will be executed in a different thread
+//    QObject::connect(this, &DetectionController_Test::newSequence,
+//                     this->controller, &DetectionController::processSequence,
+//                     Qt::ConnectionType::QueuedConnection);
 
     QObject::connect(this->controller, &DetectionController::newDetection,
-                     this, &DetectionController_Test::onNewDetection,
-                     Qt::ConnectionType::QueuedConnection);
+                     this, &DetectionController_Test::onNewDetection);
+
     this->numDetections = 0;
     this->threadId = QThread::currentThreadId();
 }
@@ -35,15 +35,19 @@ void DetectionController_Test::onNewDetection(){
 void DetectionController_Test::testQueue(){
     std::cout << "Main thread in: " << QThread::currentThreadId() << std::endl;
 
+    this->controller->processSequence(QString("footage/GOPR0016_cropped.mp4"));
+
+    QVERIFY(this->numDetections == 1);
+
     // emitting the signal 'newSequence' will cause the execution of the slot 'processSequence' in a different thread
-    emit newSequence(QString("seq#1"));
-    emit newSequence(QString("seq#2"));
+    // emit newSequence(QString("seq#1"));
+    // emit newSequence(QString("seq#2"));
 }
 
 void DetectionController_Test::cleanupTestCase(){
-    this->controllerThread->quit();
+   // this->controllerThread->quit();
     delete this->controller;
-    delete this->controllerThread;
+   // delete this->controllerThread;
 }
 
 
