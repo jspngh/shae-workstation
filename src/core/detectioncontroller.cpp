@@ -7,18 +7,10 @@ DetectionController::DetectionController(QObject *parent):QObject(parent)
 
 }
 
-void DetectionController::addSequence(QString sequence)
-{
-    this->sequencesQueue.push(sequence);
-}
+void DetectionController::processSequence(QString seq){
+    // process a sequence
+    std::cout << "Processing a sequence in thr: " << QThread::currentThreadId() << std::endl;
 
-void DetectionController::startProcessing()
-{
-    while(true){
-        // thread will go to sleep if there are no sequences to process
-        QString sequencePath = this->sequencesQueue.pop();
-        std::cout << "Processing a sequence" << std::endl;
-        emit this->newDetection();
-    }
+    // once the sequence has processed the sequence emit the signal
+    emit this->newDetection();
 }
-

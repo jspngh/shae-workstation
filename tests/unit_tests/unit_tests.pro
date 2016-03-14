@@ -1,4 +1,4 @@
-QT += core gui positioning testlib
+QT += core gui positioning testlib widgets
 
 TEMPLATE = app
 TARGET = unit_tests
