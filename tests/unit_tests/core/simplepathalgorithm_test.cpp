@@ -152,7 +152,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 {
     std::list<Drone*>* drones = new std::list<Drone*>();
     Drone* droneA = new Drone();
-    droneA->setVisionWidth(1.5);
+    droneA->setVisionWidth(2.0);
     Drone* droneB = new Drone();
     droneB->setVisionWidth(2.0);
 
