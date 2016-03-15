@@ -80,7 +80,7 @@ Slots
 ************************/
 void Drone::processResponse(const QString &response)
 {
-    //qDebug() << "In processResponse";
+    qDebug() << "In processResponse";
     qDebug() << response;
 }
 

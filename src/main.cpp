@@ -32,20 +32,22 @@ int main(int argc, char *argv[])
     l->push_back(drone);
     SimplePathAlgorithm algo = SimplePathAlgorithm(QGeoCoordinate(51.022668,3.709749));
     algo.setWaypointsForDrones(QGeoRectangle(QGeoCoordinate(51.022668,3.709749),QGeoCoordinate(51.022401,3.709868)),l);
-    //drone->sendWaypoints();
+
+    drone->sendWaypoints();
+    usleep(10000);
     drone->startFlight();
     qDebug() << "Request sent";
-    usleep(1000000);
+    usleep(10000);
     drone->requestHeartbeat();
-    usleep(1000000);
+    usleep(10000);
     qDebug() << "Request sent";
 
     drone->requestStatus(Location);
     qDebug() << "Request sent";
-    usleep(1000000);
+    usleep(10000);
     drone->setSetting(Speed,20);
     qDebug() << "Request sent";
-    usleep(1000000);
+    usleep(10000);
 
     MainWindow w;
     w.show();
