@@ -23,7 +23,7 @@ private:
     void onNewDetection();
 
 private Q_SLOTS:
-    void testQueue();
+    void testProcessSequence();
     void initTestCase();
     void cleanupTestCase();
 
