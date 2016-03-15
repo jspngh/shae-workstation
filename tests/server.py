@@ -4,7 +4,7 @@ import math
 import struct
 
 HOST = "127.0.0.1"
-PORT = 45896
+PORT = 6332
 
 serversocket = socket.socket(socket.AF_INET,  # Internet
                              socket.SOCK_STREAM)  # TCP

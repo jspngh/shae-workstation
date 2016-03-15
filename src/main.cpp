@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "Starting";
     //Communication* comm = new Communication("10.1.1.10", 6330);
-    Communication* comm = new Communication("127.0.0.1", 45896);
+    Communication* comm = new Communication("127.0.0.1", 6330);
     //comm->doRequest("This is a request for the drone");
     // Drone drone =Drone(0.000005);
     Drone* drone = new Drone(comm, 0.00001);
@@ -33,9 +33,13 @@ int main(int argc, char *argv[])
     SimplePathAlgorithm algo = SimplePathAlgorithm(QGeoCoordinate(51.022668,3.709749));
     algo.setWaypointsForDrones(QGeoRectangle(QGeoCoordinate(51.022668,3.709749),QGeoCoordinate(51.022401,3.709868)),l);
     //drone->sendWaypoints();
-    drone->startFlight();
+    //drone->startFlight();
+    //qDebug() << "Request sent";
+    //usleep(1000000);
+    drone->emergencyLanding();
     qDebug() << "Request sent";
     usleep(1000000);
+
     drone->requestHeartbeat();
     usleep(1000000);
     qDebug() << "Request sent";

@@ -7,7 +7,7 @@ Json_Messages_Test::Json_Messages_Test()
 }
 void Json_Messages_Test::initTestCase()
 {
-    commlink = new Communication("127.0.0.1", 45836);
+    commlink = new Communication("127.0.0.1", 6330);
     drone = Drone(commlink, 0.0001);
     drone.waypoints = std::list<QGeoCoordinate>();
     drone.waypoints.push_back(QGeoCoordinate(1.0,1.0));
@@ -29,6 +29,7 @@ void Json_Messages_Test::testNavigationMessages()
 {
     //send the messages, but keep them in code.
     QJsonDocument doc1 = drone.emergencyLanding();
+
     QJsonDocument doc2 = drone.sendWaypoints();
     QJsonDocument doc3 = drone.startFlight();
     QJsonDocument doc4 = drone.stopFlight();
@@ -136,6 +137,8 @@ void Json_Messages_Test::testSettingsMessages()
     message = json["Message"].toArray();
     QVERIFY( message.at(0).toObject()["Key"] == "fps" );
     QVERIFY( message.at(0).toObject()["Value"].toInt() == 60 );
+
+
 
 }
 

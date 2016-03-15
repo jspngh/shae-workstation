@@ -1,6 +1,5 @@
 #include "drone.h"
 
-
 Drone::Drone()
 {
     visionWidth = 0.000001;
@@ -75,6 +74,7 @@ QJsonDocument Drone::emergencyLanding()
 
     //send the json message
     communicationLink->doRequest(jsondoc.toJson(QJsonDocument::Indented));
+    //QString string = jsondoc.toJson(QJsonDocument::Indented);
     return jsondoc;
 }
 
