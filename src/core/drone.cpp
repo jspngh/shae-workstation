@@ -1,19 +1,31 @@
+#include <QDebug>
+
 #include "drone.h"
 
 
 Drone::Drone()
 {
-    this->visionWidth = MIN_VISIONWIDTH;
-    this->serverIp = "10.1.1.10";
+    this->guid = QUuid::createUuid();
     this->portNr = 6330;
+    this->serverIp = "10.1.1.10";
+    this->visionWidth = MIN_VISIONWIDTH;
+
+    connect(this, SIGNAL(droneResponse(QString)),
+            this, SLOT(processResponse(QString)));
+    connect(this, SIGNAL(error(int,QString)),
+            this, SLOT(processError(int,QString)));
 }
 
-Drone::Drone(QString guid, int portNr, QString serverIp, double visionWidth=MIN_VISIONWIDTH):
+Drone::Drone(QUuid guid, int portNr, QString serverIp, double visionWidth):
     guid(guid),
     portNr(portNr),
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
+    connect(this, SIGNAL(droneResponse(QString)),
+            this, SLOT(processResponse(QString)));
+    connect(this, SIGNAL(error(int,QString)),
+            this, SLOT(processError(int,QString)));
 }
 
 Drone::~Drone()
@@ -38,14 +50,19 @@ QString Drone::getServerIp()
     return this->serverIp;
 }
 
-std::list<QGeoCoordinate> Drone::getWaypoints()
+std::list<QGeoCoordinate>& Drone::getWaypoints()
 {
     return this->waypoints;
 }
 
-void Drone::setWaypoints(std::list<QGeoCoordinate> waypoints)
+void Drone::setWaypoints(const std::list<QGeoCoordinate> &waypoints)
 {
     this->waypoints = waypoints;
+}
+
+void Drone::addWaypoint(const QGeoCoordinate &waypoint)
+{
+    this->waypoints.push_back(waypoint);
 }
 
 double Drone::getVisionWidth()
@@ -57,6 +74,21 @@ void Drone::setVisionWidth(double visionWidth)
 {
     this->visionWidth = visionWidth;
 }
+
+/***********************
+Slots
+************************/
+void Drone::processResponse(const QString &response)
+{
+    //qDebug() << "In processResponse";
+    qDebug() << response;
+}
+
+void Drone::processError(int socketError, const QString &message)
+{
+    qDebug() << message;
+}
+
 
 /***********************
 Navigation message methods
@@ -149,6 +181,7 @@ QJsonDocument Drone::sendWaypoints()
 /**************************
 Status messages method
 **************************/
+
 QJsonDocument Drone::requestStatus(DroneStatus status)
 {
     std::list<DroneStatus> list = std::list<DroneStatus>();

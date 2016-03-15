@@ -1,5 +1,6 @@
-#include "json_messages_test.h"
 #include <unistd.h>
+
+#include "json_messages_test.h"
 
 Json_Messages_Test::Json_Messages_Test()
 {
@@ -7,32 +8,26 @@ Json_Messages_Test::Json_Messages_Test()
 }
 void Json_Messages_Test::initTestCase()
 {
-    commlink = new Communication("127.0.0.1", 45836);
-    drone = Drone(commlink, 0.0001);
-    drone.waypoints = std::list<QGeoCoordinate>();
-    drone.waypoints.push_back(QGeoCoordinate(1.0,1.0));
-    drone.waypoints.push_back(QGeoCoordinate(2.0,2.0));
-
-
+    QUuid droneId = QUuid::createUuid();
+    drone = new Drone(droneId, 45836, "127.0.0.1", 0.0001);
+    std::list<QGeoCoordinate> waypointList = std::list<QGeoCoordinate>();
+    waypointList.push_back(QGeoCoordinate(1.0,1.0));
+    waypointList.push_back(QGeoCoordinate(2.0,2.0));
+    drone->setWaypoints(waypointList);
 }
 
 void Json_Messages_Test::cleanupTestCase()
 {
-
-
-
-    delete commlink;
     usleep(10000);
 }
 
 void Json_Messages_Test::testNavigationMessages()
 {
     //send the messages, but keep them in code.
-    QJsonDocument doc1 = drone.emergencyLanding();
-    QJsonDocument doc2 = drone.sendWaypoints();
-    QJsonDocument doc3 = drone.startFlight();
-    QJsonDocument doc4 = drone.stopFlight();
-
+    QJsonDocument doc1 = drone->emergencyLanding();
+    QJsonDocument doc2 = drone->sendWaypoints();
+    QJsonDocument doc3 = drone->startFlight();
+    QJsonDocument doc4 = drone->stopFlight();
 
     QJsonObject json1 = doc1.object();
     QJsonObject json2 = doc2.object();
@@ -61,8 +56,6 @@ void Json_Messages_Test::testNavigationMessages()
     QVERIFY(waypoint1["Longitude"].toDouble() == 1.0);
     QVERIFY(waypoint2["Latitude"].toDouble() == 2.0);
     QVERIFY(waypoint2["Longitude"].toDouble() == 2.0);
-
-
 }
 
 void Json_Messages_Test::testStatusMessages()
@@ -73,7 +66,7 @@ void Json_Messages_Test::testStatusMessages()
     list.push_back(Drone_Type);
     list.push_back(Waypoint_Reached);
 
-    QJsonDocument jsondoc = drone.requestStatuses(list);
+    QJsonDocument jsondoc = drone->requestStatuses(list);
     QJsonObject json = jsondoc.object();
 
     QVERIFY( json["MessageType"] == "status" );
@@ -84,15 +77,11 @@ void Json_Messages_Test::testStatusMessages()
     QVERIFY( message.at(3).toObject()["Key"] == "waypoint_reached" );
 
     //Also test if just 1 status is sent
-    jsondoc = drone.requestStatus(Location);
+    jsondoc = drone->requestStatus(Location);
     json = jsondoc.object();
     QVERIFY( json["MessageType"] == "status" );
     message = json["Message"].toArray();
     QVERIFY( message.at(0).toObject()["Key"] == "current_location" );
-
-
-
-
 }
 
 void Json_Messages_Test::testSettingsMessages()
@@ -111,7 +100,7 @@ void Json_Messages_Test::testSettingsMessages()
     valueList.push_back(720);
     valueList.push_back(30);
 
-    QJsonDocument jsondoc = drone.setSettings(settingList, valueList);
+    QJsonDocument jsondoc = drone->setSettings(settingList, valueList);
     QJsonObject json = jsondoc.object();
 
     QVERIFY( json["MessageType"] == "settings" );
@@ -127,16 +116,13 @@ void Json_Messages_Test::testSettingsMessages()
     QVERIFY( message.at(3).toObject()["Value"].toInt() == 720 );
     QVERIFY( message.at(4).toObject()["Value"].toInt() == 30 );
 
-
-
     //Also test if just 1 status is sent
-    jsondoc = drone.setSetting(FPS,60);
+    jsondoc = drone->setSetting(FPS,60);
     json = jsondoc.object();
     QVERIFY( json["MessageType"] == "settings" );
     message = json["Message"].toArray();
     QVERIFY( message.at(0).toObject()["Key"] == "fps" );
     QVERIFY( message.at(0).toObject()["Value"].toInt() == 60 );
-
 }
 
 

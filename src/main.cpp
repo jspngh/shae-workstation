@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
+#include <QUuid>
 
 #include "mainwindow.h"
 #include "communication.h"
@@ -19,11 +20,10 @@ int main(int argc, char *argv[])
     }
 
     qDebug() << "Starting";
-    //Communication* comm = new Communication("10.1.1.10", 6330);
-    Communication* comm = new Communication("127.0.0.1", 45896);
     //comm->doRequest("This is a request for the drone");
     // Drone drone =Drone(0.000005);
-    Drone* drone = new Drone(comm, 0.00001);
+    QUuid droneId = QUuid::createUuid();
+    Drone* drone = new Drone(droneId, 45896, "127.0.0.1", 0.0001);
     //drone.waypoints = std::list<QGeoCoordinate>();
     //drone.waypoints.push_back(QGeoCoordinate(1.0,1.0));
     //drone.waypoints.push_back(QGeoCoordinate(0.0,0.0));
@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     delete drone;
-    delete comm;
     delete l;
 
     return a.exec();

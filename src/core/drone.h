@@ -27,9 +27,8 @@ enum DroneSetting
 */
 class Drone : public QObject
 {
-public:
-
     Q_OBJECT
+public:
     /***********************
     Constructors/Destructor
     *************************/
@@ -55,9 +54,11 @@ public:
 
     QString getServerIp();
 
-    std::list<QGeoCoordinate> getWaypoints();
+    std::list<QGeoCoordinate>& getWaypoints();
 
-    void setWaypoints(std::list<QGeoCoordinate> waypoints);
+    void setWaypoints(const std::list<QGeoCoordinate> &waypoints);
+
+    void addWaypoint(const QGeoCoordinate &waypoint);
 
     double getVisionWidth();
 
@@ -115,11 +116,11 @@ private:
     /*********
     Attributes
     **********/
-    const QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
+    QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
     DroneConnection droneConnection;
-    const int portNr; /*!< The port number that will be used to connect to the actual drone */
-    const QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
+    int portNr; /*!< The port number that will be used to connect to the actual drone */
+    QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
 
     std::list<QGeoCoordinate> waypoints; //!< Keeps the list of waypoints the drone needs to fly.
 
