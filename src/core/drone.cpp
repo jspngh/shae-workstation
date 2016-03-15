@@ -10,9 +10,9 @@ Drone::Drone()
     this->serverIp = "10.1.1.10";
     this->visionWidth = MIN_VISIONWIDTH;
 
-    connect(this, SIGNAL(droneResponse(QString)),
+    connect(&droneConnection, SIGNAL(droneResponse(QString)),
             this, SLOT(processResponse(QString)));
-    connect(this, SIGNAL(error(int,QString)),
+    connect(&droneConnection, SIGNAL(error(int,QString)),
             this, SLOT(processError(int,QString)));
 }
 
@@ -22,9 +22,9 @@ Drone::Drone(QUuid guid, int portNr, QString serverIp, double visionWidth):
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
-    connect(this, SIGNAL(droneResponse(QString)),
+    connect(&droneConnection, SIGNAL(droneResponse(QString)),
             this, SLOT(processResponse(QString)));
-    connect(this, SIGNAL(error(int,QString)),
+    connect(&droneConnection, SIGNAL(error(int,QString)),
             this, SLOT(processError(int,QString)));
 }
 
