@@ -17,7 +17,7 @@ public:
     ~Drone();
 
 private:
-    static const double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
+    const double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 
 #endif // DRONE_H
