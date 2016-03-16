@@ -11,55 +11,58 @@
 #include "ChannelFeatures.h"
 #include "ACFDetector.h"
 
-class ACFFeaturePyramid {
+class ACFFeaturePyramid
+{
 public:
 
-    ACFFeaturePyramid(const cv::Mat &Image, int scalesPerOct,cv::Size minSize, const ACFDetector &ADet);
+	ACFFeaturePyramid(const cv::Mat &Image, int scalesPerOct, cv::Size minSize, const ACFDetector &ADet);
 
 
-    ACFFeaturePyramid(const cv::Mat &Image, int scalesPerOct, cv::Size minSize, int minheigth, int maxheight, const ACFDetector &ADet);
+	ACFFeaturePyramid(const cv::Mat &Image, int scalesPerOct, cv::Size minSize, int minheigth, int maxheight, const ACFDetector &ADet);
 
 
-    // Constructor for single scale
-    ACFFeaturePyramid(const cv::Mat &Image, float sc,cv::Size minSize, const ACFDetector &ADet);
+	// Constructor for single scale
+	ACFFeaturePyramid(const cv::Mat &Image, float sc, cv::Size minSize, const ACFDetector &ADet);
 
-    //Create a Pyramid(Layer) based on approximated features (just fill them in...)
-    ACFFeaturePyramid(int scalesPerOct,cv::Size minSize, float sc, ChannelFeatures* Features);
+	//Create a Pyramid(Layer) based on approximated features (just fill them in...)
+	ACFFeaturePyramid(int scalesPerOct, cv::Size minSize, float sc, ChannelFeatures *Features);
 
 
-    virtual ~ACFFeaturePyramid();
+	virtual ~ACFFeaturePyramid();
 
-    int getAmount() {
-        return this->Layers.size();
-    }
+	int getAmount()
+	{
+		return this->Layers.size();
+	}
 
-    ChannelFeatures* getLayer(int L) {
-        if(L < this->Layers.size()) {
-            return this->Layers[L];
-        }
-        else {
-            std::cerr << "Requesting unknown layer ..." << std::endl;
-            exit(1);
-        }
-    }
+	ChannelFeatures *getLayer(int L)
+	{
+		if (L < this->Layers.size()) {
+			return this->Layers[L];
+		} else {
+			std::cerr << "Requesting unknown layer ..." << std::endl;
+			exit(1);
+		}
+	}
 
-    float getScale(int L) {
-        return this->scales[L];
-    }
+	float getScale(int L)
+	{
+		return this->scales[L];
+	}
 protected:
 
-    std::vector<ChannelFeatures*> Layers;
+	std::vector<ChannelFeatures *> Layers;
 
-    // amount of scales in each octave (so between halving each image dimension )
-    int scalesPerOct;
+	// amount of scales in each octave (so between halving each image dimension )
+	int scalesPerOct;
 
-    // Minimum size an image can have (size of the model)
-    cv::Size minSize;
+	// Minimum size an image can have (size of the model)
+	cv::Size minSize;
 
-    // Amount of layer is approximate for each real calculated one, normaly one per octave is correctly calculated
-    int approxAmount;
+	// Amount of layer is approximate for each real calculated one, normaly one per octave is correctly calculated
+	int approxAmount;
 
-    std::vector<float> scales;
+	std::vector<float> scales;
 
 };
 

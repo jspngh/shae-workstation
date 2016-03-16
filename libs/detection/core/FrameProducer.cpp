@@ -6,12 +6,14 @@
 
 #include "FrameProducer.h"
 
-FrameProducer::FrameProducer() {
-    // TODO Auto-generated constructor stub
+FrameProducer::FrameProducer()
+{
+	// TODO Auto-generated constructor stub
 
 }
 
-FrameProducer::~FrameProducer() {
-    // TODO Auto-generated destructor stub
+FrameProducer::~FrameProducer()
+{
+	// TODO Auto-generated destructor stub
 }
 

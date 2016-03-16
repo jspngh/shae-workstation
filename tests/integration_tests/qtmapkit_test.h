@@ -9,19 +9,19 @@
 
 class QtMapKit_Test : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
 private:
 
 public:
-    QtMapKit_Test();
-    ~QtMapKit_Test();
+	QtMapKit_Test();
+	~QtMapKit_Test();
 
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
+	void initTestCase();
+	void cleanupTestCase();
 
-    void testMapViewInitialized();
+	void testMapViewInitialized();
 };
 
 #endif // QTMAPKIT_TEST_H

@@ -14,15 +14,16 @@
 #include <string>
 
 // Class to inherit from by classes that return a frame (from directory, camera, network, ...)
-class FrameProducer {
+class FrameProducer
+{
 public:
-    FrameProducer();
-    virtual ~FrameProducer();
+	FrameProducer();
+	virtual ~FrameProducer();
 
-    virtual cv::Mat giveFrame() = 0;
-    virtual std::string getFilename() = 0;
+	virtual cv::Mat giveFrame() = 0;
+	virtual std::string getFilename() = 0;
 
-    virtual bool isend() = 0;
+	virtual bool isend() = 0;
 private:
 
 };

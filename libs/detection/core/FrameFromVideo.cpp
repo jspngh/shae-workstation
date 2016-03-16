@@ -9,24 +9,28 @@
 
 
 
-FrameFromVideo::FrameFromVideo(std::string directory) {
-    cap = cv::VideoCapture(directory);
+FrameFromVideo::FrameFromVideo(std::string directory)
+{
+	cap = cv::VideoCapture(directory);
 }
 
 
-FrameFromVideo::~FrameFromVideo() {
+FrameFromVideo::~FrameFromVideo()
+{
 }
 
-cv::Mat FrameFromVideo::giveFrame() {
-    cv::Mat frame;
+cv::Mat FrameFromVideo::giveFrame()
+{
+	cv::Mat frame;
 
-    if(cap.get(CV_CAP_PROP_POS_FRAMES)  < cap.get(CV_CAP_PROP_FRAME_COUNT)) {
-        cap >>frame;
-    }
+	if (cap.get(CV_CAP_PROP_POS_FRAMES)  < cap.get(CV_CAP_PROP_FRAME_COUNT)) {
+		cap >> frame;
+	}
 
-    return frame;
+	return frame;
 }
 
-bool FrameFromVideo::isend() {
-    return cap.get(CV_CAP_PROP_POS_FRAMES)  >= cap.get(CV_CAP_PROP_FRAME_COUNT);
+bool FrameFromVideo::isend()
+{
+	return cap.get(CV_CAP_PROP_POS_FRAMES)  >= cap.get(CV_CAP_PROP_FRAME_COUNT);
 }

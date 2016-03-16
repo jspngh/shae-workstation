@@ -12,38 +12,48 @@ Feature::Feature()
 {
 }
 
-void Feature::setX(int x) {
-    this->m_x = x;
+void Feature::setX(int x)
+{
+	this->m_x = x;
 }
-void Feature::setY(int y) {
-    this->m_y = y;
+void Feature::setY(int y)
+{
+	this->m_y = y;
 }
-void Feature::setWidth(int width) {
-    this->m_width = width;
+void Feature::setWidth(int width)
+{
+	this->m_width = width;
 }
-void Feature::setHeight(int height) {
-    this->m_height = height;
+void Feature::setHeight(int height)
+{
+	this->m_height = height;
 }
 
 
-void Feature::setChannel(int channel) {
-    this->m_channel = channel;
+void Feature::setChannel(int channel)
+{
+	this->m_channel = channel;
 }
 
-int Feature::getX() const {
-    return m_x;
+int Feature::getX() const
+{
+	return m_x;
 }
-int Feature::getY() const {
-    return m_y;
+int Feature::getY() const
+{
+	return m_y;
 }
-int Feature::getWidth() const {
-    return m_width;
+int Feature::getWidth() const
+{
+	return m_width;
 }
-int Feature::getHeight() const {
-    return m_height;
+int Feature::getHeight() const
+{
+	return m_height;
 }
 
 //void setChannel(channel *ch){this->chan = ch;}
-int Feature::getChannel() const {
-    return this->m_channel;
+int Feature::getChannel() const
+{
+	return this->m_channel;
 }

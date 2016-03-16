@@ -6,7 +6,7 @@ class Detection
 {
 
 public:
-    Detection();
+	Detection();
 };
 
 #endif // DETECTION_H

@@ -7,86 +7,92 @@
 #include "NonMaximumSuppression.h"
 
 
-NonMaximumSuppression::NonMaximumSuppression() {
+NonMaximumSuppression::NonMaximumSuppression()
+{
 }
 
-NonMaximumSuppression::~NonMaximumSuppression() {
+NonMaximumSuppression::~NonMaximumSuppression()
+{
 }
 
-DetectionList NonMaximumSuppression::standardNMS(const DetectionList &DL) {
+DetectionList NonMaximumSuppression::standardNMS(const DetectionList &DL)
+{
 
-    DetectionList DL2;
-    DL2.detections = nms(DL.detections, 0.65);
+	DetectionList DL2;
+	DL2.detections = nms(DL.detections, 0.65);
 
-    return DL2;
+	return DL2;
 }
 
 
-DetectionList NonMaximumSuppression::standardNMS(const DetectionList &DL,float overlap) {
+DetectionList NonMaximumSuppression::standardNMS(const DetectionList &DL, float overlap)
+{
 
-    DetectionList DL2;
-    DL2.detections = nms(DL.detections, overlap);
+	DetectionList DL2;
+	DL2.detections = nms(DL.detections, overlap);
 
-    return DL2;
+	return DL2;
 }
 
-bool sortDetFunc (Detection *i,Detection *j) {
-    return (i->getScore() > j->getScore());
+bool sortDetFunc(Detection *i, Detection *j)
+{
+	return (i->getScore() > j->getScore());
 }
 
-DetectionList NonMaximumSuppression::dollarNMS(const DetectionList &DL) {
-    DetectionList DL2;
-    float overlap = 0.65;
+DetectionList NonMaximumSuppression::dollarNMS(const DetectionList &DL)
+{
+	DetectionList DL2;
+	float overlap = 0.65;
 
-    std::vector<Detection*> FDs;
-    std::vector<Detection*> Ds = DL.detections;
+	std::vector<Detection *> FDs;
+	std::vector<Detection *> Ds = DL.detections;
 
-    std::sort (Ds.begin(), Ds.end(), sortDetFunc);
+	std::sort(Ds.begin(), Ds.end(), sortDetFunc);
 
-    int n = Ds.size();
-    std::vector<bool> kp(n,true);
-    std::vector<float> as(n);
+	int n = Ds.size();
+	std::vector<bool> kp(n, true);
+	std::vector<float> as(n);
 
-    //calculate areas for each detection
-    for(int i=0; i<n; i++) {
-        as[i] = Ds[i]->getWidth()*Ds[i]->getHeight();
-    }
+	//calculate areas for each detection
+	for (int i = 0; i < n; i++) {
+		as[i] = Ds[i]->getWidth() * Ds[i]->getHeight();
+	}
 
-    for(int i=0; i<n; i++) {
-        if(kp[i] == false) { //greedy pruning
-            continue;
-        }
+	for (int i = 0; i < n; i++) {
+		if (kp[i] == false) { //greedy pruning
+			continue;
+		}
 
-        for(int j=i+1; j<n; j++) {
-            if(kp[j] == false) { //greedy pruning
-                continue;
-            }
+		for (int j = i + 1; j < n; j++) {
+			if (kp[j] == false) { //greedy pruning
+				continue;
+			}
 
-            float iw = std::min(Ds[i]->getX()+Ds[i]->getWidth(), Ds[j]->getX()+Ds[j]->getWidth()) - std::max(Ds[i]->getX(), Ds[j]->getX());
-            float ih = std::min(Ds[i]->getY()+Ds[i]->getHeight(), Ds[j]->getY()+Ds[j]->getHeight()) - std::max(Ds[i]->getY(), Ds[j]->getY());
-            if(iw <= 0 || ih <= 0) {
-                continue;
-            }
-            //area of intersection
-            float o = iw*ih;
+			float iw = std::min(Ds[i]->getX() + Ds[i]->getWidth(), Ds[j]->getX() + Ds[j]->getWidth()) - std::max(Ds[i]->getX(), Ds[j]->getX());
+			float ih = std::min(Ds[i]->getY() + Ds[i]->getHeight(), Ds[j]->getY() + Ds[j]->getHeight()) - std::max(Ds[i]->getY(), Ds[j]->getY());
+			if (iw <= 0 || ih <= 0) {
+				continue;
+			}
+			//area of intersection
+			float o = iw * ih;
 
-            float u = std::min(as[i],as[j]);
-            if(o/u > overlap) {
-                kp[j] = false;
-            }
+			float u = std::min(as[i], as[j]);
+			if (o / u > overlap) {
+				kp[j] = false;
+			}
 
-        }
-    }
+		}
+	}
 
 
-    for(int i=0; i<n; i++) {
-        if(kp[i] == true) {
-            FDs.push_back(new Detection(Ds[i]));
-        }
-    }
+	for (int i = 0; i < n; i++) {
+		if (kp[i] == true) {
+			FDs.push_back(new Detection(Ds[i]));
+		}
+	}
 
-    DL2.detections = FDs;
+	DL2.detections = FDs;
 
-    return DL2;
+	return DL2;
 
 }

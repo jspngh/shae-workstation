@@ -16,18 +16,18 @@
 
 // Some general functions which are not yet added to the separate classes
 
-float* Convert_ToMatlab(const cv::Mat &image, float scale);
+float *Convert_ToMatlab(const cv::Mat &image, float scale);
 
 cv::Mat Convert_ToOCV(float *data, int channels, int width, int height, float scale);
-void fhog( float *M, float *O, float *H, int h, int w, int binSize, int nOrients, int softBin, float clip );
-void convTri( float *I, float *O, int h, int w, int d, int r, int s );
-void convTri1( float *I, float *O, int h, int w, int d, float p, int s );
+void fhog(float *M, float *O, float *H, int h, int w, int binSize, int nOrients, int softBin, float clip);
+void convTri(float *I, float *O, int h, int w, int d, int r, int s);
+void convTri1(float *I, float *O, int h, int w, int d, float p, int s);
 
-void grad2( float *I, float *Gx, float *Gy, int h, int w, int d );
-void gradMag( float *I, float *M, float *O, int h, int w, int d, bool full );
-void gradHist( float *M, float *O, float *H, int h, int w,
-               int bin, int nOrients, int softBin, bool full );
-void hog( float *M, float *O, float *H, int h, int w, int binSize,
-          int nOrients, int softBin, bool full, float clip );
-void gradMagNorm( float *M, float *S, int h, int w, float norm );
+void grad2(float *I, float *Gx, float *Gy, int h, int w, int d);
+void gradMag(float *I, float *M, float *O, int h, int w, int d, bool full);
+void gradHist(float *M, float *O, float *H, int h, int w,
+              int bin, int nOrients, int softBin, bool full);
+void hog(float *M, float *O, float *H, int h, int w, int binSize,
+         int nOrients, int softBin, bool full, float clip);
+void gradMagNorm(float *M, float *S, int h, int w, float norm);
 #endif

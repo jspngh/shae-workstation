@@ -17,18 +17,18 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-    QWidget* getWelcomeWidget();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
+	QWidget *getWelcomeWidget();
 
 private:
-    Ui::MainWindow *ui;
-    WelcomeWidget* welcome_widget;
-    ConfigWidget* config_widget;
-    OverviewWidget* overview_widget;
+	Ui::MainWindow *ui;
+	WelcomeWidget *welcome_widget;
+	ConfigWidget *config_widget;
+	OverviewWidget *overview_widget;
 };
 
 #endif // MAINWINDOW_H

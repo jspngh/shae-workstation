@@ -9,19 +9,21 @@
 
 #include "FrameProducer.h"
 
-class FrameFromVideo: public FrameProducer {
+class FrameFromVideo: public FrameProducer
+{
 public:
-    FrameFromVideo(std::string directory);
-    virtual ~FrameFromVideo();
+	FrameFromVideo(std::string directory);
+	virtual ~FrameFromVideo();
 
-    cv::Mat giveFrame();
-    bool isend();
+	cv::Mat giveFrame();
+	bool isend();
 
-    std::string getFilename() {
-        return "video";
-    }
+	std::string getFilename()
+	{
+		return "video";
+	}
 private:
-    cv::VideoCapture cap;
+	cv::VideoCapture cap;
 };
 
 #endif /* DETECTION_FRAMEFROMVIDEO_H */

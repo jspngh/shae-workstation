@@ -6,6 +6,6 @@ using namespace std;
 
 string Communication::send_data()
 {
-    return "test";
+	return "test";
 }
 

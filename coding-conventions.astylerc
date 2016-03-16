@@ -1,0 +1,15 @@
+# Coding convention configurations
+###################################
+
+# Brackets style:
+# Opening brackets are broken from namespaces, classes, and function definitions. 
+# Brackets are attached to everything else including statements within a function, arrays, structs, and enums.
+style=kr 
+attach-namespaces
+
+indent=tab
+pad-oper 
+unpad-paren 
+pad-header 
+align-pointer=name
+keep-one-line-blocks

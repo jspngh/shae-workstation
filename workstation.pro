@@ -11,3 +11,5 @@ tests += libs
 
 # configure compiler to use c++11s
 CONFIG += c++11
+
+DISTFILES += ./coding-conventions.astylerc

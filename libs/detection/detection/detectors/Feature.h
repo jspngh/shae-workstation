@@ -14,21 +14,21 @@
 class Feature
 {
 private:
-    int m_x, m_y, m_width,m_height;
-    int m_channel;
+	int m_x, m_y, m_width, m_height;
+	int m_channel;
 public:
-    Feature();
-    void setX(int x);
-    void setY(int y);
-    void setWidth(int width);
-    void setHeight(int height);
-    void setChannel(int channel);
+	Feature();
+	void setX(int x);
+	void setY(int y);
+	void setWidth(int width);
+	void setHeight(int height);
+	void setChannel(int channel);
 
-    int getX() const;
-    int getY() const;
-    int getWidth() const;
-    int getHeight() const;
-    int getChannel() const;
+	int getX() const;
+	int getY() const;
+	int getWidth() const;
+	int getHeight() const;
+	int getChannel() const;
 };
 
 #endif // FEATURE_H

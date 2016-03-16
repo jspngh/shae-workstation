@@ -19,22 +19,21 @@
 #ifndef QTMAPKIT_H
 #define QTMAPKIT_H
 
-namespace QtMapKit
-{
+namespace QtMapKit {
 
 enum ControlPosition {
-    BottomCenter,
-    BottomLeft,
-    BottomRight,
-    LeftBottom,
-    LeftCenter,
-    LeftTop,
-    RightBottom,
-    RightCenter,
-    RightTop,
-    TopCenter,
-    TopLeft,
-    TopRight
+	BottomCenter,
+	BottomLeft,
+	BottomRight,
+	LeftBottom,
+	LeftCenter,
+	LeftTop,
+	RightBottom,
+	RightCenter,
+	RightTop,
+	TopCenter,
+	TopLeft,
+	TopRight
 };
 
 }       // namespace QtMapKit

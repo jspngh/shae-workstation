@@ -12,15 +12,16 @@
 #include "../DetectionList.h"
 #include <vector>
 
-class NonMaximumSuppression {
+class NonMaximumSuppression
+{
 
 public:
-    NonMaximumSuppression();
-    virtual ~NonMaximumSuppression();
+	NonMaximumSuppression();
+	virtual ~NonMaximumSuppression();
 
-    DetectionList standardNMS(const DetectionList &DL);
-    DetectionList standardNMS(const DetectionList &DL, float overlap);
-    DetectionList dollarNMS(const DetectionList &DL);
+	DetectionList standardNMS(const DetectionList &DL);
+	DetectionList standardNMS(const DetectionList &DL, float overlap);
+	DetectionList dollarNMS(const DetectionList &DL);
 };
 
 #endif /* NONMAXIMUMSUPPRESSION_H_ */

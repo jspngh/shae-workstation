@@ -10,14 +10,17 @@
 #include "GradMagChannel.h"
 #include "Functions.h"
 
-GradMagChannel::~GradMagChannel() {
-    free(orientation);
+GradMagChannel::~GradMagChannel()
+{
+	free(orientation);
 }
 
-float * GradMagChannel::getMagnitude() const {
-    return this->mag;
+float *GradMagChannel::getMagnitude() const
+{
+	return this->mag;
 }
 
-float * GradMagChannel::getOrientation() const {
-    return this->orientation;
+float *GradMagChannel::getOrientation() const
+{
+	return this->orientation;
 }

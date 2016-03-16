@@ -6,13 +6,13 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+	QApplication a(argc, argv);
 
-    SimplePathAlgorithm_Test test1;
-    DetectionController_Test test2;
+	SimplePathAlgorithm_Test test1;
+	DetectionController_Test test2;
 
-    QTest::qExec(&test1);
-    QTest::qExec(&test2);
+	QTest::qExec(&test1);
+	QTest::qExec(&test2);
 
-    return a.exec();
+	return a.exec();
 }

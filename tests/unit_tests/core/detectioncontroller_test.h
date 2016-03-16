@@ -12,27 +12,27 @@
 
 class DetectionController_Test : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit DetectionController_Test(QObject *parent = 0);
+	explicit DetectionController_Test(QObject *parent = 0);
 
 signals:
-    void newSequence(QString seq);
+	void newSequence(QString seq);
 
 private:
-    void onNewDetection();
+	void onNewDetection();
 
 private Q_SLOTS:
-    void testQueue();
-    void initTestCase();
-    void cleanupTestCase();
+	void testQueue();
+	void initTestCase();
+	void cleanupTestCase();
 
 private:
-    DetectionController *controller;
-    QThread *controllerThread;
+	DetectionController *controller;
+	QThread *controllerThread;
 
-    Qt::HANDLE threadId; // the threadId of the the thread creating this object
-    int numDetections = 0; // will count the number of times the onNewDetection slot is emitted
+	Qt::HANDLE threadId; // the threadId of the the thread creating this object
+	int numDetections = 0; // will count the number of times the onNewDetection slot is emitted
 };
 
 #endif // DETECTIONCONTROLLER_TEST_H

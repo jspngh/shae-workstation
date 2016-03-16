@@ -8,16 +8,16 @@
 class Drone
 {
 public:
-    double visionWidth; //!< This attribute tells how wide the vision of the drone is. This is useful to calculate the waypoints. It should use the same scale as the coordinates used in the waypointplanning algorithms.
+	double visionWidth; //!< This attribute tells how wide the vision of the drone is. This is useful to calculate the waypoints. It should use the same scale as the coordinates used in the waypointplanning algorithms.
 
-    std::list<QGeoCoordinate> waypoints;
+	std::list<QGeoCoordinate> waypoints;
 
-    Drone();
-    Drone(double visionWidth);
-    ~Drone();
+	Drone();
+	Drone(double visionWidth);
+	~Drone();
 
 private:
-    const double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
+	const double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 
 #endif // DRONE_H
