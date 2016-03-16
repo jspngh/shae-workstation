@@ -7,7 +7,7 @@
 style=kr 
 attach-namespaces
 
-indent=tab
+indent=spaces=4
 pad-oper 
 unpad-paren 
 pad-header 

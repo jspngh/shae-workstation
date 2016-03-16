@@ -28,38 +28,38 @@ class QMMapViewPrivate;
 
 class QMMapView : public QWidget
 {
-	Q_OBJECT
-	Q_DECLARE_PRIVATE(QMMapView)
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(QMMapView)
 
 public:
-	enum MapType {
-		Hybrid,
-		RoadMap,
-		Satellite,
-		Terrain
-	};
+    enum MapType {
+        Hybrid,
+        RoadMap,
+        Satellite,
+        Terrain
+    };
 
-	QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
-	          QWidget *parent = 0);
-	MapType mapType() const;
+    QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
+              QWidget *parent = 0);
+    MapType mapType() const;
 
-	QGeoRectangle region() const;
-	QGeoCoordinate center() const;
+    QGeoRectangle region() const;
+    QGeoCoordinate center() const;
 
-	uint zoomLevel() const;
-	qreal heading() const;
-	qreal tilt() const;
+    uint zoomLevel() const;
+    qreal heading() const;
+    qreal tilt() const;
 
-	void setMapType(MapType type);
+    void setMapType(MapType type);
 
-	void setCenter(QGeoCoordinate center, bool animated = true);
-	void setCenter(QString address, bool animated = true);
-	void setZoomLevel(uint zoom);
+    void setCenter(QGeoCoordinate center, bool animated = true);
+    void setCenter(QString address, bool animated = true);
+    void setZoomLevel(uint zoom);
 
-	void makeRegionVisible(QGeoRectangle &region);
-	void fitRegion(QGeoRectangle &region);
+    void makeRegionVisible(QGeoRectangle &region);
+    void fitRegion(QGeoRectangle &region);
 
-	void shiftKeyPressed(bool down);
+    void shiftKeyPressed(bool down);
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
 //    void setTilt(qreal tile);
@@ -71,57 +71,57 @@ public:
 //    bool useMapMarker() const; get set
 
 protected:
-	void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *);
 
 signals:
-	void mapLoaded();
-	void mapFailedToLoad();
-	void mapBecameIdle();
-	void regionChanged(QGeoRectangle region);
-	void centerChanged(QGeoCoordinate center);
-	void headingChanged();
-	void mapTypeChanged(MapType type);
+    void mapLoaded();
+    void mapFailedToLoad();
+    void mapBecameIdle();
+    void regionChanged(QGeoRectangle region);
+    void centerChanged(QGeoCoordinate center);
+    void headingChanged();
+    void mapTypeChanged(MapType type);
 //    void projectionChanged();
-	void tilesLoaded();
-	void tilesChanged();
-	void zoomLevelChanged(uint level);
-	// Mouse signals
-	void mouseClicked(QGeoCoordinate coordinate);
-	void mouseDoubleClicked(QGeoCoordinate coordinate);
-	void mouseRightClicked(QGeoCoordinate coordinate);
-	void mouseDragged();
-	void mouseDragStarted();
-	void mouseDragEnded();
-	void cursorMoved(QGeoCoordinate coordinate);
-	void cursorEntered(QGeoCoordinate coordinate);
-	void cursorLeaved(QGeoCoordinate coordinate);
-	// Selected area signals
-	void selectedAreaCreated(QGeoRectangle region);
-	void selectedAreaChanged(QGeoRectangle region);
-	void selectedAreaDeleted();
+    void tilesLoaded();
+    void tilesChanged();
+    void zoomLevelChanged(uint level);
+    // Mouse signals
+    void mouseClicked(QGeoCoordinate coordinate);
+    void mouseDoubleClicked(QGeoCoordinate coordinate);
+    void mouseRightClicked(QGeoCoordinate coordinate);
+    void mouseDragged();
+    void mouseDragStarted();
+    void mouseDragEnded();
+    void cursorMoved(QGeoCoordinate coordinate);
+    void cursorEntered(QGeoCoordinate coordinate);
+    void cursorLeaved(QGeoCoordinate coordinate);
+    // Selected area signals
+    void selectedAreaCreated(QGeoRectangle region);
+    void selectedAreaChanged(QGeoRectangle region);
+    void selectedAreaDeleted();
 
 protected slots:
-	void initializeMap();
-	void insertNativeObject();
-	void regionDidChangeTo(qreal north, qreal south, qreal east, qreal west);
-	void centerDidChangeTo(qreal latitude, qreal longitude);
-	void mapTypeDidChangeTo(QString typeString);
-	// Mouse slots
-	void mouseDidClickAt(qreal latitude, qreal longitude);
-	void mouseDidDoubleClickAt(qreal latitude, qreal longitude);
-	void mouseDidRightClickAt(qreal latitude, qreal longitude);
-	void cursorDidMoveTo(qreal latitude, qreal longitude);
-	void cursorDidEnterTo(qreal latitude, qreal longitude);
-	void cursorDidLeaveFrom(qreal latitude, qreal longitude);
-	// Selected area slots
-	void selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
-	                            qreal bottomRightLat, qreal bottomRightLong);
-	void selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
-	                             qreal bottomRightLat, qreal bottomRightLong);
-	void selectedAreaWasDeleted();
+    void initializeMap();
+    void insertNativeObject();
+    void regionDidChangeTo(qreal north, qreal south, qreal east, qreal west);
+    void centerDidChangeTo(qreal latitude, qreal longitude);
+    void mapTypeDidChangeTo(QString typeString);
+    // Mouse slots
+    void mouseDidClickAt(qreal latitude, qreal longitude);
+    void mouseDidDoubleClickAt(qreal latitude, qreal longitude);
+    void mouseDidRightClickAt(qreal latitude, qreal longitude);
+    void cursorDidMoveTo(qreal latitude, qreal longitude);
+    void cursorDidEnterTo(qreal latitude, qreal longitude);
+    void cursorDidLeaveFrom(qreal latitude, qreal longitude);
+    // Selected area slots
+    void selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
+                                qreal bottomRightLat, qreal bottomRightLong);
+    void selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
+                                 qreal bottomRightLat, qreal bottomRightLong);
+    void selectedAreaWasDeleted();
 
 private:
-	QMMapViewPrivate *d_ptr;
+    QMMapViewPrivate *d_ptr;
 };
 
 #endif // QMMAPVIEW_H

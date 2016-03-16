@@ -16,19 +16,19 @@
 #include "mex.h"
 inline void wrError(const char *errormsg)
 {
-	mexErrMsgTxt(errormsg);
+    mexErrMsgTxt(errormsg);
 }
 inline void *wrCalloc(size_t num, size_t size)
 {
-	return mxCalloc(num, size);
+    return mxCalloc(num, size);
 }
 inline void *wrMalloc(size_t size)
 {
-	return mxMalloc(size);
+    return mxMalloc(size);
 }
 inline void wrFree(void *ptr)
 {
-	mxFree(ptr);
+    mxFree(ptr);
 }
 
 #else
@@ -36,19 +36,19 @@ inline void wrFree(void *ptr)
 // wrapper functions if compiling from C/C++
 inline void wrError(const char *errormsg)
 {
-	throw errormsg;
+    throw errormsg;
 }
 inline void *wrCalloc(size_t num, size_t size)
 {
-	return calloc(num, size);
+    return calloc(num, size);
 }
 inline void *wrMalloc(size_t size)
 {
-	return malloc(size);
+    return malloc(size);
 }
 inline void wrFree(void *ptr)
 {
-	free(ptr);
+    free(ptr);
 }
 
 #endif
@@ -56,18 +56,18 @@ inline void wrFree(void *ptr)
 // platform independent aligned memory allocation (see also alFree)
 void *alMalloc(size_t size, int alignment)
 {
-	const size_t pSize = sizeof(void *), a = alignment - 1;
-	void *raw = wrMalloc(size + a + pSize);
-	void *aligned = (void *)(((size_t) raw + pSize + a) & ~a);
-	*(void **)((size_t) aligned - pSize) = raw;
-	return aligned;
+    const size_t pSize = sizeof(void *), a = alignment - 1;
+    void *raw = wrMalloc(size + a + pSize);
+    void *aligned = (void *)(((size_t) raw + pSize + a) & ~a);
+    *(void **)((size_t) aligned - pSize) = raw;
+    return aligned;
 }
 
 // platform independent alignned memory de-allocation (see also alMalloc)
 void alFree(void *aligned)
 {
-	void *raw = *(void **)((char *)aligned - sizeof(void *));
-	wrFree(raw);
+    void *raw = *(void **)((char *)aligned - sizeof(void *));
+    wrFree(raw);
 }
 
 #endif

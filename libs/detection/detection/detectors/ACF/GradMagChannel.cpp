@@ -12,15 +12,15 @@
 
 GradMagChannel::~GradMagChannel()
 {
-	free(orientation);
+    free(orientation);
 }
 
 float *GradMagChannel::getMagnitude() const
 {
-	return this->mag;
+    return this->mag;
 }
 
 float *GradMagChannel::getOrientation() const
 {
-	return this->orientation;
+    return this->orientation;
 }

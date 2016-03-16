@@ -11,6 +11,6 @@
 
 GradHistChannel::~GradHistChannel()
 {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stub
 }
 

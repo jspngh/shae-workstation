@@ -19,36 +19,36 @@ class SlidingWindow : public WindowSelection
 {
 
 public:
-	/*!
-	 * Constructor of the WindowSelection class
-	 * \param frameHeight height of the complete frame
-	 * \param frameWidth width of the complete frame
-	 * \param horizon The position of the horizon (amount of pixels from the top to the horizon)
-	 * \param winHeight0 Height of the first window i.e. the window at the back / horizon
-	 * \param winWidth0 Width of the first window i.e. the window at the back / horizon
-	 * \param winHeight0 height of the last window i.e. the window at the front of the frame
-	 * \param winHeight1 width of the last window i.e. the window at the front of the frame
-	 * \param stepX step size to the right of the window
-	 * \param stepY step size to the bottom of the window
-	 */
+    /*!
+     * Constructor of the WindowSelection class
+     * \param frameHeight height of the complete frame
+     * \param frameWidth width of the complete frame
+     * \param horizon The position of the horizon (amount of pixels from the top to the horizon)
+     * \param winHeight0 Height of the first window i.e. the window at the back / horizon
+     * \param winWidth0 Width of the first window i.e. the window at the back / horizon
+     * \param winHeight0 height of the last window i.e. the window at the front of the frame
+     * \param winHeight1 width of the last window i.e. the window at the front of the frame
+     * \param stepX step size to the right of the window
+     * \param stepY step size to the bottom of the window
+     */
 
-	SlidingWindow(int frameHeight, int frameWidth, float horizon, float winHeight0, float winHeight1,
-	              float winWidth0, float winWidth1, int stepX, int stepY);
-	~SlidingWindow() {}
+    SlidingWindow(int frameHeight, int frameWidth, float horizon, float winHeight0, float winHeight1,
+                  float winWidth0, float winWidth1, int stepX, int stepY);
+    ~SlidingWindow() {}
 
-	/*!
-	 * Will set the window that needs to be evaluated next.
-	 * The function will adjust the parameter nextWin.
-	 * \param nextWin [out] nextWin contains the top-left (x,y) coordinate of the rect that needs to be evaluated.
-	 * \return False is there is no next window, True if nextWin has a meaningful value
-	 */
-	bool nextWindow(cv::Rect &nextWin);
+    /*!
+     * Will set the window that needs to be evaluated next.
+     * The function will adjust the parameter nextWin.
+     * \param nextWin [out] nextWin contains the top-left (x,y) coordinate of the rect that needs to be evaluated.
+     * \return False is there is no next window, True if nextWin has a meaningful value
+     */
+    bool nextWindow(cv::Rect &nextWin);
 
-	void reset();
+    void reset();
 
 private:
-	std::vector<cv::Rect> windows; /*!< contains all the windows that need to be evaluated */
-	std::vector<cv::Rect>::iterator windowIterator; /*!< points to the window that needs to be evaluated next */
+    std::vector<cv::Rect> windows; /*!< contains all the windows that need to be evaluated */
+    std::vector<cv::Rect>::iterator windowIterator; /*!< points to the window that needs to be evaluated next */
 };
 
 #endif //DETECTION_SLIDINGWINDOW_H

@@ -10,19 +10,19 @@ class OverviewWidget;
 
 class OverviewWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit OverviewWidget(QWidget *parent = 0);
-	~OverviewWidget();
+    explicit OverviewWidget(QWidget *parent = 0);
+    ~OverviewWidget();
 
 private:
-	Ui::OverviewWidget *ui;
-	int count;
+    Ui::OverviewWidget *ui;
+    int count;
 
 private slots:
-	void clickButtonPush();
-	void backButtonPush();
+    void clickButtonPush();
+    void backButtonPush();
 
 };
 

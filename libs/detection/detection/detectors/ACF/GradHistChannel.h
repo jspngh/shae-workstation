@@ -14,17 +14,17 @@
 class GradHistChannel: public Channel
 {
 public:
-	GradHistChannel(const GradMagChannel &GMC);
-	virtual ~GradHistChannel();
+    GradHistChannel(const GradMagChannel &GMC);
+    virtual ~GradHistChannel();
 
-	static float getLambda()
-	{
-		return 0.1158;
+    static float getLambda()
+    {
+        return 0.1158;
 //    	return 0.1130;
-	}
+    }
 
 private:
-	float *histogram;
+    float *histogram;
 };
 
 #endif /* GRADHISTCHANNEL_H_ */

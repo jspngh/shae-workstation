@@ -11,20 +11,20 @@
 
 class DetectionController : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	DetectionController(QObject *parent = 0);
-	~DetectionController() {}
+    DetectionController(QObject *parent = 0);
+    ~DetectionController() {}
 
 public slots:
-	void processSequence(QString seq);
+    void processSequence(QString seq);
 
 signals:
-	void newDetection();
+    void newDetection();
 
 private:
-	DetectorManager manager;
+    DetectorManager manager;
 };
 
 #endif // DETECTIONCONTROLLER_H

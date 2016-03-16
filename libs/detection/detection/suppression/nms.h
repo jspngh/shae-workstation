@@ -16,8 +16,8 @@
 	After detection, detections that have to much overlap should be pruned and only the best detections (which should represent the actual object found) will be kept
 */
 struct nmsHelperStruct {
-	float score;
-	int index;
+    float score;
+    int index;
 };
 
 /*!

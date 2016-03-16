@@ -15,29 +15,29 @@
 class Channel
 {
 public:
-	Channel();
-	virtual ~Channel();
-	void PrintChanneldata() const;
-	void PrintChanneldata(int w, int h) const;
-	int getWidth() const;
-	int getHeight() const;
-	int getnChns() const;
-	float *getData() const;
+    Channel();
+    virtual ~Channel();
+    void PrintChanneldata() const;
+    void PrintChanneldata(int w, int h) const;
+    int getWidth() const;
+    int getHeight() const;
+    int getnChns() const;
+    float *getData() const;
 
-	float getLambda()
-	{
-		return 0.0;
-	}
+    float getLambda()
+    {
+        return 0.0;
+    }
 
 protected:
-	void setChanneldata(float *data, int width, int height, int nChns);
+    void setChanneldata(float *data, int width, int height, int nChns);
 
 
 private:
-	int width;
-	int height;
-	int nChns;
-	float *data;
+    int width;
+    int height;
+    int nChns;
+    float *data;
 };
 
 #endif /* CHANNEL_H_ */

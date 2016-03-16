@@ -8,7 +8,7 @@ This is an example of a comment that doxygen will export. The Communication clas
 class Communication
 {
 public:
-	std::string send_data();
+    std::string send_data();
 
 
 };

@@ -20,26 +20,26 @@ float *Convert_ToMatlab(const cv::Mat &image, float scale);
 class ColorChannel : public Channel
 {
 public:
-	ColorChannel(const cv::Mat &Image);
-	virtual ~ColorChannel();
+    ColorChannel(const cv::Mat &Image);
+    virtual ~ColorChannel();
 
-	static float getLambda()
-	{
-		return 0.0;
-	}
+    static float getLambda()
+    {
+        return 0.0;
+    }
 
 
 private:
 
-	void setColorSpace(std::string cspace)
-	{
-		if (cspace == "luv") {
-			this->colorSpace = cspace;
-		} else {
-			std::cerr << "Unknown colorspace!!" << std::endl;
-		}
-	}
-	std::string  colorSpace;
+    void setColorSpace(std::string cspace)
+    {
+        if (cspace == "luv") {
+            this->colorSpace = cspace;
+        } else {
+            std::cerr << "Unknown colorspace!!" << std::endl;
+        }
+    }
+    std::string  colorSpace;
 };
 
 #endif /* COLORCHANNEL_H_ */

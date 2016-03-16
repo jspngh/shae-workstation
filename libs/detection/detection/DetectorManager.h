@@ -14,41 +14,41 @@
 class DetectorManager
 {
 public:
-	/*!
-	 * No-args (default) constructor
-	 * \brief Initialises a default DetectorManager
-	 * */
-	DetectorManager();
-	~DetectorManager();
+    /*!
+     * No-args (default) constructor
+     * \brief Initialises a default DetectorManager
+     * */
+    DetectorManager();
+    ~DetectorManager();
 
-	// setters
-	void setDetector(Detector *detector);
-	void setWindowSelection(WindowSelection *windowSelection);
+    // setters
+    void setDetector(Detector *detector);
+    void setWindowSelection(WindowSelection *windowSelection);
 
 
-	// getters
-	Detector *getDetector()
-	{
-		return this->detector;
-	}
+    // getters
+    Detector *getDetector()
+    {
+        return this->detector;
+    }
 
-	WindowSelection *getWindowSelector()
-	{
-		return this->windowSelection;
-	}
+    WindowSelection *getWindowSelector()
+    {
+        return this->windowSelection;
+    }
 
-	/*!
-	 * \brief Searches for human presence in a frame
-	 * \param frame The complete frame that will be searched for human presence
-	 * Note: the dimension of the frame must be equal to the dimension set in the WindowSelection object
-	 */
-	DetectionList applyDetector(cv::Mat &frame);
-	string getDetectorType();
+    /*!
+     * \brief Searches for human presence in a frame
+     * \param frame The complete frame that will be searched for human presence
+     * Note: the dimension of the frame must be equal to the dimension set in the WindowSelection object
+     */
+    DetectionList applyDetector(cv::Mat &frame);
+    string getDetectorType();
 
 
 private:
-	Detector *detector;
-	WindowSelection *windowSelection;
+    Detector *detector;
+    WindowSelection *windowSelection;
 };
 
 #endif /* DETECTORMANAGER_H_ */

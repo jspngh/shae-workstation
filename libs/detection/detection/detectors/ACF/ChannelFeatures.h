@@ -29,57 +29,57 @@
 class ChannelFeatures
 {
 public:
-	friend class SqrtChannelFeatures;
+    friend class SqrtChannelFeatures;
 
-	ChannelFeatures(const cv::Mat &Image, int shrinking);
-	ChannelFeatures *ApproxChannel(const cv::Mat &Image, int shrinking, float scaleN, float scaleR);
-	virtual ~ChannelFeatures();
+    ChannelFeatures(const cv::Mat &Image, int shrinking);
+    ChannelFeatures *ApproxChannel(const cv::Mat &Image, int shrinking, float scaleN, float scaleR);
+    virtual ~ChannelFeatures();
 
-	void printFeatures(int index) const
-	{
+    void printFeatures(int index) const
+    {
 
-		for (int y = 0; y < Channelheight; y++) {
-			for (int x = 0; x < Channelwidth; x++) {
-				std::cout << Features[index][x * Channelheight + y] << " ";
-			}
-			std::cout << std::endl;
-		}
-	}
+        for (int y = 0; y < Channelheight; y++) {
+            for (int x = 0; x < Channelwidth; x++) {
+                std::cout << Features[index][x * Channelheight + y] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
 
-	int getChannelWidth() const
-	{
-		return this->Channelwidth;
-	}
+    int getChannelWidth() const
+    {
+        return this->Channelwidth;
+    }
 
-	int getChannelHeight() const
-	{
-		return this->Channelheight;
-	}
+    int getChannelHeight() const
+    {
+        return this->Channelheight;
+    }
 
-	int getnChannels() const
-	{
-		return this->Features.size();
-	}
+    int getnChannels() const
+    {
+        return this->Features.size();
+    }
 
-	float getFeatureValue(int channel, int location) const;
+    float getFeatureValue(int channel, int location) const;
 
-	void SmoothChannels();
+    void SmoothChannels();
 
 
 
 protected:
 
-	ChannelFeatures(int width, int height, std::vector<float *> F): Channelwidth(width), Channelheight(height)
-	{
-		this->Features = F;
-	} //only used in approximation
+    ChannelFeatures(int width, int height, std::vector<float *> F): Channelwidth(width), Channelheight(height)
+    {
+        this->Features = F;
+    } //only used in approximation
 private:
-	void addChannelFeatures(Channel &ch);
+    void addChannelFeatures(Channel &ch);
 
 
 
-	std::vector<float *> Features;
-	int Channelwidth, Channelheight;
+    std::vector<float *> Features;
+    int Channelwidth, Channelheight;
 };
 
 #endif /* CHANNELFEATURES_H_ */

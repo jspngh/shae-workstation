@@ -17,17 +17,17 @@
 class HOGDetector: public Detector
 {
 public:
-	HOGDetector();
-	std::string getName() const { return "HOG"; }
+    HOGDetector();
+    std::string getName() const { return "HOG"; }
 
-	bool applyDetectorOnWindow(const cv::Mat &Frame) const;
-	DetectionList applyDetectorOnBand(const cv::Mat &Frame) const;
-	DetectionList applyDetectorOnFrame(const cv::Mat &Frame) const;
+    bool applyDetectorOnWindow(const cv::Mat &Frame) const;
+    DetectionList applyDetectorOnBand(const cv::Mat &Frame) const;
+    DetectionList applyDetectorOnFrame(const cv::Mat &Frame) const;
 
-	std::string getType() const;
-	void setType(std::string type);
+    std::string getType() const;
+    void setType(std::string type);
 private:
-	cv::HOGDescriptor hog;
+    cv::HOGDescriptor hog;
 };
 
 

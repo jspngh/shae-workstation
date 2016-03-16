@@ -4,20 +4,20 @@
 
 class Detection_Test : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	Detection_Test() {}
+    Detection_Test() {}
 
 private Q_SLOTS:
-	void testDetectionControllerInit();
+    void testDetectionControllerInit();
 };
 
 void Detection_Test::testDetectionControllerInit()
 {
-	// DetectionController detectionController();
-	// detectionController.smallTest();
-	// detectionController.addSequence();
-	QVERIFY(1 == 1);
+    // DetectionController detectionController();
+    // detectionController.smallTest();
+    // detectionController.addSequence();
+    QVERIFY(1 == 1);
 }
 
