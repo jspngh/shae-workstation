@@ -9,12 +9,14 @@
 
 
 
-FrameFromVideo::FrameFromVideo(std::string directory){
+FrameFromVideo::FrameFromVideo(std::string directory)
+{
     cap = cv::VideoCapture(directory);
 }
 
 
-FrameFromVideo::~FrameFromVideo(){
+FrameFromVideo::~FrameFromVideo()
+{
 }
 
 cv::Mat FrameFromVideo::giveFrame()
