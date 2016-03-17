@@ -4,17 +4,13 @@
 
 #include "FrameProducer.h"
 
-<<<<<<< HEAD
 /*!
  * \brief The FrameFromVideo class implements the virtual functions from FrameProducer
  * The class will provide frames at a specific fps from a sequence stored on disk
  */
 
 class FrameFromVideo: public FrameProducer {
-=======
-class FrameFromVideo: public FrameProducer
-{
->>>>>>> fe6385d11e0833c15a4b907450e23216fa34965a
+
 public:
     FrameFromVideo(std::string directory, int fps);
     virtual ~FrameFromVideo();
@@ -27,15 +23,8 @@ public:
      */
     cv::Mat giveFrame();
 
-<<<<<<< HEAD
     bool frameAvailable();
 
-=======
-    std::string getFilename()
-    {
-        return "video";
-    }
->>>>>>> fe6385d11e0833c15a4b907450e23216fa34965a
 private:
     cv::VideoCapture capture;
     int fps; //!< Desired fps

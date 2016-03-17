@@ -4,6 +4,7 @@
 FrameFromVideo::FrameFromVideo(std::string sequence, int fps) {
     this->capture = cv::VideoCapture(sequence);
     this->fps = fps;
+
     this->numFrames = capture.get(CV_CAP_PROP_FRAME_COUNT);
     this->fpsOriginal = (double) capture.get(CV_CAP_PROP_FPS);
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
@@ -14,8 +15,7 @@ FrameFromVideo::FrameFromVideo(std::string sequence, int fps) {
 
 FrameFromVideo::~FrameFromVideo() {}
 
-cv::Mat FrameFromVideo::giveFrame()
-{
+cv::Mat FrameFromVideo::giveFrame() {
     cv::Mat frame;
     capture.set(CV_CAP_PROP_POS_FRAMES, currentFrame);
     capture >> frame;
@@ -25,15 +25,4 @@ cv::Mat FrameFromVideo::giveFrame()
 
 bool FrameFromVideo::frameAvailable() {
     return this->currentFrame < this->numFrames;
-
-    if (cap.get(CV_CAP_PROP_POS_FRAMES)  < cap.get(CV_CAP_PROP_FRAME_COUNT)) {
-        cap >> frame;
-    }
-
-    return frame;
-}
-
-bool FrameFromVideo::isend()
-{
-    return cap.get(CV_CAP_PROP_POS_FRAMES)  >= cap.get(CV_CAP_PROP_FRAME_COUNT);
 }
