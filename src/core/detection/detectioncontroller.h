@@ -14,7 +14,7 @@ class DetectionController : public QObject
     Q_OBJECT
 
 public:
-    DetectionController(QObject *parent = 0);
+    DetectionController(QObject *parent = 0, double fps=2);
     ~DetectionController() {}
 
 public slots:
@@ -26,6 +26,8 @@ signals:
 
 private:
     DetectorManager manager;
+    double fps;
+    double frameHop;
 };
 
 #endif // DETECTIONCONTROLLER_H

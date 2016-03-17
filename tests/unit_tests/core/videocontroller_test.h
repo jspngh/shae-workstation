@@ -28,11 +28,10 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    void onStreamStarted()
-    {
-        std::cout << "stream is started" << std::endl;
-    }
+    void onStreamStarted();
+    void onStreamStopped();
 
+    bool started, stopped;
     VideoController vc;
 };
 

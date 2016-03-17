@@ -8,8 +8,10 @@
 #include <iostream>
 
 #include <vlc/vlc.h>
+
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include "core/models/videosequence.h"
 
 class VideoController : public QObject
 {
@@ -22,7 +24,7 @@ public slots:
     void onStartStream(QUuid drone, QString sdpFile);
     void onStopStream(QUuid drone);
 signals:
-    void streamStarted();
+    void streamStarted(VideoSequence seq);
     void streamStopped();
 private:
     libvlc_media_player_t *mp;

@@ -22,9 +22,8 @@ void DetectionController_Test::initTestCase()
 void DetectionController_Test::testProcessSequence(){
     std::cout << "Main thread in: " << QThread::currentThreadId() << std::endl;
 
-    //this->controller->processSequence(QString("footage/testsequence.mp4"));
-
-    //QVERIFY(this->numDetections == 1);
+    this->controller->processSequence(QString("footage/testfootage.mp4"));
+    QVERIFY(this->numDetections > 1);
 }
 
 void DetectionController_Test::cleanupTestCase(){
@@ -37,7 +36,6 @@ void DetectionController_Test::cleanupTestCase(){
 // It is used to count the number of times the newDetection signal is emitted in the controller.
 void DetectionController_Test::onNewDetection(){
     ++(this->numDetections);
-    std::cout <<  "new detection #" << (this->numDetections) << std::endl;
 }
 
 

@@ -8,7 +8,6 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
     SimplePathAlgorithm_Test test1;
     DetectionController_Test test2;
     VideoController_Test test3;
@@ -17,5 +16,5 @@ int main(int argc, char *argv[])
     QTest::qExec(&test2);
     QTest::qExec(&test3);
 
-    return a.exec();
+    return 0;
 }

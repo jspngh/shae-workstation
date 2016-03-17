@@ -17,7 +17,6 @@ PKGCONFIG+=opencv
 SOURCES += \
     $$PWD/communication/*.cpp \
     $$PWD/detection/*.cpp \
-    $$PWD/models/*.cpp \
     $$PWD/pathlogic/*.cpp \
     $$PWD/persistence/*.cpp \
     $$PWD/utils/*.cpp \
@@ -25,14 +24,13 @@ SOURCES += \
     $$PWD/models/dronestatus.cpp \
     $$PWD/models/videosequence.cpp \
     $$PWD/models/detectionresult.cpp \
-    $$PWD/models/search.cpp \
+    $$PWD/models/drone.cpp \
     $$PWD/videocontroller/videocontroller.cpp
 
 
 HEADERS += \
     $$PWD/communication/*.h \
     $$PWD/detection/*.h \
-    $$PWD/models/*.h \
     $$PWD/pathlogic/*.h \
     $$PWD/persistence/*.h \
     $$PWD/utils/*.h \
@@ -41,6 +39,7 @@ HEADERS += \
     $$PWD/models/videosequence.h \
     $$PWD/models/detectionresult.h \
     $$PWD/models/search.h \
+    $$PWD/models/drone.h \
     $$PWD/videocontroller/videocontroller.h
 # If something has changed in libdetection: first rebuild the lib and then build the application
 PRE_TARGETDEPS += "$$PWD/../../libs/detection/bin/libdetection.a"
