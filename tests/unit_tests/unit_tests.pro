@@ -2,8 +2,9 @@ QT += core gui positioning testlib widgets
 
 TEMPLATE = app
 TARGET = unit_tests
-INCLUDEPATH += .
-INCLUDEPATH += ../../src
+INCLUDEPATH += "."
+INCLUDEPATH += "./core"
+INCLUDEPATH += "../../src"
 
 DESTDIR = $$PWD/../../bin/tests/
 OBJECTS_DIR = $$PWD/build/.obj
@@ -17,11 +18,13 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/simplepathalgorithm_test.h \
-    core/detectioncontroller_test.h
+    core/detectioncontroller_test.h \
+    core/videocontroller_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/detectioncontroller_test.cpp \
+    core/videocontroller_test.cpp \
     main.cpp
 
 

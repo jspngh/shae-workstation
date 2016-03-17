@@ -20,6 +20,7 @@ public:
 public slots:
     void processSequence(QString seq);
 
+
 signals:
     void newDetection();
 

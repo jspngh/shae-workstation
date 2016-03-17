@@ -20,7 +20,6 @@ SOURCES += \
     $$PWD/pathlogic/*.cpp \
     $$PWD/persistence/*.cpp \
     $$PWD/utils/*.cpp \
-    $$PWD/videocontroller/*.cpp \
     $$PWD/persistence/persistence.cpp \
     $$PWD/models/dronestatus.cpp \
     $$PWD/models/videosequence.cpp \
@@ -36,7 +35,6 @@ HEADERS += \
     $$PWD/pathlogic/*.h \
     $$PWD/persistence/*.h \
     $$PWD/utils/*.h \
-    $$PWD/videocontroller/*.h \
     $$PWD/persistence/persistence.h \
     $$PWD/models/dronestatus.h \
     $$PWD/models/videosequence.h \
