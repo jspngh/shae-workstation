@@ -60,7 +60,7 @@ void Json_Messages_Test::testNavigationMessages()
 
 void Json_Messages_Test::testStatusMessages()
 {
-    std::list<DroneStatus> list = std::list<DroneStatus>();
+    std::list<RequestedDroneStatus> list = std::list<RequestedDroneStatus>();
     list.push_back(Battery_Level);
     list.push_back(Location);
     list.push_back(Drone_Type);
@@ -86,12 +86,12 @@ void Json_Messages_Test::testStatusMessages()
 
 void Json_Messages_Test::testSettingsMessages()
 {
-    std::list<DroneSetting> settingList = std::list<DroneSetting>();
-    settingList.push_back(Speed);
-    settingList.push_back(Height);
-    settingList.push_back(Camera_Angle);
-    settingList.push_back(Resolution);
-    settingList.push_back(FPS);
+    std::list<RequestedDroneSetting> settingList = std::list<RequestedDroneSetting>();
+    settingList.push_back(Speed_To_Set);
+    settingList.push_back(Height_To_Set);
+    settingList.push_back(Camera_Angle_To_Set);
+    settingList.push_back(Resolution_To_Set);
+    settingList.push_back(FPS_To_Set);
 
     std::list<int> valueList = std::list<int>();
     valueList.push_back(3);
@@ -117,12 +117,10 @@ void Json_Messages_Test::testSettingsMessages()
     QVERIFY( message.at(4).toObject()["Value"].toInt() == 30 );
 
     //Also test if just 1 status is sent
-    jsondoc = drone->setSetting(FPS,60);
+    jsondoc = drone->setSetting(FPS_To_Set, 60);
     json = jsondoc.object();
     QVERIFY( json["MessageType"] == "settings" );
     message = json["Message"].toArray();
     QVERIFY( message.at(0).toObject()["Key"] == "fps" );
     QVERIFY( message.at(0).toObject()["Value"].toInt() == 60 );
 }
-
-

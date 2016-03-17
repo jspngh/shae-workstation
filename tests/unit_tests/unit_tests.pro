@@ -21,6 +21,9 @@ SOURCES += \
     core/json_messages_test.cpp \
     core/main.cpp
 
+# c++11
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 include(../../src/core/core.pri)
 

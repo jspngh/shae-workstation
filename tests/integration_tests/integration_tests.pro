@@ -24,6 +24,9 @@ HEADERS += \
 SOURCES += \
     qtmapkit_test.cpp
 
+# c++11
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 include(../../src/core/core.pri)
 
