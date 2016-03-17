@@ -17,7 +17,7 @@ while True:
     length = client.recv(4)
     if length is not None:
         buffersize = struct.unpack(">I", length)[0]
-	#print buffersize
+        # print buffersize
     data = client.recv(buffersize)  # buffer size is 1024 bytes
     print "received message:", data
     response = "Roger that golden eagle"

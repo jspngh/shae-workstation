@@ -5,23 +5,19 @@
 
 #include "droneconnection.h"
 
+/**
+ * This class is now obsolete
+ */
  class Communication : public QObject
  {
      Q_OBJECT
 
  public:
 
-
-     /**
-      * ... todo ...
-      */
      Communication(QString serverIp, int portNr);
 
      ~Communication();
-     /**
-      * ... todo ...
-      * returns 0 when everything is correct
-      */
+
      int doRequest(const QString &message);
 
  private slots:

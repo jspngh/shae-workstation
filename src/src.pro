@@ -24,6 +24,10 @@ INCLUDEPATH += \
 # Main source
 SOURCES += main.cpp
 
+# c++11
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
+
 # Resources
 RESOURCES = application.qrc
 

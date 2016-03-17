@@ -1,6 +1,7 @@
 #ifndef JSON_MESSAGES_TEST_H
 #define JSON_MESSAGES_TEST_H
 #include <QString>
+#include <QUuid>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
 #include "core/drone.h"
@@ -20,9 +21,7 @@ private Q_SLOTS:
     void testSettingsMessages();
 
 private:
-    Drone drone;
-    Communication* commlink;
-
+    Drone* drone;
 };
 
 #endif // JSON_MESSAGES_TEST_H
