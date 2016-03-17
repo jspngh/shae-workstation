@@ -9,8 +9,7 @@
 
 #include "FrameProducer.h"
 
-class FrameFromVideo: public FrameProducer
-{
+class FrameFromVideo: public FrameProducer{
 public:
     FrameFromVideo(std::string directory);
     virtual ~FrameFromVideo();
