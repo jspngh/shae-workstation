@@ -6,7 +6,9 @@ HOGDetector::HOGDetector()
 {
     // set the default OpenCV PeopleDetector (note: this detector works on frames of size 64 x 128)
     this->hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
-    this->type = "windows";
+    this->type="window";
+
+
 }
 
 std::string HOGDetector::getType() const

@@ -4,10 +4,7 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
-#include <QThread>
-#include <iostream>
-
-#include "detection/detection/DetectorManager.h"
+#include "detection/DetectorManager.h"
 
 class DetectionController : public QObject
 {

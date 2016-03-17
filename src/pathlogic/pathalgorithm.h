@@ -1,9 +1,9 @@
 #ifndef PATHALGORITHM_H
 #define PATHALGORITHM_H
-#include <list>
-#include "drone.h"
+
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
+#include "models/drone.h"
 
 
 enum Direction {
@@ -23,10 +23,10 @@ public:
     ~PathAlgorithm();
 
     //! calculates waypointcoordinates to cover a certain area, when given a certain visionwidth.
-    virtual std::list<QGeoCoordinate> calculateWaypoints(QGeoRectangle area, double visionWidth) = 0;
+    virtual QList<QGeoCoordinate> calculateWaypoints(QGeoRectangle area, double visionWidth) = 0;
 
     //! divides a rectangular area in multiple rectangles and saves the resulting waypoints in each drone object.
-    virtual void setWaypointsForDrones(QGeoRectangle area, std::list<Drone> *drones) = 0;
+    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone> *drones) = 0;
 
 protected:
     //! returns a new coordinate based on a certain distance and direction from a previous coordinate.

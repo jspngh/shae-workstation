@@ -18,12 +18,36 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 # Libraries
-LIBS +=  -L"$$PWD/../libs/qtmapkit/bin/" -lqtmapkit
+LIBS +=  \
+    -L"$$PWD/../libs/qtmapkit/bin/" -lqtmapkit \
+    -L"$$PWD/../libs/detection/bin/" -ldetection
 
-INCLUDEPATH += "$$PWD/../libs/qtmapkit/include/"
+INCLUDEPATH += \
+    "$$PWD/../libs/qtmapkit/include/" \
+    "$$PWD/../libs/detection/"
 
-# Main source
-SOURCES += main.cpp
+HEADERS += \
+    $$PWD/core/*.h \
+    $$PWD/communication/*.h \
+    $$PWD/detection/*.h \
+    $$PWD/models/*.h \
+    $$PWD/pathlogic/*.h \
+    $$PWD/persistence/*.h \
+    $$PWD/utils/*.h \
+    $$PWD/models/*.h \
+    $$PWD/videocontroller/*.h
+
+SOURCES += \
+    $$PWD/core/*.cpp \
+    $$PWD/communication/*.cpp \
+    $$PWD/detection/*.cpp \
+    $$PWD/models/*.cpp \
+    $$PWD/pathlogic/*.cpp \
+    $$PWD/persistence/*.cpp \
+    $$PWD/utils/*.cpp \
+    $$PWD/models/*.cpp \
+    $$PWD/videocontroller/*.cpp \
+    main.cpp
 
 # Resources
 RESOURCES = application.qrc

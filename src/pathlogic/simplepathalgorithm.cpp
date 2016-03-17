@@ -9,16 +9,15 @@ SimplePathAlgorithm::SimplePathAlgorithm(QGeoCoordinate start)
 {
     this->start = start;
 }
+
 SimplePathAlgorithm::~SimplePathAlgorithm()
 {
-
 }
 
-
-std::list<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area, double visionWidth)
+QList<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area, double visionWidth)
 {
     //create empty list of Coordinates that will contain the waypoints
-    std::list<QGeoCoordinate> list = std::list<QGeoCoordinate>();
+    QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
 
     //calculate distances from the start coordinate to each corner of the rectangular area
     double d1 = start.distanceTo(area.topRight());
@@ -76,10 +75,10 @@ std::list<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle 
     return list;
 }
 
-void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, std::list<Drone> *drones)
+void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone> *drones)
 {
     int numberOfDrones = drones->size();
-    std::_List_iterator<Drone> it = drones->begin();
+    QList<Drone>::iterator it = drones->begin();
     for (int i = 0; i < numberOfDrones; i++) {
 
         it->waypoints = calculateWaypoints(QGeoRectangle(QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i * (area.width() / numberOfDrones)),

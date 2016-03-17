@@ -1,9 +1,4 @@
 #include "pathalgorithm.h"
-#include <algorithm>
-#include <list>
-
-
-
 
 PathAlgorithm::PathAlgorithm()
 {
@@ -14,12 +9,11 @@ PathAlgorithm::PathAlgorithm(QGeoCoordinate start)
 {
     this->start = start;
 }
+
 PathAlgorithm::~PathAlgorithm()
 {
 
 }
-
-
 
 QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direction, double distance)
 {

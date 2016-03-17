@@ -6,7 +6,7 @@
 #include "mediator.h"
 #include "communication/communication.h"
 #include "ui/mainwindow.h"
-#include "drone.h"
+#include "models/drone.h"
 
 namespace Core {
     class Controller;
