@@ -53,8 +53,10 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+    int ret = a.exec();
+
     delete drone;
     delete l;
 
-    return a.exec();
+    return ret;
 }
