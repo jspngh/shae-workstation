@@ -53,7 +53,7 @@ public:
     DetectionList applyDetector(cv::Mat &frame);
     std::string getDetectorType();
     DetectionList process(std::string seq);
-    std::vector<std::tuple<double,double>> calculatePositions(DetectionList dl, std::tuple<double,double> location);
+    std::vector<std::pair<double,double>> calculatePositions(DetectionList dl, std::pair<double,double> location);
 
 
 

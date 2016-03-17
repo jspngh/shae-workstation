@@ -4,10 +4,12 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
-#include <QThread>
+#include <thread>
 #include <iostream>
 
 #include "detection/detection/DetectorManager.h"
+#include "core/models/detectionresult.h"
+
 
 class DetectionController : public QObject
 {
@@ -18,16 +20,18 @@ public:
     ~DetectionController() {}
 
 public slots:
-    void processSequence(QString seq);
+    void onProcessSequence(QString seq);
+    void onFinish();
 
 
 signals:
-    void newDetection();
+    void newDetection(DetectionResult result);
 
 private:
     DetectorManager manager;
     double fps;
     double frameHop;
+    volatile bool streaming;
 };
 
 #endif // DETECTIONCONTROLLER_H

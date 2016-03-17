@@ -1,19 +1,17 @@
 #ifndef DETECTIONRESULT_H
 #define DETECTIONRESULT_H
 #include <QGeoCoordinate>
-#include <QGeoCoordinate>
+#include <QThread>
 #include "core/models/videosequence.h"
 
 
 class DetectionResult
 {
 public:
-    DetectionResult();
+    DetectionResult(QGeoCoordinate location, double score);
+private:
     QGeoCoordinate location;
     double score;
-    VideoSequence sequence;
-
-
 };
 
 #endif // DETECTIONRESULT_H

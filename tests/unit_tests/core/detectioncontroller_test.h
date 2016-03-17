@@ -20,7 +20,7 @@ signals:
     void newSequence(QString seq);
 
 private:
-    void onNewDetection();
+    void onNewDetection(DetectionResult result);
 
 private Q_SLOTS:
     void testProcessSequence();

@@ -108,8 +108,12 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     return detections;
 }
 
-std::vector<std::tuple<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::tuple<double,double> location){
-    vector<std::tuple<double,double>> result;
+std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location){
+    vector<std::pair<double,double>> result;
+    for(int i = 0; i< dl.getSize();i++)
+    {
+        result.push_back(std::pair<double,double>(0,0));
+    }
     return result;
 }
 
