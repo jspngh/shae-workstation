@@ -190,7 +190,7 @@ QJsonDocument Drone::requestStatus()
     // Create json message to request all statuses
     QJsonObject json = QJsonObject();
 
-    json["Message"]= "allStatuses";
+    json["Message"]= "all_statuses";
     json["MessageType"]= "status";
     QJsonDocument jsondoc(json);
 
