@@ -14,8 +14,7 @@ FrameFromVideo::FrameFromVideo(std::string directory){
 }
 
 
-FrameFromVideo::~FrameFromVideo()
-{
+FrameFromVideo::~FrameFromVideo(){
 }
 
 cv::Mat FrameFromVideo::giveFrame()
