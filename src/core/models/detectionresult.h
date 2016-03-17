@@ -13,6 +13,7 @@ public:
     double score;
     VideoSequence sequence;
 
+
 };
 
 #endif // DETECTIONRESULT_H
