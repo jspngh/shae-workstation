@@ -20,7 +20,8 @@ done
 
 if [ $RETURN -eq 1 ]; then
 	echo "" >&2
-	echo "Make sure you have run astyle with the following options:" >&2
+	echo "One or more files did not follow the coding conventions." >&2
+	echo "Run the script \"refactor-code.sh\" to refactor the code. " >&2
 	echo $OPTIONS >&2
 fi
 
