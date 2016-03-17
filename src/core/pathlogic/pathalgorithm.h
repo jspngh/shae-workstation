@@ -1,7 +1,7 @@
 #ifndef PATHALGORITHM_H
 #define PATHALGORITHM_H
 #include <list>
-#include "drone.h"
+#include "core/models/drone.h"
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
 

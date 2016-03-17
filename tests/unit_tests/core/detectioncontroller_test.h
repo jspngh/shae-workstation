@@ -8,7 +8,7 @@
 #include <string>
 #include <QThread>
 
-#include "core/detectioncontroller.h"
+#include "core/detection/detectioncontroller.h"
 
 class DetectionController_Test : public QObject
 {
