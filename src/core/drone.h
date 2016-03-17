@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include "dronestatus.h"
 
 #include "droneconnection.h"
 
@@ -115,6 +116,8 @@ private slots:
     void processResponse(const QString &response);
     void processError(int socketError, const QString &message);
 
+signals:
+    void droneStatusReceived(DroneStatus &status);
 
 private:
     /*********

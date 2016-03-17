@@ -2,6 +2,11 @@
 
 #include "communication.h"
 
+/*! \brief This class is deprecated and no longer used
+ *
+ *
+*/
+
 Communication::~Communication()
 {
 
