@@ -21,8 +21,7 @@ done
 if [ $RETURN -eq 1 ]; then
 	echo "" >&2
 	echo "One or more files did not follow the coding conventions." >&2
-	echo "Run the script \"refactor-code.sh\" to refactor the code. " >&2
-	echo $OPTIONS >&2
+	echo "Run the script \"refactor-code.sh\" to refactor the code then recommit." >&2
 fi
 
 exit $RETURN
