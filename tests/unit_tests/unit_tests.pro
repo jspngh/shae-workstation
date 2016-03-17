@@ -1,8 +1,10 @@
-QT += core gui positioning testlib webkit
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
+QT += testlib
 
 TEMPLATE = app
 TARGET = unit_tests
+
+include(../../common.pri)
+
 INCLUDEPATH += .
 INCLUDEPATH += ../../src
 
@@ -11,16 +13,6 @@ OBJECTS_DIR = $$PWD/build/.obj
 MOC_DIR = $$PWD/build/.moc
 RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
-
-# Libraries
-LIBS += \
-    -L"$$PWD/../../libs/qtmapkit/bin/" -lqtmapkit
-INCLUDEPATH += \
-    "$$PWD/../../libs/qtmapkit/include/"
-
-# run main of unit test after build
-# QMAKE_POST_LINK = ./$${DESTDIR}/$${TARGET}
-
 
 # Input
 HEADERS += \
@@ -35,5 +27,4 @@ SOURCES += \
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
-include(../../src/communication/communication.pri)
 
