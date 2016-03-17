@@ -5,6 +5,7 @@
 DroneConnection::DroneConnection(QObject *parent)
     : QThread(parent), quit(false)
 {
+    //connect(this, SIGNAL(droneResponse(QString)), qApp, SLOT(aboutQt()));
 }
 
 DroneConnection::~DroneConnection()
@@ -69,7 +70,7 @@ void DroneConnection::run()
         QDataStream in(&socket);
         in.setVersion(QDataStream::Qt_4_0);
         in >> blockSize;
-        //qDebug() << blockSize;
+        qDebug() << blockSize;
 
         while (socket.bytesAvailable() < blockSize) {
             if (!socket.waitForReadyRead(Timeout)) {
@@ -82,6 +83,7 @@ void DroneConnection::run()
         QByteArray raw;
         in >> raw;
         QString response = QString::fromStdString(raw.toStdString());
+        //qDebug() << response;
         emit droneResponse(response);
 
         cond.wait(&mutex);

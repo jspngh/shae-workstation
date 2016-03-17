@@ -9,11 +9,12 @@ Drone::Drone()
     this->portNr = 6330;
     this->serverIp = "10.1.1.10";
     this->visionWidth = MIN_VISIONWIDTH;
+    droneConnection = new DroneConnection();
 
-    connect(&droneConnection, SIGNAL(droneResponse(QString)),
-            this, SLOT(processResponse(QString)));
-    connect(&droneConnection, SIGNAL(error(int,QString)),
-            this, SLOT(processError(int,QString)));
+    connect(droneConnection, SIGNAL(droneResponse(const QString &)),
+            this, SLOT(processResponse(const QString &)));
+    connect(droneConnection, SIGNAL(error(int,const QString &)),
+            this, SLOT(processError(int,const QString &)));
 }
 
 Drone::Drone(QUuid guid, int portNr, QString serverIp, double visionWidth):
@@ -22,14 +23,17 @@ Drone::Drone(QUuid guid, int portNr, QString serverIp, double visionWidth):
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
-    connect(&droneConnection, SIGNAL(droneResponse(QString)),
-            this, SLOT(processResponse(QString)));
-    connect(&droneConnection, SIGNAL(error(int,QString)),
-            this, SLOT(processError(int,QString)));
+    droneConnection = new DroneConnection();
+
+    auto res = connect(droneConnection, SIGNAL(droneResponse(const QString &)),
+            this, SLOT(processResponse(const QString &)));
+    connect(droneConnection, SIGNAL(error(int,const QString &)),
+            this, SLOT(processError(int,const QString &)));
 }
 
 Drone::~Drone()
 {
+    delete droneConnection;
 }
 
 /***********************
@@ -106,7 +110,7 @@ QJsonDocument Drone::startFlight()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }
@@ -122,7 +126,7 @@ QJsonDocument Drone::stopFlight()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }
@@ -138,7 +142,7 @@ QJsonDocument Drone::emergencyLanding()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }
@@ -173,7 +177,7 @@ QJsonDocument Drone::sendWaypoints()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }
@@ -181,21 +185,37 @@ QJsonDocument Drone::sendWaypoints()
 /**************************
 Status messages method
 **************************/
-
-QJsonDocument Drone::requestStatus(DroneStatus status)
+QJsonDocument Drone::requestStatus()
 {
-    std::list<DroneStatus> list = std::list<DroneStatus>();
+    // Create json message to request all statuses
+    QJsonObject json = QJsonObject();
+
+    json["Message"]= "allStatuses";
+    json["MessageType"]= "status";
+    QJsonDocument jsondoc(json);
+
+    // Send the json message
+    QString message = jsondoc.toJson(QJsonDocument::Indented);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
+    return jsondoc;
+}
+
+
+QJsonDocument Drone::requestStatus(RequestedDroneStatus status)
+{
+    std::list<RequestedDroneStatus> list = std::list<RequestedDroneStatus>();
     list.push_back(status);
     return requestStatuses(list);
 }
 
-QJsonDocument Drone::requestStatuses(std::list<DroneStatus> statuses)
+QJsonDocument Drone::requestStatuses(std::list<RequestedDroneStatus> statuses)
 {
     // Create json message
     QJsonObject json = QJsonObject();
     json["MessageType"]= "status";
     QJsonArray requestedStatuses = QJsonArray();
-    foreach (const DroneStatus status, statuses){
+    foreach (const RequestedDroneStatus status, statuses){
         QJsonObject requestedStatus = QJsonObject();
         QString key;
         switch (status) {
@@ -211,8 +231,36 @@ QJsonDocument Drone::requestStatuses(std::list<DroneStatus> statuses)
         case Waypoint_Reached:
             key = "waypoint_reached";
             break;
+        case Speed:
+            key = "speed";
+            break;
+        case Selected_Speed:
+            key = "selected_speed";
+            break;
+        case Height:
+            key = "height";
+            break;
+        case Selected_Height:
+            key = "selected_height";
+            break;
+        case Camera_Angle:
+            key = "camera_angle";
+            break;
+        case FPS:
+            key = "fps";
+            break;
+        case Resolution:
+            key = "resolution";
+            break;
+        case Next_Waypoint:
+            key = "next_waypoint";
+            break;
+        case Next_Waypoints:
+            key = "next_waypoints";
+            break;
+
         default:
-            key = "current_lcoation";
+            key = "current_location";
             break;
         }
         requestedStatus["Key"] = key;
@@ -223,7 +271,7 @@ QJsonDocument Drone::requestStatuses(std::list<DroneStatus> statuses)
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }
@@ -238,7 +286,7 @@ QJsonDocument Drone::requestHeartbeat()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }
@@ -248,9 +296,9 @@ QJsonDocument Drone::requestHeartbeat()
 Setting messages methods
 **************************/
 
-QJsonDocument Drone::setSetting(DroneSetting setting, int value)
+QJsonDocument Drone::setSetting(RequestedDroneSetting setting, int value)
 {
-    std::list<DroneSetting> settingList = std::list<DroneSetting>();
+    std::list<RequestedDroneSetting> settingList = std::list<RequestedDroneSetting>();
     settingList.push_back(setting);
     std::list<int> valueList = std::list<int>();
     valueList.push_back(value);
@@ -258,7 +306,7 @@ QJsonDocument Drone::setSetting(DroneSetting setting, int value)
     return setSettings(settingList, valueList);
 }
 
-QJsonDocument Drone::setSettings(std::list<DroneSetting> settings, std::list<int> values)
+QJsonDocument Drone::setSettings(std::list<RequestedDroneSetting> settings, std::list<int> values)
 {
     // Create json message
     QJsonObject json = QJsonObject();
@@ -268,22 +316,22 @@ QJsonDocument Drone::setSettings(std::list<DroneSetting> settings, std::list<int
     for(int i=0; i < size ; i++){
         QJsonObject settingToSet = QJsonObject();
         QString key;
-        DroneSetting setting = settings.front();
+        RequestedDroneSetting setting = settings.front();
         settings.pop_front();
         switch (setting) {
-        case Height:
+        case Height_To_Set:
             key = "height";
             break;
-        case Speed:
+        case Speed_To_Set:
             key = "speed";
             break;
-        case Camera_Angle:
+        case Camera_Angle_To_Set:
             key = "camera_angle";
             break;
-        case FPS:
+        case FPS_To_Set:
             key = "fps";
             break;
-        case Resolution:
+        case Resolution_To_Set:
             key = "resolution";
             break;
         default:
@@ -300,7 +348,7 @@ QJsonDocument Drone::setSettings(std::list<DroneSetting> settings, std::list<int
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection.droneRequest(serverIp, (quint16) portNr, message);
+    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
 }

@@ -11,13 +11,13 @@
 
 #include "droneconnection.h"
 
-enum DroneStatus
+enum RequestedDroneStatus
 {
-    Battery_Level, Location, Drone_Type, Waypoint_Reached
+    Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
 };
-enum DroneSetting
+enum RequestedDroneSetting
 {
-    Height, Speed, Camera_Angle, FPS, Resolution
+    Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
 };
 
 /*! \brief This is the class that represents a drone on the workstation.
@@ -82,13 +82,17 @@ public:
     /**************************
     Status messages method
     **************************/
+    //! Sends a Json messages to the drone that requests all statusses, possibly more than specified in the RequestedDroneStatus enum.
+    QJsonDocument requestStatus();
+
+
     /*! \brief Sends a Json message to the drone to request a certain status.
-     *  See DroneStatus enum to see which statuses can be requested.
+     *  See RequestedDroneStatus enum to see which statuses can be requested.
      * This method actually uses the method to request multiple statuses, namely requestStatuses(). */
-    QJsonDocument requestStatus(DroneStatus status);
+    QJsonDocument requestStatus(RequestedDroneStatus status);
     /*! \brief Sends a Json message to the drone to request certain multiple statuses.
-     *  See DroneStatus enum to see which statuses can be requested. */
-    QJsonDocument requestStatuses(std::list<DroneStatus> statuses);
+     *  See RequestedDroneStatus enum to see which statuses can be requested. */
+    QJsonDocument requestStatuses(std::list<RequestedDroneStatus> statuses);
     //! Sends a Json message that asks for the heartbeat.
     QJsonDocument requestHeartbeat();
 
@@ -96,15 +100,15 @@ public:
     Setting messages methods
     **************************/
     /*! \brief Sends a Json message to set a certain setting to a certain value.
-     *  See DroneStatus enum to see which settings can be set.
+     *  See RequestedDroneStatus enum to see which settings can be set.
      * This method actually uses the method to set mulitple settings, namely setSettings().
     */
-    QJsonDocument setSetting(DroneSetting setting, int value);
+    QJsonDocument setSetting(RequestedDroneSetting setting, int value);
 
     /*! \brief Sends a Json message to set certain settings to a certain values.
-     * See Dronestatus enum to see which settings can be set.
+     * See RequestedDroneStatus enum to see which settings can be set.
     */
-    QJsonDocument setSettings(std::list<DroneSetting> settings, std::list<int> values);
+    QJsonDocument setSettings(std::list<RequestedDroneSetting> settings, std::list<int> values);
 
 
 private slots:
@@ -118,7 +122,7 @@ private:
     **********/
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
-    DroneConnection droneConnection;
+    DroneConnection* droneConnection;
     int portNr; /*!< The port number that will be used to connect to the actual drone */
     QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
 
@@ -128,7 +132,7 @@ private:
     //!< This is useful to calculate the waypoints.
     //!< It should use the same scale as the coordinates used in the waypointplanning algorithms.
     double visionWidth;
-    static const double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
+    static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 
 #endif // DRONE_H
