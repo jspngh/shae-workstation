@@ -4,8 +4,8 @@
 #include <QThread>
 #include <QSet>
 #include "mediator.h"
-#include "communication.h"
-#include "mainwindow.h"
+#include "communication/communication.h"
+#include "ui/mainwindow.h"
 #include "drone.h"
 
 namespace Core {

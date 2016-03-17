@@ -26,9 +26,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    WelcomeWidget *welcome_widget;
-    ConfigWidget *config_widget;
-    OverviewWidget *overview_widget;
+    WelcomeWidget *welcomeWidget;
+    ConfigWidget *configWidget;
+    OverviewWidget *overviewWidget;
 };
 
 #endif // MAINWINDOW_H

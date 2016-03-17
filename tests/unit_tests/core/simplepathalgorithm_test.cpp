@@ -1,7 +1,6 @@
 #include <QString>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
-#include "core/communication.h"
 #include "core/pathalgorithm.h"
 #include "core/simplepathalgorithm.h"
 #include "core/drone.h"

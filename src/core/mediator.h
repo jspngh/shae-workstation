@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QThread>
-#include "communication.h"
+#include "communication/communication.h"
 #include "ui/mainwindow.h"
 
 namespace Core {

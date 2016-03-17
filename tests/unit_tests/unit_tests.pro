@@ -35,4 +35,5 @@ SOURCES += \
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
+include(../../src/communication/communication.pri)
 
