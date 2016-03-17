@@ -12,7 +12,8 @@
 #include "ColorChannel.h"
 
 
-class GradMagChannel: public Channel {
+class GradMagChannel: public Channel
+{
 public:
     GradMagChannel(const ColorChannel &CC);
     virtual ~GradMagChannel();
@@ -20,7 +21,8 @@ public:
     float *getMagnitude() const;
     float *getOrientation() const;
 
-    static float getLambda() {
+    static float getLambda()
+    {
         return 0.1158;
 //    	return 0.1130;
     }

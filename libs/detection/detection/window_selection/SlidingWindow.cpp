@@ -8,7 +8,8 @@
 
 SlidingWindow::SlidingWindow(int frameHeight, int frameWidth, float horizon, float winHeight0, float winHeight1,
                              float winWidth0, float winWidth1, int stepX, int stepY)
-        : WindowSelection(frameHeight, frameWidth, horizon, winHeight0, winHeight1, winWidth0, winWidth1, stepX, stepY) {
+    : WindowSelection(frameHeight, frameWidth, horizon, winHeight0, winHeight1, winWidth0, winWidth1, stepX, stepY)
+{
 
     // numWindsHeight: the number of horizontal steps: will change dynamically depending on the width of the window
     int numWindsWidth;
@@ -21,7 +22,7 @@ SlidingWindow::SlidingWindow(int frameHeight, int frameWidth, float horizon, flo
     // x and y position of the top left corner of the window
     int x, y;
 
-    for(int i = 0; i < numWindsHeight; i++){
+    for (int i = 0; i < numWindsHeight; i++) {
         // calculate the height and the width of the window. These dimensions stay constant during a horizontal run.
         float height = winHeight0 + ricoHeight * i;
         float width = winWidth0 + ricoWidth * i;
@@ -30,7 +31,7 @@ SlidingWindow::SlidingWindow(int frameHeight, int frameWidth, float horizon, flo
         // the y position of every window in a horizontal run is equal and can be calculated upfront.
         y = horizon + i * stepY;
 
-        for(int j = 0; j < numWindsWidth; j++){
+        for (int j = 0; j < numWindsWidth; j++) {
             x = j * stepX;
             // note: the min functions are necessary for the window at the end and bottom of the frame
             this->windows.push_back(cv::Rect(x, y, fmin(width, frameWidth - x - 1), fmin(height, frameHeight - y - 1)));
@@ -41,9 +42,10 @@ SlidingWindow::SlidingWindow(int frameHeight, int frameWidth, float horizon, flo
     this->windowIterator = this->windows.begin();
 }
 
-bool SlidingWindow::nextWindow(cv::Rect &win) {
+bool SlidingWindow::nextWindow(cv::Rect &win)
+{
 
-    if(this->windowIterator == this->windows.end())
+    if (this->windowIterator == this->windows.end())
         return false;
 
     win = *this->windowIterator;
@@ -52,6 +54,7 @@ bool SlidingWindow::nextWindow(cv::Rect &win) {
 
 }
 
-void SlidingWindow::reset(){
+void SlidingWindow::reset()
+{
     this->windowIterator = this->windows.begin();
 }

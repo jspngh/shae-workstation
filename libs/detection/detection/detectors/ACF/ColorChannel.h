@@ -15,25 +15,27 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
-float* Convert_ToMatlab(const cv::Mat &image, float scale);
+float *Convert_ToMatlab(const cv::Mat &image, float scale);
 
-class ColorChannel : public Channel {
+class ColorChannel : public Channel
+{
 public:
     ColorChannel(const cv::Mat &Image);
     virtual ~ColorChannel();
 
-    static float getLambda() {
+    static float getLambda()
+    {
         return 0.0;
     }
 
 
 private:
 
-    void setColorSpace(std::string cspace) {
-        if(cspace == "luv") {
+    void setColorSpace(std::string cspace)
+    {
+        if (cspace == "luv") {
             this->colorSpace = cspace;
-        }
-        else {
+        } else {
             std::cerr << "Unknown colorspace!!" << std::endl;
         }
     }

@@ -8,15 +8,18 @@
 #include "Channel.h"
 #include <cstdlib>
 
-Channel::Channel(): data(NULL),width(0),height(0),nChns(0) {
+Channel::Channel(): data(NULL), width(0), height(0), nChns(0)
+{
 
 }
 
-Channel::~Channel() {
+Channel::~Channel()
+{
 }
 
-void Channel::setChanneldata(float* data, int width, int height, int nChns) {
-    if(data) {
+void Channel::setChanneldata(float *data, int width, int height, int nChns)
+{
+    if (data) {
         this->data = data;
         this->width = width;
         this->height = height;
@@ -24,12 +27,13 @@ void Channel::setChanneldata(float* data, int width, int height, int nChns) {
     }
 }
 
-void Channel::PrintChanneldata() const {
+void Channel::PrintChanneldata() const
+{
 
-    for(int c=0; c<this->nChns; c++) {
-        for(int y=0; y<this->height; y++) {
-            for(int x=0; x<this->width; x++) {
-                std::cout << data[this->height*this->width*c+x*this->height+y] << " ";
+    for (int c = 0; c < this->nChns; c++) {
+        for (int y = 0; y < this->height; y++) {
+            for (int x = 0; x < this->width; x++) {
+                std::cout << data[this->height * this->width * c + x * this->height + y] << " ";
             }
             std::cout << std::endl;
         }
@@ -40,12 +44,13 @@ void Channel::PrintChanneldata() const {
 
 }
 
-void Channel::PrintChanneldata(int w, int h) const {
+void Channel::PrintChanneldata(int w, int h) const
+{
 
-    for(int c=0; c<this->nChns; c++) {
-        for(int y=0; y<h; y++) {
-            for(int x=0; x<w; x++) {
-                std::cout << data[this->height*this->width*c+x*this->height+y] << " ";
+    for (int c = 0; c < this->nChns; c++) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                std::cout << data[this->height * this->width * c + x * this->height + y] << " ";
             }
             std::cout << std::endl;
         }
@@ -56,17 +61,21 @@ void Channel::PrintChanneldata(int w, int h) const {
 
 }
 
-int Channel::getWidth() const {
+int Channel::getWidth() const
+{
     return this->width;
 }
 
-int Channel::getHeight() const {
+int Channel::getHeight() const
+{
     return this->height;
 }
-int Channel::getnChns() const {
+int Channel::getnChns() const
+{
     return this->nChns;
 }
 
-float *Channel::getData() const {
+float *Channel::getData() const
+{
     return this->data;
 }

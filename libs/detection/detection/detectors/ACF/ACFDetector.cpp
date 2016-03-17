@@ -8,46 +8,50 @@
 #include "ACFDetector.h"
 #include "ACFFeaturePyramid.h"
 
-ACFDetector::ACFDetector() {
+ACFDetector::ACFDetector()
+{
     ReadModel("../src/detection/detectors/ACF/Model/INRIA_ACF.xml");
-    this->type="frame";
+    this->type = "frame";
 
 }
 
-ACFDetector::ACFDetector(std::string modelfile) {
+ACFDetector::ACFDetector(std::string modelfile)
+{
     ReadModel(modelfile);
-    this->type="frame";
+    this->type = "frame";
 
 }
 
-ACFDetector::~ACFDetector() {
+ACFDetector::~ACFDetector()
+{
 }
 
 
-void ACFDetector::getChild( const ChannelFeatures *features, int &k0, int &k, int c,int r, int s, int channelwidth, int channelheight, int modelwidth, int modelheight ) const
+void ACFDetector::getChild(const ChannelFeatures *features, int &k0, int &k, int c, int r, int s, int channelwidth, int channelheight, int modelwidth, int modelheight) const
 {
 
     int featind = Fid[s][k];
 
-    int channel = featind/(modelwidth*modelheight);
-    int offset = featind%(modelwidth*modelheight);
-    int posX = offset/modelheight;
-    int posY = offset%modelheight;
+    int channel = featind / (modelwidth * modelheight);
+    int offset = featind % (modelwidth * modelheight);
+    int posX = offset / modelheight;
+    int posY = offset % modelheight;
 
-    int pos = (c+posX)*channelheight+(r+posY);
+    int pos = (c + posX) * channelheight + (r + posY);
 
     float ftr = features->getFeatureValue(channel, pos);
 
-    k = (ftr<Thresholds[s][k]) ? 1 : 2;
-    k0=k+=k0*2;
+    k = (ftr < Thresholds[s][k]) ? 1 : 2;
+    k0 = k += k0 * 2;
 
 }
 
-bool ACFDetector::applyDetectorOnWindow(const cv::Mat &Frame) const{
+bool ACFDetector::applyDetectorOnWindow(const cv::Mat &Frame) const
+{
     cv::Mat roi;
-    cv::resize(Frame, roi, cv::Size(64,128));
+    cv::resize(Frame, roi, cv::Size(64, 128));
 
-    ACFFeaturePyramid ACFP(roi, (float)1.0,cv::Size(41,100), *this);
+    ACFFeaturePyramid ACFP(roi, (float)1.0, cv::Size(41, 100), *this);
     ChannelFeatures *features = ACFP.getLayer(0);
     float cascThr = -1; //could also come from model
 
@@ -61,69 +65,69 @@ bool ACFDetector::applyDetectorOnWindow(const cv::Mat &Frame) const{
     int modelWd = this->modelwidthpad;
     int modelHt = this->modelheightpad;
 
-            float h=-30;
-            for( int t = 0; t < nTrees; t++ ) {
+    float h = -30;
+    for (int t = 0; t < nTrees; t++) {
 
-                int  k=0, k0=0;
+        int  k = 0, k0 = 0;
 
-                if(treeDepth != 0) {
-                    for( int i=0; i<treeDepth; i++ ) {
-                        getChild(features,k0,k,0,0,t,chnWidth,chnHeight,modelWd/shrinking, modelHt/shrinking);
-                    }
-                    if(t == 0)
-                        h = Values[t][k];
-                    else
-                        h += Values[t][k];
+        if (treeDepth != 0) {
+            for (int i = 0; i < treeDepth; i++) {
+                getChild(features, k0, k, 0, 0, t, chnWidth, chnHeight, modelWd / shrinking, modelHt / shrinking);
+            }
+            if (t == 0)
+                h = Values[t][k];
+            else
+                h += Values[t][k];
 
-                }
-                else { //variable tree depth ...
+        } else { //variable tree depth ...
 
-                    while(Child[t][k]) {
-                        int featind = Fid[t][k];
-                        int S = ((modelWd/shrinking)*(modelHt/shrinking)); //size of the model
-                        int channel = featind/S;
-                        int offset = featind%S;
+            while (Child[t][k]) {
+                int featind = Fid[t][k];
+                int S = ((modelWd / shrinking) * (modelHt / shrinking)); //size of the model
+                int channel = featind / S;
+                int offset = featind % S;
 
-                        int posX = offset/(modelHt/shrinking);
-                        int posY = offset%(modelHt/shrinking);
+                int posX = offset / (modelHt / shrinking);
+                int posY = offset % (modelHt / shrinking);
 
-                        int pos = (posX)*chnHeight+(posY);
-                        float ftr = features->getFeatureValue(channel, pos);
+                int pos = (posX) * chnHeight + (posY);
+                float ftr = features->getFeatureValue(channel, pos);
 
-                        k = (ftr<Thresholds[t][k]) ? 1 : 0;
-                        k0 = k = Child[t][k0]-k;
-                    }
-
-                    if(t == 0)
-                        h = Values[t][k];
-                    else
-                        h += Values[t][k];
-
-                }
-                if( h<=cascThr )
-                    break;
+                k = (ftr < Thresholds[t][k]) ? 1 : 0;
+                k0 = k = Child[t][k0] - k;
             }
 
-            if(h>cascThr) {
-                return true;
-            }
+            if (t == 0)
+                h = Values[t][k];
+            else
+                h += Values[t][k];
+
+        }
+        if (h <= cascThr)
+            break;
+    }
+
+    if (h > cascThr) {
+        return true;
+    }
 
     return false;
 }
 
 
 
-DetectionList ACFDetector::applyDetectorOnBand(const cv::Mat &Frame) const {
-    ACFFeaturePyramid ACFP = ACFFeaturePyramid(Frame, 4,cv::Size(41,100), Frame.size().height/2, Frame.size().height, *this);
+DetectionList ACFDetector::applyDetectorOnBand(const cv::Mat &Frame) const
+{
+    ACFFeaturePyramid ACFP = ACFFeaturePyramid(Frame, 4, cv::Size(41, 100), Frame.size().height / 2, Frame.size().height, *this);
     DetectionList DL;
 
-    for(int L=0; L<ACFP.getAmount(); L++) {
-        std::vector<Detection*> Detections = Detect(ACFP.getLayer(L));
-        if(Detections.size() > 0) {
+    for (int L = 0; L < ACFP.getAmount(); L++) {
+        std::vector<Detection *> Detections = Detect(ACFP.getLayer(L));
+        if (Detections.size() > 0) {
 
-            for(int D=0; D<Detections.size(); D++) {
+            for (int D = 0; D < Detections.size(); D++) {
 
-                float rescaleValue = 1.0/ACFP.getScale(L);
+                float rescaleValue = 1.0 / ACFP.getScale(L);
                 DL.addDetection(Detections[D]->getX()*rescaleValue, Detections[D]->getY()*rescaleValue, Detections[D]->getWidth()*rescaleValue, Detections[D]->getHeight()*rescaleValue, Detections[D]->getScore());
             }
         }
@@ -131,17 +135,18 @@ DetectionList ACFDetector::applyDetectorOnBand(const cv::Mat &Frame) const {
     return DL;
 }
 
-DetectionList ACFDetector::applyDetectorOnFrame(const cv::Mat &Frame) const {
-    ACFFeaturePyramid ACFP = ACFFeaturePyramid(Frame, 4,cv::Size(41,100), *this);
+DetectionList ACFDetector::applyDetectorOnFrame(const cv::Mat &Frame) const
+{
+    ACFFeaturePyramid ACFP = ACFFeaturePyramid(Frame, 4, cv::Size(41, 100), *this);
     DetectionList DL;
 
-    for(int L=0; L<ACFP.getAmount(); L++) {
-        std::vector<Detection*> Detections = Detect(ACFP.getLayer(L));
-        if(Detections.size() > 0) {
+    for (int L = 0; L < ACFP.getAmount(); L++) {
+        std::vector<Detection *> Detections = Detect(ACFP.getLayer(L));
+        if (Detections.size() > 0) {
 
-            for(int D=0; D<Detections.size(); D++) {
+            for (int D = 0; D < Detections.size(); D++) {
 
-                float rescaleValue = 1.0/ACFP.getScale(L);
+                float rescaleValue = 1.0 / ACFP.getScale(L);
                 DL.addDetection(Detections[D]->getX()*rescaleValue, Detections[D]->getY()*rescaleValue, Detections[D]->getWidth()*rescaleValue, Detections[D]->getHeight()*rescaleValue, Detections[D]->getScore());
             }
         }
@@ -149,8 +154,9 @@ DetectionList ACFDetector::applyDetectorOnFrame(const cv::Mat &Frame) const {
     return DL;
 }
 
-std::vector<Detection*> ACFDetector::Detect(const ChannelFeatures *features) const {
-    std::vector<Detection*> Ds;
+std::vector<Detection *> ACFDetector::Detect(const ChannelFeatures *features) const
+{
+    std::vector<Detection *> Ds;
 
     float cascThr = -1; //could also come from model
     int stride = shrinking;
@@ -168,8 +174,8 @@ std::vector<Detection*> ACFDetector::Detect(const ChannelFeatures *features) con
     int modelHt = this->modelheightpad;
 
     //Height and width of the area to cover with the sliding window-detector
-    int height1 = static_cast<int>( std::ceil(static_cast<float>(chnHeight*shrinking-modelHt+1)/stride));
-    int width1 = static_cast<int>( std::ceil(static_cast<float>(chnWidth*shrinking-modelWd+1)/stride));
+    int height1 = static_cast<int>(std::ceil(static_cast<float>(chnHeight * shrinking - modelHt + 1) / stride));
+    int width1 = static_cast<int>(std::ceil(static_cast<float>(chnWidth * shrinking - modelWd + 1) / stride));
 
     int nChns = features->getnChannels();
 
@@ -177,52 +183,51 @@ std::vector<Detection*> ACFDetector::Detect(const ChannelFeatures *features) con
     std::vector<int> rs, cs;
     std::vector<float> hs1;
 
-    for( int c=0; c<width1; c++ ) {
-        for( int r=0; r<height1; r++ ) {
-            float h=-30;
-            for( int t = 0; t < nTrees; t++ ) {
+    for (int c = 0; c < width1; c++) {
+        for (int r = 0; r < height1; r++) {
+            float h = -30;
+            for (int t = 0; t < nTrees; t++) {
 
-                int  k=0, k0=0;
+                int  k = 0, k0 = 0;
 
-                if(treeDepth != 0) {
-                    for( int i=0; i<treeDepth; i++ ) {
-                        getChild(features,k0,k,c,r,t,chnWidth,chnHeight,modelWd/shrinking, modelHt/shrinking);
+                if (treeDepth != 0) {
+                    for (int i = 0; i < treeDepth; i++) {
+                        getChild(features, k0, k, c, r, t, chnWidth, chnHeight, modelWd / shrinking, modelHt / shrinking);
                     }
-                    if(t == 0)
+                    if (t == 0)
                         h = Values[t][k];
                     else
                         h += Values[t][k];
 
-                }
-                else { //variable tree depth ...
+                } else { //variable tree depth ...
 
-                    while(Child[t][k]) {
+                    while (Child[t][k]) {
                         int featind = Fid[t][k];
-                        int S = ((modelWd/shrinking)*(modelHt/shrinking)); //size of the model
-                        int channel = featind/S;
-                        int offset = featind%S;
+                        int S = ((modelWd / shrinking) * (modelHt / shrinking)); //size of the model
+                        int channel = featind / S;
+                        int offset = featind % S;
 
-                        int posX = offset/(modelHt/shrinking);
-                        int posY = offset%(modelHt/shrinking);
+                        int posX = offset / (modelHt / shrinking);
+                        int posY = offset % (modelHt / shrinking);
 
-                        int pos = (c+posX)*chnHeight+(r+posY);
+                        int pos = (c + posX) * chnHeight + (r + posY);
                         float ftr = features->getFeatureValue(channel, pos);
 
-                        k = (ftr<Thresholds[t][k]) ? 1 : 0;
-                        k0 = k = Child[t][k0]-k;
+                        k = (ftr < Thresholds[t][k]) ? 1 : 0;
+                        k0 = k = Child[t][k0] - k;
                     }
 
-                    if(t == 0)
+                    if (t == 0)
                         h = Values[t][k];
                     else
                         h += Values[t][k];
 
                 }
-                if( h<=cascThr )
+                if (h <= cascThr)
                     break;
             }
 
-            if(h>cascThr) {
+            if (h > cascThr) {
                 cs.push_back(c);
                 rs.push_back(r);
                 hs1.push_back(h);
@@ -232,10 +237,10 @@ std::vector<Detection*> ACFDetector::Detect(const ChannelFeatures *features) con
 
     int nDets = cs.size();
 
-    float shiftw = (this->modelwidthpad - this->modelwidth)/2.0; // when padding is used, this should also be subtracted ...
-    float shifth = (this->modelheightpad - this->modelheight)/2.0; // "
+    float shiftw = (this->modelwidthpad - this->modelwidth) / 2.0; // when padding is used, this should also be subtracted ...
+    float shifth = (this->modelheightpad - this->modelheight) / 2.0; // "
 
-    for(int Q=0; Q<nDets; Q++) {
+    for (int Q = 0; Q < nDets; Q++) {
         Detection *D = new Detection();
         D->setX(cs[Q]*shrinking + shiftw);
         D->setY(rs[Q]*shrinking + shifth);
@@ -248,7 +253,8 @@ std::vector<Detection*> ACFDetector::Detect(const ChannelFeatures *features) con
     return Ds;
 }
 
-float ConvertString2float(std::string s) {
+float ConvertString2float(std::string s)
+{
 
     std::istringstream os(s);
     float d;
@@ -257,13 +263,14 @@ float ConvertString2float(std::string s) {
 }
 
 
-void ACFDetector::ReadModel(std::string modelfile) {
+void ACFDetector::ReadModel(std::string modelfile)
+{
 
     xml_document<> doc;
-    xml_node<> * root_node;
-    std::ifstream theFile (modelfile.c_str());
+    xml_node<> *root_node;
+    std::ifstream theFile(modelfile.c_str());
 
-    if(!theFile) {
+    if (!theFile) {
         std::cerr << "The Model-file to read does not seem to exist" << std::endl;
         exit(1);
     }
@@ -274,7 +281,7 @@ void ACFDetector::ReadModel(std::string modelfile) {
     doc.parse<0>(&buffer[0]);
     root_node = doc.first_node("CascadeModel");
 
-    xml_node<> * Nums = root_node->first_node("NumberWeaks");
+    xml_node<> *Nums = root_node->first_node("NumberWeaks");
 
     this->setWidth(ConvertString2float(root_node->first_node("Width")->value()));
     this->setWidthPad(ConvertString2float(root_node->first_node("WidthPad")->value()));
@@ -284,15 +291,15 @@ void ACFDetector::ReadModel(std::string modelfile) {
     this->ModelDepth = atoi(root_node->first_node("ModelDepth")->value());
 
 
-    xml_node<> * Shri = root_node->first_node("Shrinking");
+    xml_node<> *Shri = root_node->first_node("Shrinking");
     this->shrinking = atoi(Shri->value());
 
     xml_node<> *Childs_node = root_node->first_node("Childs");
-    for(xml_node<> *Child_node = Childs_node->first_node("Child"); Child_node; Child_node = Child_node->next_sibling()) {
+    for (xml_node<> *Child_node = Childs_node->first_node("Child"); Child_node; Child_node = Child_node->next_sibling()) {
         std::vector<int> Cs;
         Cs.clear();
 
-        for(xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
+        for (xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
             Cs.push_back(atof(Field_node->value()));
         }
         this->Child.push_back(Cs);
@@ -300,11 +307,11 @@ void ACFDetector::ReadModel(std::string modelfile) {
     }
 
     xml_node<> *Fids_node = root_node->first_node("Fids");
-    for(xml_node<> *Child_node = Fids_node->first_node("Fid"); Child_node; Child_node = Child_node->next_sibling()) {
+    for (xml_node<> *Child_node = Fids_node->first_node("Fid"); Child_node; Child_node = Child_node->next_sibling()) {
         std::vector<int> Cs;
         Cs.clear();
 
-        for(xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
+        for (xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
             int V = atoi(Field_node->value());
             Cs.push_back(V);
         }
@@ -312,62 +319,71 @@ void ACFDetector::ReadModel(std::string modelfile) {
     }
 
     xml_node<> *Thresh_node = root_node->first_node("Thrs");
-    for(xml_node<> *Child_node = Thresh_node->first_node("threshold"); Child_node; Child_node = Child_node->next_sibling()) {
+    for (xml_node<> *Child_node = Thresh_node->first_node("threshold"); Child_node; Child_node = Child_node->next_sibling()) {
         std::vector<float> Cs;
         Cs.clear();
 
-        for(xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
+        for (xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
             Cs.push_back(ConvertString2float(Field_node->value()));
         }
         this->Thresholds.push_back(Cs);
     }
     xml_node<> *Value_node = root_node->first_node("hss");
-    for(xml_node<> *Child_node = Value_node->first_node("value"); Child_node; Child_node = Child_node->next_sibling()) {
+    for (xml_node<> *Child_node = Value_node->first_node("value"); Child_node; Child_node = Child_node->next_sibling()) {
         std::vector<float> Cs;
         Cs.clear();
 
-        for(xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
+        for (xml_node<> *Field_node = Child_node->first_node("Field"); Field_node; Field_node = Field_node->next_sibling()) {
             Cs.push_back(ConvertString2float(Field_node->value()));
         }
         this->Values.push_back(Cs);
     }
 }
 
-std::string ACFDetector::getName() const {
+std::string ACFDetector::getName() const
+{
     return "ACF";
 }
 
-std::string ACFDetector::getType() const {
+std::string ACFDetector::getType() const
+{
     return type;
 }
 
-int ACFDetector::getShrinking() const {
+int ACFDetector::getShrinking() const
+{
     return this->shrinking;
 }
 
-int ACFDetector::getHeight() const{
+int ACFDetector::getHeight() const
+{
     return this->modelheight;
 }
 
-void ACFDetector::setWidth(float w) {
+void ACFDetector::setWidth(float w)
+{
     this->modelwidth = w;
 
 }
 
-void ACFDetector::setHeight(float h) {
+void ACFDetector::setHeight(float h)
+{
     this->modelheight = h;
 }
 
-void ACFDetector::setWidthPad(float w) {
+void ACFDetector::setWidthPad(float w)
+{
     this->modelwidthpad = w;
 
 }
 
-void ACFDetector::setHeightPad(float h) {
+void ACFDetector::setHeightPad(float h)
+{
     this->modelheightpad = h;
 }
 
-void ACFDetector::setType(std::string type){
+void ACFDetector::setType(std::string type)
+{
     this->type = type;
 }
 

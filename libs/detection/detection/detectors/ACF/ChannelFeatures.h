@@ -26,33 +26,38 @@
  * we can avoid having memory-leaks due to users who are not familiar with the channel-functions (which are
  *  build around malloc's/calloc's and free's)
 */
-class ChannelFeatures {
+class ChannelFeatures
+{
 public:
     friend class SqrtChannelFeatures;
 
-    ChannelFeatures(const cv::Mat &Image,int shrinking);
+    ChannelFeatures(const cv::Mat &Image, int shrinking);
     ChannelFeatures *ApproxChannel(const cv::Mat &Image, int shrinking, float scaleN, float scaleR);
     virtual ~ChannelFeatures();
 
-    void printFeatures(int index) const {
+    void printFeatures(int index) const
+    {
 
-        for(int y=0; y<Channelheight; y++) {
-            for(int x=0; x<Channelwidth; x++) {
-                std::cout << Features[index][x*Channelheight+y] << " ";
+        for (int y = 0; y < Channelheight; y++) {
+            for (int x = 0; x < Channelwidth; x++) {
+                std::cout << Features[index][x * Channelheight + y] << " ";
             }
             std::cout << std::endl;
         }
     }
 
-    int getChannelWidth() const {
+    int getChannelWidth() const
+    {
         return this->Channelwidth;
     }
 
-    int getChannelHeight() const {
+    int getChannelHeight() const
+    {
         return this->Channelheight;
     }
 
-    int getnChannels() const {
+    int getnChannels() const
+    {
         return this->Features.size();
     }
 
@@ -64,7 +69,8 @@ public:
 
 protected:
 
-    ChannelFeatures(int width, int height, std::vector<float*> F): Channelwidth(width), Channelheight(height) {
+    ChannelFeatures(int width, int height, std::vector<float *> F): Channelwidth(width), Channelheight(height)
+    {
         this->Features = F;
     } //only used in approximation
 private:
@@ -72,7 +78,7 @@ private:
 
 
 
-    std::vector<float*> Features;
+    std::vector<float *> Features;
     int Channelwidth, Channelheight;
 };
 

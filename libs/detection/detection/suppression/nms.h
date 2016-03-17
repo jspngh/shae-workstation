@@ -26,6 +26,6 @@ struct nmsHelperStruct {
 	\param overlap The amount of overlap that is allowed between detections
 	\return A vector of pointers to detections which do not overlap more than the overlap parameter
 */
-std::vector<Detection*> nms(std::vector<Detection*> Dets, float overlap);
+std::vector<Detection *> nms(std::vector<Detection *> Dets, float overlap);
 
 #endif

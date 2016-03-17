@@ -9,7 +9,8 @@
 
 
 
-GradHistChannel::~GradHistChannel() {
+GradHistChannel::~GradHistChannel()
+{
     // TODO Auto-generated destructor stub
 }
 

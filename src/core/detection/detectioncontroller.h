@@ -14,8 +14,8 @@ class DetectionController : public QObject
     Q_OBJECT
 
 public:
-    DetectionController(QObject *parent=0);
-    ~DetectionController(){}
+    DetectionController(QObject *parent = 0);
+    ~DetectionController() {}
 
 public slots:
     void processSequence(QString seq);

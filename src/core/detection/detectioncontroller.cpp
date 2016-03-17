@@ -2,12 +2,13 @@
 
 
 
-DetectionController::DetectionController(QObject *parent):QObject(parent)
+DetectionController::DetectionController(QObject *parent): QObject(parent)
 {
 
 }
 
-void DetectionController::processSequence(QString seq){
+void DetectionController::processSequence(QString seq)
+{
     // process a sequence
     std::cout << "Processing a sequence in thr: " << QThread::currentThreadId() << std::endl;
 

@@ -13,7 +13,8 @@
  * WindowSelection is a base class for every class that return windows which need to be evaluated by the detector.
  */
 
-class WindowSelection {
+class WindowSelection
+{
 public:
     /*!
      * Constructor of the WindowSelection class

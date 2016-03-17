@@ -9,4 +9,4 @@ WindowSelection::WindowSelection(int frameHeight, int frameWidth, float horizon,
     frameHeight(frameHeight), frameWidth(frameWidth),
     winHeight0(winHeight0), winWidth0(winWidth0),
     winHeight1(winHeight1), winWidth1(winWidth1),
-    stepX(stepX), stepY(stepY), horizon(horizon){}
+    stepX(stepX), stepY(stepY), horizon(horizon) {}

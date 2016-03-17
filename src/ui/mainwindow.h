@@ -22,13 +22,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    QWidget* getWelcomeWidget();
+    QWidget *getWelcomeWidget();
 
 private:
     Ui::MainWindow *ui;
-    WelcomeWidget* welcome_widget;
-    ConfigWidget* config_widget;
-    OverviewWidget* overview_widget;
+    WelcomeWidget *welcome_widget;
+    ConfigWidget *config_widget;
+    OverviewWidget *overview_widget;
 };
 
 #endif // MAINWINDOW_H

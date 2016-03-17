@@ -13,13 +13,14 @@
  * TODO: mechanism to match a detection to a coordinate
  */
 
-class Detection {
+class Detection
+{
 public:
     // constructors
     Detection();
     Detection(float x, float y, float width, float height, float score);
-    Detection(float x,float y, float width, float height, float score, std::string name);
-    Detection(const Detection& d);
+    Detection(float x, float y, float width, float height, float score, std::string name);
+    Detection(const Detection &d);
     Detection(Detection *d);
 
     // getters an setters

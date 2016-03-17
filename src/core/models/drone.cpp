@@ -7,7 +7,7 @@ Drone::Drone()
 
 Drone::Drone(double visionWidth)
 {
-    if(visionWidth > MIN_VISIONWIDTH)
+    if (visionWidth > MIN_VISIONWIDTH)
         this->visionWidth = visionWidth;
     else
         this ->visionWidth = MIN_VISIONWIDTH;

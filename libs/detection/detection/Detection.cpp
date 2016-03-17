@@ -3,7 +3,8 @@
 Detection::Detection()
 {}
 
-Detection::Detection(float x, float y, float width, float height, float score) {
+Detection::Detection(float x, float y, float width, float height, float score)
+{
     this->setX(x);
     this->setY(y);
     this->setWidth(width);
@@ -11,7 +12,8 @@ Detection::Detection(float x, float y, float width, float height, float score) {
     this->setScore(score);
 }
 
-Detection::Detection(float x,float y, float width, float height, float score, std::string name) {
+Detection::Detection(float x, float y, float width, float height, float score, std::string name)
+{
     this->setX(x);
     this->setY(y);
     this->setWidth(width);
@@ -21,7 +23,8 @@ Detection::Detection(float x,float y, float width, float height, float score, st
     this->setDetectorName(name);
 }
 
-Detection::Detection(const Detection& D) {
+Detection::Detection(const Detection &D)
+{
     this->x = D.getX();
     this->y = D.getY();
     this->width = D.getWidth();
@@ -35,7 +38,8 @@ Detection::Detection(const Detection& D) {
 }
 
 
-Detection::Detection(Detection *D){
+Detection::Detection(Detection *D)
+{
     this->setX(D->getX());
     this->setY(D->getY());
     this->setWidth(D->getWidth());
@@ -81,48 +85,60 @@ int Detection::getLevel() const
 {
     return this->level;
 }
-void Detection::setX(float x) {
+void Detection::setX(float x)
+{
     this->x = x;
 }
-void Detection::setY(float y) {
+void Detection::setY(float y)
+{
     this->y = y;
 }
-void Detection::setWidth(float width) {
+void Detection::setWidth(float width)
+{
     this->width = width;
 }
-void Detection::setHeight(float height) {
+void Detection::setHeight(float height)
+{
     this->height = height;
 }
-void Detection::setScore(float score) {
+void Detection::setScore(float score)
+{
     this->score = score;
 }
-void Detection::setFilename(std::string filename) {
+void Detection::setFilename(std::string filename)
+{
     this->filename = filename;
 }
 
-void Detection::setColor(cv::Scalar color) {
+void Detection::setColor(cv::Scalar color)
+{
     this->color = color;
 }
-void Detection::setModelName(std::string modelname) {
+void Detection::setModelName(std::string modelname)
+{
     this->modelName = modelname;
 }
 
-void Detection::setDetectorName(std::string d) {
+void Detection::setDetectorName(std::string d)
+{
     this->detectorname = d;
 }
 
-std::string Detection::getDetectorName() const {
+std::string Detection::getDetectorName() const
+{
     return this->detectorname;
 }
 
-cv::Point Detection::getCenter() {
-    return cv::Point(this->getX()+this->getWidth()/2, this->getY()+this->getHeight()/2);
+cv::Point Detection::getCenter()
+{
+    return cv::Point(this->getX() + this->getWidth() / 2, this->getY() + this->getHeight() / 2);
 }
 
-void Detection::resize(float factor) {
-    this->setX(this->x/factor);
-    this->setY(this->y/factor);
-    this->setWidth(this->width/factor);
-    this->setHeight(this->height/factor);
+void Detection::resize(float factor)
+{
+    this->setX(this->x / factor);
+    this->setY(this->y / factor);
+    this->setWidth(this->width / factor);
+    this->setHeight(this->height / factor);
 }
 

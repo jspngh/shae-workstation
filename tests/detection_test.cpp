@@ -13,7 +13,8 @@ private Q_SLOTS:
     void testDetectionControllerInit();
 };
 
-void Detection_Test::testDetectionControllerInit(){
+void Detection_Test::testDetectionControllerInit()
+{
     // DetectionController detectionController();
     // detectionController.smallTest();
     // detectionController.addSequence();

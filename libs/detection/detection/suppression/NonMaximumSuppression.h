@@ -12,7 +12,8 @@
 #include "../DetectionList.h"
 #include <vector>
 
-class NonMaximumSuppression {
+class NonMaximumSuppression
+{
 
 public:
     NonMaximumSuppression();

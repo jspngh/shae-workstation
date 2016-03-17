@@ -12,7 +12,8 @@
 
 
 
-class Channel {
+class Channel
+{
 public:
     Channel();
     virtual ~Channel();
@@ -23,12 +24,13 @@ public:
     int getnChns() const;
     float *getData() const;
 
-    float getLambda() {
+    float getLambda()
+    {
         return 0.0;
     }
 
 protected:
-    void setChanneldata(float* data, int width, int height, int nChns);
+    void setChanneldata(float *data, int width, int height, int nChns);
 
 
 private:

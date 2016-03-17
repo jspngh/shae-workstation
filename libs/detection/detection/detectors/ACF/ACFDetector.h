@@ -30,7 +30,8 @@ using namespace rapidxml;
  * The detector relies on the ACF detector implementation of the 'openframework' to make detections.
  */
 
-class ACFDetector: public Detector {
+class ACFDetector: public Detector
+{
 public:
     //constructors and destructors
     ACFDetector();
@@ -47,26 +48,26 @@ public:
 
     //detection specific methods
     /*!
- * \brief The Detect method compares a set of calculated features to the model.
- */
-    std::vector<Detection*> Detect(const ChannelFeatures *features) const;
+    * \brief The Detect method compares a set of calculated features to the model.
+    */
+    std::vector<Detection *> Detect(const ChannelFeatures *features) const;
     /*!
-* \brief The applyDetectorOnWindow method applies the Detector on single window.
-*/
+    * \brief The applyDetectorOnWindow method applies the Detector on single window.
+    */
     bool applyDetectorOnWindow(const cv::Mat &Frame) const;
     /*!
-* \brief The applyDetectorOnBand method applies the Detector on single band.
-*/
+    * \brief The applyDetectorOnBand method applies the Detector on single band.
+    */
     DetectionList applyDetectorOnBand(const cv::Mat &Frame) const;
 
     /*!
-* \brief The applyDetectorOnFrame method applies the Detector on a full frame.
-*/
+    * \brief The applyDetectorOnFrame method applies the Detector on a full frame.
+    */
     DetectionList applyDetectorOnFrame(const cv::Mat &Frame) const;
 
 private:
 
-    void getChild( const ChannelFeatures *features, int &k0, int &k, int c,int r, int s,int channelwidth, int channelheight, int modelwidth, int modelheight ) const;
+    void getChild(const ChannelFeatures *features, int &k0, int &k, int c, int r, int s, int channelwidth, int channelheight, int modelwidth, int modelheight) const;
     void setWidth(float w);
     void setHeight(float h);
     void setWidthPad(float w);

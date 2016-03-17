@@ -27,7 +27,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QWidget* MainWindow::getWelcomeWidget(){
+QWidget *MainWindow::getWelcomeWidget()
+{
     return welcome_widget;
 }
 

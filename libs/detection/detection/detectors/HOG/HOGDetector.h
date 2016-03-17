@@ -14,7 +14,8 @@
  * The detector relies on the openCV HOG + SVM detector to make detections.
  */
 
-class HOGDetector: public Detector {
+class HOGDetector: public Detector
+{
 public:
     HOGDetector();
     std::string getName() const { return "HOG"; }
@@ -26,7 +27,7 @@ public:
     std::string getType() const;
     void setType(std::string type);
 private:
-   cv::HOGDescriptor hog;
+    cv::HOGDescriptor hog;
 };
 
 

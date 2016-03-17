@@ -14,7 +14,7 @@
 class Feature
 {
 private:
-    int m_x, m_y, m_width,m_height;
+    int m_x, m_y, m_width, m_height;
     int m_channel;
 public:
     Feature();

@@ -15,7 +15,8 @@
  * people in the back of the frame.
  */
 
-class SlidingWindow : public WindowSelection {
+class SlidingWindow : public WindowSelection
+{
 
 public:
     /*!
