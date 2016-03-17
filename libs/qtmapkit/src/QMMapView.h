@@ -117,7 +117,7 @@ protected slots:
     void selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
                                 qreal bottomRightLat, qreal bottomRightLong);
     void selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
-                                qreal bottomRightLat, qreal bottomRightLong);
+                                 qreal bottomRightLat, qreal bottomRightLong);
     void selectedAreaWasDeleted();
 
 private:

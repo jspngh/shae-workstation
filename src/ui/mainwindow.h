@@ -10,7 +10,7 @@
 #include "welcomewidget.h"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -26,9 +26,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    WelcomeWidget* welcome_widget;
-    ConfigWidget* config_widget;
-    OverviewWidget* overview_widget;
+    WelcomeWidget *welcome_widget;
+    ConfigWidget *config_widget;
+    OverviewWidget *overview_widget;
 };
 
 #endif // MAINWINDOW_H

@@ -1,10 +1,12 @@
 #ifndef SIMPLEPATHALGORITHM_TEST_H
 #define SIMPLEPATHALGORITHM_TEST_H
-
 #include <QString>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
 
+/*!
+ * \brief The SimplePathAlgorithm_Test class tests the simple boustrophedon waypoint planning algorithm.
+ */
 class SimplePathAlgorithm_Test : public QObject
 {
     Q_OBJECT

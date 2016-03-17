@@ -18,12 +18,19 @@ LIBS += \
 INCLUDEPATH += \
     "$$PWD/../../libs/qtmapkit/include/"
 
+# run main of unit test after build
+# QMAKE_POST_LINK = ./$${DESTDIR}/$${TARGET}
+
+
 # Input
 HEADERS += \
-    core/simplepathalgorithm_test.h
+    core/simplepathalgorithm_test.h \
+    core/detectioncontroller_test.h
 
 SOURCES += \
-    core/simplepathalgorithm_test.cpp
+    core/simplepathalgorithm_test.cpp \
+    core/detectioncontroller_test.cpp \
+    main.cpp
 
 
 include(../../src/ui/ui.pri)

@@ -6,6 +6,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 TARGET = frontend
 TEMPLATE = app
 
+CONFIG += c++11
+
 # Put all releases in build-folder
 release: DESTDIR = $$PWD/../bin/release
 debug: DESTDIR = $$PWD/../bin/debug
@@ -16,10 +18,9 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 # Libraries
-LIBS += \
-    -L"$$PWD/../libs/qtmapkit/bin/" -lqtmapkit
-INCLUDEPATH += \
-    "$$PWD/../libs/qtmapkit/include/"
+LIBS +=  -L"$$PWD/../libs/qtmapkit/bin/" -lqtmapkit
+
+INCLUDEPATH += "$$PWD/../libs/qtmapkit/include/"
 
 # Main source
 SOURCES += main.cpp
@@ -31,6 +32,4 @@ RESOURCES = application.qrc
 include(ui/ui.pri)
 include(core/core.pri)
 include(communication/communication.pri)
-
-DISTFILES +=
 

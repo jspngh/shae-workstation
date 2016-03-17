@@ -28,6 +28,7 @@ MainWindow::~MainWindow()
 }
 
 WelcomeWidget* MainWindow::getWelcomeWidget(){
+{
     return welcome_widget;
 }
 
