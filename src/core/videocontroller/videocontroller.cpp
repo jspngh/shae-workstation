@@ -8,13 +8,13 @@ VideoController::VideoController(QObject *parent): QObject(parent)
 void VideoController::onStartStream(QUuid drone, QString sdpFile){
     std::cout << "start" << std::endl;
 
-    const char * vlc_args[] = { "--sout=file/ps:footage/drone_stream.mpg" };
+    const char * vlc_args[] = { "--reset-plugins-cache --verbose=2 --sout=file/ps:footage/drone_stream.mpg" };
     // Launch VLC
     std::cout << "new vlc" << std::endl;
 
-    this->inst = libvlc_new(0, NULL);
+    //this->inst = libvlc_new(0, NULL);
 
-    //inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+    this->inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
 
     /* Create a new item */
     std::cout << "test" << std::endl;

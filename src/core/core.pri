@@ -4,6 +4,7 @@ DEPENDPATH += "core"
 CONFIG += c++11
 
 LIBS +=  -L"$$PWD/../../libs/detection/bin/" -ldetection
+LIBS += -lvlc
 INCLUDEPATH +=  "$$PWD/../../libs/"
 
 INCLUDEPATH += /usr/local/include/
