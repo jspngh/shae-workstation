@@ -9,8 +9,7 @@
 
 
 
-FrameFromVideo::FrameFromVideo(std::string directory)
-{
+FrameFromVideo::FrameFromVideo(std::string directory){
     cap = cv::VideoCapture(directory);
 }
 
