@@ -35,11 +35,11 @@ public:
     int getDroneState() const;
     void setDroneState(int value);
 
-    QTime getTimestampDrone() const;
-    void setTimestampDrone(const QTime &value);
+    QDateTime getTimestampDrone() const;
+    void setTimestampDrone(const QDateTime &value);
 
-    QTime getTimestampRecievedWorkstation() const;
-    void setTimestampRecievedWorkstation(const QTime &value);
+    QDateTime getTimestampRecievedWorkstation() const;
+    void setTimestampRecievedWorkstation(const QDateTime &value);
 
     double getSelectedSpeed() const;
     void setSelectedSpeed(double value);
@@ -71,6 +71,9 @@ public:
     QList<QGeoCoordinate> getNextWaypoints() const;
     void setNextWaypoints(const QList<QGeoCoordinate> &value);
 
+    int getFps() const;
+    void setFps(int value);
+
 private:
     /**************
     * Attributes
@@ -92,13 +95,13 @@ private:
     bool heartbeat = false;
     QString manufacturer = "";
     QString type = "";
-    QTime timestampDrone;
+    QDateTime timestampDrone;
     //! contains long, lat
     QGeoCoordinate currentLocation;
     QGeoCoordinate nextWaypoint;
     QGeoCoordinate previousWaypoint;
     QList<QGeoCoordinate> nextWaypoints;
-    QTime timestampReceivedWorkstation;
+    QDateTime timestampReceivedWorkstation;
 
 };
 
