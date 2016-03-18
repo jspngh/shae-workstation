@@ -1,7 +1,10 @@
-QT += core gui widgets positioning testlib
+QT += testlib
 
 TEMPLATE = app
 TARGET = integration_tests
+
+include(../../common.pri)
+
 INCLUDEPATH += .
 INCLUDEPATH += ../../src
 
@@ -11,11 +14,6 @@ MOC_DIR = $$PWD/build/.moc
 RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
-# Libraries
-LIBS += \
-    -L"$$PWD/../../libs/qtmapkit/bin/" -lqtmapkit
-INCLUDEPATH += \
-    "$$PWD/../../libs/qtmapkit/include/"
 
 # Input
 HEADERS += \
@@ -26,4 +24,5 @@ SOURCES += \
 
 
 include(../../src/core/core.pri)
+include(../../src/ui/ui.pri)
 

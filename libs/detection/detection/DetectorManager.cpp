@@ -10,12 +10,18 @@
 DetectorManager::DetectorManager()
 {
     this->detector = new HOGDetector();
-    this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150, 20, 20);
+    this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150,20, 20);
+    this->fps = 2;
 }
 
-DetectorManager::~DetectorManager()
-{
-    // delete this->detector;
+DetectorManager::DetectorManager(Detector *det, WindowSelection *wndSel, int fps){
+    this->detector = det;
+    this->windowSelection = wndSel;
+    this->fps = fps;
+}
+
+DetectorManager::~DetectorManager() {
+    delete this->detector;
     delete this->windowSelection;
 }
 
@@ -34,6 +40,20 @@ void DetectorManager::setWindowSelection(WindowSelection *windowSelection)
     this->windowSelection = windowSelection;
 }
 
+DetectionList DetectorManager::process(std::string seq){
+    DetectionList detections;
+    FrameFromVideo producer(seq, this->fps);
+    cv::Mat frame;
+
+    while(producer.frameAvailable())
+    {
+        frame = producer.giveFrame();
+        detections = this->applyDetector(frame);
+        // std::cout << "#: " << detections.getSize() << std::endl;
+    }
+
+    return detections;
+}
 
 
 DetectionList DetectorManager::applyDetector(cv::Mat &frame)
@@ -55,7 +75,7 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     while (this->windowSelection->nextWindow(win)) {
         // select the window from the complete frame
         roi = frame(win);
-        //drawRectOnFrame(frame, win, COLOR_WHITE, 0);
+        // drawRectOnFrame(frame, win, COLOR_WHITE, 0);
         if (this->detector->getType().compare("window") == 0) {
             if (this->detector->applyDetectorOnWindow(roi)) {
                 // the detector detected a person in the roi

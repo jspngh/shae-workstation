@@ -1,12 +1,8 @@
-# QT constraints
-QT  += core gui webkit positioning
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
-
 # Project properties
 TARGET = frontend
 TEMPLATE = app
 
-CONFIG += c++11
+include(../common.pri)
 
 # Put all releases in build-folder
 release: DESTDIR = $$PWD/../bin/release
@@ -17,13 +13,8 @@ MOC_DIR = $$PWD/build/.moc
 RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
-# Libraries
-LIBS +=  -L"$$PWD/../libs/qtmapkit/bin/" -lqtmapkit
-
-INCLUDEPATH += "$$PWD/../libs/qtmapkit/include/"
-
-# Main source
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp
 
 # Resources
 RESOURCES = application.qrc
