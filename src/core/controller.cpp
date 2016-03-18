@@ -17,7 +17,7 @@ void Controller::run()
     createPersistence();
     createCommunication();
     createDrone();
-    createDetection();
+    createDetectionController();
     createMediator();
 }
 
@@ -33,8 +33,10 @@ void Controller::createCommunication()
     communication->moveToThread(&communicationThread);
 }
 
-void Controller::createDetection()
+void Controller::createDetectionController()
 {
+    detectionController = new DetectionController();
+    detectionController->moveToThread(&detectorThread);
 }
 
 //! this should ideally be done by the communication module
@@ -45,5 +47,7 @@ void Controller::createDrone()
 
 void Controller::createPersistence()
 {
+    persistence = new Persistence();
+    persistence->moveToThread(&persistenceThread);
 }
 

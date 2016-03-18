@@ -6,7 +6,9 @@
 #include "mediator.h"
 #include "communication/communication.h"
 #include "ui/mainwindow.h"
+#include "persistence/persistence.h"
 #include "models/drone.h"
+#include "detection/detectioncontroller.h"
 
 namespace Core {
     class Controller;
@@ -21,7 +23,9 @@ class Controller : public QThread
 private:
     MainWindow *mainWindow;
     Mediator *mediator;
+    Persistence *persistence;
     Communication *communication;
+    DetectionController *detectionController;
     QSet<Drone*> *drones;
 
     QThread mediatorThread;
@@ -41,7 +45,7 @@ private:
     void createMediator();
     void createCommunication();
     void createDrone();
-    void createDetection();
+    void createDetectionController();
     void createPersistence();
 
 };

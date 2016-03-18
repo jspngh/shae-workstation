@@ -11,8 +11,8 @@
 
 class Persistence : public QObject
 {
-  public:
-     Persistence(QObject *parent = 0);
+public:
+    Persistence(QObject *parent = 0);
 
     Search saveSearch(Search &search);
     Search retrieveSearch(QUuid searchId);
