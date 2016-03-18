@@ -11,9 +11,9 @@ Drone::Drone()
     droneConnection = new DroneConnection();
 
     connect(droneConnection, SIGNAL(droneResponse(const QString &)),
-            this, SLOT(processResponse(const QString &)));
-    connect(droneConnection, SIGNAL(error(int,const QString &)),
-            this, SLOT(processError(int,const QString &)));
+            this, SLOT(onDroneResponse(const QString &)));
+    connect(droneConnection, SIGNAL(droneResponseError(int,const QString &)),
+            this, SLOT(onDroneResponseError(int,const QString &)));
 }
 
 Drone::Drone(QUuid guid, int portNr, QString serverIp, double visionWidth):

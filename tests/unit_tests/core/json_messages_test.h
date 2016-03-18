@@ -4,7 +4,7 @@
 #include <QUuid>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
-#include "core/drone.h"
+#include "models/drone.h"
 
 class Json_Messages_Test: public QObject
 {
