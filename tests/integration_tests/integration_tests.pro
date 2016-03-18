@@ -1,7 +1,12 @@
+
 QT += core gui widgets positioning testlib network
+
 
 TEMPLATE = app
 TARGET = integration_tests
+
+include(../../common.pri)
+
 INCLUDEPATH += .
 INCLUDEPATH += ../../src
 
@@ -11,11 +16,6 @@ MOC_DIR = $$PWD/build/.moc
 RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
-# Libraries
-LIBS += \
-    -L"$$PWD/../../libs/qtmapkit/bin/" -lqtmapkit
-INCLUDEPATH += \
-    "$$PWD/../../libs/qtmapkit/include/"
 
 # Input
 HEADERS += \
@@ -29,4 +29,5 @@ CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
 
 include(../../src/core/core.pri)
+include(../../src/ui/ui.pri)
 

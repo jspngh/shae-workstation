@@ -19,9 +19,5 @@ FORMS += \
     $$PWD/configwidget.ui \
     $$PWD/overviewwidget.ui
 
-DISTFILES += \
-    $$PWD/OverviewwindowForm.ui.qml \
-    $$PWD/Overviewwindow.qml
-
 RESOURCES +=
 

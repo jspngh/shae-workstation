@@ -8,26 +8,37 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    welcome_widget = new WelcomeWidget(this);
-    config_widget = new ConfigWidget(this);
-    overview_widget = new OverviewWidget(this);
+    welcomeWidget = new WelcomeWidget(this);
+    configWidget = new ConfigWidget(this);
+    overviewWidget = new OverviewWidget(this);
 
-    ui->stackedWidget->addWidget(welcome_widget);
-    ui->stackedWidget->addWidget(config_widget);
-    ui->stackedWidget->addWidget(overview_widget);
+    ui->stackedWidget->addWidget(welcomeWidget);
+    ui->stackedWidget->addWidget(configWidget);
+    ui->stackedWidget->addWidget(overviewWidget);
 
     ui->stackedWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
 {
-    delete welcome_widget;
-    delete config_widget;
-    delete overview_widget;
+    delete welcomeWidget;
+    delete configWidget;
+    delete overviewWidget;
     delete ui;
 }
 
-QWidget* MainWindow::getWelcomeWidget(){
-    return welcome_widget;
+WelcomeWidget* MainWindow::getWelcomeWidget()
+{
+    return welcomeWidget;
+}
+
+ConfigWidget* MainWindow::getConfigWidget()
+{
+    return configWidget;
+}
+
+OverviewWidget* MainWindow::getOverviewWidget()
+{
+    return overviewWidget;
 }
 

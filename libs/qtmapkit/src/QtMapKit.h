@@ -19,8 +19,7 @@
 #ifndef QTMAPKIT_H
 #define QTMAPKIT_H
 
-namespace QtMapKit
-{
+namespace QtMapKit {
 
 enum ControlPosition {
     BottomCenter,

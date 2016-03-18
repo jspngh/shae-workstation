@@ -26,16 +26,16 @@
 
 class CustomWebPage : public QWebPage
 {
-    public:
-        CustomWebPage(QObject *parent = 0) : QWebPage(parent) {}
+public:
+    CustomWebPage(QObject *parent = 0) : QWebPage(parent) {}
 
-    protected:
-        void javaScriptConsoleMessage(const QString &message, int lineNumber,
-                                      const QString &sourceID)
-        {
-            qDebug() << "JavaScript" << sourceID << "line" << lineNumber <<
-                        ":" << message;
-        }
+protected:
+    void javaScriptConsoleMessage(const QString &message, int lineNumber,
+                                  const QString &sourceID)
+    {
+        qDebug() << "JavaScript" << sourceID << "line" << lineNumber <<
+                 ":" << message;
+    }
 };
 
 class QMMapViewPrivate
@@ -74,8 +74,7 @@ public:
     inline QString toJsMapType(QMMapView::MapType type)
     {
         QString typeName;
-        switch (type)
-        {
+        switch (type) {
         case QMMapView::Hybrid:
             typeName = "HYBRID";
             break;
@@ -96,8 +95,7 @@ public:
     inline QMMapView::MapType fromJsMapType(QString &type)
     {
         static QHash<QString, QMMapView::MapType> types;
-        if (types.isEmpty())
-        {
+        if (types.isEmpty()) {
             types.insert("hybrid", QMMapView::Hybrid);
             types.insert("roadmap", QMMapView::RoadMap);
             types.insert("satellite", QMMapView::Satellite);
@@ -137,13 +135,13 @@ void QMMapView::initializeMap()
     Q_D(QMMapView);
     QGeoCoordinate &center = d->initialValues.centerCoordinate;
     QString js = QString("initialize(%1, %2, %3, %4);").arg(
-                QString::number(center.longitude()),
-                QString::number(center.latitude()),
-                d->toJsMapType(d->initialValues.mapType),
-                QString::number(d->initialValues.zoomLevel));
+                     QString::number(center.longitude()),
+                     QString::number(center.latitude()),
+                     d->toJsMapType(d->initialValues.mapType),
+                     QString::number(d->initialValues.zoomLevel));
     bool success = d->evaluateJavaScript(js, true).toBool();
 
-    if(success) {
+    if (success) {
         d->loaded = true;
         emit mapLoaded();
     } else {
@@ -173,16 +171,16 @@ QGeoRectangle QMMapView::region() const
 {
     QVariantMap result = d_ptr->evaluateJavaScript("getMapBounds();").toMap();
     return QGeoRectangle(QGeoCoordinate(result["south"].toReal(),
-                                           result["west"].toReal()),
-                              QGeoCoordinate(result["north"].toReal(),
-                                           result["east"].toReal()));
+                                        result["west"].toReal()),
+                         QGeoCoordinate(result["north"].toReal(),
+                                        result["east"].toReal()));
 }
 
 QGeoCoordinate QMMapView::center() const
 {
     QVariantMap result = d_ptr->evaluateJavaScript("getMapCenter();").toMap();
     return QGeoCoordinate(result["latitude"].toReal(),
-                        result["longitude"].toReal());
+                          result["longitude"].toReal());
 }
 
 uint QMMapView::zoomLevel() const
@@ -254,7 +252,7 @@ void QMMapView::fitRegion(QGeoRectangle &region)
 void QMMapView::shiftKeyPressed(bool down)
 {
     Q_D(QMMapView);
-    if(down) {
+    if (down) {
         d->evaluateJavaScript("shiftKeyDown();");
     } else {
         d->evaluateJavaScript("shiftKeyUp();");
@@ -312,9 +310,9 @@ void QMMapView::selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
                                        qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
-        QGeoCoordinate(topLeftLat, topLeftLong),
-        QGeoCoordinate(bottomRightLat, bottomRightLong)
-    );
+                                     QGeoCoordinate(topLeftLat, topLeftLong),
+                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
+                                 );
     emit selectedAreaCreated(selectedArea);
 }
 
@@ -322,9 +320,9 @@ void QMMapView::selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
                                         qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
-        QGeoCoordinate(topLeftLat, topLeftLong),
-        QGeoCoordinate(bottomRightLat, bottomRightLong)
-    );
+                                     QGeoCoordinate(topLeftLat, topLeftLong),
+                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
+                                 );
     emit selectedAreaChanged(selectedArea);
 }
 

@@ -13,9 +13,9 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
 
     ui->browseEdit->setText(QDir::currentPath());
 
-    connect(ui->continueButton,SIGNAL(clicked()),this, SLOT(continueButtonPush()));
+    connect(ui->continueButton, SIGNAL(clicked()), this, SLOT(continueButtonPush()));
     connect(ui->browseButton, SIGNAL(clicked()), this, SLOT(browse()));
-    connect(ui->findButton,SIGNAL(clicked()),this, SLOT(find()));
+    connect(ui->findButton, SIGNAL(clicked()), this, SLOT(find()));
 }
 
 WelcomeWidget::~WelcomeWidget()
@@ -23,21 +23,21 @@ WelcomeWidget::~WelcomeWidget()
     delete ui;
 }
 
-void WelcomeWidget::continueButtonPush(){
-    if(ui->configTable->selectedItems().size() == 3)
-    {
+void WelcomeWidget::continueButtonPush()
+{
+    if (ui->configTable->selectedItems().size() == 3) {
         QString ss = ui->configTable->selectedItems().at(0)->text();
         emit configFileSignal(ss);
     } else {
         emit configFileSignal("");
     }
-    ((QStackedWidget*) this->parent())->setCurrentIndex(1);
+    ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
 void WelcomeWidget::browse()
 {
     QString directory = QFileDialog::getExistingDirectory(this,
-                               tr("Find Files"), QDir::currentPath());
+                        tr("Find Files"), QDir::currentPath());
 }
 
 void WelcomeWidget::find()
@@ -98,7 +98,7 @@ void WelcomeWidget::showFiles(const QStringList &files)
         QTableWidgetItem *dateItem = new QTableWidgetItem(dateString);
         dateItem->setFlags(fileNameItem->flags() ^ Qt::ItemIsEditable);
         QTableWidgetItem *sizeItem = new QTableWidgetItem(tr("%1 KB")
-                                             .arg(int((size + 1023) / 1024)));
+                .arg(int((size + 1023) / 1024)));
         sizeItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
         sizeItem->setFlags(sizeItem->flags() ^ Qt::ItemIsEditable);
 
