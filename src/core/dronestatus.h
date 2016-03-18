@@ -6,6 +6,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QString>
+#include "parseexception.h"
 
 class DroneStatus
 {
@@ -21,11 +23,8 @@ public:
     double getOrientation() const;
     void setOrientation(double value);
 
-    QGeoCoordinate getPosition() const;
-    void setPosition(const QGeoCoordinate &value);
-
-    double getGimballAngle() const;
-    void setGimballAngle(double value);
+    double getCameraAngle() const;
+    void setCameraAngle(double value);
 
     double getSpeed() const;
     void setSpeed(double value);
@@ -39,29 +38,69 @@ public:
     QTime getTimestampDrone() const;
     void setTimestampDrone(const QTime &value);
 
-    QTime getTimestampWorkstation() const;
-    void setTimestampWorkstation(const QTime &value);
+    QTime getTimestampRecievedWorkstation() const;
+    void setTimestampRecievedWorkstation(const QTime &value);
+
+    double getSelectedSpeed() const;
+    void setSelectedSpeed(double value);
+
+    double getHeight() const;
+    void setHeight(double value);
+
+    double getSelectedHeight() const;
+    void setSelectedHeight(double value);
+
+    bool getHeartbeat() const;
+    void setHeartbeat(bool value);
+
+    QString getManufacturer() const;
+    void setManufacturer(const QString &value);
+
+    QString getType() const;
+    void setType(const QString &value);
+
+    QGeoCoordinate getCurrentLocation() const;
+    void setCurrentLocation(const QGeoCoordinate &value);
+
+    QGeoCoordinate getNextWaypoint() const;
+    void setNextWaypoint(const QGeoCoordinate &value);
+
+    QGeoCoordinate getPreviousWaypoint() const;
+    void setPreviousWaypoint(const QGeoCoordinate &value);
+
+    QList<QGeoCoordinate> getNextWaypoints() const;
+    void setNextWaypoints(const QList<QGeoCoordinate> &value);
 
 private:
     /**************
     * Attributes
     * Default values are values that are saved if the value was not received in the message.
     **************/
-    //! contains long, lat and alt
-    QGeoCoordinate position;
+
     /*! Orientation (0-360 degrees)
      * Default as -1 */
     double orientation = -1;
     double cameraAngle = -1;
     double speed = -1;
+    double selectedSpeed =-1;
+    double height = -1;
+    double selectedHeight =-1;
     double batteryLevel = -1;
     int droneState =-1;
     int fps =-1;
     int resolution = -1;
-
+    bool heartbeat = false;
+    QString manufacturer = "";
+    QString type = "";
     QTime timestampDrone;
-    QTime timestampWorkstation;
+    //! contains long, lat
+    QGeoCoordinate currentLocation;
+    QGeoCoordinate nextWaypoint;
+    QGeoCoordinate previousWaypoint;
+    QList<QGeoCoordinate> nextWaypoints;
+    QTime timestampReceivedWorkstation;
 
 };
+
 
 #endif // DRONESTATUS_H

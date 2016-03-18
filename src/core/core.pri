@@ -6,11 +6,13 @@ SOURCES += $$PWD/communication.cpp \
     $$PWD/simplepathalgorithm.cpp \
     $$PWD/pathalgorithm.cpp \
     $$PWD/droneconnection.cpp \
-    $$PWD/dronestatus.cpp
+    $$PWD/dronestatus.cpp \
+    $$PWD/parseexception.cpp
 HEADERS += $$PWD/communication.h \
     $$PWD/drone.h \
     $$PWD/pathalgorithm.h \
     $$PWD/simplepathalgorithm.h \
     $$PWD/droneconnection.h \
-    $$PWD/dronestatus.h
+    $$PWD/dronestatus.h \
+    $$PWD/parseexception.h
 
