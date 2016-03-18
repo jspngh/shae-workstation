@@ -82,7 +82,7 @@ void DroneConnection::run()
         mutex.lock();
         QByteArray raw;
         in >> raw;
-        QString response = QString::fromStdString(raw.toStdString());
+        QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
         //qDebug() << response;
         emit droneResponse(response);
 
