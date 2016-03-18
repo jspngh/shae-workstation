@@ -113,8 +113,8 @@ public:
 
 
 private slots:
-    void processResponse(const QString &response);
-    void processError(int socketError, const QString &message);
+    void onDroneResponse(const QString &response);
+    void onDroneResponseError(int socketError, const QString &message);
 
 signals:
     void droneStatusReceived(DroneStatus &status);

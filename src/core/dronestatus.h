@@ -45,15 +45,20 @@ public:
 private:
     /**************
     * Attributes
+    * Default values are values that are saved if the value was not received in the message.
     **************/
     //! contains long, lat and alt
     QGeoCoordinate position;
-    //! orientation (0-360 degrees)
-    double orientation;
-    double gimballAngle;
-    double speed;
-    double batteryLevel;
-    int droneState;
+    /*! Orientation (0-360 degrees)
+     * Default as -1 */
+    double orientation = -1;
+    double cameraAngle = -1;
+    double speed = -1;
+    double batteryLevel = -1;
+    int droneState =-1;
+    int fps =-1;
+    int resolution = -1;
+
     QTime timestampDrone;
     QTime timestampWorkstation;
 

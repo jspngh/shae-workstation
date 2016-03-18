@@ -81,7 +81,7 @@ void Drone::setVisionWidth(double visionWidth)
 /***********************
 Slots
 ************************/
-void Drone::processResponse(const QString &response)
+void Drone::onDroneResponse(const QString &response)
 {
     qDebug() << "In processResponse";
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
@@ -93,7 +93,7 @@ void Drone::processResponse(const QString &response)
         qDebug() << response;
 }
 
-void Drone::processError(int socketError, const QString &message)
+void Drone::onDroneResponseError(int socketError, const QString &message)
 {
     qDebug() << message;
 }

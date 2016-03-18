@@ -48,7 +48,7 @@ void DroneConnection::run()
         socket.connectToHost(serverName, serverPort);
 
         if (!socket.waitForConnected(Timeout)) {
-            emit error(socket.error(), socket.errorString());
+            emit droneResponseError(socket.error(), socket.errorString());
             return;
         }
 
@@ -61,7 +61,7 @@ void DroneConnection::run()
 
         while (socket.bytesAvailable() < (int)sizeof(quint16)) {
             if (!socket.waitForReadyRead(Timeout)) {
-                emit error(socket.error(), socket.errorString());
+                emit droneResponseError(socket.error(), socket.errorString());
                 return;
             }
         }
@@ -74,7 +74,7 @@ void DroneConnection::run()
 
         while (socket.bytesAvailable() < blockSize) {
             if (!socket.waitForReadyRead(Timeout)) {
-                emit error(socket.error(), socket.errorString());
+                emit droneResponseError(socket.error(), socket.errorString());
                 return;
             }
         }

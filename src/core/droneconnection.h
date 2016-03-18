@@ -18,7 +18,7 @@ public:
 
 signals:
     void droneResponse(const QString &fortune);
-    void error(int socketError, const QString &message);
+    void droneResponseError(int socketError, const QString &message);
 
 private:
     QString jsonMessage; /*!< The message to send, in Json format */
