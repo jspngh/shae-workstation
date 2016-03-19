@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->stackedWidget->setCurrentIndex(0);
 
+    statusBar()->addWidget(new QLabel(tr("Ready")));
+
 //    qApp->setStyle(QStyleFactory::create("Fusion"));
     qApp->setStyle("Fusion");
 
@@ -37,9 +39,9 @@ MainWindow::MainWindow(QWidget *parent) :
     darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
-    qApp->setPalette(darkPalette);
+//    qApp->setPalette(darkPalette);
 
-    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+//    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
     connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(ui->connectAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
