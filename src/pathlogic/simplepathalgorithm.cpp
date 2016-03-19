@@ -75,17 +75,28 @@ QList<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area
     return list;
 }
 
-void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone> *drones)
+
+void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone*>* drones)
 {
     int numberOfDrones = drones->size();
-    QList<Drone>::iterator it = drones->begin();
-    for (int i = 0; i < numberOfDrones; i++) {
-
-        it->addWaypoints(calculateWaypoints(
-                            QGeoRectangle(QGeoCoordinate(area.topLeft().latitude()   , area.topLeft().longitude() + i * (area.width() / numberOfDrones)),
-                                          QGeoCoordinate(area.bottomLeft().latitude(), area.bottomLeft().longitude() + (i + 1) * (area.width() / numberOfDrones))),
-                            it->getVisionWidth()));
-        it++;
+    /*
+    std::_List_iterator<Drone*> it = drones->begin();
+    for(int i=0;i<numberOfDrones;i++){
+        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i*(area.width() / numberOfDrones));
+        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i+1)*(area.width() / numberOfDrones));
+        QGeoRectangle areaPerDrone = QGeoRectangle(topleft,bottomright);
+        double visionPerDrone = (*it)->visionWidth;
+        (*it)->waypoints= calculateWaypoints(areaPerDrone,visionPerDrone);
+        (*it)++;
+    }*/
+    int i=0;
+    foreach(Drone* drone, *drones){
+        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i*(area.width() / numberOfDrones));
+        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i+1)*(area.width() / numberOfDrones));
+        QGeoRectangle areaPerDrone = QGeoRectangle(topleft,bottomright);
+        double visionPerDrone = drone->getVisionWidth();
+        drone->setWaypoints(calculateWaypoints(areaPerDrone, visionPerDrone));
+        i++;
     }
 }
 

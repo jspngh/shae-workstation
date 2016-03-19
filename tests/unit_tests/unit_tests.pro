@@ -1,4 +1,6 @@
-QT += testlib
+
+QT += core gui positioning testlib network
+
 
 TEMPLATE = app
 TARGET = unit_tests
@@ -17,13 +19,19 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/simplepathalgorithm_test.h \
+    core/json_messages_test.h \
     core/detectioncontroller_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
+    core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
     main.cpp
 
+
+# c++11
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)

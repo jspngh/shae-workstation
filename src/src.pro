@@ -1,3 +1,8 @@
+# QT constraints
+# QT  += core gui network webkit positioning
+# greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
+
+
 # Project properties
 TARGET = frontend
 TEMPLATE = app
@@ -15,6 +20,10 @@ UI_DIR = $$PWD/build/.ui
 
 SOURCES += \
     main.cpp
+
+# c++11
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 # Resources
 RESOURCES = application.qrc

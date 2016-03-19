@@ -26,7 +26,9 @@ public:
     virtual QList<QGeoCoordinate> calculateWaypoints(QGeoRectangle area, double visionWidth) = 0;
 
     //! divides a rectangular area in multiple rectangles and saves the resulting waypoints in each drone object.
-    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone> *drones) = 0;
+
+    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone*> *drones) = 0;
+
 
 protected:
     //! returns a new coordinate based on a certain distance and direction from a previous coordinate.
