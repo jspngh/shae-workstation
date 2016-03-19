@@ -5,7 +5,7 @@ Controller::Controller(MainWindow *window, QObject *parent) :
 {
     mainWindow = window;
 
-    drones = new QSet<Drone*>();
+    drones = new QSet<Drone *>();
 }
 
 Controller::~Controller()
@@ -23,8 +23,8 @@ void Controller::run()
 
 void Controller::createMediator()
 {
-    mediator = new Mediator(mainWindow);
-    mediator->moveToThread(&mediatorThread);
+    //mediator = new Mediator(mainWindow);
+    //mediator->moveToThread(&mediatorThread);
 }
 
 void Controller::createCommunication()

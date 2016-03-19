@@ -21,7 +21,7 @@ private Q_SLOTS:
     void testSettingsMessages();
 
 private:
-    Drone* drone;
+    Drone *drone;
 };
 
 #endif // JSON_MESSAGES_TEST_H

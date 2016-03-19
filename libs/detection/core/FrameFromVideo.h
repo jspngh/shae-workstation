@@ -9,7 +9,8 @@
  * The class will provide frames at a specific fps from a sequence stored on disk
  */
 
-class FrameFromVideo: public FrameProducer {
+class FrameFromVideo: public FrameProducer
+{
 
 public:
     FrameFromVideo(std::string directory, int fps);

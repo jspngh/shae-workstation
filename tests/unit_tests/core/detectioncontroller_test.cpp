@@ -36,7 +36,8 @@ void DetectionController_Test::cleanupTestCase()
 
 // This function is NOT a Unit Test.
 // It is used to count the number of times the newDetection signal is emitted in the controller.
-void DetectionController_Test::onNewDetection(){
+void DetectionController_Test::onNewDetection()
+{
     ++(this->numDetections);
     std::cout <<  "new detection #" << (this->numDetections) << std::endl;
 }

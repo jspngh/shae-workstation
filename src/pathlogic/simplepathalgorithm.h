@@ -28,7 +28,7 @@ public:
      * based on their area, using the calculateWaypoints() method.
     */
 
-    void setWaypointsForDrones(QGeoRectangle area, QList<Drone*> *drones);
+    void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
 
 };
 

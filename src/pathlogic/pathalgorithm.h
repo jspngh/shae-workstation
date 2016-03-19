@@ -27,7 +27,7 @@ public:
 
     //! divides a rectangular area in multiple rectangles and saves the resulting waypoints in each drone object.
 
-    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone*> *drones) = 0;
+    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones) = 0;
 
 
 protected:

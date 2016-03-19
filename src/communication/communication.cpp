@@ -21,8 +21,8 @@ Communication::Communication(QString serverIp, int portNr)
 {
     connect(&drone, SIGNAL(droneResponse(QString)),
             this, SLOT(processResponse(QString)));
-    connect(&drone, SIGNAL(error(int,QString)),
-            this, SLOT(processError(int,QString)));
+    connect(&drone, SIGNAL(error(int, QString)),
+            this, SLOT(processError(int, QString)));
 }
 
 int Communication::doRequest(const QString &message)

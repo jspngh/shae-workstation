@@ -11,7 +11,7 @@
 #include "detection/detectioncontroller.h"
 
 namespace Core {
-    class Controller;
+class Controller;
 }
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
@@ -26,7 +26,7 @@ private:
     Persistence *persistence;
     Communication *communication;
     DetectionController *detectionController;
-    QSet<Drone*> *drones;
+    QSet<Drone *> *drones;
 
     QThread mediatorThread;
     QThread communicationThread;
