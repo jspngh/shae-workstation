@@ -1,4 +1,4 @@
-QT += testlib
+QT += testlib sql
 
 TEMPLATE = app
 TARGET = unit_tests
@@ -17,12 +17,14 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/simplepathalgorithm_test.h \
-    core/detectioncontroller_test.h
+    core/detectioncontroller_test.h \
+    core/searchdao_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/detectioncontroller_test.cpp \
-    main.cpp
+    main.cpp \
+    core/searchdao_test.cpp
 
 
 include(../../src/ui/ui.pri)

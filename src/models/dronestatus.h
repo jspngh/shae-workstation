@@ -7,7 +7,16 @@ class DroneStatus
 {
 public:
     DroneStatus();
-
+    DroneStatus(QTime timestampDrone, QTime timestampWorkstation, double latitude, double longitude, double altitude, double orientation,
+                double gimballAngle, double speed, double batteryLevel, int droneState);
+    QGeoCoordinate getPosition();
+    double getOrientation();
+    double getGimballAngle();
+    double getSpeed();
+    double getBatteryLevel();
+    int getDroneState();
+    QTime getTimestampDrone();
+    QTime getTimestampWorkstation();
 private:
     //contains long, lat and alt
     QGeoCoordinate position;

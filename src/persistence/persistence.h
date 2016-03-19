@@ -8,11 +8,19 @@
 #include "models/videosequence.h"
 #include "models/detectionresult.h"
 #include "models/search.h"
+#include "models/drone.h"
+#include "detectionresultdao.h"
+#include "dronedao.h"
+#include "dronestatusdao.h"
+#include "searchdao.h"
+#include "dronesearchdao.h"
+#include "videosequencedao.h"
 
 class Persistence : public QObject
 {
 public:
     Persistence(QObject *parent = 0);
+    ~Persistence();
 
     Search saveSearch(Search &search);
     Search retrieveSearch(QUuid searchId);
@@ -29,12 +37,23 @@ public:
     QList<QGeoCoordinate> saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
     QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
 
+    Drone saveDrone(Drone drone);
+    Drone retrieveDrone(QUuid droneId);
+
     //will register a videosequence in the database (already saved in location)
     VideoSequence saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence);
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
 
     DetectionResult saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult &result);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
+private:
+    QSqlDatabase projectShaeDatabase;
+    DetectionResultDAO detectionresultdao;
+    DroneDAO dronedao;
+    DroneSearchDAO  dronesearchdao;
+    DroneStatusDAO dronestatusdao;
+    SearchDAO searchdao;
+    VideoSequenceDAO videosequencedao;
 };
 
 #endif // PERSISTENCE_H

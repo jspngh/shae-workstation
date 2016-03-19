@@ -1,4 +1,4 @@
-QT += testlib
+QT += testlib sql
 
 TEMPLATE = app
 TARGET = integration_tests

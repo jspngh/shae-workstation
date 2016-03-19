@@ -1,3 +1,5 @@
+QT += sql
+
 # Project properties
 TARGET = frontend
 TEMPLATE = app
@@ -14,7 +16,7 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 SOURCES += \
-    main.cpp
+    main.cpp \
 
 # Resources
 RESOURCES = application.qrc
@@ -22,4 +24,5 @@ RESOURCES = application.qrc
 # Put subdirectories here
 include(ui/ui.pri)
 include(core/core.pri)
+
 

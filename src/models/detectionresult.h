@@ -9,6 +9,10 @@ class DetectionResult
 {
 public:
     DetectionResult();
+    DetectionResult(QGeoCoordinate coordinate, double score, VideoSequence video);
+    VideoSequence getVideoSequence();
+    double getScore();
+    QGeoCoordinate getLocation();
 
 private:
     QGeoCoordinate location;
