@@ -132,7 +132,7 @@ void Json_Messages_Test::testSettingsMessages()
     json = jsondoc.object();
     QVERIFY( json["MessageType"] == QString("settings") );
     message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == "fps" );
+    QVERIFY( message.at(0).toObject()["Key"] == QString("fps") );
     QVERIFY( message.at(0).toObject()["Value"].toInt() == 60 );
 
 }
