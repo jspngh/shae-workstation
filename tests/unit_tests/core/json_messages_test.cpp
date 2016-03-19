@@ -42,15 +42,15 @@ void Json_Messages_Test::testNavigationMessages()
     QJsonObject json4 = doc4.object();
 
     //compare extracted fields to required fields
-    QVERIFY( json1["MessageType"] == "navigation" );
-    QVERIFY( json2["MessageType"] == "navigation" );
-    QVERIFY( json3["MessageType"] == "navigation" );
-    QVERIFY( json4["MessageType"] == "navigation" );
+    QVERIFY( json1["MessageType"] == QString("navigation") );
+    QVERIFY( json2["MessageType"] == QString("navigation") );
+    QVERIFY( json3["MessageType"] == QString("navigation") );
+    QVERIFY( json4["MessageType"] == QString("navigation") );
 
-    QVERIFY( json1["Message"] == "emergency" );
-    QVERIFY( json2["Message"] == "path" );
-    QVERIFY( json3["Message"] == "start" );
-    QVERIFY( json4["Message"] == "stop" );
+    QVERIFY( json1["Message"] == QString("emergency") );
+    QVERIFY( json2["Message"] == QString("path") );
+    QVERIFY( json3["Message"] == QString("start") );
+    QVERIFY( json4["Message"] == QString("stop") );
 
     QJsonArray waypoints = json2["Waypoints"].toArray();
     QVERIFY( waypoints.at(0).toObject()["Order"] == 1 );
@@ -77,20 +77,20 @@ void Json_Messages_Test::testStatusMessages()
     usleep(1000);
     QJsonObject json = jsondoc.object();
 
-    QVERIFY( json["MessageType"] == "status" );
+    QVERIFY( json["MessageType"] == QString("status") );
     QJsonArray message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == "battery_level" );
-    QVERIFY( message.at(1).toObject()["Key"] == "current_location" );
-    QVERIFY( message.at(2).toObject()["Key"] == "drone_type" );
-    QVERIFY( message.at(3).toObject()["Key"] == "waypoint_reached" );
+    QVERIFY( message.at(0).toObject()["Key"] == QString("battery_level") );
+    QVERIFY( message.at(1).toObject()["Key"] == QString("current_location") );
+    QVERIFY( message.at(2).toObject()["Key"] == QString("drone_type") );
+    QVERIFY( message.at(3).toObject()["Key"] == QString("waypoint_reached") );
 
     //Also test if just 1 status is sent
     jsondoc = drone->requestStatus(Location);
     usleep(1000);
     json = jsondoc.object();
-    QVERIFY( json["MessageType"] == "status" );
+    QVERIFY( json["MessageType"] == QString("status") );
     message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == "current_location" );
+    QVERIFY( message.at(0).toObject()["Key"] == QString("current_location") );
 }
 
 void Json_Messages_Test::testSettingsMessages()
@@ -113,13 +113,13 @@ void Json_Messages_Test::testSettingsMessages()
     usleep(1000);
     QJsonObject json = jsondoc.object();
 
-    QVERIFY( json["MessageType"] == "settings" );
+    QVERIFY( json["MessageType"] == QString("settings") );
     QJsonArray message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == "speed" );
-    QVERIFY( message.at(1).toObject()["Key"] == "height" );
-    QVERIFY( message.at(2).toObject()["Key"] == "camera_angle" );
-    QVERIFY( message.at(3).toObject()["Key"] == "resolution" );
-    QVERIFY( message.at(4).toObject()["Key"] == "fps" );
+    QVERIFY( message.at(0).toObject()["Key"] == QString("speed") );
+    QVERIFY( message.at(1).toObject()["Key"] == QString("height") );
+    QVERIFY( message.at(2).toObject()["Key"] == QString("camera_angle") );
+    QVERIFY( message.at(3).toObject()["Key"] == QString("resolution") );
+    QVERIFY( message.at(4).toObject()["Key"] == QString("fps") );
     QVERIFY( message.at(0).toObject()["Value"].toInt() == 3);
     QVERIFY( message.at(1).toObject()["Value"].toInt() == 4 );
     QVERIFY( message.at(2).toObject()["Value"].toInt() == 60 );
@@ -130,7 +130,7 @@ void Json_Messages_Test::testSettingsMessages()
     jsondoc = drone->setSetting(FPS_To_Set, 60);
     usleep(1000);
     json = jsondoc.object();
-    QVERIFY( json["MessageType"] == "settings" );
+    QVERIFY( json["MessageType"] == QString("settings") );
     message = json["Message"].toArray();
     QVERIFY( message.at(0).toObject()["Key"] == "fps" );
     QVERIFY( message.at(0).toObject()["Value"].toInt() == 60 );
