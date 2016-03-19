@@ -31,6 +31,10 @@ sudo make install
 sudo /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 ```
+In order to capture the drone streams, VLC and the corresponding library LibVLC need to be installed as well:
+```
+sudo apt-get install vlc libvlc-dev
+```
 
 
 ## How to get started
@@ -58,4 +62,5 @@ After this, you have several possibilities:
   ```bash
   doxygen Doxyfile
   ```
+
 
