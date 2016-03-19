@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QStackedWidget>
+#include "core/mediator.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
@@ -23,6 +24,7 @@ public:
     WelcomeWidget *getWelcomeWidget();
     ConfigWidget *getConfigWidget();
     OverviewWidget *getOverviewWidget();
+    void setMediator(Mediator *mediator);
 
 private:
     Ui::MainWindow *ui;

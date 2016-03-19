@@ -5,13 +5,14 @@
 #include <QDebug>
 #include <QObject>
 #include "detection/DetectorManager.h"
+#include "core/mediator.h"
 
 class DetectionController : public QObject
 {
     Q_OBJECT
 
 public:
-    DetectionController(QObject *parent = 0);
+    DetectionController(Mediator *mediator, QObject *parent = 0);
     ~DetectionController() {}
 
 public slots:

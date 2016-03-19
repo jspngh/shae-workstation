@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
+#include "core/mediator.h"
 
 #include "communication/droneconnection.h"
 
@@ -38,10 +39,10 @@ public:
     //! visionwidth to MIN_VISIONWIDTH
     //! serverIp to 10.1.1.10
     //! portNr to 6330
-    Drone();
+    Drone(Mediator *mediator);
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    Drone(QUuid guid, int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
+    Drone(Mediator *mediator, QUuid guid, int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
     //! Destructor
     ~Drone();
 

@@ -1,6 +1,6 @@
 #include "persistence.h"
 
-Persistence::Persistence(QObject *parent):
+Persistence::Persistence(Mediator *mediator, QObject *parent):
     QObject(parent)
 {
 }

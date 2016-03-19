@@ -2,13 +2,13 @@
 
 #include "drone.h"
 
-Drone::Drone()
+Drone::Drone(Mediator *mediator)
 {
     this->guid = QUuid::createUuid();
     this->portNr = 6330;
     this->serverIp = "10.1.1.10";
     this->visionWidth = MIN_VISIONWIDTH;
-    droneConnection = new DroneConnection();
+    droneConnection = new DroneConnection(mediator);
 
     connect(droneConnection, SIGNAL(droneResponse(const QString &)),
             this, SLOT(onDroneResponse(const QString &)));
@@ -16,13 +16,13 @@ Drone::Drone()
             this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
-Drone::Drone(QUuid guid, int portNr, QString serverIp, double visionWidth):
+Drone::Drone(Mediator *mediator, QUuid guid, int portNr, QString serverIp, double visionWidth):
     guid(guid),
     portNr(portNr),
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
-    droneConnection = new DroneConnection();
+    droneConnection = new DroneConnection(mediator);
 
     auto res = connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));

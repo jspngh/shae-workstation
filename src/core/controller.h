@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QSet>
 #include "mediator.h"
-#include "communication/communication.h"
+#include "communication/droneconnection.h"
 #include "ui/mainwindow.h"
 #include "persistence/persistence.h"
 #include "models/drone.h"
@@ -24,12 +24,11 @@ private:
     MainWindow *mainWindow;
     Mediator *mediator;
     Persistence *persistence;
-    Communication *communication;
     DetectionController *detectionController;
     QSet<Drone *> *drones;
 
     QThread mediatorThread;
-    QThread communicationThread;
+    QThread droneThread;
     QThread detectorThread;
     QThread persistenceThread;
 
@@ -43,7 +42,6 @@ public:
 
 private:
     void createMediator();
-    void createCommunication();
     void createDrone();
     void createDetectionController();
     void createPersistence();

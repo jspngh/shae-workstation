@@ -6,12 +6,6 @@ Mediator::Mediator(QObject *parent)
 
 }
 
-Mediator &Mediator::get()
-{
-    static Mediator instance; // Instantiated on first use and guaranteed to be destroyed
-    return instance;
-}
-
 int Mediator::addSignal(QObject *sender, char *signal, QString signalName)
 {
     int count = 0;

@@ -17,14 +17,9 @@ class Mediator: public QObject
     Q_OBJECT
 
 public:
+    Mediator(QObject *parent = 0);
     Mediator(Mediator const &copy) = delete;            // Not Implemented: prevent the creation of multiple instances
     Mediator &operator=(Mediator const &copy) = delete; // Not Implemented: prevent the creation of multiple instances
-
-    /*!
-     * \brief instance static method to get access to the global instance (singleton) Mediator
-     * \return Mediator instance
-     */
-    static Mediator &get();
 
     /*!
      * \brief addSignal will connect the signal to every slot with the same signalName. (thread-safe function)
@@ -50,11 +45,7 @@ private Q_SLOTS:
     void onReceiverObjectDestroyed(QObject *obj);
     void onSenderObjectDestroyed(QObject *obj);
 
-
 private:
-    //! Mediator constructor is set private because the class is implemented as a singleton
-    Mediator(QObject *parent = 0);
-
     QMutex mutex;
 
     /*!

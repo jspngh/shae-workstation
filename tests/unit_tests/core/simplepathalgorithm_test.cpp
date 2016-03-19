@@ -1,7 +1,6 @@
 #include <QString>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
-#include "communication/communication.h"
 #include "pathlogic/pathalgorithm.h"
 #include "pathlogic/simplepathalgorithm.h"
 #include "models/drone.h"
@@ -151,13 +150,14 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
     }
 }
 
+
+// TODO: this should become an integration test (since it involves 2 components)
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 {
-
     QList<Drone *> *drones = new QList<Drone *>();
-    Drone *droneA = new Drone();
+    Drone *droneA = new Drone(nullptr);
     droneA->setVisionWidth(2.0);
-    Drone *droneB = new Drone();
+    Drone *droneB = new Drone(nullptr);
     droneB->setVisionWidth(2.0);
 
     drones->push_back(droneA);
@@ -228,9 +228,9 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 {
     QList<Drone *> *drones = new QList<Drone *>();
-    Drone *droneA = new Drone();
+    Drone *droneA = new Drone(nullptr);
     droneA->setVisionWidth(1.5);
-    Drone *droneB = new Drone();
+    Drone *droneB = new Drone(nullptr);
     droneB->setVisionWidth(2.0);
     drones->push_back(droneA);
     drones->push_back(droneB);

@@ -68,3 +68,8 @@ OverviewWidget *MainWindow::getOverviewWidget()
     return overviewWidget;
 }
 
+void MainWindow::setMediator(Mediator *mediator)
+{
+    configWidget->setMediator(mediator);
+}
+
