@@ -1,7 +1,6 @@
+#include <QDebug>
+
 #include "dronestatus.h"
-
-#include <QtDebug>
-
 
 DroneStatus::DroneStatus()
 {
@@ -31,7 +30,9 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     QJsonDocument jsondoc = QJsonDocument::fromJson(string.toUtf8());
 
     //not a Json message
+
     if(!jsondoc.isObject()){
+        qDebug() << "Not a Json object";
         throw ParseException("Not a Json object", string);
     }
     QJsonObject json = jsondoc.object();
@@ -39,70 +40,71 @@ DroneStatus DroneStatus::fromJsonString(QString string)
 
     //not a status message
     if(messageType != "status"){
+        qDebug() << "Not a status message";
          throw ParseException("Not a status message", string);
     }
     QJsonValue value = json["Orientation"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setOrientation(value.toDouble());
     }
     value = json["Camera_angle"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setCameraAngle(value.toDouble());
     }
     value = json["Speed"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setSpeed(value.toDouble());
     }
     value = json["Selected_speed"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setSelectedSpeed(value.toDouble());
     }
     value = json["Battery_level"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setBatteryLevel(value.toDouble());
     }
     value = json["Drone_state"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setDroneState(value.toInt());
     }
     value = json["Fps"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setFps(value.toInt());
     }
     value = json["Heartbeat"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setHeartbeat(value.toBool());
     }
     value = json["Manufacturer"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setManufacturer(value.toString());
     }
     value = json["Type"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         status.setType(value.toString());
     }
-    value= json["Current_location"];
-    if(! value.isUndefined() && value.isObject()){
+    value = json["Current_location"];
+    if (! value.isUndefined() && value.isObject()) {
         QJsonObject position = value.toObject();
-        status.setCurrentLocation(QGeoCoordinate(position["Latitude"].toDouble(),position["Longitude"].toDouble()));
+        status.setCurrentLocation(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
     }
-    value= json["Next_waypoint"];
-    if(! value.isUndefined() && value.isObject()){
+    value = json["Next_waypoint"];
+    if (! value.isUndefined() && value.isObject()) {
         QJsonObject position = value.toObject();
-        status.setNextWaypoint(QGeoCoordinate(position["Latitude"].toDouble(),position["Longitude"].toDouble()));
+        status.setNextWaypoint(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
     }
-    value= json["Next_waypoints"];
-    if(! value.isUndefined() && value.isArray()){
+    value = json["Next_waypoints"];
+    if (! value.isUndefined() && value.isArray()) {
         QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
         QJsonArray positions = value.toArray();
-        for(auto v : positions){
+        for (auto v : positions) {
             QJsonObject position = v.toObject();
-            list.push_back(QGeoCoordinate(position["Latitude"].toDouble(),position["Longitude"].toDouble()));
+            list.push_back(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
         }
         status.setNextWaypoints(list);
     }
     value = json["Timestamp"];
-    if(! value.isUndefined()){
+    if (! value.isUndefined()) {
         QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }

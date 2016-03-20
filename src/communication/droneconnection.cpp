@@ -2,7 +2,7 @@
 
 #include "droneconnection.h"
 
-DroneConnection::DroneConnection(QObject *parent)
+DroneConnection::DroneConnection(Mediator *mediator, QObject *parent)
     : QThread(parent), quit(false)
 {
     //connect(this, SIGNAL(droneResponse(QString)), qApp, SLOT(aboutQt()));
@@ -56,7 +56,7 @@ void DroneConnection::run()
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_0);
 
-        out << message;
+        out << message.toUtf8();
         socket.write(block);
 
         while (socket.bytesAvailable() < (int)sizeof(quint16)) {
@@ -71,7 +71,6 @@ void DroneConnection::run()
         in.setVersion(QDataStream::Qt_4_0);
         in >> blockSize;
 
-
         while (socket.bytesAvailable() < blockSize) {
             if (!socket.waitForReadyRead(Timeout)) {
                 emit droneResponseError(socket.error(), socket.errorString());
@@ -83,7 +82,6 @@ void DroneConnection::run()
         QByteArray raw;
         in >> raw;
         QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
-        //qDebug() << response;
         emit droneResponse(response);
 
         cond.wait(&mutex);

@@ -7,6 +7,7 @@
 #include "core/dronestatusdao_test.h"
 #include "core/videosequencedao_test.h"
 #include "core/json_messages_test.h"
+#include "core/mediator_test.h"
 
 #include <QTest>
 #include <QApplication>
@@ -25,6 +26,8 @@ int main(int argc, char *argv[])
     DroneSearchDAO_Test test7;
     DroneStatusDAO_Test test8;
     VideoSequenceDAO_Test test9;
+    //mediator tests
+    Mediator_Test test10;
 
     QTest::qExec(&test1);
     QTest::qExec(&test2);
@@ -35,6 +38,9 @@ int main(int argc, char *argv[])
     QTest::qExec(&test7);
     QTest::qExec(&test8);
     QTest::qExec(&test9);
+    QTest::qExec(&test10);
 
-    return a.exec();
+    // a.exec();
+
+    return 0;
 }

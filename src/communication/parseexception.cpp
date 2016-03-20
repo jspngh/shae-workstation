@@ -6,7 +6,7 @@ ParseException::ParseException(QString error, QString message):
 
 }
 
-const char* ParseException::what() const throw()
+const char *ParseException::what() const throw()
 {
     return QString("Something went wrong during parsing of the message: ").append(this->messageThatFailedToParse).toStdString().c_str();
 
