@@ -13,18 +13,9 @@ class DroneStatus
 {
 public:
     DroneStatus();
-<<<<<<< HEAD
-    DroneStatus(QTime timestampDrone, QTime timestampWorkstation, double latitude, double longitude, double altitude, double orientation,
-                double gimballAngle, double speed, double batteryLevel, int droneState);
-    QGeoCoordinate getPosition();
-    double getOrientation();
-    double getGimballAngle();
-    double getSpeed();
-    double getBatteryLevel();
-    int getDroneState();
-    QTime getTimestampDrone();
-    QTime getTimestampWorkstation();
-=======
+
+    DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate location,
+                double orientation, double cameraAngle, double speed, double batteryLevel, int droneState);
 
     //! Creates a droneStatus object from a Json status messages that can be received from the drone.
     static DroneStatus fromJsonString(QString string);
@@ -86,7 +77,6 @@ public:
     int getFps() const;
     void setFps(int value);
 
->>>>>>> develop
 private:
     /**************
     * Attributes

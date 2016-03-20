@@ -8,8 +8,10 @@
 class DetectionResult
 {
 public:
+    //constructors
     DetectionResult();
     DetectionResult(QGeoCoordinate coordinate, double score, VideoSequence video);
+    //getters
     VideoSequence getVideoSequence();
     double getScore();
     QGeoCoordinate getLocation();

@@ -16,13 +16,13 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchI
     QSqlQuery query;
     query.prepare("INSERT INTO videosequences (videoID, searchID, droneID, start, end, frameCount, path) "
                   "VALUES (:videoID, :searchID, :droneID, :start, :end, :frameCount, :path)");
-    query.bindValue(":videoID", sequence.videoId.toString());
+    query.bindValue(":videoID", sequence.getVideoID().toString());
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
-    query.bindValue(":start", sequence.start.toString());
-    query.bindValue(":end", sequence.end.toString());
-    query.bindValue(":frameCount", sequence.frameCount);
-    query.bindValue(":path", sequence.path);
+    query.bindValue(":start", sequence.getStart().toString());
+    query.bindValue(":end", sequence.getEnd().toString());
+    query.bindValue(":frameCount", sequence.getFrameCount());
+    query.bindValue(":path", sequence.getPath());
     if(query.exec())
     {
        qDebug() << "insert succes";
@@ -38,18 +38,19 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchI
 VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
 {
     VideoSequence sequence;
-    QSqlQuery queryVideoSequence;
-    queryVideoSequence.prepare("SELECT start, end, frameCount, path FROM videosequences WHERE videoID = (:videoID)");
-    queryVideoSequence.bindValue(":videoID", videoId);
-    if(queryVideoSequence.exec())
+    QSqlQuery query;
+    query.prepare("SELECT start, end, frameCount, path FROM videosequences WHERE videoID = (:videoID)");
+    query.bindValue(":videoID", videoId);
+    if(query.exec())
     {
-        if(queryVideoSequence.next())
+        if(query.next())
         {
-            sequence = VideoSequence(QUuid(videoId), queryVideoSequence.value(0),
-                                               queryVideoSequence.value(1),
-                                               queryVideoSequence.value(2),
-                                               queryVideoSequence.value(3));
+            sequence = VideoSequence(QUuid(videoId), query.value(0).toTime(),
+                                                    query.value(1).toTime(),
+                                                    query.value(2).toInt(),
+                                                    query.value(3).toString());
         }
+    }
     else
     {
         qDebug() << "setVideoSequence error:  "

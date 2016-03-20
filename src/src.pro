@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 QT += sql
-=======
+
 # QT constraints
 # QT  += core gui network webkit positioning
 # greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
-
->>>>>>> develop
 
 # Project properties
 TARGET = frontend

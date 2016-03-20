@@ -5,27 +5,15 @@
 #include <QString>
 #include <QUuid>
 #include <QGeoCoordinate>
-<<<<<<< HEAD
-#include <QUuid>
-=======
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
->>>>>>> develop
 
 #include "communication/droneconnection.h"
 
 enum RequestedDroneStatus
 {
-<<<<<<< HEAD
-private:
-    double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
-
-    double visionWidth; //!< This attribute tells how wide the vision of the drone is. This is useful to calculate the waypoints. It should use the same scale as the coordinates used in the waypointplanning algorithms.
-    QList<QGeoCoordinate> waypoints;
-    QUuid droneId;
-=======
     Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
 };
 enum RequestedDroneSetting
@@ -40,7 +28,6 @@ enum RequestedDroneSetting
 */
 class Drone : public QObject
 {
->>>>>>> develop
 
     Q_OBJECT
 public:
@@ -54,15 +41,6 @@ public:
     //! serverIp to 10.1.1.10
     //! portNr to 6330
     Drone();
-<<<<<<< HEAD
-    Drone(double visionWidth);
-    Drone(QUuid droneId, double visionWidth);
-    ~Drone();
-
-    double getVisionWidth() const;
-    QList<QGeoCoordinate> getWaypoints();
-    QUuid getDroneID();
-=======
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
     Drone(QUuid guid, int portNr, QString serverIp, double visionWidth=MIN_VISIONWIDTH);
@@ -83,7 +61,6 @@ public:
 
     void setWaypoints(const QList<QGeoCoordinate> &waypoints);
 
->>>>>>> develop
     void addWaypoint(const QGeoCoordinate &waypoint);
 
     double getVisionWidth();

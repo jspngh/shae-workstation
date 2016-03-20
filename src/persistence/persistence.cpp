@@ -4,7 +4,7 @@ Persistence::Persistence(QObject *parent):
     QObject(parent)
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
+    projectShaeDatabase.setDatabaseName(QDir().absolutePath().append(QString("projectShae.db")));
 
     if (!projectShaeDatabase.open())
     {
@@ -27,76 +27,76 @@ Persistence::~Persistence(){
     projectShaeDatabase.close();
 }
 
-Search Persistence::saveSearch(Search &search)
+void Persistence::saveSearch(Search &search)
+{
+    emit onSaveSearch(searchdao.dbSaveSearch(search));
+}
+
+void Persistence::retrieveSearch(QUuid searchId)
+{
+    emit onRetrieveSearch(searchdao.dbRetrieveSearch(searchId));
+}
+
+void Persistence::saveDroneStatus(DroneStatus &droneStatus, QUuid droneId, QUuid searchId)
+{
+    emit onSaveDroneStatus(dronestatusdao.dbSaveDroneStatus(droneStatus, droneId, searchId));
+}
+
+void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end)
+{
+    emit onRetrieveDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,begin,end));
+}
+
+void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
+{
+    emit onRetrieveLatestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId));
+}
+
+void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time)
+{
+  emit onRetrieveClosestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,time));
+}
+
+/*void Persistence::saveDrone(Drone drone)
 {
     //TODO
     throw "Error: method not implemented yet.";
 }
 
-Search Persistence::retrieveSearch(QUuid searchId)
+void Persistence::retrieveDrone(QUuid droneId)
 {
     //TODO
     throw "Error: method not implemented yet.";
+}*/
+
+void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
+{
+    emit onSaveDronePath(dronesearchdao.dbSaveDronePath(droneId,searchId,path));
 }
 
-DroneStatus Persistence::saveDroneStatus(DroneStatus &droneStatus, QUuid droneId, QUuid searchId)
+void Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
+    emit onRetrieveDronePath(dronesearchdao.dbRetrieveDronePath(droneId, searchId));
 }
 
-QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end)
+void Persistence::saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
+    emit onSaveVideoSequence(videosequencedao.dbSaveVideoSequence(droneId,searchId,sequence));
 }
 
-DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
+void Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
+    emit onRetrieveVideoSequence(videosequencedao.dbRetrieveVideoSequence(droneId, searchId,videoId));
 }
 
-DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time)
+void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult &result)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
+    emit onSaveDetectionResult(detectionresultdao.dbSaveDetectionResult(droneId,searchId,result));
 }
 
-QList<QGeoCoordinate> Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
+void Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
-}
-
-QList<QGeoCoordinate> Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
-{
-    //TODO
-    throw "Error: method not implemented yet.";
-}
-
-VideoSequence saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence)
-{
-    //TODO
-    throw "Error: method not implemented yet.";
-}
-
-VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
-{
-    //TODO
-    throw "Error: method not implemented yet.";
-}
-
-DetectionResult saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult &result)
-{
-    //TODO
-    throw "Error: method not implemented yet.";
-}
-
-QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId)
-{
-    //TODO
-    throw "Error: method not implemented yet.";
+    emit onRetrieveDetectionResults(detectionresultdao.dbRetrieveDetectionResults(droneId,searchId));
 }
 
 

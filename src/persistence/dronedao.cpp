@@ -11,10 +11,10 @@ DroneDAO::DroneDAO(QSqlDatabase* projectShaeDatabase){
 
 Drone DroneDAO::dbSaveDrone(Drone drone)
 {
-    QSqlQuery query;
+    /*QSqlQuery query;
     query.prepare("INSERT INTO detectionresults (droneID, visionWidth) "
                   "VALUES (:droneID, :visionWidth)");
-    query.bindValue(":droneID", drone.getDroneID());
+    query.bindValue(":droneID", drone.getGuid());
     query.bindValue(":visionWidth", drone.getVisionWidth());
     if(query.exec())
     {
@@ -25,18 +25,19 @@ Drone DroneDAO::dbSaveDrone(Drone drone)
        qDebug() << "addDrone error:  "
                 << query.lastError();
     }
-    return drone;
+    return drone;*/
+    //TODO werkt nog niet aangezien men van het drone model een Q_Object hebben gemaakt
 }
 
 Drone DroneDAO::dbRetrieveDrone(QUuid droneId){
-    QSqlQuery query;
+    /*QSqlQuery query;
     Drone returnDrone;
     query.prepare("SELECT visionWidth FROM drones WHERE droneID = (:droneID)");
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         if (query.next()) {
-            returnDrone = Drone(droneId, query.value(0));
+            returnDrone = Drone(droneId,0,QString(" ") ,query.value(0).toDouble());
         }
     }
     else
@@ -44,5 +45,6 @@ Drone DroneDAO::dbRetrieveDrone(QUuid droneId){
        qDebug() << "getDrone error:  "
                 << query.lastError();
     }
-    return returnDrone;
+    return returnDrone;*/
+    //TODO werkt nog niet aangezien men van het drone model een Q_Object hebben gemaakt
 }

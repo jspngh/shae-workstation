@@ -8,6 +8,19 @@ DroneStatus::DroneStatus()
 
 }
 
+DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate location,
+            double orientation, double cameraAngle, double speed, double batteryLevel, int droneState)
+{
+    this->timestampDrone = timestampDrone;
+    this->timestampReceivedWorkstation = timestampReceiveWorkstation;
+    this->currentLocation = location;
+    this->orientation = orientation;
+    this->cameraAngle = cameraAngle;
+    this->speed = speed;
+    this->batteryLevel = batteryLevel;
+    this->droneState = droneState;
+}
+
 DroneStatus DroneStatus::fromJsonString(QString string)
 {
     //create status object to return and set current time

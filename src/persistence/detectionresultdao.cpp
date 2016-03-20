@@ -15,7 +15,7 @@ DetectionResult DetectionResultDAO::dbSaveDetectionResult(QUuid droneId, QUuid s
     QSqlQuery query;
     query.prepare("INSERT INTO detectionresults (videoID, searchID, droneID, latitude, longitude, score) "
                   "VALUES (:videoID, :searchID, :droneID, :latitude, :longitude, :score)");
-    query.bindValue(":videoID", result.getVideoSequence().videoId.toString());
+    query.bindValue(":videoID", result.getVideoSequence().getVideoID().toString());
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     QGeoCoordinate location = result.getLocation();
@@ -44,19 +44,19 @@ QList<DetectionResult> DetectionResultDAO::dbRetrieveDetectionResults(QUuid dron
     if(query.exec())
     {
         while (query.next()) {
-            DetectionResult output = DetectionResult(QGeoCoordinate(query.value(1).toDouble(),query.value(2).toDouble()), query.value(3), VideoSequence(QUuid(query.value(0).toString())));
+            DetectionResult output = DetectionResult(QGeoCoordinate(query.value(1).toDouble(),query.value(2).toDouble()), query.value(3).toDouble(), VideoSequence(QUuid(query.value(0).toString())));
             returnList.append(output);
         }
         for(DetectionResult dr : returnList){
             QSqlQuery queryVideoSequence;
             queryVideoSequence.prepare("SELECT start, end, frameCount, path FROM videosequences WHERE videoID = (:videoID)");
-            queryVideoSequence.bindValue(":videoID", dr.getVideoSequence().videoId);
+            queryVideoSequence.bindValue(":videoID", dr.getVideoSequence().getVideoID().toString());
             if(queryVideoSequence.exec())
             {
                 if(queryVideoSequence.next())
                 {
-                    dr.getVideoSequence().setVariables(queryVideoSequence.value(0).toString(),
-                                                       queryVideoSequence.value(1).toString(),
+                    dr.getVideoSequence().setVariables(queryVideoSequence.value(0).toTime(),
+                                                       queryVideoSequence.value(1).toTime(),
                                                        queryVideoSequence.value(2).toInt(),
                                                        queryVideoSequence.value(3).toString());
                 }

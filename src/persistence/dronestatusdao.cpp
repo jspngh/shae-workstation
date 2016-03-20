@@ -16,17 +16,17 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
                   "VALUES (:searchID, :droneID, :timestampDrone, :timestampWorkstation, :latitude, :longitude, :altitude, :orientation, :gimballAngle, :speed, :batteryLevel, :droneState)");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
-    QGeoCoordinate location = droneStatus.getPosition();
+    QGeoCoordinate location = droneStatus.getCurrentLocation();
     query.bindValue(":latitude", location.latitude());
     query.bindValue(":longitude", location.longitude());
     query.bindValue(":altitude", location.longitude());
     query.bindValue(":orientation", droneStatus.getOrientation());
-    query.bindValue(":gimballAngle", droneStatus.getGimballAngle());
+    query.bindValue(":gimballAngle", droneStatus.getCameraAngle());
     query.bindValue(":speed", droneStatus.getSpeed());
     query.bindValue(":batteryLevel", droneStatus.getBatteryLevel());
     query.bindValue(":droneState", droneStatus.getDroneState());
     query.bindValue(":timestampDrone", droneStatus.getTimestampDrone().toString());
-    query.bindValue(":timestampWorkstation", droneStatus.getTimestampWorkstation().toString());
+    query.bindValue(":timestampWorkstation", droneStatus.getTimestampRecievedWorkstation().toString());
     if(query.exec())
     {
        qDebug() << "insert succes";
@@ -36,24 +36,26 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
        qDebug() << "addDetectionResult error:  "
                 << query.lastError();
     }
-    return result;
+    return droneStatus;
 }
 
 //compare with timestamp of workstation
 QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end)
 {
     QSqlQuery query;
-    QList<DroneStatus> returnList = QList<DroneStatus>;
+    QList<DroneStatus> returnList = QList<DroneStatus>();
     query.prepare("SELECT * FROM statuses");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         while (query.next()) {
-            if(start <= QTime(query.value(2)) && QTime(query.value(3)) <= end)
+            if(begin <= query.value(2).toTime() && query.value(3).toTime() <= end)
             {
-                DroneStatus output = DroneStatus(QTime(query.value(2)), QTime(query.value(3)), query.value(4), query.value(5), query.value(6),
-                                                 query.value(7), query.value(8), query.value(9), query.value(10), query.value(11));
+                DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
+                                                 QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble(), query.value(6).toDouble()),
+                                                 query.value(7).toDouble(), query.value(8).toDouble(), query.value(9).toDouble(),
+                                                 query.value(10).toDouble(), query.value(11).toInt());
                 returnList.append(output);
             }
         }
@@ -70,15 +72,17 @@ QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid se
 DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
 {
     QSqlQuery query;
-    QList<DroneStatus> returnList = QList<DroneStatus>;
+    QList<DroneStatus> returnList = QList<DroneStatus>();
     query.prepare("SELECT * FROM statuses");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         while (query.next()) {
-            DroneStatus output = DroneStatus(QTime(query.value(2)), QTime(query.value(3)), query.value(4), query.value(5), query.value(6),
-                                                 query.value(7), query.value(8), query.value(9), query.value(10), query.value(11));
+            DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
+                                             QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble(), query.value(6).toDouble()),
+                                             query.value(7).toDouble(), query.value(8).toDouble(), query.value(9).toDouble(),
+                                             query.value(10).toDouble(), query.value(11).toInt());
             returnList.append(output);
         }
     }
@@ -87,24 +91,26 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
        qDebug() << "getDetectionResult error:  "
                 << query.lastError();
     }
-    return returnList.end();
+    return returnList.back();
 }
 
 //retrieve dronestatus closest to time parameter
 DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time)
 {
     QSqlQuery query;
-    QList<DroneStatus> returnList = QList<DroneStatus>;
+    QList<DroneStatus> returnList = QList<DroneStatus>();
     query.prepare("SELECT * FROM statuses");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         while (query.next()) {
-            if(QTime(query.value(3)) < time)
+            if(query.value(3).toTime() < time)
             {
-                DroneStatus output = DroneStatus(QTime(query.value(2)), QTime(query.value(3)), query.value(4), query.value(5), query.value(6),
-                                                 query.value(7), query.value(8), query.value(9), query.value(10), query.value(11));
+                DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
+                                                 QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble(), query.value(6).toDouble()),
+                                                 query.value(7).toDouble(), query.value(8).toDouble(), query.value(9).toDouble(),
+                                                 query.value(10).toDouble(), query.value(11).toInt());
                 returnList.append(output);
             }
         }
@@ -114,5 +120,5 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId,
        qDebug() << "getDetectionResult error:  "
                 << query.lastError();
     }
-    return returnList.end();
+    return returnList.back();
 }

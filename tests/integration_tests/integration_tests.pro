@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-QT += testlib sql
-=======
+QT += core gui widgets positioning testlib network sql
 
-QT += core gui widgets positioning testlib network
-
->>>>>>> develop
 
 TEMPLATE = app
 TARGET = integration_tests

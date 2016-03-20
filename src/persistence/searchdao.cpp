@@ -14,8 +14,8 @@ Search SearchDAO::dbSaveSearch(Search search){
     QSqlQuery query;
     query.prepare("INSERT INTO searches (searchID, start) "
                   "VALUES (:searchID, :start)");
-    query.bindValue(":searchID", search.searchID.toString());
-    query.bindValue(":start", search.start.toString());
+    query.bindValue(":searchID", search.getSearchID().toString());
+    query.bindValue(":start", search.getStart().toString());
     if(query.exec())
     {
        qDebug() << "yay";
@@ -37,8 +37,8 @@ Search SearchDAO::dbRetrieveSearch(QUuid searchId){
     {
         if (query.next())
         {
-            search = Search(query.value(0), query.value(1));
-            QList <Drone> drones = QList<Drone>;
+            search = Search(QUuid(query.value(0).toString()), query.value(1).toTime());
+            /*QList <Drone> drones = QList<Drone>;
             QSqlQuery queryDrones;
             queryDrones.prepare("SELECT droneID FROM dronessearches WHERE searchID = (:searchID)");
             queryDrones.bindValue(":searchID", searchId);
@@ -52,7 +52,7 @@ Search SearchDAO::dbRetrieveSearch(QUuid searchId){
                     if(queryDrone.exec())
                     {
                             if(queryDrone.next())
-                                drones.append(Drone(QUuid(queryDrone.value(0),queryDrone.value(1))));
+                                drones.append(Drone(QUuid(queryDrone.value(0).,queryDrone.value(1))));
                     }
                     else
                     {
@@ -65,7 +65,8 @@ Search SearchDAO::dbRetrieveSearch(QUuid searchId){
             {
                 qDebug() << "getDroneSearches from getsearch error: "
                          << queryDrones.lastError();
-            }
+            }*/
+            //cant do due current state of model
         }
 
     }

@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-QT += testlib sql
-=======
-
-QT += core gui positioning testlib network
-
->>>>>>> develop
+QT += core gui positioning testlib network sql
 
 TEMPLATE = app
 TARGET = unit_tests
@@ -23,13 +17,10 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/simplepathalgorithm_test.h \
-<<<<<<< HEAD
     core/detectioncontroller_test.h \
-    core/searchdao_test.h
-=======
+    core/searchdao_test.h \
     core/json_messages_test.h \
     core/detectioncontroller_test.h
->>>>>>> develop
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \

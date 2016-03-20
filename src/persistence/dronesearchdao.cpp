@@ -1,4 +1,7 @@
 #include "dronesearchdao.h"
+#include <sstream>
+#include <string>
+#include <iostream>
 
 DroneSearchDAO::DroneSearchDAO()
 {
@@ -17,15 +20,15 @@ QList<QGeoCoordinate> DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searc
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
 
-    QString pathString = QString("");
+    std::ostringstream os;
 
     for(QGeoCoordinate gc : path)
     {
-        pathString.append(gc.latitude());
-        pathString.append("-");
-        pathString.append(gc.longitude());
-        pathString.append(":");
+        os << gc.latitude() << "-" << gc.longitude() << ":";
     }
+
+    QString pathString = QString(os.str().c_str());
+
     query.bindValue(":path", pathString);
     if(query.exec())
     {
@@ -41,14 +44,14 @@ QList<QGeoCoordinate> DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searc
 
 QList<QGeoCoordinate> DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid searchId){
     QSqlQuery query;
-    QList<QGeoCoordinate> returnList = QList<QGeoCoordinate>;
+    QList<QGeoCoordinate> returnList = QList<QGeoCoordinate>();
     query.prepare("SELECT path FROM dronessearches WHERE searchID = (:searchID) and droneID = (:droneID)");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         if(query.next()) {
-            returnList = uncypherPathString(query.value(0));
+            returnList = uncypherPathString(query.value(0).toString());
         }
     }
     else
@@ -61,7 +64,7 @@ QList<QGeoCoordinate> DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid s
 
 QList<QGeoCoordinate> DroneSearchDAO::uncypherPathString(QString pathString)
 {
-    QList<QGeoCoordinate> returnList = QList<QGeoCoordinate>;
+    QList<QGeoCoordinate> returnList = QList<QGeoCoordinate>();
     QList<QString> coordinates = pathString.split(":");
     for(QString coordinate : coordinates){
         QList<QString> coordinateValues = coordinate.split("-");

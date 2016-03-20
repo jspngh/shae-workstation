@@ -10,7 +10,7 @@ public:
     VideoSequenceDAO();
     VideoSequenceDAO(QSqlDatabase* projectShaeDatabase);
     //
-    VideoSequence dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence);
+    VideoSequence dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
     VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
 private:
     QSqlDatabase* projectShaeDatabase;
