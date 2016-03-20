@@ -57,11 +57,11 @@ public slots:
 
     void saveDroneStatus(DroneStatus &droneStatus, QUuid droneId, QUuid searchId);
     //compare with timestamp of workstation
-    void retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end);
+    void retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
     void retrieveDroneStatus(QUuid droneId, QUuid searchId);
     //retrieve dronestatus closest to time parameter
-    void retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time);
+    void retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
 
 
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);

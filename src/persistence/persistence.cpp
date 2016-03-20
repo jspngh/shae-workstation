@@ -4,7 +4,7 @@ Persistence::Persistence(QObject *parent):
     QObject(parent)
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QDir().absolutePath().append(QString("projectShae.db")));
+    projectShaeDatabase.setDatabaseName("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db");
 
     if (!projectShaeDatabase.open())
     {
@@ -42,7 +42,7 @@ void Persistence::saveDroneStatus(DroneStatus &droneStatus, QUuid droneId, QUuid
     emit onSaveDroneStatus(dronestatusdao.dbSaveDroneStatus(droneStatus, droneId, searchId));
 }
 
-void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end)
+void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
 {
     emit onRetrieveDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,begin,end));
 }
@@ -52,7 +52,7 @@ void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
     emit onRetrieveLatestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId));
 }
 
-void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time)
+void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
 {
   emit onRetrieveClosestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,time));
 }

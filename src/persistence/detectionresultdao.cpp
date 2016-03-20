@@ -15,7 +15,7 @@ DetectionResult DetectionResultDAO::dbSaveDetectionResult(QUuid droneId, QUuid s
     QSqlQuery query;
     query.prepare("INSERT INTO detectionresults (videoID, searchID, droneID, latitude, longitude, score) "
                   "VALUES (:videoID, :searchID, :droneID, :latitude, :longitude, :score)");
-    query.bindValue(":videoID", result.getVideoSequence().getVideoID().toString());
+    query.bindValue(":videoID", result.getVideoSequence().getVideoID());
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     QGeoCoordinate location = result.getLocation();

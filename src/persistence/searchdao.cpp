@@ -14,11 +14,11 @@ Search SearchDAO::dbSaveSearch(Search search){
     QSqlQuery query;
     query.prepare("INSERT INTO searches (searchID, start) "
                   "VALUES (:searchID, :start)");
-    query.bindValue(":searchID", search.getSearchID().toString());
-    query.bindValue(":start", search.getStart().toString());
+    query.bindValue(":searchID", search.getSearchID());
+    query.bindValue(":start", search.getStart());
     if(query.exec())
     {
-       qDebug() << "yay";
+       qDebug() << "insert succes";
     }
     else
     {

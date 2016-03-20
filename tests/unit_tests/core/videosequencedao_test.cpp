@@ -4,13 +4,13 @@
 #include <QUuid>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
-#include "persistence/searchdao.h"
-#include "models/search.h"
+#include "persistence/videosequencedao.h"
+#include "models/videosequence.h"
 
 VideoSequenceDAO_Test::VideoSequenceDAO_Test()
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("workstation/src/persistence/projectShae.db"));
+    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
 
     if (!projectShaeDatabase.open())
     {
@@ -37,14 +37,34 @@ void VideoSequenceDAO_Test::cleanupTestCase()
 
 void VideoSequenceDAO_Test::testSimpleVideoSequenceDAO()
 {
-    //SearchDAO sd = SearchDAO(&projectShaeDatabase);
+    VideoSequenceDAO sd = VideoSequenceDAO(&projectShaeDatabase);
 
-    //Search s = Search();
-    //s.searchID = QUuid::createUuid();
-    //s.start = QTime(7,6);
+    VideoSequence s = VideoSequence(QUuid::createUuid(), QTime(8,8,8), QTime(9,9,9), 10 , "pathtofile");
+    QUuid searchID = QUuid::createUuid();
+    QUuid droneID = QUuid::createUuid();
 
-    //sd.dbSaveSearch(s);
+    sd.dbSaveVideoSequence(droneID,searchID,s);
 
-    QVERIFY(true);
+   VideoSequence sback = sd.dbRetrieveVideoSequence(droneID,searchID,s.getVideoID());
+
+   QVERIFY(sback.getVideoID() == s.getVideoID());
+   QVERIFY(s.getFrameCount() == sback.getFrameCount());
+   QVERIFY(s.getStart() == sback.getStart());
+   QVERIFY(s.getEnd() == sback.getEnd());
+   QVERIFY(s.getPath() == sback.getPath());
+
+    QSqlQuery query;
+    query.prepare("DELETE from videosequences "
+                  "WHERE videoID == (:videoID)");
+    query.bindValue(":videoID", s.getVideoID());
+    if(query.exec())
+    {
+       qDebug() << "delete succes";
+    }
+    else
+    {
+       qDebug() << "remove videosequence error:  "
+                << query.lastError();
+    };
 
 }

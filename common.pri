@@ -34,4 +34,6 @@ SOURCES += \
     $$PWD/src/utils/*.cpp \
     $$PWD/src/videocontroller/*.cpp
 
+DISTFILES +=
+
 

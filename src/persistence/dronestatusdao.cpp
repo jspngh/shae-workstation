@@ -14,8 +14,10 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
     QSqlQuery query;
     query.prepare("INSERT INTO statuses (searchID, droneID, timestampDrone, timestampWorkstation, latitude, longitude, altitude, orientation, gimballAngle, speed, batteryLevel, droneState) "
                   "VALUES (:searchID, :droneID, :timestampDrone, :timestampWorkstation, :latitude, :longitude, :altitude, :orientation, :gimballAngle, :speed, :batteryLevel, :droneState)");
-    query.bindValue(":searchID", searchId);
-    query.bindValue(":droneID", droneId);
+    query.bindValue(":searchID", searchId.toString());
+    query.bindValue(":droneID", droneId.toString());
+    query.bindValue(":timestampDrone", droneStatus.getTimestampDrone());
+    query.bindValue(":timestampWorkstation", droneStatus.getTimestampRecievedWorkstation());
     QGeoCoordinate location = droneStatus.getCurrentLocation();
     query.bindValue(":latitude", location.latitude());
     query.bindValue(":longitude", location.longitude());
@@ -25,8 +27,6 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
     query.bindValue(":speed", droneStatus.getSpeed());
     query.bindValue(":batteryLevel", droneStatus.getBatteryLevel());
     query.bindValue(":droneState", droneStatus.getDroneState());
-    query.bindValue(":timestampDrone", droneStatus.getTimestampDrone().toString());
-    query.bindValue(":timestampWorkstation", droneStatus.getTimestampRecievedWorkstation().toString());
     if(query.exec())
     {
        qDebug() << "insert succes";
@@ -40,17 +40,17 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
 }
 
 //compare with timestamp of workstation
-QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end)
+QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
 {
     QSqlQuery query;
     QList<DroneStatus> returnList = QList<DroneStatus>();
-    query.prepare("SELECT * FROM statuses");
+    query.prepare("SELECT * FROM statuses where (searchID = (:searchID) and droneID = (:droneID)) order by timestampDrone");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         while (query.next()) {
-            if(begin <= query.value(2).toTime() && query.value(3).toTime() <= end)
+            if(begin <= query.value(2).toDateTime() && query.value(2).toDateTime() <= end)
             {
                 DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
                                                  QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble(), query.value(6).toDouble()),
@@ -73,7 +73,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
 {
     QSqlQuery query;
     QList<DroneStatus> returnList = QList<DroneStatus>();
-    query.prepare("SELECT * FROM statuses");
+    query.prepare("SELECT * FROM statuses where (searchID = (:searchID) and droneID = (:droneID)) order by timestampDrone");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
@@ -95,17 +95,17 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
 }
 
 //retrieve dronestatus closest to time parameter
-DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time)
+DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
 {
     QSqlQuery query;
     QList<DroneStatus> returnList = QList<DroneStatus>();
-    query.prepare("SELECT * FROM statuses");
+    query.prepare("SELECT * FROM statuses where (searchID = (:searchID) and droneID = (:droneID)) order by timestampDrone");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         while (query.next()) {
-            if(query.value(3).toTime() < time)
+            if(query.value(3).toDateTime() < time)
             {
                 DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
                                                  QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble(), query.value(6).toDouble()),

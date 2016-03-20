@@ -4,13 +4,12 @@
 #include <QUuid>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
-#include "persistence/searchdao.h"
-#include "models/search.h"
+#include "persistence/dronesearchdao.h"
 
 DroneSearchDAO_Test::DroneSearchDAO_Test()
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("workstation/src/persistence/projectShae.db"));
+    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
 
     if (!projectShaeDatabase.open())
     {
@@ -37,15 +36,39 @@ void DroneSearchDAO_Test::cleanupTestCase()
 
 void DroneSearchDAO_Test::testSimpleDroneSearchDAO()
 {
-    //SearchDAO sd = SearchDAO(&projectShaeDatabase);
+    DroneSearchDAO sd = DroneSearchDAO(&projectShaeDatabase);
 
-    //Search s = Search();
-    //s.searchID = QUuid::createUuid();
-    //s.start = QTime(7,6);
+    QList<QGeoCoordinate> s = QList<QGeoCoordinate>();
+    for(int i = 0; i < 10; i ++)
+        s.append(QGeoCoordinate(i,i));
+    QUuid searchID = QUuid::createUuid();
+    QUuid droneID = QUuid::createUuid();
 
-    //sd.dbSaveSearch(s);
+    sd.dbSaveDronePath(droneID,searchID,s);
 
-    QVERIFY(true);
+   QList<QGeoCoordinate> sback = sd.dbRetrieveDronePath(droneID,searchID);
+
+   int i = 0;
+   for(QGeoCoordinate coordinate : sback){
+       QVERIFY(i == coordinate.longitude());
+       QVERIFY(i == coordinate.latitude());
+       i++;
+   }
+
+    QSqlQuery query;
+    query.prepare("DELETE from dronessearches "
+                  "WHERE (droneID = (:droneID) and searchID = (:searchID))");
+    query.bindValue(":droneID", droneID);
+    query.bindValue(":searchID", searchID);
+    if(query.exec())
+    {
+       qDebug() << "delete succes";
+    }
+    else
+    {
+       qDebug() << "remove dronessearches error:  "
+                << query.lastError();
+    };
 
 }
 

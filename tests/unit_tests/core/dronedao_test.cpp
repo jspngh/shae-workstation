@@ -10,7 +10,7 @@
 DroneDAO_Test::DroneDAO_Test()
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("workstation/src/persistence/projectShae.db"));
+    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
 
     if (!projectShaeDatabase.open())
     {
@@ -37,16 +37,8 @@ void DroneDAO_Test::cleanupTestCase()
 
 void DroneDAO_Test::testSimpleDroneDAO()
 {
-    //SearchDAO sd = SearchDAO(&projectShaeDatabase);
-
-    //Search s = Search();
-    //s.searchID = QUuid::createUuid();
-    //s.start = QTime(7,6);
-
-    //sd.dbSaveSearch(s);
-
+    // not yet implemented due to drone model design wiht qobject
     QVERIFY(true);
-
 }
 
 

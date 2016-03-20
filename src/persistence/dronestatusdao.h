@@ -13,11 +13,11 @@ public:
 
     DroneStatus dbSaveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId);
     //compare with timestamp of workstation
-    QList<DroneStatus> dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QTime begin, QTime end);
+    QList<DroneStatus> dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
     DroneStatus dbRetrieveDroneStatus(QUuid droneId, QUuid searchId);
     //retrieve dronestatus closest to time parameter
-    DroneStatus dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QTime time);
+    DroneStatus dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
 private:
     QSqlDatabase* projectShaeDatabase;
 };

@@ -16,11 +16,11 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchI
     QSqlQuery query;
     query.prepare("INSERT INTO videosequences (videoID, searchID, droneID, start, end, frameCount, path) "
                   "VALUES (:videoID, :searchID, :droneID, :start, :end, :frameCount, :path)");
-    query.bindValue(":videoID", sequence.getVideoID().toString());
+    query.bindValue(":videoID", sequence.getVideoID());
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
-    query.bindValue(":start", sequence.getStart().toString());
-    query.bindValue(":end", sequence.getEnd().toString());
+    query.bindValue(":start", sequence.getStart());
+    query.bindValue(":end", sequence.getEnd());
     query.bindValue(":frameCount", sequence.getFrameCount());
     query.bindValue(":path", sequence.getPath());
     if(query.exec())

@@ -10,7 +10,7 @@
 DetectionResultDAO_Test::DetectionResultDAO_Test()
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("workstation/src/persistence/projectShae.db"));
+    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
 
     if (!projectShaeDatabase.open())
     {
@@ -37,14 +37,33 @@ void DetectionResultDAO_Test::cleanupTestCase()
 
 void DetectionResultDAO_Test::testSimpleDetectionResultDAO()
 {
-    //SearchDAO sd = SearchDAO(&projectShaeDatabase);
+    DetectionResultDAO sd = DetectionResultDAO(&projectShaeDatabase);
 
-    //Search s = Search();
-    //s.searchID = QUuid::createUuid();
-    //s.start = QTime(7,6);
+    DetectionResult s = DetectionResult(QGeoCoordinate(5,5), 5.5, VideoSequence(QUuid::createUuid()));
+    QUuid searchID = QUuid::createUuid();
+    QUuid droneID = QUuid::createUuid();
 
-    //sd.dbSaveSearch(s);
+    sd.dbSaveDetectionResult(droneID,searchID,s);
 
-    QVERIFY(true);
+   QList<DetectionResult> sback = sd.dbRetrieveDetectionResults(droneID,searchID);
+
+   QVERIFY(sback.first().getScore() == s.getScore());
+   QVERIFY( s.getVideoSequence().getVideoID() == sback.first().getVideoSequence().getVideoID());
+   QVERIFY(s.getLocation().longitude() == sback.first().getLocation().longitude());
+   QVERIFY(s.getLocation().latitude() == sback.first().getLocation().latitude());
+
+    QSqlQuery query;
+    query.prepare("DELETE from detectionresults "
+                  "WHERE videoID == (:videoID)");
+    query.bindValue(":videoID", s.getVideoSequence().getVideoID());
+    if(query.exec())
+    {
+       qDebug() << "delete succes";
+    }
+    else
+    {
+       qDebug() << "remove detectionresult error:  "
+                << query.lastError();
+    };
 
 }

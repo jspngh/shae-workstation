@@ -39,11 +39,14 @@ SOURCES += \
     core/dronestatusdao_test.cpp \
     core/videosequencedao_test.cpp
 
-
 # c++11
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
+
+DISTFILES +=
+
+QMAKE
 

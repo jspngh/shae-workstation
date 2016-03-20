@@ -10,7 +10,7 @@
 SearchDAO_Test::SearchDAO_Test()
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("workstation/src/persistence/projectShae.db"));
+    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
 
     if (!projectShaeDatabase.open())
     {
@@ -37,13 +37,27 @@ void SearchDAO_Test::cleanupTestCase()
 
 void SearchDAO_Test::testSimpleSearchDAO()
 {
-    qDebug() << QDir().absolutePath();
     SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
     Search s = Search(QUuid::createUuid(),QTime(7,6));
 
     sd.dbSaveSearch(s);
 
-    QVERIFY(true);
+    Search sback = sd.dbRetrieveSearch(s.getSearchID());
 
+    QVERIFY(sback.getSearchID() == s.getSearchID() && s.getStart() == sback.getStart());
+
+    QSqlQuery query;
+    query.prepare("DELETE from searches "
+                  "WHERE searchID == (:searchID)");
+    query.bindValue(":searchID", s.getSearchID());
+    if(query.exec())
+    {
+       qDebug() << "delete succes";
+    }
+    else
+    {
+       qDebug() << "addDroe error:  "
+                << query.lastError();
+    };
 }
