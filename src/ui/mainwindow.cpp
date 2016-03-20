@@ -18,7 +18,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->stackedWidget->setCurrentIndex(0);
 
+//    qApp->setStyle(QStyleFactory::create("Fusion"));
+    qApp->setStyle("Fusion");
+
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::BrightText, Qt::red);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+
     statusBar()->addWidget(new QLabel(tr("Ready")));
+
 
     qApp->setStyle("Fusion");
     QFile file(":styles/main.qss");
@@ -39,18 +59,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-WelcomeWidget* MainWindow::getWelcomeWidget()
+WelcomeWidget *MainWindow::getWelcomeWidget()
 {
     return welcomeWidget;
 }
 
-ConfigWidget* MainWindow::getConfigWidget()
+ConfigWidget *MainWindow::getConfigWidget()
 {
     return configWidget;
 }
 
-OverviewWidget* MainWindow::getOverviewWidget()
+OverviewWidget *MainWindow::getOverviewWidget()
 {
     return overviewWidget;
+}
+
+void MainWindow::setMediator(Mediator *mediator)
+{
+    configWidget->setMediator(mediator);
 }
 

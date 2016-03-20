@@ -2,7 +2,8 @@
 
 using namespace std;
 
-DetectionController::DetectionController(QObject *parent, double fps): QObject(parent)
+DetectionController::DetectionController(Mediator *mediator, double fps, QObject *parent)
+    : QObject(parent)
 {
     this->fps = fps;
     this->streaming = true;

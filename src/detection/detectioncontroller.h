@@ -12,13 +12,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "detection/DetectorManager.h"
 #include "models/detectionresult.h"
+#include "core/mediator.h"
 
 class DetectionController : public QObject
 {
     Q_OBJECT
 
 public:
-    DetectionController(QObject *parent = 0, double fps=2);
+    DetectionController(Mediator *mediator, double fps=2, QObject *parent = 0);
     ~DetectionController() {}
 
 public slots:

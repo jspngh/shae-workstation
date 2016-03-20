@@ -19,18 +19,19 @@ UI_DIR = $$PWD/build/.ui
 
 # Input
 HEADERS += \
-    $$PWD/core/simplepathalgorithm_test.h \
-    $$PWD/core/detectioncontroller_test.h \
-    $$PWD/core/videocontroller_test.h \
-    $$PWD/core/json_messages_test.h
+    core/simplepathalgorithm_test.h \
+    core/json_messages_test.h \
+    core/detectioncontroller_test.h \
+    core/videocontroller_test.h \
+    core/mediator_test.h
 
 SOURCES += \
-    $$PWD/core/simplepathalgorithm_test.cpp \
-    $$PWD/core/detectioncontroller_test.cpp \
-    $$PWD/core/videocontroller_test.cpp \
-    $$PWD/core/json_messages_test.cpp \
+    core/simplepathalgorithm_test.cpp \
+    core/json_messages_test.cpp \
+    core/detectioncontroller_test.cpp \
+    core/videocontroller_test.cpp \
+    core/mediator_test.cpp
     main.cpp
-
 
 # c++11
 CONFIG += c++11

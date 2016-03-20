@@ -9,7 +9,7 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase()
 {
-    this->controller = new DetectionController();
+    this->controller = new DetectionController(nullptr);
 
     QObject::connect(this->controller, &DetectionController::newDetection,
                      this, &DetectionController_Test::onNewDetection);
