@@ -337,7 +337,7 @@ void QMMapView::jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
     emit selectedAreaChanged(selectedArea);
 }
 
-void QMMapView::selectedAreaWasDeleted()
+void QMMapView::jsSelectedAreaDeleted()
 {
     emit selectedAreaDeleted();
 }
