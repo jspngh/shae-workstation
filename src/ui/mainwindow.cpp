@@ -2,33 +2,55 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QLabel>
+#include <QStyleFactory>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    welcome_widget = new WelcomeWidget(this);
-    config_widget = new ConfigWidget(this);
-    overview_widget = new OverviewWidget(this);
-
-    ui->stackedWidget->addWidget(welcome_widget);
-    ui->stackedWidget->addWidget(config_widget);
-    ui->stackedWidget->addWidget(overview_widget);
+    welcomeWidget = new WelcomeWidget(this);
+    configWidget = new ConfigWidget(this);
+    overviewWidget = new OverviewWidget(this);
+    ui->stackedWidget->addWidget(welcomeWidget);
+    ui->stackedWidget->addWidget(configWidget);
+    ui->stackedWidget->addWidget(overviewWidget);
 
     ui->stackedWidget->setCurrentIndex(0);
+
+    statusBar()->addWidget(new QLabel(tr("Ready")));
+
+    qApp->setStyle("Fusion");
+    QFile file(":styles/main.qss");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qApp->setStyleSheet(file.readAll());
+        file.close();
+    }
+
+    connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(ui->connectAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 }
 
 MainWindow::~MainWindow()
 {
-    delete welcome_widget;
-    delete config_widget;
-    delete overview_widget;
+    delete welcomeWidget;
+    delete configWidget;
+    delete overviewWidget;
     delete ui;
 }
 
-QWidget *MainWindow::getWelcomeWidget()
+WelcomeWidget* MainWindow::getWelcomeWidget()
 {
-    return welcome_widget;
+    return welcomeWidget;
+}
+
+ConfigWidget* MainWindow::getConfigWidget()
+{
+    return configWidget;
+}
+
+OverviewWidget* MainWindow::getOverviewWidget()
+{
+    return overviewWidget;
 }
 

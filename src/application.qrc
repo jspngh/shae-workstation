@@ -1,9 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>styles/main.qss</file>
+        <file>styles/dark_orange.qss</file>
         <file>ui/img/map.png</file>
         <file>ui/img/gradient.png</file>
         <file>ui/img/battery_318-665.jpg</file>
         <file>ui/img/wireless-xxl.png</file>
+        <file>ui/img/checkbox.png</file>
+        <file>ui/img/handle.png</file>
+        <file>ui/img/down_arrow.png</file>
     </qresource>
 </RCC>

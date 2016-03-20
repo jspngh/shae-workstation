@@ -26,10 +26,10 @@ void DetectionController_Test::testProcessSequence(){
     QVERIFY(this->numDetections > 1);
 }
 
-void DetectionController_Test::cleanupTestCase(){
+void DetectionController_Test::cleanupTestCase()
+{
     delete this->controller;
 }
-
 
 
 // This function is NOT a Unit Test.

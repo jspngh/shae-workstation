@@ -41,5 +41,3 @@ HEADERS += \
     $$PWD/detection/window_selection/*.h \
     $$PWD/utils/*.h \
 
-
-

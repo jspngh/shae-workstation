@@ -11,7 +11,6 @@
  * DetectorManager is a builder/Broker class
  * It will chain the output of a WindowSelection object to a detector
  */
-
 class DetectorManager
 {
 public:

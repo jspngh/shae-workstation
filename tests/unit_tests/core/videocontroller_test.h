@@ -9,7 +9,7 @@
 #include <QThread>
 #include <QUuid>
 
-#include "core/videocontroller/videocontroller.h"
+#include "videocontroller/videocontroller.h"
 
 class VideoController_Test : public QObject
 {
