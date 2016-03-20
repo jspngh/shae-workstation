@@ -47,7 +47,7 @@ public:
     };
 
     QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
-              QWidget *parent = 0);
+              bool selectable, QWidget *parent = 0);
 
     /*!
      * \brief Returns the display type of the map (e.g. satellite/road, ...)

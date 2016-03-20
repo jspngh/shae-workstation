@@ -106,7 +106,7 @@ public:
 };
 
 QMMapView::QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
-                     QWidget *parent) :
+                     bool selectable, QWidget *parent) :
     QWidget(parent), d_ptr(new QMMapViewPrivate(this))
 {
     Q_D(QMMapView);
@@ -118,6 +118,7 @@ QMMapView::QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
     d->initialValues.centerCoordinate = center;
     d->initialValues.mapType = mapType;
     d->initialValues.zoomLevel = zoomLevel;
+    this->selectable = selectable;
     connect(d->frame(), SIGNAL(javaScriptWindowObjectCleared()),
             this, SLOT(insertNativeObject()));
     connect(d->webView, SIGNAL(loadFinished(bool)),
@@ -134,7 +135,7 @@ void QMMapView::initializeMap()
 {
     Q_D(QMMapView);
     QGeoCoordinate &center = d->initialValues.centerCoordinate;
-    QString js = QString("initialize(%1, %2, %3, %4);").arg(
+    QString js = QString("mapKit.initialize(%1, %2, %3, %4);").arg(
                      QString::number(center.longitude()),
                      QString::number(center.latitude()),
                      d->toJsMapType(d->initialValues.mapType),
@@ -152,18 +153,18 @@ void QMMapView::initializeMap()
 void QMMapView::resizeEvent(QResizeEvent *)
 {
     Q_D(QMMapView);
-    d->evaluateJavaScript("google.maps.event.trigger(map, 'resize');");
+    d->evaluateJavaScript("google.maps.event.trigger(mapKit.map, 'resize');");
 }
 
 QMMapView::MapType QMMapView::mapType() const
 {
-    QString res = d_ptr->evaluateJavaScript("map.getMapTypeId();").toString();
+    QString res = d_ptr->evaluateJavaScript("mapKit.map.getMapTypeId();").toString();
     return d_ptr->fromJsMapType(res);
 }
 
 QGeoRectangle QMMapView::region() const
 {
-    QVariantMap result = d_ptr->evaluateJavaScript("getMapBounds();").toMap();
+    QVariantMap result = d_ptr->evaluateJavaScript("mapKit.getMapBounds();").toMap();
     return QGeoRectangle(QGeoCoordinate(result["south"].toReal(),
                                         result["west"].toReal()),
                          QGeoCoordinate(result["north"].toReal(),
@@ -172,38 +173,38 @@ QGeoRectangle QMMapView::region() const
 
 QGeoCoordinate QMMapView::center() const
 {
-    QVariantMap result = d_ptr->evaluateJavaScript("getMapCenter();").toMap();
+    QVariantMap result = d_ptr->evaluateJavaScript("mapKit.getMapCenter();").toMap();
     return QGeoCoordinate(result["latitude"].toReal(),
                           result["longitude"].toReal());
 }
 
 uint QMMapView::zoomLevel() const
 {
-    return d_ptr->evaluateJavaScript("map.getZoom();").toUInt();
+    return d_ptr->evaluateJavaScript("mapKit.map.getZoom();").toUInt();
 }
 
 qreal QMMapView::heading() const
 {
-    return d_ptr->evaluateJavaScript("map.getHeading();").toReal();
+    return d_ptr->evaluateJavaScript("mapKit.map.getHeading();").toReal();
 }
 
 qreal QMMapView::tilt() const
 {
-    return d_ptr->evaluateJavaScript("map.getTilt();").toReal();
+    return d_ptr->evaluateJavaScript("mapKit.map.getTilt();").toReal();
 }
 
 void QMMapView::setMapType(MapType type)
 {
     Q_D(QMMapView);
     QString typeName = d->toJsMapType(type);
-    QString script = QString("map.setMapTypeId(%1);").arg(typeName);
+    QString script = QString("mapKit.map.setMapTypeId(%1);").arg(typeName);
     d->evaluateJavaScript(script);
 }
 
 void QMMapView::setCenter(QGeoCoordinate center, bool animated)
 {
     Q_D(QMMapView);
-    QString format = QString("setMapCenter(%1, %2, %3);");
+    QString format = QString("mapKit.setMapCenter(%1, %2, %3);");
     QString js = format.arg(QString::number(center.latitude()),
                             QString::number(center.longitude()),
                             animated ? "true" : "false");
@@ -213,7 +214,7 @@ void QMMapView::setCenter(QGeoCoordinate center, bool animated)
 void QMMapView::setCenter(QString address, bool animated)
 {
     Q_D(QMMapView);
-    QString format = QString("setMapCenterByAddress(\"%1\", %2);");
+    QString format = QString("mapKit.setMapCenterByAddress(\"%1\", %2);");
     QString js = format.arg(address,
                             animated ? "true" : "false");
     d->evaluateJavaScript(js);
@@ -222,13 +223,13 @@ void QMMapView::setCenter(QString address, bool animated)
 void QMMapView::setZoomLevel(uint zoom)
 {
     Q_D(QMMapView);
-    d->evaluateJavaScript(QString("map.setZoom(%1);").arg(zoom));
+    d->evaluateJavaScript(QString("mapKit.map.setZoom(%1);").arg(zoom));
 }
 
 void QMMapView::makeRegionVisible(QGeoRectangle &region)
 {
     Q_D(QMMapView);
-    QString format = QString("panMapToBounds(%1, %2, %3, %4);");
+    QString format = QString("mapKit.panToBounds(%1, %2, %3, %4);");
     QString js = format.arg(region.topLeft().latitude(), region.bottomLeft().latitude(),
                             region.topRight().longitude(), region.topLeft().longitude());
     d->evaluateJavaScript(js);
@@ -237,7 +238,7 @@ void QMMapView::makeRegionVisible(QGeoRectangle &region)
 void QMMapView::fitRegion(QGeoRectangle &region)
 {
     Q_D(QMMapView);
-    QString format = QString("fitMapToBounds(%1, %2, %3, %4);");
+    QString format = QString("mapKit.fitBounds(%1, %2, %3, %4);");
     QString js = format.arg(region.topLeft().latitude(), region.bottomLeft().latitude(),
                             region.topRight().longitude(), region.topLeft().longitude());
     d->evaluateJavaScript(js);
@@ -255,16 +256,16 @@ void QMMapView::shiftKeyPressed(bool down)
 
     Q_D(QMMapView);
     if (down) {
-        d->evaluateJavaScript("shiftKeyDown();");
+        d->evaluateJavaScript("mapKit.shiftKeyDown();");
     } else {
-        d->evaluateJavaScript("shiftKeyUp();");
+        d->evaluateJavaScript("mapKit.shiftKeyUp();");
     }
 }
 
 void QMMapView::selectArea(QGeoRectangle &area)
 {
     Q_D(QMMapView);
-    QString format = QString("selectAreaOnMap(%1, %2, %3, %4);");
+    QString format = QString("mapKit.selectAreaOnMap(%1, %2, %3, %4);");
     QString js = format.arg(area.topLeft().latitude(), area.topLeft().latitude(),
                             area.bottomRight().longitude(), area.bottomRight().longitude());
     d->evaluateJavaScript(js);

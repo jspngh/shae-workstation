@@ -44,7 +44,8 @@ void ConfigWidget::initializeMap()
 {
     mapView = new QMMapView(QMMapView::Satellite,
                             QGeoCoordinate(51.02, 3.73),
-                            11);
+                            11,
+                            true);
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(tilesLoaded()),
