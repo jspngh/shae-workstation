@@ -12,7 +12,8 @@ QWidget:item:hover
 
 QWidget:item:selected
 {
-    background-color: #ddeeaa;
+    color: #c6bf21;
+    background-color: #5a5c51;
 }
 
 QMenuBar {
@@ -95,7 +96,7 @@ QStatusBar::item {
     border-radius: 2;
 }
 
-QComboBox, QLineEdit, QSpinBox, QTextEdit, QListView {
+QLineEdit, QSpinBox, QTextEdit, QListView {
     background-color:#323232;
     selection-color: #dedede;
     selection-background-color: #5a5c51;
@@ -137,7 +138,63 @@ QLineEdit:focus, QFrame:focus {
     padding: 1px;
 }
 
-/* A QLabel is a QFrame ... */
+QComboBox {
+    border: 1px solid #5a5c51;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+QComboBox:item:selected
+{
+    color: #fefefe;
+    background-color: #5a5c51;
+}
+
+QComboBox:item:hover
+{
+    color: #fefefe;
+    background-color: #5a5c51;
+}
+
+QComboBox:editable {
+    background: #323232;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: #323232;
+}
+
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: #323232;
+}
+
+QComboBox:on {
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+    border-left-width: 2px;
+    border-left-color: #5a5c51;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/images/down_arrow.png);
+}
+
+QComboBox::down-arrow:on {
+    top: 1px;
+    left: 1px;
+}
+
 QLabel {
     border: none;
     padding: 0;
