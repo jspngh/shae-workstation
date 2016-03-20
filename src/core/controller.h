@@ -27,7 +27,6 @@ private:
     DetectionController *detectionController;
     QSet<Drone *> *drones;
 
-    QThread mediatorThread;
     QThread droneThread;
     QThread detectorThread;
     QThread persistenceThread;

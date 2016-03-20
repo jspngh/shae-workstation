@@ -24,7 +24,6 @@ void Controller::run()
 void Controller::createMediator()
 {
     mediator = new Mediator();
-    mediator->moveToThread(&mediatorThread);
     mainWindow->setMediator(mediator);
 }
 

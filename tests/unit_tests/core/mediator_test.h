@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QTest>
+#include <QSignalSpy>
 
 class Mediator_Test: public QObject
 {
@@ -16,12 +17,14 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void testConnects();
     void testAddMethods();
     void testCountAddSignal();
     void testCountAddSlot();
     void testCount();
 
 private:
+    Mediator mediator;
 
 };
 

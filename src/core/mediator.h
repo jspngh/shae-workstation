@@ -8,8 +8,6 @@
 #include <QList>
 
 /*! \brief The mediator connects all components to each other.
- * Mediator is implemented as a singleton class
- * Get access to the singleton using the static method \ref Mediator::get()
  * Add signals and slots using the methods \ref Mediator::addSignal() and \ref Mediator::addSlot() respectivily.
  */
 class Mediator: public QObject
@@ -18,8 +16,8 @@ class Mediator: public QObject
 
 public:
     Mediator(QObject *parent = 0);
-    Mediator(Mediator const &copy) = delete;            // Not Implemented: prevent the creation of multiple instances
-    Mediator &operator=(Mediator const &copy) = delete; // Not Implemented: prevent the creation of multiple instances
+    Mediator(Mediator const &copy) = delete;
+    Mediator &operator=(Mediator const &copy) = delete;
 
     /*!
      * \brief addSignal will connect the signal to every slot with the same signalName. (thread-safe function)
@@ -42,7 +40,12 @@ public:
     virtual ~Mediator() {}
 
 private Q_SLOTS:
+    //! Called when an object, residing in the slotList, is destroyed.
+    //! The method will delete all the Elements in the list that have a reference to the object
     void onReceiverObjectDestroyed(QObject *obj);
+
+    //! Called when an object, residing in the signalList, is destroyed.
+    //! The method will delete all the Elements in the list that have a reference to the object
     void onSenderObjectDestroyed(QObject *obj);
 
 private:
