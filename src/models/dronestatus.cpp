@@ -1,7 +1,6 @@
+#include <QDebug>
+
 #include "dronestatus.h"
-
-#include <QtDebug>
-
 
 DroneStatus::DroneStatus()
 {
@@ -18,15 +17,18 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     QJsonDocument jsondoc = QJsonDocument::fromJson(string.toUtf8());
 
     //not a Json message
-    if (!jsondoc.isObject()) {
+
+    if(!jsondoc.isObject()){
+        qDebug() << "Not a Json object";
         throw ParseException("Not a Json object", string);
     }
     QJsonObject json = jsondoc.object();
     QString messageType = json["MessageType"].toString();
 
     //not a status message
-    if (messageType != "status") {
-        throw ParseException("Not a status message", string);
+    if(messageType != "status"){
+        qDebug() << "Not a status message";
+         throw ParseException("Not a status message", string);
     }
     QJsonValue value = json["Orientation"];
     if (! value.isUndefined()) {
