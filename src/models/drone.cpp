@@ -84,6 +84,7 @@ Slots
 void Drone::onDroneResponse(const QString &response)
 {
     qDebug() << "In processResponse";
+    qDebug() << response;
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if(jsondoc.isObject()){
         DroneStatus status = DroneStatus::fromJsonString(response);
@@ -182,7 +183,7 @@ QJsonDocument Drone::sendWaypoints()
     QJsonDocument jsondoc(json);
 
     // Send the json message
-    QString message = jsondoc.toJson(QJsonDocument::Indented);
+    QString message = jsondoc.toJson(QJsonDocument::Compact);
     droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;
