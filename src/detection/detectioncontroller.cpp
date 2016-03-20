@@ -39,8 +39,6 @@ void DetectionController::onProcessSequence(QString seq)
             for(int i = 0; i < detectionList.getSize(); i++){
                 emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first,locations[i].second),1));
             }
-            std::cout<<iteratorFrames << std::endl;
-            std::cout<<this->streaming << std::endl;
 
         }
     }while(this->streaming);

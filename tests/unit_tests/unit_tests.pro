@@ -30,7 +30,7 @@ SOURCES += \
     core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
     core/videocontroller_test.cpp \
-    core/mediator_test.cpp
+    core/mediator_test.cpp \
     main.cpp
 
 # c++11

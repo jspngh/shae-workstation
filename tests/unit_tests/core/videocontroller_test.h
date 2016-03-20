@@ -8,6 +8,8 @@
 #include <string>
 #include <QThread>
 #include <QUuid>
+#include <fstream>
+
 
 #include "videocontroller/videocontroller.h"
 

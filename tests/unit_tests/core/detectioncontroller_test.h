@@ -17,7 +17,8 @@ public:
     explicit DetectionController_Test(QObject *parent = 0);
 
 signals:
-    void newSequence(QString seq);
+    void startDetection(QString parameter);
+    void stopDetection();
 
 private:
     void onNewDetection(DetectionResult result);

@@ -6,7 +6,7 @@ VideoController::VideoController(QObject *parent): QObject(parent)
 }
 
 void VideoController::onStartStream(QUuid drone, QString sdpFile){
-    const char * vlc_args[] = { "--sout=file/ps:footage/drone_stream.mpg" };
+    const char * vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
     // Launch VLC
     this->inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
 
@@ -21,7 +21,7 @@ void VideoController::onStartStream(QUuid drone, QString sdpFile){
     libvlc_media_player_play (mp);
 
 
-    emit this->streamStarted(VideoSequence(QString("footage/drone_stream.mpg"),QUuid::createUuid()));
+    emit this->streamStarted(VideoSequence(QString("dependencies/drone_stream.mpg"),QUuid::createUuid()));
 }
 
 

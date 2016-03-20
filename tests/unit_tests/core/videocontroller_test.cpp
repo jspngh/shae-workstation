@@ -27,17 +27,30 @@ void VideoController_Test::initTestCase()
 
 }
 
+#include <fstream>
+
+std::ifstream::pos_type filesize(const char* filename)
+{
+    std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+    return in.tellg();
+}
 void VideoController_Test::testCreateFile()
 {
     bool fileExists = false;
     QUuid id;
-    emit this->startStream(id, QString("test.sdp"));
+    emit this->startStream(id, QString("dependencies/test.sdp"));
     sleep(5);
     emit this->stopStream(id);
-    if (FILE *file = fopen("footage/drone_stream.mpg", "r"))
+    if (FILE *file = fopen("dependencies/drone_stream.mpg", "r"))
     {
-        fileExists = true;
+        std::ifstream in("dependencies/drone_stream.mpg", std::ifstream::ate | std::ifstream::binary);
+        std::ifstream::pos_type size = in.tellg();
+        if(size>10){ //header file should not be taken into account
+            fileExists=true;
+        }
+        std::remove("dependencies/drone_stream.mpg"); // delete file
     }
+
     QVERIFY(fileExists&&this->started &&this->stopped);
 }
 

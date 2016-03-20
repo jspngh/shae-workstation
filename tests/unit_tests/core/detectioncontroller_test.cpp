@@ -13,16 +13,21 @@ void DetectionController_Test::initTestCase()
 
     QObject::connect(this->controller, &DetectionController::newDetection,
                      this, &DetectionController_Test::onNewDetection);
+    QObject::connect(this, &DetectionController_Test::startDetection,
+                     this->controller, &DetectionController::onProcessSequence);
+    QObject::connect(this, &DetectionController_Test::stopDetection,
+                     this->controller, &DetectionController::onFinish);
 
     this->numDetections = 0;
-    this->threadId = QThread::currentThreadId();
 }
 
 
 void DetectionController_Test::testProcessSequence(){
-    this->controller->onProcessSequence(QString("footage/testfootage.mp4"));
+    QThread detectionThread;
+    this->controller->moveToThread(&detectionThread);
+    emit startDetection(QString("dependencies/testfootage.mp4"));
     std::this_thread::sleep_for (std::chrono::seconds(1));
-    this->controller->onFinish();
+    emit stopDetection();
     QVERIFY(this->numDetections > 1);
 }
 
