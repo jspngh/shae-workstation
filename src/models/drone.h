@@ -9,15 +9,14 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
+#include "core/mediator.h"
 
 #include "communication/droneconnection.h"
 
-enum RequestedDroneStatus
-{
+enum RequestedDroneStatus {
     Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
 };
-enum RequestedDroneSetting
-{
+enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
 };
 
@@ -40,10 +39,10 @@ public:
     //! visionwidth to MIN_VISIONWIDTH
     //! serverIp to 10.1.1.10
     //! portNr to 6330
-    Drone();
+    Drone(Mediator *mediator);
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    Drone(QUuid guid, int portNr, QString serverIp, double visionWidth=MIN_VISIONWIDTH);
+    Drone(Mediator *mediator, QUuid guid, int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
     //! Destructor
     ~Drone();
 
@@ -57,7 +56,7 @@ public:
 
     QString getServerIp();
 
-    QList<QGeoCoordinate>& getWaypoints();
+    QList<QGeoCoordinate> &getWaypoints();
 
     void setWaypoints(const QList<QGeoCoordinate> &waypoints);
 
@@ -127,7 +126,7 @@ private:
     **********/
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
-    DroneConnection* droneConnection;
+    DroneConnection *droneConnection;
     int portNr; /*!< The port number that will be used to connect to the actual drone */
     QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
 

@@ -20,13 +20,15 @@ UI_DIR = $$PWD/build/.ui
 HEADERS += \
     core/simplepathalgorithm_test.h \
     core/json_messages_test.h \
-    core/detectioncontroller_test.h
+    core/detectioncontroller_test.h \
+    core/mediator_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
-    main.cpp
+    main.cpp \
+    core/mediator_test.cpp
 
 
 # c++11

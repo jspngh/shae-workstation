@@ -85,12 +85,12 @@ private:
     double orientation = -1;
     double cameraAngle = -1;
     double speed = -1;
-    double selectedSpeed =-1;
+    double selectedSpeed = -1;
     double height = -1;
-    double selectedHeight =-1;
+    double selectedHeight = -1;
     double batteryLevel = -1;
-    int droneState =-1;
-    int fps =-1;
+    int droneState = -1;
+    int fps = -1;
     int resolution = -1;
     bool heartbeat = false;
     QString manufacturer = "";

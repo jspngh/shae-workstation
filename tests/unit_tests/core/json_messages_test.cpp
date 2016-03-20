@@ -10,10 +10,10 @@ void Json_Messages_Test::initTestCase()
 {
 
     QUuid droneId = QUuid::createUuid();
-    drone = new Drone(droneId, 6331, "127.0.0.1", 0.0001);
+    drone = new Drone(nullptr, droneId, 6331, "127.0.0.1", 0.0001);
     QList<QGeoCoordinate> waypointList = QList<QGeoCoordinate>();
-    waypointList.push_back(QGeoCoordinate(1.0,1.0));
-    waypointList.push_back(QGeoCoordinate(2.0,2.0));
+    waypointList.push_back(QGeoCoordinate(1.0, 1.0));
+    waypointList.push_back(QGeoCoordinate(2.0, 2.0));
     drone->setWaypoints(waypointList);
 
 }
@@ -42,19 +42,19 @@ void Json_Messages_Test::testNavigationMessages()
     QJsonObject json4 = doc4.object();
 
     //compare extracted fields to required fields
-    QVERIFY( json1["MessageType"] == QString("navigation") );
-    QVERIFY( json2["MessageType"] == QString("navigation") );
-    QVERIFY( json3["MessageType"] == QString("navigation") );
-    QVERIFY( json4["MessageType"] == QString("navigation") );
+    QVERIFY(json1["MessageType"] == QString("navigation"));
+    QVERIFY(json2["MessageType"] == QString("navigation"));
+    QVERIFY(json3["MessageType"] == QString("navigation"));
+    QVERIFY(json4["MessageType"] == QString("navigation"));
 
-    QVERIFY( json1["Message"] == QString("emergency") );
-    QVERIFY( json2["Message"] == QString("path") );
-    QVERIFY( json3["Message"] == QString("start") );
-    QVERIFY( json4["Message"] == QString("stop") );
+    QVERIFY(json1["Message"] == QString("emergency"));
+    QVERIFY(json2["Message"] == QString("path"));
+    QVERIFY(json3["Message"] == QString("start"));
+    QVERIFY(json4["Message"] == QString("stop"));
 
     QJsonArray waypoints = json2["Waypoints"].toArray();
-    QVERIFY( waypoints.at(0).toObject()["Order"] == 1 );
-    QVERIFY( waypoints.at(1).toObject()["Order"] == 2 );
+    QVERIFY(waypoints.at(0).toObject()["Order"] == 1);
+    QVERIFY(waypoints.at(1).toObject()["Order"] == 2);
 
     QJsonObject waypoint1 = waypoints.at(0).toObject()["Location"].toObject();
     QJsonObject waypoint2 = waypoints.at(1).toObject()["Location"].toObject();
@@ -77,20 +77,20 @@ void Json_Messages_Test::testStatusMessages()
     usleep(1000);
     QJsonObject json = jsondoc.object();
 
-    QVERIFY( json["MessageType"] == QString("status") );
+    QVERIFY(json["MessageType"] == QString("status"));
     QJsonArray message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == QString("battery_level") );
-    QVERIFY( message.at(1).toObject()["Key"] == QString("current_location") );
-    QVERIFY( message.at(2).toObject()["Key"] == QString("drone_type") );
-    QVERIFY( message.at(3).toObject()["Key"] == QString("waypoint_reached") );
+    QVERIFY(message.at(0).toObject()["Key"] == QString("battery_level"));
+    QVERIFY(message.at(1).toObject()["Key"] == QString("current_location"));
+    QVERIFY(message.at(2).toObject()["Key"] == QString("drone_type"));
+    QVERIFY(message.at(3).toObject()["Key"] == QString("waypoint_reached"));
 
     //Also test if just 1 status is sent
     jsondoc = drone->requestStatus(Location);
     usleep(1000);
     json = jsondoc.object();
-    QVERIFY( json["MessageType"] == QString("status") );
+    QVERIFY(json["MessageType"] == QString("status"));
     message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == QString("current_location") );
+    QVERIFY(message.at(0).toObject()["Key"] == QString("current_location"));
 }
 
 void Json_Messages_Test::testSettingsMessages()
@@ -113,26 +113,26 @@ void Json_Messages_Test::testSettingsMessages()
     usleep(1000);
     QJsonObject json = jsondoc.object();
 
-    QVERIFY( json["MessageType"] == QString("settings") );
+    QVERIFY(json["MessageType"] == QString("settings"));
     QJsonArray message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == QString("speed") );
-    QVERIFY( message.at(1).toObject()["Key"] == QString("height") );
-    QVERIFY( message.at(2).toObject()["Key"] == QString("camera_angle") );
-    QVERIFY( message.at(3).toObject()["Key"] == QString("resolution") );
-    QVERIFY( message.at(4).toObject()["Key"] == QString("fps") );
-    QVERIFY( message.at(0).toObject()["Value"].toInt() == 3);
-    QVERIFY( message.at(1).toObject()["Value"].toInt() == 4 );
-    QVERIFY( message.at(2).toObject()["Value"].toInt() == 60 );
-    QVERIFY( message.at(3).toObject()["Value"].toInt() == 720 );
-    QVERIFY( message.at(4).toObject()["Value"].toInt() == 30 );
+    QVERIFY(message.at(0).toObject()["Key"] == QString("speed"));
+    QVERIFY(message.at(1).toObject()["Key"] == QString("height"));
+    QVERIFY(message.at(2).toObject()["Key"] == QString("camera_angle"));
+    QVERIFY(message.at(3).toObject()["Key"] == QString("resolution"));
+    QVERIFY(message.at(4).toObject()["Key"] == QString("fps"));
+    QVERIFY(message.at(0).toObject()["Value"].toInt() == 3);
+    QVERIFY(message.at(1).toObject()["Value"].toInt() == 4);
+    QVERIFY(message.at(2).toObject()["Value"].toInt() == 60);
+    QVERIFY(message.at(3).toObject()["Value"].toInt() == 720);
+    QVERIFY(message.at(4).toObject()["Value"].toInt() == 30);
 
     //Also test if just 1 status is sent
     jsondoc = drone->setSetting(FPS_To_Set, 60);
     usleep(1000);
     json = jsondoc.object();
-    QVERIFY( json["MessageType"] == QString("settings") );
+    QVERIFY(json["MessageType"] == QString("settings"));
     message = json["Message"].toArray();
-    QVERIFY( message.at(0).toObject()["Key"] == QString("fps") );
-    QVERIFY( message.at(0).toObject()["Value"].toInt() == 60 );
+    QVERIFY(message.at(0).toObject()["Key"] == QString("fps"));
+    QVERIFY(message.at(0).toObject()["Value"].toInt() == 60);
 
 }

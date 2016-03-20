@@ -2,7 +2,7 @@
 
 #include "droneconnection.h"
 
-DroneConnection::DroneConnection(QObject *parent)
+DroneConnection::DroneConnection(Mediator *mediator, QObject *parent)
     : QThread(parent), quit(false)
 {
     //connect(this, SIGNAL(droneResponse(QString)), qApp, SLOT(aboutQt()));

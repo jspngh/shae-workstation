@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGeoCoordinate>
 #include <QUuid>
+#include "core/mediator.h"
 #include "models/dronestatus.h"
 #include "models/videosequence.h"
 #include "models/detectionresult.h"
@@ -12,7 +13,7 @@
 class Persistence : public QObject
 {
 public:
-    Persistence(QObject *parent = 0);
+    Persistence(Mediator *mediator, QObject *parent = 0);
 
     Search saveSearch(Search &search);
     Search retrieveSearch(QUuid searchId);

@@ -10,7 +10,7 @@ class ParseException: public std::exception
 {
 public:
     ParseException(QString error, QString message);
-    virtual const char* what() const throw();
+    virtual const char *what() const throw();
 private:
     QString messageThatFailedToParse = "Something went wrong during parsing of a message";
     QString error;
