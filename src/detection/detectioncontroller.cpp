@@ -2,20 +2,19 @@
 
 using namespace std;
 
-DetectionController::DetectionController(Mediator *mediator, double fps, QObject *parent)
-    : QObject(parent)
+DetectionController::DetectionController(Mediator *mediator, double fps, QString sequence, QObject *parent)
+    : QThread(parent)
 {
     this->fps = fps;
-    this->streaming = true;
-
+    this->sequence = sequence;
 }
 
-void DetectionController::onProcessSequence(QString seq)
+void DetectionController::run()
 {
-    std::cout << "onprocessequence started" << std::endl;
+    this->streaming = true;
     // process a sequence
     cv::Mat frame;
-    cv::VideoCapture capture = cv::VideoCapture(seq.toStdString());
+    cv::VideoCapture capture = cv::VideoCapture(this->sequence.toStdString());
     if(capture.isOpened()){
     int numFrames = capture.get(CV_CAP_PROP_FRAME_COUNT);
     int iteratorFrames = 0;
@@ -25,8 +24,7 @@ void DetectionController::onProcessSequence(QString seq)
     do
     {
         //allow for frames to buffer
-        std::this_thread::sleep_for (std::chrono::seconds(1));
-        //check if new frames have arrived
+        QThread::sleep(1);       //check if new frames have arrived
         numFrames = capture.get(CV_CAP_PROP_FRAME_COUNT);
         while(iteratorFrames < numFrames)
         {
@@ -39,17 +37,23 @@ void DetectionController::onProcessSequence(QString seq)
             vector<pair<double,double>> locations = this->manager.calculatePositions(detectionList, pair<double,double>(frameLocation.longitude(),frameLocation.latitude()));
             for(int i = 0; i < detectionList.getSize(); i++){
                 emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first,locations[i].second),1));
+                nrDetections++;
             }
 
         }
-    }while(this->streaming);
-    }
 
+    }while(this->streaming);
+    emit this->detectionFinished();
+
+    }
+ }
+
+void DetectionController::streamFinished(){
+    this->streaming = false;
 }
 
-void DetectionController::onFinish(){
-    std::cout << "onfinish started" << std::endl;
 
-    this->streaming = false;
+int DetectionController::getNrDetections(){
+    return this->nrDetections;
 }
 

@@ -7,6 +7,7 @@
 class DetectionResult
 {
 public:
+    DetectionResult();
     DetectionResult(QGeoCoordinate location, double score);
 private:
     QGeoCoordinate location;

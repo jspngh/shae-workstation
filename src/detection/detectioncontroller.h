@@ -14,26 +14,29 @@
 #include "models/detectionresult.h"
 #include "core/mediator.h"
 
-class DetectionController : public QObject
-{
+class DetectionController : public QThread{
     Q_OBJECT
 
 public:
-    DetectionController(Mediator *mediator, double fps=2, QObject *parent = 0);
+    explicit DetectionController(Mediator *mediator, double fps=2, QString sequence = "dependencies/drone_stream.mpg", QObject *parent = 0);
     ~DetectionController() {}
-
-public slots:
-    void onProcessSequence(QString seq);
-    void onFinish();
+    void streamFinished();
+    void run() Q_DECL_OVERRIDE;
+    int getNrDetections();
 
 
 signals:
     void newDetection(DetectionResult result);
+    void detectionFinished();
+
+
 
 private:
     DetectorManager manager;
+    QString sequence;
     double fps;
     double frameHop;
+    int nrDetections;
     volatile bool streaming;
 };
 
