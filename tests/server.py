@@ -31,7 +31,9 @@ while True:
     message = packet['Message']           # the 'message' attribute tells what packet it is, within it's class
     print message
 
-    response = "Roger that golden eagle"
+    # response = "Roger that golden eagle"
+    start_message = {'MessageType': 'status', 'Speed': 10}
+    response = json.dumps(start_message)
     print "responding"
     # client.send(format(len(response), '#04x') + response)
     preamble = bytearray(struct.pack(">H", len(response) + 4))

@@ -84,6 +84,7 @@ Slots
 void Drone::onDroneResponse(const QString &response)
 {
     qDebug() << "In processResponse";
+    qDebug() << response;
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if(jsondoc.isObject()){
         DroneStatus status = DroneStatus::fromJsonString(response);

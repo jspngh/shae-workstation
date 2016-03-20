@@ -71,7 +71,6 @@ void DroneConnection::run()
         in.setVersion(QDataStream::Qt_4_0);
         in >> blockSize;
 
-
         while (socket.bytesAvailable() < blockSize) {
             if (!socket.waitForReadyRead(Timeout)) {
                 emit droneResponseError(socket.error(), socket.errorString());
