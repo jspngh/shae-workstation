@@ -1,4 +1,4 @@
-#include "searchdao_test.h"
+#include "dronesearchdao_test.h"
 #include <QString>
 #include <QtSql>
 #include <QUuid>
@@ -7,7 +7,7 @@
 #include "persistence/searchdao.h"
 #include "models/search.h"
 
-SearchDAO_Test::SearchDAO_Test()
+DroneSearchDAO_Test::DroneSearchDAO_Test()
 {
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
     projectShaeDatabase.setDatabaseName(QString("workstation/src/persistence/projectShae.db"));
@@ -22,28 +22,30 @@ SearchDAO_Test::SearchDAO_Test()
     }
 }
 
-SearchDAO_Test::~SearchDAO_Test()
+DroneSearchDAO_Test::~DroneSearchDAO_Test()
 {
     projectShaeDatabase.close();
 }
 
-void SearchDAO_Test::initTestCase()
+void DroneSearchDAO_Test::initTestCase()
 {
 }
 
-void SearchDAO_Test::cleanupTestCase()
+void DroneSearchDAO_Test::cleanupTestCase()
 {
 }
 
-void SearchDAO_Test::testSimpleSearchDAO()
+void DroneSearchDAO_Test::testSimpleDroneSearchDAO()
 {
-    qDebug() << QDir().absolutePath();
-    SearchDAO sd = SearchDAO(&projectShaeDatabase);
+    //SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
-    Search s = Search(QUuid::createUuid(),QTime(7,6));
+    //Search s = Search();
+    //s.searchID = QUuid::createUuid();
+    //s.start = QTime(7,6);
 
-    sd.dbSaveSearch(s);
+    //sd.dbSaveSearch(s);
 
     QVERIFY(true);
 
 }
+

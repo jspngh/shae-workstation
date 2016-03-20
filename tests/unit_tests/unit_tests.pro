@@ -20,14 +20,24 @@ HEADERS += \
     core/detectioncontroller_test.h \
     core/searchdao_test.h \
     core/json_messages_test.h \
-    core/detectioncontroller_test.h
+    core/detectioncontroller_test.h \
+    core/detectionresultdao_test.h \
+    core/dronedao_test.h \
+    core/dronesearchdao_test.h \
+    core/dronestatusdao_test.h \
+    core/videosequencedao_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
     main.cpp \
-    core/searchdao_test.cpp
+    core/searchdao_test.cpp \
+    core/detectionresultdao_test.cpp \
+    core/dronedao_test.cpp \
+    core/dronesearchdao_test.cpp \
+    core/dronestatusdao_test.cpp \
+    core/videosequencedao_test.cpp
 
 
 # c++11
