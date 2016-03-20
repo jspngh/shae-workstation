@@ -161,12 +161,6 @@ QMMapView::MapType QMMapView::mapType() const
     return d_ptr->fromJsMapType(res);
 }
 
-/** Returns the map's current visible region.
- * Corresponds to `getBounds()`. Due to the limitation in the Google Map
- * JavaScript API, this method works only after the first `regionChanged()`
- * signal is sent. The result of any invocation of this method before that is
- * undifined.
- */
 QGeoRectangle QMMapView::region() const
 {
     QVariantMap result = d_ptr->evaluateJavaScript("getMapBounds();").toMap();
@@ -249,14 +243,31 @@ void QMMapView::fitRegion(QGeoRectangle &region)
     d->evaluateJavaScript(js);
 }
 
+bool QMMapView::isSelectable() const
+{
+    return selectable;
+}
+
 void QMMapView::shiftKeyPressed(bool down)
 {
+    if(!selectable)
+        return;
+
     Q_D(QMMapView);
     if (down) {
         d->evaluateJavaScript("shiftKeyDown();");
     } else {
         d->evaluateJavaScript("shiftKeyUp();");
     }
+}
+
+void QMMapView::selectArea(QGeoRectangle &area)
+{
+    Q_D(QMMapView);
+    QString format = QString("selectAreaOnMap(%1, %2, %3, %4);");
+    QString js = format.arg(area.topLeft().latitude(), area.topLeft().latitude(),
+                            area.bottomRight().longitude(), area.bottomRight().longitude());
+    d->evaluateJavaScript(js);
 }
 
 void QMMapView::regionDidChangeTo(qreal north, qreal south,

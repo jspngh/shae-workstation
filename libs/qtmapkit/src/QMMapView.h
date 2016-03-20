@@ -41,34 +41,91 @@ public:
 
     QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
               QWidget *parent = 0);
+
+    /*!
+     * \brief Returns the display type of the map (e.g. satellite/road, ...)
+     */
     MapType mapType() const;
 
+    /*!
+     * \brief Returns the region of the map (i.e. the region that is visible on the map)
+     *
+     * Due to the limitation in the Google Map JavaScript API, this method
+     * works only after the first `regionChanged()` signal is sent. The result
+     * of any invocation of this method before that is undefined.
+     */
     QGeoRectangle region() const;
+
+    /*!
+     * \brief Returns the center at the coordinate of the map.
+     */
     QGeoCoordinate center() const;
 
+    /*!
+     * \brief Returns the zoom level of the map
+     */
     uint zoomLevel() const;
+
+    /*!
+     * \brief Returns the heading of the map (i.e. the angle of the direction you're taking)
+     */
     qreal heading() const;
+
+    /*!
+     * \brief Returns the tilt of the map (in degrees). Will be a value in [0,45]
+     */
     qreal tilt() const;
 
+    /*!
+     * \brief Returns whether an area can be selected on the map.
+     */
+    bool isSelectable() const;
+
+    /*!
+     * \brief Call this when the shift key is pressed
+     */
+    void shiftKeyPressed(bool down);
+
+public slots:
+    /*!
+     * \brief Sets the display type of the map (e.g. satellite imagery, roads, ...)
+     */
     void setMapType(MapType type);
 
+    /*!
+     * \brief Set the center of the map to the given coordinate.
+     */
     void setCenter(QGeoCoordinate center, bool animated = true);
+
+    /*!
+     * \brief Set the center of the map to the given address.
+     * Note: the map will use a best guess for the address' location.
+     */
     void setCenter(QString address, bool animated = true);
+
+    /*!
+     * \brief Sets the zoom level of the map.
+     */
     void setZoomLevel(uint zoom);
 
+    /*!
+     * \brief Translates and zooms the map to make the given region visible.
+     */
     void makeRegionVisible(QGeoRectangle &region);
+
+    /*!
+     * \brief Fits the map area to the given region.
+     */
     void fitRegion(QGeoRectangle &region);
 
-    void shiftKeyPressed(bool down);
+    /*!
+     * \brief Selects an area from topLeft to bottomRight on the map.
+     */
+    void selectArea(QGeoRectangle &area);
+
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
 //    void setTilt(qreal tile);
-
-//    ??? projection() const; get
-//    ??? streetView() const; get set
-//    QUrl draggableCursor(); get set
-//    QUrl draggingCursor(); get set
-//    bool useMapMarker() const; get set
 
 protected:
     void resizeEvent(QResizeEvent *);
@@ -81,7 +138,6 @@ signals:
     void centerChanged(QGeoCoordinate center);
     void headingChanged();
     void mapTypeChanged(MapType type);
-//    void projectionChanged();
     void tilesLoaded();
     void tilesChanged();
     void zoomLevelChanged(uint level);
@@ -121,6 +177,7 @@ protected slots:
     void selectedAreaWasDeleted();
 
 private:
+    bool selectable;
     QMMapViewPrivate *d_ptr;
 };
 

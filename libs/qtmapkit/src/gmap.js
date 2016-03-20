@@ -280,3 +280,13 @@ function fitMapToBounds(north, south, east, west)
     map.fitBounds(boundsFromCoordinates(north, south, east, west));
 }
 
+function selectAreaOnMap(topLeftLat, topLeftLong, bottomRightLat, bottomRightLong)
+{
+    selectionMode.createSelectedArea(
+        new google.maps.LatLngBounds(
+            { lat: topLeftLat, lng: topLeftLong },
+            { lat: bottomRightLat, lng: bottomRightLong }
+        )
+    );
+}
+
