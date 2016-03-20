@@ -26,6 +26,13 @@
 
 class QMMapViewPrivate;
 
+/*!
+ * \brief QMMapView provides a Google Maps-widget. It also providess extra
+ *        features, such as area selection.
+ * \warning Do not use the protected slots prefixed with "js" for your C++
+ *          code, as these are used internally and would result in an infinite
+ *          loop.
+ */
 class QMMapView : public QWidget
 {
     Q_OBJECT
@@ -159,22 +166,20 @@ signals:
 protected slots:
     void initializeMap();
     void insertNativeObject();
-    void regionDidChangeTo(qreal north, qreal south, qreal east, qreal west);
-    void centerDidChangeTo(qreal latitude, qreal longitude);
-    void mapTypeDidChangeTo(QString typeString);
-    // Mouse slots
-    void mouseDidClickAt(qreal latitude, qreal longitude);
-    void mouseDidDoubleClickAt(qreal latitude, qreal longitude);
-    void mouseDidRightClickAt(qreal latitude, qreal longitude);
-    void cursorDidMoveTo(qreal latitude, qreal longitude);
-    void cursorDidEnterTo(qreal latitude, qreal longitude);
-    void cursorDidLeaveFrom(qreal latitude, qreal longitude);
-    // Selected area slots
-    void selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
+    void jsRegionChangedTo(qreal north, qreal south, qreal east, qreal west);
+    void jsCenterChangedTo(qreal latitude, qreal longitude);
+    void jsMapTypeChangedTo(QString typeString);
+    void jsMouseClickedAt(qreal latitude, qreal longitude);
+    void jsMouseDoubleClickedAt(qreal latitude, qreal longitude);
+    void jsMouseRightClickedAt(qreal latitude, qreal longitude);
+    void jsMouseMovedTo(qreal latitude, qreal longitude);
+    void jsMouseEnteredAt(qreal latitude, qreal longitude);
+    void jsMouseLeftAt(qreal latitude, qreal longitude);
+    void jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
                                 qreal bottomRightLat, qreal bottomRightLong);
-    void selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
+    void jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
                                  qreal bottomRightLat, qreal bottomRightLong);
-    void selectedAreaWasDeleted();
+    void jsSelectedAreaDeleted();
 
 private:
     bool selectable;

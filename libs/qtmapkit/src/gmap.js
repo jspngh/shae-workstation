@@ -25,14 +25,14 @@ var selectionMode = {
             bounds: bounds
         });
 
-        qMapView.selectedAreaWasCreated(
+        qMapView.jsSelectedAreaCreated(
             bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
             bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
         );
     },
     editSelectedArea: function(bounds) {
         selectionMode.selectedArea.setBounds(bounds);
-        qMapView.selectedAreaDidChangeTo(
+        qMapView.jsSelectedAreaChanged(
             bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
             bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
         );
@@ -80,23 +80,23 @@ function initializeMap(lng, lat, type, zoom)
         var bounds = map.getBounds();
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();
-        qMapView.regionDidChangeTo(ne.lat(), sw.lat(), ne.lng(), sw.lng());
+        qMapView.jsRegionChangedTo(ne.lat(), sw.lat(), ne.lng(), sw.lng());
     });
     google.maps.event.addListener(map, "center_changed", function() {
         var center = map.getCenter();
-        qMapView.centerDidChangeTo(center.lat(), center.lng());
+        qMapView.jsCenterChangedTo(center.lat(), center.lng());
     });
     google.maps.event.addListener(map, "click", function(e) {
         var p = e.latLng;
-        qMapView.mouseDidClickAt(p.lat(), p.lng());
+        qMapView.jsMouseClickedAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "dblclick", function(e) {
         var p = e.latLng;
-        qMapView.mouseDidDoubleClickAt(p.lat(), p.lng());
+        qMapView.jsMouseDoubleClickedAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "rightclick", function(e) {
         var p = e.latLng;
-        qMapView.mouseDidRightClickAt(p.lat(), p.lng());
+        qMapView.jsMouseRightClickedAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "drag", function() {
         qMapView.mouseDragged();
@@ -114,11 +114,11 @@ function initializeMap(lng, lat, type, zoom)
         qMapView.mapBecameIdle();
     });
     google.maps.event.addListener(map, "maptypeid_changed", function() {
-        qMapView.mapTypeDidChangeTo(map.getMapTypeId());
+        qMapView.jsMapTypeChangedTo(map.getMapTypeId());
     });
     google.maps.event.addListener(map, "mousemove", function(e) {
         var p = e.latLng;
-        qMapView.cursorDidMoveTo(p.lat(), p.lng());
+        qMapView.jsMouseMovedTo(p.lat(), p.lng());
 
         if(selectionMode.keysPressed() && selectionMode.isSelecting) {
             bounds.extend(e.latLng);
@@ -142,11 +142,11 @@ function initializeMap(lng, lat, type, zoom)
     });
     google.maps.event.addListener(map, "mouseover", function(e) {
         var p = e.latLng;
-        qMapView.cursorDidEnterTo(p.lat(), p.lng());
+        qMapView.jsMouseEnteredAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "mouseout", function(e) {
         var p = e.latLng;
-        qMapView.cursorDidLeaveFrom(p.lat(), p.lng());
+        qMapView.jsMouseLeftAt(p.lat(), p.lng());
     });
     google.maps.event.addListener(map, "tilesloaded", function() {
         qMapView.tilesLoaded();

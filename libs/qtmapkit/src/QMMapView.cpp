@@ -270,54 +270,54 @@ void QMMapView::selectArea(QGeoRectangle &area)
     d->evaluateJavaScript(js);
 }
 
-void QMMapView::regionDidChangeTo(qreal north, qreal south,
+void QMMapView::jsRegionChangedTo(qreal north, qreal south,
                                   qreal east, qreal west)
 {
     emit regionChanged(QGeoRectangle(QGeoCoordinate(north, west), QGeoCoordinate(south, east)));
 }
 
-void QMMapView::centerDidChangeTo(qreal latitude, qreal longitude)
+void QMMapView::jsCenterChangedTo(qreal latitude, qreal longitude)
 {
     emit centerChanged(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::mapTypeDidChangeTo(QString typeString)
+void QMMapView::jsMapTypeChangedTo(QString typeString)
 {
     Q_D(QMMapView);
     emit mapTypeChanged(d->fromJsMapType(typeString));
 }
 
-void QMMapView::mouseDidClickAt(qreal latitude, qreal longitude)
+void QMMapView::jsMouseClickedAt(qreal latitude, qreal longitude)
 {
     emit mouseClicked(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::mouseDidDoubleClickAt(qreal latitude, qreal longitude)
+void QMMapView::jsMouseDoubleClickedAt(qreal latitude, qreal longitude)
 {
     emit mouseDoubleClicked(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::mouseDidRightClickAt(qreal latitude, qreal longitude)
+void QMMapView::jsMouseRightClickedAt(qreal latitude, qreal longitude)
 {
     emit mouseRightClicked(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::cursorDidMoveTo(qreal latitude, qreal longitude)
+void QMMapView::jsMouseMovedTo(qreal latitude, qreal longitude)
 {
     emit cursorMoved(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::cursorDidEnterTo(qreal latitude, qreal longitude)
+void QMMapView::jsMouseEnteredAt(qreal latitude, qreal longitude)
 {
     emit cursorEntered(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::cursorDidLeaveFrom(qreal latitude, qreal longitude)
+void QMMapView::jsMouseLeftAt(qreal latitude, qreal longitude)
 {
     emit cursorLeaved(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
+void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
                                        qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
@@ -327,7 +327,7 @@ void QMMapView::selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
     emit selectedAreaCreated(selectedArea);
 }
 
-void QMMapView::selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
+void QMMapView::jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
                                         qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
