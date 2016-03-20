@@ -29,10 +29,6 @@ QMAKE_CXXFLAGS += -std=c++11
 # Resources
 RESOURCES = application.qrc
 
-addFiles.sources = projectShae.db
-addFiles.path = ./src/persistence
-DEPLOYMENT += addFiles
-
 # Put subdirectories here
 include(ui/ui.pri)
 include(core/core.pri)
