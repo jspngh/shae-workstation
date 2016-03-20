@@ -12,6 +12,7 @@ DetectionController::DetectionController(Mediator *mediator, double fps, QObject
 
 void DetectionController::onProcessSequence(QString seq)
 {
+    std::cout << "onprocessequence started" << std::endl;
     // process a sequence
     cv::Mat frame;
     cv::VideoCapture capture = cv::VideoCapture(seq.toStdString());
@@ -47,6 +48,8 @@ void DetectionController::onProcessSequence(QString seq)
 }
 
 void DetectionController::onFinish(){
+    std::cout << "onfinish started" << std::endl;
+
     this->streaming = false;
 }
 
