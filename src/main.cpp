@@ -25,11 +25,10 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    Controller *controller = new Controller(&w);
-    controller->run();
+    Controller controller(&w);
+    controller.init();
 
-    int ret = a.exec();
-    return ret;
+    return a.exec();
 }
 
 // This is test code and should not be in main()

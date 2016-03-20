@@ -1,49 +1,68 @@
 #include "controller.h"
 #include <QUuid>
 
-Controller::Controller(MainWindow *window, QObject *parent) :
-    QThread(parent)
+Controller::Controller(MainWindow *window) :
 {
     mainWindow = window;
 
-    drones = new QSet<Drone *>();
+    search = new Search();
+
+    // create the mediator. Note: the same mediator object must be shared among all the components!
+    mediator = new Mediator();
+
+    // create drones
+    // TODO: drone info (IP, port, etc) should be set elsewhere
+    drones = new QList<Drone>();
+    QUuid droneId = QUuid::createUuid();
+    drones->append(Drone(mediator, droneId, 6331, "127.0.0.1", 0.0001));
+
+    // create controllers
+    detectionController = new DetectionController(mediator);
+    persistenceController = new Persistence(mediator);
+    pathLogicController = new SimplePathAlgorithm();
+
 }
 
 Controller::~Controller()
 {
+    // TODO: stop all the threads
+    delete mediator;
+    delete search;
+    delete drones;
+    delete detectionController;
+    delete persistenceController;
+    delete pathLogicController;
 }
 
-void Controller::run()
+void Controller::init()
 {
-    createMediator();
-    createPersistence();
-    createDrone();
-    createDetectionController();
-}
-
-void Controller::createMediator()
-{
-    mediator = new Mediator();
-    mainWindow->setMediator(mediator);
-}
-
-void Controller::createDetectionController()
-{
-    detectionController = new DetectionController(mediator);
     detectionController->moveToThread(&detectorThread);
+    persistenceController->moveToThread(&persistenceThread);
+    pathLogicController->moveToThread(&pathLogicThread);
+
+    detectorThread.start();
+    persistenceController.start();
+    pathLogicController.start();
+
+    mainWindow->getConfigWidget()->setController(this);
 }
 
-//! this should ideally be done by the communication module
-void Controller::createDrone()
+/*****************
+ *    Getters
+ *****************/
+
+Mediator *Controller::getMediator() const
 {
-    QUuid droneId = QUuid::createUuid();
-    Drone *drone = new Drone(mediator, droneId, 6331, "127.0.0.1", 0.0001);
-    drones->insert(drone);
+    return mediator;
 }
 
-void Controller::createPersistence()
+QList<Drone> *Controller::getDrones() const
 {
-    persistence = new Persistence(mediator);
-    persistence->moveToThread(&persistenceThread);
+    return drones;
+}
+
+Search *Controller::getSearch() const
+{
+    return search;
 }
 

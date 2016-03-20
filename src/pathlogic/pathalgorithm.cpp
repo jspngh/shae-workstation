@@ -1,13 +1,18 @@
 #include "pathalgorithm.h"
 
-PathAlgorithm::PathAlgorithm()
+PathAlgorithm::PathAlgorithm(Mediator *mediator, QObject *p)
+    : PathAlgorithm(QGeoCoordinate(0.0, 0.0), mediator)
 {
-    this->start = QGeoCoordinate(0.0, 0.0);
+
 }
 
-PathAlgorithm::PathAlgorithm(QGeoCoordinate start)
+PathAlgorithm::PathAlgorithm(QGeoCoordinate start, Mediator *mediator, QObject *p)
+    : QObject(p),
+      start(start),
+      mediator(mediator)
 {
-    this->start = start;
+    this->mediator->addSignal(this, SIGNAL(pathCalculated(Search*)), QString("pathCalculated(Search*)"));
+    this->mediator->addSlot(this, SLOT(onStartSearch(Search*)), QString("startSearch(Search*)"));
 }
 
 PathAlgorithm::~PathAlgorithm()
@@ -37,3 +42,12 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
 
 }
 
+PathAlgorithm::onStartSearch(Search *s)
+{
+    // TODO: for now, the drone width of the first drone is picked. This means there is no multidrone support.
+    QList<QGeoCoordinate> waypoints = this->calculateWaypoints(s->getArea(), s->getDroneList().at(0).getVisionWidth());
+    s->setWaypoints(waypoints);
+
+    // signal that the path is calculated
+    emit this->pathCalculated(s);
+}

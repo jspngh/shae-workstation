@@ -8,7 +8,8 @@
 #include <QMainWindow>
 #include <QMMapView.h>
 #include <QFile>
-#include "core/mediator.h"
+
+#include "core/controller.h"
 
 namespace Ui {
 class ConfigWidget;
@@ -23,13 +24,10 @@ public:
     ~ConfigWidget();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void setMediator(Mediator *mediator);
+    void setController(Core::Controller *value);
 
-private:
-    Ui::ConfigWidget *ui;
-    Mediator *mediator;
-    QMMapView *mapView;
-    void initializeMap();
+signals:
+    void startSearch(Search *s);
 
 public slots:
     void onMapLoaded();
@@ -41,6 +39,15 @@ private slots:
     void backButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
+
+private:
+    Ui::ConfigWidget *ui;
+    QMMapView *mapView;
+    Controller* controller;
+
+
+    void writeConfigToFile();
+    void initializeMap();
 };
 
 #endif // CONFIGWIDGET_H

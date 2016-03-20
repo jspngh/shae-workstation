@@ -24,7 +24,6 @@ public:
     WelcomeWidget *getWelcomeWidget();
     ConfigWidget *getConfigWidget();
     OverviewWidget *getOverviewWidget();
-    void setMediator(Mediator *mediator);
 
 private:
     Ui::MainWindow *ui;

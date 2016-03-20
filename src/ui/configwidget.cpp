@@ -82,10 +82,6 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
     QWidget::keyReleaseEvent(event);
 }
 
-void ConfigWidget::setMediator(Mediator *mediator)
-{
-}
-
 void ConfigWidget::initConfScreen(QString f)
 {
     QFile file(f);
@@ -130,7 +126,49 @@ void ConfigWidget::sliderChanged(int value)
     ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
 }
 
+void ConfigWidget::setController(Controller *value)
+{
+    controller = value;
+    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search*)), QString("startSearch(Search*)"));
+}
+
 void ConfigWidget::startButtonPush()
+{
+    Search *s = controller->getSearch();
+    // TODO: read the search area from the gui
+    QGeoRectangle area(QGeoCoordinate(12,12),QGeoCoordinate(12.5,12.5));
+    s->setArea(area);
+
+    // TODO: read the drones that will be used in the search
+    // for now, we pick every drone that is set in the controller
+    s->setDroneList(controller->getDrones());
+
+    emit startSearch(s);
+
+    ((QStackedWidget *) this->parent())->setCurrentIndex(2);
+}
+
+void ConfigWidget::backButtonPush()
+{
+    ((QStackedWidget *) this->parent())->setCurrentIndex(0);
+}
+
+void ConfigWidget::locateButtonPush()
+{
+    QString choice = ui->locateComboBox->currentText();
+    if (choice == "Location") {
+        mapView->setCenter(ui->locateField->text());
+    } else if (choice == "Coordinates") {
+        mapView->setCenter(QGeoCoordinate(
+                               ui->latitudeField->text().toDouble(),
+                               ui->longitudeField->text().toDouble()
+                           ));
+    } else {
+        //herpaderp, this shouldn't happen
+    }
+}
+
+void ConfigWidget::writeConfigToFile()
 {
     time_t t = time(0);
     struct tm *now = localtime(&t);
@@ -184,26 +222,4 @@ void ConfigWidget::startButtonPush()
 
     outfile.close();
 
-    ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
-
-void ConfigWidget::backButtonPush()
-{
-    ((QStackedWidget *) this->parent())->setCurrentIndex(0);
-}
-
-void ConfigWidget::locateButtonPush()
-{
-    QString choice = ui->locateComboBox->currentText();
-    if (choice == "Location") {
-        mapView->setCenter(ui->locateField->text());
-    } else if (choice == "Coordinates") {
-        mapView->setCenter(QGeoCoordinate(
-                               ui->latitudeField->text().toDouble(),
-                               ui->longitudeField->text().toDouble()
-                           ));
-    } else {
-        //herpaderp, this shouldn't happen
-    }
-}
-
