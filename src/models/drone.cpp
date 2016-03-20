@@ -182,7 +182,7 @@ QJsonDocument Drone::sendWaypoints()
     QJsonDocument jsondoc(json);
 
     // Send the json message
-    QString message = jsondoc.toJson(QJsonDocument::Indented);
+    QString message = jsondoc.toJson(QJsonDocument::Compact);
     droneConnection->droneRequest(serverIp, (quint16) portNr, message);
 
     return jsondoc;

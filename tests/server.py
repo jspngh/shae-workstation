@@ -18,8 +18,19 @@ while True:
     if length is not None:
         buffersize = struct.unpack(">I", length)[0]
         # print buffersize
-    data = client.recv(buffersize)  # buffer size is 1024 bytes
-    print "received message:", data
+    data = client.recv(buffersize)
+    # print "received message:{0}".format(data)
+    packet = json.loads(data)  # parse the Json we received
+
+    if 'MessageType' not in packet:  # every packet should have a MessageType field
+        raise ValueError
+    if 'Message' not in packet:  # every packet should have a Message field
+        raise ValueError
+
+    message_type = packet['MessageType']  # the 'message type' attribute tells us to which class of packet this packet belongs
+    message = packet['Message']           # the 'message' attribute tells what packet it is, within it's class
+    print message
+
     response = "Roger that golden eagle"
     print "responding"
     # client.send(format(len(response), '#04x') + response)
