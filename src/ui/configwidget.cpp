@@ -83,6 +83,10 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
     QWidget::keyReleaseEvent(event);
 }
 
+void ConfigWidget::setMediator(Mediator *mediator)
+{
+}
+
 void ConfigWidget::initConfScreen(QString f)
 {
     QFile file(f);

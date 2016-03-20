@@ -1,7 +1,8 @@
 #include "detectioncontroller.h"
 #include <QThread>
 
-DetectionController::DetectionController(QObject *parent): QObject(parent)
+DetectionController::DetectionController(Mediator *mediator, QObject *parent)
+    : QObject(parent)
 {
 }
 

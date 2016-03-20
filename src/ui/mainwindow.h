@@ -5,12 +5,13 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QStackedWidget>
+#include "core/mediator.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
 
 namespace Ui {
-    class MainWindow;
+class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -20,9 +21,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    WelcomeWidget* getWelcomeWidget();
-    ConfigWidget* getConfigWidget();
-    OverviewWidget* getOverviewWidget();
+    WelcomeWidget *getWelcomeWidget();
+    ConfigWidget *getConfigWidget();
+    OverviewWidget *getOverviewWidget();
+    void setMediator(Mediator *mediator);
 
 private:
     Ui::MainWindow *ui;

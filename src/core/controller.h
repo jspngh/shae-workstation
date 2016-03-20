@@ -4,14 +4,14 @@
 #include <QThread>
 #include <QSet>
 #include "mediator.h"
-#include "communication/communication.h"
+#include "communication/droneconnection.h"
 #include "ui/mainwindow.h"
 #include "persistence/persistence.h"
 #include "models/drone.h"
 #include "detection/detectioncontroller.h"
 
 namespace Core {
-    class Controller;
+class Controller;
 }
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
@@ -24,12 +24,10 @@ private:
     MainWindow *mainWindow;
     Mediator *mediator;
     Persistence *persistence;
-    Communication *communication;
     DetectionController *detectionController;
-    QSet<Drone*> *drones;
+    QSet<Drone *> *drones;
 
-    QThread mediatorThread;
-    QThread communicationThread;
+    QThread droneThread;
     QThread detectorThread;
     QThread persistenceThread;
 
@@ -43,7 +41,6 @@ public:
 
 private:
     void createMediator();
-    void createCommunication();
     void createDrone();
     void createDetectionController();
     void createPersistence();

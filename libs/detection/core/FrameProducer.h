@@ -7,7 +7,8 @@
 #include <string>
 
 // Virtual base class (Interface) for classes producing frames
-class FrameProducer {
+class FrameProducer
+{
 public:
     FrameProducer();
     virtual ~FrameProducer();
