@@ -15,7 +15,6 @@ int main(int argc, char *argv[])
     DetectionController_Test test3;
     Mediator_Test test4;
 
-
     QTest::qExec(&test1);
     QTest::qExec(&test2);
     QTest::qExec(&test3);

@@ -31,6 +31,21 @@ sudo make install
 sudo /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 ```
+In order to capture the drone streams, VLC and the corresponding library LibVLC need to be installed as well:
+```
+sudo apt-get install vlc libvlc-dev
+```
+To allow for testing, gstreamer-1.0 needs to be installed:
+```
+sudo apt-get install python-gi python3-gi \
+    gstreamer1.0-tools \
+    gir1.2-gstreamer-1.0 \
+    gir1.2-gst-plugins-base-1.0 \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-ugly \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-libav
+```
 
 
 ## How to get started
