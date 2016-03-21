@@ -135,7 +135,7 @@ void QMMapView::initializeMap()
 {
     Q_D(QMMapView);
     QGeoCoordinate &center = d->initialValues.centerCoordinate;
-    QString js = QString("mapKit.initialize(%1, %2, %3, %4);").arg(
+    QString js = QString("initialize(%1, %2, %3, %4);").arg(
                      QString::number(center.longitude()),
                      QString::number(center.latitude()),
                      d->toJsMapType(d->initialValues.mapType),
@@ -204,7 +204,7 @@ void QMMapView::setMapType(MapType type)
 void QMMapView::setCenter(QGeoCoordinate center, bool animated)
 {
     Q_D(QMMapView);
-    QString format = QString("mapKit.setMapCenter(%1, %2, %3);");
+    QString format = QString("mapKit.setCenter(%1, %2, %3);");
     QString js = format.arg(QString::number(center.latitude()),
                             QString::number(center.longitude()),
                             animated ? "true" : "false");
@@ -214,7 +214,7 @@ void QMMapView::setCenter(QGeoCoordinate center, bool animated)
 void QMMapView::setCenter(QString address, bool animated)
 {
     Q_D(QMMapView);
-    QString format = QString("mapKit.setMapCenterByAddress(\"%1\", %2);");
+    QString format = QString("mapKit.setCenterByAddress(\"%1\", %2);");
     QString js = format.arg(address,
                             animated ? "true" : "false");
     d->evaluateJavaScript(js);
@@ -319,7 +319,7 @@ void QMMapView::jsMouseLeftAt(qreal latitude, qreal longitude)
 }
 
 void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
-                                       qreal bottomRightLat, qreal bottomRightLong)
+                                      qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
                                      QGeoCoordinate(topLeftLat, topLeftLong),
@@ -329,7 +329,7 @@ void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
 }
 
 void QMMapView::jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
-                                        qreal bottomRightLat, qreal bottomRightLong)
+                                      qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
                                      QGeoCoordinate(topLeftLat, topLeftLong),

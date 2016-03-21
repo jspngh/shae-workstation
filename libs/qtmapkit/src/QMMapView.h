@@ -176,9 +176,9 @@ protected slots:
     void jsMouseEnteredAt(qreal latitude, qreal longitude);
     void jsMouseLeftAt(qreal latitude, qreal longitude);
     void jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
-                                qreal bottomRightLat, qreal bottomRightLong);
+                               qreal bottomRightLat, qreal bottomRightLong);
     void jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
-                                 qreal bottomRightLat, qreal bottomRightLong);
+                               qreal bottomRightLat, qreal bottomRightLong);
     void jsSelectedAreaDeleted();
 
 private:
