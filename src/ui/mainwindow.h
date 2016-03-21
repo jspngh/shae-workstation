@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
+#include "ui_mainwindow.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
@@ -23,7 +24,7 @@ public:
     OverviewWidget *getOverviewWidget();
 
 private:
-    MainWindow *ui;
+    Ui::MainWindow *ui;
     WelcomeWidget *welcomeWidget;
     ConfigWidget *configWidget;
     OverviewWidget *overviewWidget;

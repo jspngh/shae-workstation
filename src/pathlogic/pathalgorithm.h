@@ -5,9 +5,11 @@
 
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
+
 #include "models/drone.h"
 #include "models/search.h"
-#include "core/mediator.h"
+
+class Controller;
 
 
 enum Direction {
@@ -23,8 +25,8 @@ public:
 
     QGeoCoordinate start; //!< We will need this to efficiently divide search areas over the available drones, and to plan the beginning of the path as close to the start as possible.
 
-    PathAlgorithm(Mediator *mediator, QObject *p = 0);
-    PathAlgorithm(QGeoCoordinate start, Mediator *mediator, QObject *p = 0);
+    PathAlgorithm(Controller *ctrl, QObject *p = 0);
+    PathAlgorithm(Controller *ctrl, QGeoCoordinate start, QObject *p = 0);
     ~PathAlgorithm();
 
     //! calculates waypointcoordinates to cover a certain area, when given a certain visionwidth.
@@ -48,7 +50,7 @@ signals:
 
 
 private:
-    Mediator *mediator;
+    Controller *controller;
 
 };
 

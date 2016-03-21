@@ -27,7 +27,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm()
     //initiate area, start point and algorithm.
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(10.0, 0.0), QGeoCoordinate(0.0, 10.0));
     QGeoCoordinate start = QGeoCoordinate(2.0, 2.0);
-    SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
+    SimplePathAlgorithm algorithm(start);
     QList<QGeoCoordinate> calculatedList = algorithm.calculateWaypoints(area, 2.0);
 
     //Create testlist
@@ -68,7 +68,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm2()
     //initiate area, start point and algorithm.
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(1.0, -1.0), QGeoCoordinate(-1.0, 1.0));
     QGeoCoordinate start = QGeoCoordinate(20.0, 20.0);
-    SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
+    SimplePathAlgorithm algorithm(start);
     QList< QGeoCoordinate> calculatedList = algorithm.calculateWaypoints(area, 0.3);
 
     //Create testlist
@@ -115,7 +115,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
     //initiate area, start point and algorithm.
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(1.0, -1.0), QGeoCoordinate(-1.0, 1.0));
     QGeoCoordinate start =  QGeoCoordinate(-20.0, 20.0);
-    SimplePathAlgorithm algorithm = SimplePathAlgorithm(start);
+    SimplePathAlgorithm algorithm(start);
 
     QList< QGeoCoordinate> calculatedList = algorithm.calculateWaypoints(area, 0.6);
 
@@ -164,7 +164,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
     drones->push_back(droneB);
 
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(8.0, 0.0), QGeoCoordinate(0.0, 8.0));
-    SimplePathAlgorithm algorithm = SimplePathAlgorithm(QGeoCoordinate(1.0, 1.0));
+    SimplePathAlgorithm algorithm(QGeoCoordinate(1.0, 1.0));
     algorithm.setWaypointsForDrones(area, drones);
     QList<QGeoCoordinate> testList1 = QList<QGeoCoordinate>();
     QList<QGeoCoordinate> testList2 = QList<QGeoCoordinate>();
@@ -236,7 +236,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
     drones->push_back(droneB);
 
     QGeoRectangle area = QGeoRectangle(QGeoCoordinate(8.0, 0.0), QGeoCoordinate(0.0, 8.0));
-    SimplePathAlgorithm algorithm = SimplePathAlgorithm(QGeoCoordinate(5.0, 5.0));
+    SimplePathAlgorithm algorithm(QGeoCoordinate(5.0, 5.0));
     algorithm.setWaypointsForDrones(area, drones);
     QList<QGeoCoordinate> testList1 = QList<QGeoCoordinate>();
     QList<QGeoCoordinate> testList2 = QList<QGeoCoordinate>();

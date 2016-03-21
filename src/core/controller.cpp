@@ -17,9 +17,9 @@ Controller::Controller(MainWindow *window)
     drones->append(Drone(mediator, droneId, 6331, "127.0.0.1", 0.0001));
 
     // create controllers
-    detectionController = new DetectionController(mediator);
-    persistenceController = new Persistence(mediator);
-    pathLogicController = new SimplePathAlgorithm();
+    //detectionController = new DetectionController(mediator);
+    //persistenceController = new Persistence(mediator);
+    pathLogicController = new SimplePathAlgorithm(this);
 
 }
 
@@ -29,19 +29,19 @@ Controller::~Controller()
     delete mediator;
     delete search;
     delete drones;
-    delete detectionController;
-    delete persistenceController;
+    // delete detectionController;
+    // delete persistenceController;
     delete pathLogicController;
 }
 
 void Controller::init()
 {
-    detectionController->moveToThread(&detectorThread);
-    persistenceController->moveToThread(&persistenceThread);
+    // detectionController->moveToThread(&detectorThread);
+    // persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
 
-    detectorThread.start();
-    persistenceThread.start();
+    // detectorThread.start();
+    // persistenceThread.start();
     pathLogicThread.start();
 
     mainWindow->getConfigWidget()->setController(this);

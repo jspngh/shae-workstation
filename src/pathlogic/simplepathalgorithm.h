@@ -8,10 +8,12 @@
 class SimplePathAlgorithm : public PathAlgorithm
 {
 public:
-    //! The default constructor that sets the start Coordinate from the superclass equal to (0,0)
-    SimplePathAlgorithm();
-    //! Constructor that sets the start Coordinate from the superclass equal to the parameter.
+    // this constructor is only used for unit testing the component
     SimplePathAlgorithm(QGeoCoordinate start);
+    //! The constructor that sets the start Coordinate from the superclass equal to (0,0)
+    SimplePathAlgorithm(Controller *c);
+    //! Constructor that sets the start Coordinate from the superclass equal to the parameter.
+    SimplePathAlgorithm(Controller *c, QGeoCoordinate start);
     //! The default destructor.
     ~SimplePathAlgorithm();
 

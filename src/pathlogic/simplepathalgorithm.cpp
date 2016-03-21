@@ -1,13 +1,21 @@
 #include "simplepathalgorithm.h"
 
-SimplePathAlgorithm::SimplePathAlgorithm()
+SimplePathAlgorithm::SimplePathAlgorithm(QGeoCoordinate start)
+    : SimplePathAlgorithm(NULL, start)
 {
-    this->start = QGeoCoordinate(0.0, 0.0);
+
 }
 
-SimplePathAlgorithm::SimplePathAlgorithm(QGeoCoordinate start)
+SimplePathAlgorithm::SimplePathAlgorithm(Controller *c):
+    PathAlgorithm(c)
 {
-    this->start = start;
+
+}
+
+SimplePathAlgorithm::SimplePathAlgorithm(Controller *c, QGeoCoordinate start):
+    PathAlgorithm(c, start)
+{
+
 }
 
 SimplePathAlgorithm::~SimplePathAlgorithm()

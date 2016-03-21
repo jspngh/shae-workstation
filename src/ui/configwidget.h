@@ -9,11 +9,13 @@
 #include <QMMapView.h>
 #include <QFile>
 
+#include "models/search.h"
+
 class Controller;
 
-//namespace Ui {
-//class ConfigWidget;
-//}
+namespace Ui {
+class ConfigWidget;
+}
 
 class ConfigWidget : public QWidget
 {
@@ -41,7 +43,7 @@ private slots:
     void sliderChanged(int);
 
 private:
-    ConfigWidget *ui;
+    Ui::ConfigWidget *ui;
     QMMapView *mapView;
     Controller* controller;
 

@@ -136,6 +136,7 @@ void ConfigWidget::setController(Controller *value)
 
 void ConfigWidget::startButtonPush()
 {
+    // TODO check that controller not null
     Search *s = controller->getSearch();
     // TODO: read the search area from the gui
     QGeoRectangle area(QGeoCoordinate(12,12),QGeoCoordinate(12.5,12.5));
