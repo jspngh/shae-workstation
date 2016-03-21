@@ -9,6 +9,8 @@
 #include <QGeoRectangle>
 #include <QDebug>
 
+#include "core/controller.h"
+
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConfigWidget)

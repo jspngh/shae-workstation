@@ -1,7 +1,7 @@
 #include "controller.h"
 #include <QUuid>
 
-Controller::Controller(MainWindow *window) :
+Controller::Controller(MainWindow *window)
 {
     mainWindow = window;
 
@@ -41,8 +41,8 @@ void Controller::init()
     pathLogicController->moveToThread(&pathLogicThread);
 
     detectorThread.start();
-    persistenceController.start();
-    pathLogicController.start();
+    persistenceThread.start();
+    pathLogicThread.start();
 
     mainWindow->getConfigWidget()->setController(this);
 }

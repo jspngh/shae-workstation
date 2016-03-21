@@ -9,11 +9,11 @@
 #include <QMMapView.h>
 #include <QFile>
 
-#include "core/controller.h"
+class Controller;
 
-namespace Ui {
-class ConfigWidget;
-}
+//namespace Ui {
+//class ConfigWidget;
+//}
 
 class ConfigWidget : public QWidget
 {
@@ -24,7 +24,7 @@ public:
     ~ConfigWidget();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void setController(Core::Controller *value);
+    void setController(Controller *value);
 
 signals:
     void startSearch(Search *s);
@@ -41,7 +41,7 @@ private slots:
     void sliderChanged(int);
 
 private:
-    Ui::ConfigWidget *ui;
+    ConfigWidget *ui;
     QMMapView *mapView;
     Controller* controller;
 

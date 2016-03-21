@@ -12,7 +12,7 @@ class Search
 {
 public:
     Search();
-    Search(QList<Drone> droneList, QGeoRectangle area);
+    Search(QList<Drone> *droneList, QGeoRectangle area);
 
     QTime getStartTime() const;
 

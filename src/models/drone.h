@@ -46,6 +46,12 @@ public:
     //! Destructor
     ~Drone();
 
+    //! Copy constructor
+    Drone(const Drone& d)
+    {
+
+    }
+
 
     /***********************
     Getters/Setters

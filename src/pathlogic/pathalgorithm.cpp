@@ -42,12 +42,13 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
 
 }
 
-PathAlgorithm::onStartSearch(Search *s)
+void PathAlgorithm::onStartSearch(Search *s)
 {
     // TODO: for now, the drone width of the first drone is picked. This means there is no multidrone support.
-    QList<QGeoCoordinate> waypoints = this->calculateWaypoints(s->getArea(), s->getDroneList().at(0).getVisionWidth());
+    QList<QGeoCoordinate> waypoints = calculateWaypoints(s->getArea(), (s->getDroneList()->at(0)).getVisionWidth());
+
     s->setWaypoints(waypoints);
 
     // signal that the path is calculated
-    emit this->pathCalculated(s);
+    emit pathCalculated(s);
 }

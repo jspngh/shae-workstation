@@ -7,7 +7,7 @@ Search::Search()
     // TODO set time
 }
 
-Search::Search(QList<Drone> droneList, QGeoRectangle area)
+Search::Search(QList<Drone> *droneList, QGeoRectangle area)
     : searchID(QUuid::createUuid()),
       droneList(droneList),
       area(area)
