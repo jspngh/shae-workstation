@@ -1,25 +1,31 @@
 #include "pathalgorithm.h"
 #include "core/controller.h"
 
-PathAlgorithm::PathAlgorithm(Controller *controller, QObject *p)
-    : PathAlgorithm(controller, QGeoCoordinate(0.0, 0.0))
+PathAlgorithm::PathAlgorithm(QObject *p)
+    : PathAlgorithm(QGeoCoordinate(0.0, 0.0))
 {
 
 }
 
-PathAlgorithm::PathAlgorithm(Controller *c, QGeoCoordinate start, QObject *p)
+PathAlgorithm::PathAlgorithm(QGeoCoordinate start, QObject *p)
     : QObject(p),
-      start(start),
-      controller(c)
+      start(start)
 {
-    controller->getMediator()->addSignal(this, SIGNAL(pathCalculated(Search*)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSlot(this, SLOT(onStartSearch(Search*)), QString("startSearch(Search*)"));
+
 }
 
 PathAlgorithm::~PathAlgorithm()
 {
 
 }
+
+void PathAlgorithm::setController(Controller *value)
+{
+    controller = value;
+    controller->getMediator()->addSignal(this, SIGNAL(pathCalculated(Search*)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSlot(this, SLOT(onStartSearch(Search*)), QString("startSearch(Search*)"));
+}
+
 
 QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direction, double distance)
 {
@@ -45,11 +51,17 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
 
 void PathAlgorithm::onStartSearch(Search *s)
 {
-    // TODO: for now, the drone width of the first drone is picked. This means there is no multidrone support.
-   // QList<QGeoCoordinate> waypoints = calculateWaypoints(s->getArea(), (s->getDroneList()->at(0)).getVisionWidth());
+    qDebug() << "PathAlgorithm::onStartSearch(Search *s)";
+    // TODO: for now, the drone visionwidth of the first drone is picked. This means there is no multidrone support.
 
-    s->setWaypoints(0);
+    QGeoRectangle r = s->getArea();
+    //double visionWidth = s->getDroneList()->at(0).getVisionWidth();
+    QList<QGeoCoordinate> *waypoints = calculateWaypoints(r, 0.1);
+
+    s->setWaypoints(waypoints);
 
     // signal that the path is calculated
     emit pathCalculated(s);
+    qDebug() << "PathAlgorithm::pathCalculated(Search *s)";
 }
+

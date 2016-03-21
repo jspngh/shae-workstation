@@ -1,7 +1,8 @@
 #include "controller.h"
 #include <QUuid>
 
-Controller::Controller(MainWindow *window)
+Controller::Controller(MainWindow *window, QObject *p)
+    : QObject(p)
 {
     mainWindow = window;
 
@@ -19,7 +20,7 @@ Controller::Controller(MainWindow *window)
     // create controllers
     //detectionController = new DetectionController(mediator);
     //persistenceController = new Persistence(mediator);
-    pathLogicController = new SimplePathAlgorithm(this);
+    pathLogicController = new SimplePathAlgorithm();
 
 }
 
@@ -45,6 +46,7 @@ void Controller::init()
     pathLogicThread.start();
 
     mainWindow->getConfigWidget()->setController(this);
+    pathLogicController->setController(this);
 }
 
 /*****************

@@ -1,19 +1,13 @@
 #include "simplepathalgorithm.h"
 
-SimplePathAlgorithm::SimplePathAlgorithm(QGeoCoordinate start)
-    : SimplePathAlgorithm(NULL, start)
+SimplePathAlgorithm::SimplePathAlgorithm()
+    : SimplePathAlgorithm(QGeoCoordinate(0.0, 0.0))
 {
 
 }
 
-SimplePathAlgorithm::SimplePathAlgorithm(Controller *c):
-    PathAlgorithm(c)
-{
-
-}
-
-SimplePathAlgorithm::SimplePathAlgorithm(Controller *c, QGeoCoordinate start):
-    PathAlgorithm(c, start)
+SimplePathAlgorithm::SimplePathAlgorithm(QGeoCoordinate start):
+    PathAlgorithm(start)
 {
 
 }
@@ -22,10 +16,10 @@ SimplePathAlgorithm::~SimplePathAlgorithm()
 {
 }
 
-QList<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area, double visionWidth)
+QList<QGeoCoordinate> *SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area, double visionWidth)
 {
     //create empty list of Coordinates that will contain the waypoints
-    QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
+    QList<QGeoCoordinate> *list = new QList<QGeoCoordinate>();
 
     //calculate distances from the start coordinate to each corner of the rectangular area
     double d1 = start.distanceTo(area.topRight());
@@ -36,47 +30,47 @@ QList<QGeoCoordinate> SimplePathAlgorithm::calculateWaypoints(QGeoRectangle area
     //Set closest corner as first waypoint.
     double min = std::min(std::min(d1, d2), std::min(d3, d4));
     if (min == d1)
-        list.push_back(area.topRight());
+        list->push_back(area.topRight());
     else if (min == d2)
-        list.push_back(area.topLeft());
+        list->push_back(area.topLeft());
     else if (min == d3)
-        list.push_back(area.bottomRight());
+        list->push_back(area.bottomRight());
     else
-        list.push_back(area.bottomLeft());
+        list->push_back(area.bottomLeft());
 
     //go up until most north coordinate reached if started south
-    if (list.back().latitude() == area.bottomRight().latitude())
-        list.push_back(QGeoCoordinate(area.topRight().latitude(), list.back().longitude()));
+    if (list->back().latitude() == area.bottomRight().latitude())
+        list->push_back(QGeoCoordinate(area.topRight().latitude(), list->back().longitude()));
     else
         //go south because started north
-        list.push_back(QGeoCoordinate(area.bottomRight().latitude(), list.back().longitude()));
+        list->push_back(QGeoCoordinate(area.bottomRight().latitude(), list->back().longitude()));
 
     //then try to go 1 step(=visionWidth) in direction (=first west). If going west exceeds the most western coordinate of the rectangle, set direction to east and go 1 step east.
     Direction direction = WEST;
-    if (PathAlgorithm::goDirection((list.back()), direction, visionWidth).longitude() < area.topLeft().longitude())
+    if (PathAlgorithm::goDirection((list->back()), direction, visionWidth).longitude() < area.topLeft().longitude())
         direction = EAST;
-    list.push_back(PathAlgorithm::goDirection((list.back()), direction, visionWidth));
+    list->push_back(PathAlgorithm::goDirection((list->back()), direction, visionWidth));
 
     //Go all the way south, until most south coordinate reached. Go 1 step in direction again.
     //Go north again, and so forth, until all area is covered.
 
-    while (list.back().longitude() < area.topRight().longitude() && list.back().longitude() > area.topLeft().longitude()) {
+    while (list->back().longitude() < area.topRight().longitude() && list->back().longitude() > area.topLeft().longitude()) {
         //go south or north depending on location
-        if (list.back().latitude() == area.topRight().latitude())
-            list.push_back(QGeoCoordinate(area.bottomRight().latitude(), list.back().longitude()));
+        if (list->back().latitude() == area.topRight().latitude())
+            list->push_back(QGeoCoordinate(area.bottomRight().latitude(), list->back().longitude()));
         else
-            list.push_back(QGeoCoordinate(area.topRight().latitude(), list.back().longitude()));
+            list->push_back(QGeoCoordinate(area.topRight().latitude(), list->back().longitude()));
         //go direction
-        list.push_back(PathAlgorithm::goDirection((list.back()), direction, visionWidth));
+        list->push_back(PathAlgorithm::goDirection((list->back()), direction, visionWidth));
     }
 
     //Go south or north for the last time
-    if (list.back().latitude() == area.topRight().latitude())
+    if (list->back().latitude() == area.topRight().latitude())
         //Go south
-        list.push_back(QGeoCoordinate(area.bottomRight().latitude(), list.back().longitude()));
+        list->push_back(QGeoCoordinate(area.bottomRight().latitude(), list->back().longitude()));
     else
         //Go north
-        list.push_back(QGeoCoordinate(area.topRight().latitude(), list.back().longitude()));
+        list->push_back(QGeoCoordinate(area.topRight().latitude(), list->back().longitude()));
 
 
     //return list

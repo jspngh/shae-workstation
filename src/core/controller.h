@@ -21,11 +21,12 @@
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
  */
-class Controller
+class Controller: public QObject
 {
+    Q_OBJECT
 
 public:
-    Controller(MainWindow *window);
+    Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
     Mediator *getMediator() const;

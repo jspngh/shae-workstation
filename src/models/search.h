@@ -14,6 +14,8 @@ public:
     Search();
     Search(QList<Drone> *droneList, QGeoRectangle area);
 
+    ~Search();
+
     QTime getStartTime() const;
 
     QGeoRectangle getArea() const;

@@ -15,6 +15,12 @@ Search::Search(QList<Drone> *droneList, QGeoRectangle area)
     // TODO set time
 }
 
+Search::~Search()
+{
+    delete droneList;
+    delete waypoints;
+}
+
 QTime Search::getStartTime() const
 {
     return startTime;

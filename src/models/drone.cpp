@@ -53,19 +53,19 @@ QString Drone::getServerIp()
     return this->serverIp;
 }
 
-QList<QGeoCoordinate> &Drone::getWaypoints()
+QList<QGeoCoordinate>* Drone::getWaypoints()
 {
     return this->waypoints;
 }
 
-void Drone::setWaypoints(const QList<QGeoCoordinate> &waypoints)
+void Drone::setWaypoints(QList<QGeoCoordinate> *waypoints)
 {
     this->waypoints = waypoints;
 }
 
 void Drone::addWaypoint(const QGeoCoordinate &waypoint)
 {
-    this->waypoints.push_back(waypoint);
+    this->waypoints->push_back(waypoint);
 }
 
 double Drone::getVisionWidth()
@@ -164,7 +164,7 @@ QJsonDocument Drone::sendWaypoints()
 
     QJsonArray coordinates = QJsonArray();
     int i = 0;
-    foreach (const QGeoCoordinate waypoint, this->waypoints) {
+    foreach (const QGeoCoordinate waypoint, *waypoints) {
         i++;
         QJsonObject coordinate = QJsonObject();
 

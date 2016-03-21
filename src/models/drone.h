@@ -62,9 +62,9 @@ public:
 
     QString getServerIp();
 
-    QList<QGeoCoordinate> &getWaypoints();
+    QList<QGeoCoordinate>* getWaypoints();
 
-    void setWaypoints(const QList<QGeoCoordinate> &waypoints);
+    void setWaypoints(QList<QGeoCoordinate> *waypoints);
 
     void addWaypoint(const QGeoCoordinate &waypoint);
 
@@ -136,7 +136,7 @@ private:
     int portNr; /*!< The port number that will be used to connect to the actual drone */
     QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
 
-    QList<QGeoCoordinate> waypoints; //!< Keeps the list of waypoints the drone needs to fly.
+    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
 
     //!< This attribute tells how wide the vision of the drone is.
     //!< This is useful to calculate the waypoints.

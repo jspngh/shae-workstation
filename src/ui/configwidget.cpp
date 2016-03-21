@@ -136,17 +136,22 @@ void ConfigWidget::setController(Controller *value)
 
 void ConfigWidget::startButtonPush()
 {
-    // TODO check that controller not null
-    Search *s = controller->getSearch();
-    // TODO: read the search area from the gui
-    QGeoRectangle area(QGeoCoordinate(12,12),QGeoCoordinate(12.5,12.5));
-    s->setArea(area);
+    if(controller){
+        Search *s = controller->getSearch();
 
-    // TODO: read the drones that will be used in the search
-    // for now, we pick every drone that is set in the controller
-    s->setDroneList(controller->getDrones());
+        // TODO: read the search area from the gui
+        QGeoRectangle area(QGeoCoordinate(12,12),QGeoCoordinate(12.5,12.5));
+        s->setArea(area);
 
-    emit startSearch(s);
+        // TODO: read the drones that will be used in the search
+        // for now, we pick every drone that is set in the controller
+        s->setDroneList(controller->getDrones());
+
+        emit startSearch(s);
+
+        qDebug() << "startSearch";
+    }
+
 
     ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
