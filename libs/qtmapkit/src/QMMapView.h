@@ -130,6 +130,14 @@ public slots:
      */
     void selectArea(QGeoRectangle &area);
 
+    /*!
+     * \brief Adds a marker on the given coordinate.
+     * \param name     The name of marker type
+     * \param markerId The id of the maerker
+     * \param point    The coordinate of the marker
+     */
+    void addMarker(QString listName, uint markerId, QGeoCoordinate point);
+
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
 //    void setTilt(qreal tile);

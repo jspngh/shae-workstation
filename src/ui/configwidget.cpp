@@ -48,7 +48,7 @@ void ConfigWidget::initializeMap()
                             true);
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
-    connect(mapView, SIGNAL(tilesLoaded()),
+    connect(mapView, SIGNAL(mapLoaded()),
             this, SLOT(onMapLoaded()));
 }
 
@@ -61,8 +61,8 @@ void ConfigWidget::onMapLoaded()
 void ConfigWidget::onMapFailedToLoad()
 {
     ui->searchAreaLoadingLabel->setText(QString(
-                                            "Error loading map.\nPlease check your internet connection."
-                                        ));
+        "Error loading map.\nPlease check your internet connection."
+    ));
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)

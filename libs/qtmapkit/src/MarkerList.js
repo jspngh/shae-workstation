@@ -19,7 +19,6 @@
     MarkerList.prototype.add = function(id, latitude, longitude) {
         var marker = new google.maps.Marker({
             map: this.map,
-            title: id,
             position: new google.maps.LatLng(latitude, longitude)
         });
         this.markers[id] = marker;

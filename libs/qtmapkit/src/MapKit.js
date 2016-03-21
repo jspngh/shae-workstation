@@ -12,6 +12,8 @@
         this.map = this.initializeMap(lng, lat, type, zoom);
         this.geocoder = new google.maps.Geocoder();
         this.mapSelection = new MapSelection(this.map);
+        this.markerLists = {};
+
         this.addEventListeners();
     };
 
@@ -209,6 +211,22 @@
     MapKit.prototype.shiftKeyUp = function() {
         this.mapSelection.shiftPressed = false;
     };
+
+    MapKit.prototype.addMarkerList = function(name, icon) {
+        this.markerLists[name] = new MarkerList(this.map, icon);
+    }
+
+    MapKit.prototype.getMarkerList = function(name) {
+        if(!this.markerLists[name]) {
+            this.addMarkerList(name);
+        }
+
+        return this.markerLists[name];
+    }
+
+    MapKit.prototype.removeMarkerList = function(name) {
+        delete this.markerLists[name];
+    }
 
     window.MapKit = MapKit;
 })();

@@ -173,7 +173,7 @@ QGeoRectangle QMMapView::region() const
 
 QGeoCoordinate QMMapView::center() const
 {
-    QVariantMap result = d_ptr->evaluateJavaScript("mapKit.getMapCenter();").toMap();
+    QVariantMap result = d_ptr->evaluateJavaScript("mapKit.getCenter();").toMap();
     return QGeoCoordinate(result["latitude"].toReal(),
                           result["longitude"].toReal());
 }
@@ -215,8 +215,7 @@ void QMMapView::setCenter(QString address, bool animated)
 {
     Q_D(QMMapView);
     QString format = QString("mapKit.setCenterByAddress(\"%1\", %2);");
-    QString js = format.arg(address,
-                            animated ? "true" : "false");
+    QString js = format.arg(address).arg(animated);
     d->evaluateJavaScript(js);
 }
 
@@ -268,6 +267,14 @@ void QMMapView::selectArea(QGeoRectangle &area)
     QString format = QString("mapKit.selectAreaOnMap(%1, %2, %3, %4);");
     QString js = format.arg(area.topLeft().latitude(), area.topLeft().latitude(),
                             area.bottomRight().longitude(), area.bottomRight().longitude());
+    d->evaluateJavaScript(js);
+}
+
+void QMMapView::addMarker(QString listName, uint markerId, QGeoCoordinate point)
+{
+    Q_D(QMMapView);
+    QString format = QString("mapKit.getMarkerList(\"%1\").add(%2, %3, %4);");
+    QString js = format.arg(listName).arg(markerId).arg(point.latitude()).arg(point.longitude());
     d->evaluateJavaScript(js);
 }
 
