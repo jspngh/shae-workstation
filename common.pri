@@ -34,6 +34,7 @@ SOURCES += \
     $$PWD/src/utils/*.cpp \
     $$PWD/src/videocontroller/*.cpp
 
-DISTFILES +=
+DISTFILES += \
+    $$PWD/src/persistence/projectShae.db
 
 

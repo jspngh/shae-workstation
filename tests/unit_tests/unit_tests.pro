@@ -49,7 +49,8 @@ QMAKE_CXXFLAGS += -std=c++11
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
 
-DISTFILES +=
+DISTFILES += \
+    testProjectShae.db
 
 QMAKE
 
