@@ -1,19 +1,13 @@
 #include "persistence.h"
+#include <QDir>
+#include <QFileInfo>
+#include <QDebug>
+#include <QStandardPaths>
 
 Persistence::Persistence(Mediator *mediator, QObject *parent):
     QObject(parent)
 {
-    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db");
-
-    if (!projectShaeDatabase.open())
-    {
-       qDebug() << "Error: connection with database fail";
-    }
-    else
-    {
-       qDebug() << "Database: connection ok";
-    }
+    initDatabase();
 
     dronedao = DroneDAO(&projectShaeDatabase);
     detectionresultdao = DetectionResultDAO(&projectShaeDatabase);
@@ -54,7 +48,7 @@ void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
 
 void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
 {
-  emit onRetrieveClosestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,time));
+      emit onRetrieveClosestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,time));
 }
 
 /*void Persistence::saveDrone(Drone drone)
@@ -99,4 +93,38 @@ void Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
     emit onRetrieveDetectionResults(detectionresultdao.dbRetrieveDetectionResults(droneId,searchId));
 }
 
+void Persistence::initDatabase()
+{
+    // Make sure the file exists
+    QFileInfo checkFile(databaseLocation());
+    if(!checkFile.exists() || !checkFile.isFile()) {
+        QFile databaseFile(databaseLocation());
+        databaseFile.open(QIODevice::ReadWrite);
+
+        // Now create the file
+        // HERPADERP, here we create the sql
+
+        databaseFile.close();
+    }
+
+    // Open database ^^
+    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
+    projectShaeDatabase.setDatabaseName(databaseLocation());
+
+    if (!projectShaeDatabase.open())
+       qDebug() << "Error: connection with database fail";
+    else
+       qDebug() << "Database: connection ok";
+}
+
+QString Persistence::databaseLocation()
+{
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString name = "database.sqlite";
+
+    if(!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+    return folder.append(name);
+}
 

@@ -26,9 +26,6 @@ public:
     ~Persistence();
 
 signals:
-
-
-
     void onSaveSearch(Search search);
     void onRetrieveSearch(Search search);
 
@@ -88,6 +85,11 @@ private:
     DroneStatusDAO dronestatusdao;
     SearchDAO searchdao;
     VideoSequenceDAO videosequencedao;
+
+    //! \brief Initializes the database (sets the projectShaeDatabase-property).
+    void initDatabase();
+    //! \brief Returns the path to the database file.
+    QString databaseLocation();
 };
 
 #endif // PERSISTENCE_H
