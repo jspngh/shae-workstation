@@ -14,14 +14,12 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
     drones = new QList<Drone>();
-    QUuid droneId = QUuid::createUuid();
-    drones->append(Drone(mediator, droneId, 6331, "127.0.0.1", 0.0001));
+    drones->append(Drone(6331, "127.0.0.1", 0.0001));
 
     // create controllers
     //detectionController = new DetectionController(mediator);
     //persistenceController = new Persistence(mediator);
     pathLogicController = new SimplePathAlgorithm();
-
 }
 
 Controller::~Controller()
@@ -47,6 +45,10 @@ void Controller::init()
 
     mainWindow->getConfigWidget()->setController(this);
     pathLogicController->setController(this);
+
+    for(int i = 0; i < drones->size(); i++){
+       (*drones)[i].setController(this);
+    }
 }
 
 /*****************

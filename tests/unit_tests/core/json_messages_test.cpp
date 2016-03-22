@@ -8,14 +8,11 @@ Json_Messages_Test::Json_Messages_Test()
 }
 void Json_Messages_Test::initTestCase()
 {
-
-    QUuid droneId = QUuid::createUuid();
-    drone = new Drone(nullptr, droneId, 6331, "127.0.0.1", 0.0001);
+    drone = new Drone(6331, "127.0.0.1", 0.0001);
     QList<QGeoCoordinate>* waypointList = new QList<QGeoCoordinate>();
     waypointList->push_back(QGeoCoordinate(1.0, 1.0));
     waypointList->push_back(QGeoCoordinate(2.0, 2.0));
     drone->setWaypoints(waypointList);
-
 }
 
 void Json_Messages_Test::cleanupTestCase()

@@ -155,9 +155,9 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 {
     QList<Drone *> *drones = new QList<Drone *>();
-    Drone *droneA = new Drone(nullptr);
+    Drone *droneA = new Drone();
     droneA->setVisionWidth(2.0);
-    Drone *droneB = new Drone(nullptr);
+    Drone *droneB = new Drone();
     droneB->setVisionWidth(2.0);
 
     drones->push_back(droneA);
@@ -228,9 +228,9 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 {
     QList<Drone *> *drones = new QList<Drone *>();
-    Drone *droneA = new Drone(nullptr);
+    Drone *droneA = new Drone();
     droneA->setVisionWidth(1.5);
-    Drone *droneB = new Drone(nullptr);
+    Drone *droneB = new Drone();
     droneB->setVisionWidth(2.0);
     drones->push_back(droneA);
     drones->push_back(droneB);

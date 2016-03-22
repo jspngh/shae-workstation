@@ -1,33 +1,28 @@
 #include <QDebug>
 
 #include "drone.h"
+#include "core/controller.h"
+#include "models/search.h"
 
-Drone::Drone(Mediator *mediator)
+Drone::Drone()
+    : Drone(6331, "10.1.1.10", MIN_VISIONWIDTH)
 {
-    this->guid = QUuid::createUuid();
-    this->portNr = 6330;
-    this->serverIp = "10.1.1.10";
-    this->visionWidth = MIN_VISIONWIDTH;
-    droneConnection = new DroneConnection(mediator);
 
-    connect(droneConnection, SIGNAL(droneResponse(const QString &)),
-            this, SLOT(onDroneResponse(const QString &)));
-    connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
-            this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
-Drone::Drone(Mediator *mediator, QUuid guid, int portNr, QString serverIp, double visionWidth):
-    guid(guid),
+Drone::Drone(int portNr, QString serverIp, double visionWidth):
+    guid(QUuid::createUuid()),
     portNr(portNr),
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
-    droneConnection = new DroneConnection(mediator);
+    droneConnection = new DroneConnection();
 
     auto res = connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
+
 }
 
 Drone::~Drone()
@@ -38,7 +33,14 @@ Drone::~Drone()
 /***********************
 Getters/Setters
 ************************/
-QUuid Drone::getGuid()
+void Drone::setController(Controller *c)
+{
+    controller = c;
+    controller->getMediator()->addSlot(this, SLOT(onPathCalculated(Search*)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSignal(this, SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+}
+
+QUuid Drone::getGuid() const
 {
     return this->guid;
 }
@@ -81,6 +83,28 @@ void Drone::setVisionWidth(double visionWidth)
 /***********************
 Slots
 ************************/
+void Drone::onPathCalculated(Search *s)
+{
+    qDebug() << "Drone::onPathCalculated";
+    bool droneInList = false;
+    // check if this drone is selected for this search
+    // if the drone is indeed selected we continue, if not, nothing will happen
+    // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
+    for(int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
+        if(s->getDroneList()->at(i).getGuid() == guid)
+            droneInList = true;
+    }
+    if(droneInList){
+        qDebug() << "drone was selected";
+        // the drone is selected
+        waypoints = s->getWaypoints();
+        //sendWaypoints();
+        qDebug() << "sendWaypoints";
+        //startFlight();
+        qDebug() << "startFlight";
+    }
+}
+
 void Drone::onDroneResponse(const QString &response)
 {
     qDebug() << "In processResponse";

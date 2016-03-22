@@ -9,9 +9,12 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
-#include "core/mediator.h"
 
 #include "communication/droneconnection.h"
+
+
+class Controller;
+class Search;
 
 enum RequestedDroneStatus {
     Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
@@ -39,10 +42,10 @@ public:
     //! visionwidth to MIN_VISIONWIDTH
     //! serverIp to 10.1.1.10
     //! portNr to 6330
-    Drone(Mediator *mediator);
+    Drone();
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    Drone(Mediator *mediator, QUuid guid, int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
+    Drone(int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
     //! Destructor
     ~Drone();
 
@@ -56,7 +59,9 @@ public:
     /***********************
     Getters/Setters
     ************************/
-    QUuid getGuid();
+    void setController(Controller *ctrl);
+
+    QUuid getGuid() const;
 
     int getPortNr();
 
@@ -119,7 +124,15 @@ public:
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
 
+    /*********************
+     Slots
+     *********************/
+
 private slots:
+    // slots connected via mediator
+    void onPathCalculated(Search *s);
+
+    // slots between
     void onDroneResponse(const QString &response);
     void onDroneResponseError(int socketError, const QString &message);
 
@@ -130,6 +143,7 @@ private:
     /*********
     Attributes
     **********/
+    Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
     DroneConnection *droneConnection;

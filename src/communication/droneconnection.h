@@ -11,7 +11,7 @@ class DroneConnection: public QThread
     Q_OBJECT
 
 public:
-    DroneConnection(Mediator *mediator, QObject *parent = 0);
+    DroneConnection(QObject *parent = 0);
     ~DroneConnection();
 
     void droneRequest(const QString &hostName, quint16 port, const QString &message);

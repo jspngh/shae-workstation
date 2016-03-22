@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     Controller controller(&w);
     controller.init();
-
+    qDebug() << "here3";
     return a.exec();
 }
 
