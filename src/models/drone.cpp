@@ -16,7 +16,11 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
-    droneConnection = new DroneConnection();
+    droneConnection = new DroneConnection(serverIp, (quint16) portNr);
+    droneConnection->moveToThread(&droneThread);
+    droneThread.start();
+
+    connect(this, SIGNAL(droneRequest(QString&)), droneConnection, SLOT(onDroneRequest(QString&)));
 
     auto res = connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));
@@ -70,7 +74,7 @@ void Drone::addWaypoint(const QGeoCoordinate &waypoint)
     this->waypoints->push_back(waypoint);
 }
 
-double Drone::getVisionWidth()
+double Drone::getVisionWidth() const
 {
     return this->visionWidth;
 }
@@ -98,9 +102,10 @@ void Drone::onPathCalculated(Search *s)
         qDebug() << "drone was selected";
         // the drone is selected
         waypoints = s->getWaypoints();
-        //sendWaypoints();
+        qDebug() << waypoints->size();
+        sendWaypoints();
         qDebug() << "sendWaypoints";
-        //startFlight();
+        // startFlight();
         qDebug() << "startFlight";
     }
 }
@@ -139,7 +144,8 @@ QJsonDocument Drone::startFlight()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
 
     return jsondoc;
 }
@@ -155,7 +161,8 @@ QJsonDocument Drone::stopFlight()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    //droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
 
     return jsondoc;
 }
@@ -172,8 +179,8 @@ QJsonDocument Drone::emergencyLanding()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-
+    //droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
     return jsondoc;
 }
 
@@ -207,8 +214,8 @@ QJsonDocument Drone::sendWaypoints()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Compact);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-
+    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
     return jsondoc;
 }
 
@@ -226,8 +233,8 @@ QJsonDocument Drone::requestStatus()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-
+    //droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
     return jsondoc;
 }
 
@@ -301,8 +308,8 @@ QJsonDocument Drone::requestStatuses(QList<RequestedDroneStatus> statuses)
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-
+    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
     return jsondoc;
 }
 
@@ -316,8 +323,8 @@ QJsonDocument Drone::requestHeartbeat()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-
+    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
     return jsondoc;
 }
 
@@ -378,7 +385,7 @@ QJsonDocument Drone::setSettings(QList<RequestedDroneSetting> settings, QList<in
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-
+   //  droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+    emit droneRequest(message);
     return jsondoc;
 }

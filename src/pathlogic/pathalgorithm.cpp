@@ -52,11 +52,10 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
 void PathAlgorithm::onStartSearch(Search *s)
 {
     qDebug() << "PathAlgorithm::onStartSearch(Search *s)";
-    // TODO: for now, the drone visionwidth of the first drone is picked. This means there is no multidrone support.
 
+    // TODO: for now, the drone visionwidth of the first drone is picked. This means there is no multidrone support.
     QGeoRectangle r = s->getArea();
-    //double visionWidth = s->getDroneList()->at(0).getVisionWidth();
-    QList<QGeoCoordinate> *waypoints = calculateWaypoints(r, 0.1);
+    QList<QGeoCoordinate> *waypoints = calculateWaypoints(r, s->getDroneList()->at(0).getVisionWidth());
 
     s->setWaypoints(waypoints);
 

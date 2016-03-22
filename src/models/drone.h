@@ -73,7 +73,7 @@ public:
 
     void addWaypoint(const QGeoCoordinate &waypoint);
 
-    double getVisionWidth();
+    double getVisionWidth() const;
 
     void setVisionWidth(double visionWidth);
 
@@ -123,6 +123,12 @@ public:
     */
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
+    /*******************
+     * Signal
+     * ****************/
+signals:
+    void droneRequest(QString &message);
+
 
     /*********************
      Slots
@@ -143,6 +149,7 @@ private:
     /*********
     Attributes
     **********/
+    QThread droneThread;
     Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
