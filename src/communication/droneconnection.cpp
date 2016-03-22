@@ -15,8 +15,10 @@ DroneConnection::~DroneConnection()
 
 }
 
-void DroneConnection::onDroneRequest(const QString &m)
+void DroneConnection::onDroneRequest(QString m)
 {
+    qDebug() << "DroneConnection::onDroneRequest";
+
     QString message = m;
     QString serverName = droneIpAddress;
     quint16 serverPort = port;
@@ -57,11 +59,9 @@ void DroneConnection::onDroneRequest(const QString &m)
         }
     }
 
-    // mutex.lock();
     QByteArray raw;
     in >> raw;
     QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
 
     emit droneResponse(response);
-
 }

@@ -14,8 +14,8 @@ public:
     DroneConnection(const QString hostName, quint16 port, QObject *p = 0);
     ~DroneConnection();
 
-private slots:
-    void onDroneRequest(const QString &message);
+public slots:
+    void onDroneRequest(QString message);
 
 signals:
     void droneResponse(const QString &fortune);

@@ -17,21 +17,22 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
     visionWidth(visionWidth)
 {
     droneConnection = new DroneConnection(serverIp, (quint16) portNr);
-    droneConnection->moveToThread(&droneThread);
-    droneThread.start();
+    connectionThread = new QThread();
+    droneConnection->moveToThread(connectionThread);
+    // connectionThread->start();
 
-    connect(this, SIGNAL(droneRequest(QString&)), droneConnection, SLOT(onDroneRequest(QString&)));
+    connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
 
     auto res = connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
-
 }
 
 Drone::~Drone()
 {
     delete droneConnection;
+    delete connectionThread;
 }
 
 /***********************
@@ -105,7 +106,7 @@ void Drone::onPathCalculated(Search *s)
         qDebug() << waypoints->size();
         sendWaypoints();
         qDebug() << "sendWaypoints";
-        // startFlight();
+        startFlight();
         qDebug() << "startFlight";
     }
 }
@@ -141,12 +142,11 @@ QJsonDocument Drone::startFlight()
     json["MessageType"] = QString("navigation");
     QJsonDocument jsondoc(json);
 
-
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
-    emit droneRequest(message);
 
+    emit droneRequest(message);
+    qDebug() << "emit droneRequest(message)";
     return jsondoc;
 }
 
@@ -161,7 +161,7 @@ QJsonDocument Drone::stopFlight()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    //droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
 
     return jsondoc;
@@ -179,7 +179,7 @@ QJsonDocument Drone::emergencyLanding()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    //droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
     return jsondoc;
 }
@@ -214,7 +214,7 @@ QJsonDocument Drone::sendWaypoints()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Compact);
-    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
     return jsondoc;
 }
@@ -233,7 +233,7 @@ QJsonDocument Drone::requestStatus()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    //droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
     return jsondoc;
 }
@@ -308,7 +308,7 @@ QJsonDocument Drone::requestStatuses(QList<RequestedDroneStatus> statuses)
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
     return jsondoc;
 }
@@ -323,7 +323,7 @@ QJsonDocument Drone::requestHeartbeat()
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-    // droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
     return jsondoc;
 }
@@ -385,7 +385,7 @@ QJsonDocument Drone::setSettings(QList<RequestedDroneSetting> settings, QList<in
 
     // Send the json message
     QString message = jsondoc.toJson(QJsonDocument::Indented);
-   //  droneConnection->droneRequest(serverIp, (quint16) portNr, message);
+
     emit droneRequest(message);
     return jsondoc;
 }

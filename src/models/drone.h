@@ -127,7 +127,7 @@ public:
      * Signal
      * ****************/
 signals:
-    void droneRequest(QString &message);
+    void droneRequest(QString message);
 
 
     /*********************
@@ -149,10 +149,11 @@ private:
     /*********
     Attributes
     **********/
-    QThread droneThread;
+
     Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
+    QThread *connectionThread;
     DroneConnection *droneConnection;
     int portNr; /*!< The port number that will be used to connect to the actual drone */
     QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
