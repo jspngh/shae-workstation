@@ -36,12 +36,12 @@ void Search::setArea(const QGeoRectangle &value)
     area = value;
 }
 
-QList<Drone*> *Search::getDroneList() const
+QList<Drone *> *Search::getDroneList() const
 {
     return droneList;
 }
 
-void Search::setDroneList(QList<Drone*> *value)
+void Search::setDroneList(QList<Drone *> *value)
 {
     droneList = value;
 }

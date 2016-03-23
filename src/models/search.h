@@ -21,8 +21,8 @@ public:
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
 
-    QList<Drone*> *getDroneList() const;
-    void setDroneList(QList<Drone*> *value);
+    QList<Drone *> *getDroneList() const;
+    void setDroneList(QList<Drone *> *value);
 
     QList<QGeoCoordinate> *getWaypoints() const;
     void setWaypoints(QList<QGeoCoordinate> *value);
@@ -31,7 +31,7 @@ private:
     QUuid searchID;
     QTime startTime;
     QGeoRectangle area;
-    QList<Drone*> *droneList;
+    QList<Drone *> *droneList;
     QList<QGeoCoordinate> *waypoints;
 
 };

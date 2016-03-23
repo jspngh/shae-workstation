@@ -41,7 +41,7 @@ Getters/Setters
 void Drone::setController(Controller *c)
 {
     controller = c;
-    controller->getMediator()->addSlot(this, SLOT(onPathCalculated(Search*)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSlot(this, SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
@@ -60,7 +60,7 @@ QString Drone::getServerIp()
     return this->serverIp;
 }
 
-QList<QGeoCoordinate>* Drone::getWaypoints()
+QList<QGeoCoordinate> *Drone::getWaypoints()
 {
     return this->waypoints;
 }
@@ -95,11 +95,11 @@ void Drone::onPathCalculated(Search *s)
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
-    for(int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
-        if(s->getDroneList()->at(i)->getGuid() == guid)
+    for (int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
+        if (s->getDroneList()->at(i)->getGuid() == guid)
             droneInList = true;
     }
-    if(droneInList){
+    if (droneInList) {
         qDebug() << "drone was selected";
         // the drone is selected
         waypoints = s->getWaypoints();

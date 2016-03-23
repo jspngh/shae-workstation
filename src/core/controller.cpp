@@ -13,7 +13,7 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-    drones = new QList<Drone*>();
+    drones = new QList<Drone *>();
     drones->append(new Drone(6331, "127.0.0.1", 0.0001));
 
     // create controllers
@@ -46,8 +46,8 @@ void Controller::init()
     mainWindow->getConfigWidget()->setController(this);
     pathLogicController->setController(this);
 
-    for(int i = 0; i < drones->size(); i++){
-       (*drones)[i]->setController(this);
+    for (int i = 0; i < drones->size(); i++) {
+        (*drones)[i]->setController(this);
     }
 }
 
@@ -60,7 +60,7 @@ Mediator *Controller::getMediator() const
     return mediator;
 }
 
-QList<Drone*> *Controller::getDrones() const
+QList<Drone *> *Controller::getDrones() const
 {
     return drones;
 }

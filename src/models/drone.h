@@ -50,7 +50,7 @@ public:
     ~Drone();
 
     //! Copy constructor
-    Drone(const Drone& d)
+    Drone(const Drone &d)
     {
 
     }
@@ -67,7 +67,7 @@ public:
 
     QString getServerIp();
 
-    QList<QGeoCoordinate>* getWaypoints();
+    QList<QGeoCoordinate> *getWaypoints();
 
     void setWaypoints(QList<QGeoCoordinate> *waypoints);
 

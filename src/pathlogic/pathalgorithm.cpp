@@ -22,8 +22,8 @@ PathAlgorithm::~PathAlgorithm()
 void PathAlgorithm::setController(Controller *value)
 {
     controller = value;
-    controller->getMediator()->addSignal(this, SIGNAL(pathCalculated(Search*)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSlot(this, SLOT(onStartSearch(Search*)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 

@@ -188,7 +188,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
     double epsilon = 0.000001;
     int listSize = testList1.size();
     Drone *frontDrone = drones->front();
-    QList<QGeoCoordinate>* frontDroneList = frontDrone->getWaypoints();
+    QList<QGeoCoordinate> *frontDroneList = frontDrone->getWaypoints();
 
     for (int i = 0; i < listSize; i++) {
         QGeoCoordinate calculated = frontDroneList->front();
@@ -205,7 +205,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
     //check if drones->back().waypoints == testList2
     listSize = testList2.size();
     Drone *backDrone = drones->back();
-    QList<QGeoCoordinate>* backDroneList = backDrone->getWaypoints();
+    QList<QGeoCoordinate> *backDroneList = backDrone->getWaypoints();
 
     for (int i = 0; i < listSize; i++) {
         QGeoCoordinate calculated = backDroneList->front();
@@ -261,7 +261,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
     double epsilon = 0.000001;
     int listSize = testList1.size();
     Drone *frontDrone = drones->front();
-    QList<QGeoCoordinate>* frontDroneList = frontDrone->getWaypoints();
+    QList<QGeoCoordinate> *frontDroneList = frontDrone->getWaypoints();
 
     for (int i = 0; i < listSize; i++) {
         QGeoCoordinate calculated = frontDroneList->front();
@@ -278,7 +278,7 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
     //check if drones->back().waypoints == testList2
     listSize = testList2.size();
     Drone *backDrone = drones->back();
-    QList<QGeoCoordinate>* backDroneList = backDrone->getWaypoints();
+    QList<QGeoCoordinate> *backDroneList = backDrone->getWaypoints();
 
     for (int i = 0; i < listSize; i++) {
         QGeoCoordinate calculated = backDroneList->front();
