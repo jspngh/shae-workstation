@@ -41,8 +41,8 @@ Getters/Setters
 void Drone::setController(Controller *c)
 {
     controller = c;
-    controller->getMediator()->addSlot(this, SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSignal(this, SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    controller->getMediator()->addSlot(this, (char*) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
 QUuid Drone::getGuid() const
