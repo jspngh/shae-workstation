@@ -26,7 +26,7 @@ Controller::~Controller()
 {
     // TODO: stop all the threads
     delete mediator;
-    delete search;
+    //delete search;
     delete drones;
     // delete detectionController;
     // delete persistenceController;

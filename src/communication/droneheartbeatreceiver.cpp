@@ -17,6 +17,7 @@ DroneHeartBeatReceiver::~DroneHeartBeatReceiver()
     delete server;
 }
 
+//this method only gets called by a signal if a client is trying to connect.
 void DroneHeartBeatReceiver::receiveHeartbeat()
 {
     const int Timeout = 5 * 1000;
@@ -25,7 +26,8 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
     QTcpSocket* clientConnection = server->nextPendingConnection();
     //make sure socket gets deleted if disconnected
     connect(clientConnection, &QAbstractSocket::disconnected, clientConnection, &QObject::deleteLater);
-    //copied from droneconnection.cpp
+
+    //rest is copied and refactored from droneconnection.cpp
     while (clientConnection->bytesAvailable() < (int)sizeof(quint16)) {
         if (!clientConnection->waitForReadyRead(Timeout)) {
             emit droneHeartBeatError(clientConnection->error(), clientConnection->errorString());
