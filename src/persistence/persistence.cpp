@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QStandardPaths>
+#include <QSqlQuery>
 
 Persistence::Persistence(Mediator *mediator, QObject *parent):
     QObject(parent)
@@ -95,36 +96,61 @@ void Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 
 void Persistence::initDatabase()
 {
+    bool dbNotCreatedYet = false;
+
     // Make sure the file exists
     QFileInfo checkFile(databaseLocation());
     if(!checkFile.exists() || !checkFile.isFile()) {
+        // If not, create a file in which we will create the database
         QFile databaseFile(databaseLocation());
         databaseFile.open(QIODevice::ReadWrite);
-
-        // Now create the file
-        // HERPADERP, here we create the sql
-
         databaseFile.close();
+        dbNotCreatedYet = true;
     }
 
-    // Open database ^^
+    // Open database
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
     projectShaeDatabase.setDatabaseName(databaseLocation());
 
     if (!projectShaeDatabase.open())
-       qDebug() << "Error: connection with database fail";
+       qDebug() << projectShaeDatabase.lastError();
     else
-       qDebug() << "Database: connection ok";
+       qDebug() << "Database connection successfully setup.";
+
+    if(dbNotCreatedYet) {
+        createDatabase();
+    }
 }
 
 QString Persistence::databaseLocation()
 {
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    QString name = "database.sqlite";
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
 
     if(!folder.endsWith(QDir::separator()))
         folder.append(QDir::separator());
 
+    QString name = "database.sqlite";
+
     return folder.append(name);
+}
+
+void Persistence::createDatabase()
+{
+    QFile sqlScheme(":/db/createTables.sql");
+    if(sqlScheme.open(QIODevice::ReadOnly)) {
+        QSqlQuery query(projectShaeDatabase);
+        QStringList queryStrings = QTextStream(&sqlScheme).readAll().split(';');
+        // Can't execute several queries at once, so split them
+        // and execute them one by one.
+        Q_FOREACH(QString queryString, queryStrings) {
+            if(!query.exec(queryString))
+                qDebug() << "Could not issue command: " << queryString;
+        }
+    } else {
+        qDebug() << "Error opening file to create database";
+    }
 }
 

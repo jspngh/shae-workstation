@@ -90,6 +90,8 @@ private:
     void initDatabase();
     //! \brief Returns the path to the database file.
     QString databaseLocation();
+    //!  \brief Create the database.
+    void createDatabase();
 };
 
 #endif // PERSISTENCE_H
