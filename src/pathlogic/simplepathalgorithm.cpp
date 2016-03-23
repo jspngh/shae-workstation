@@ -1,4 +1,5 @@
 #include "simplepathalgorithm.h"
+#include <QDebug>
 
 SimplePathAlgorithm::SimplePathAlgorithm()
     : SimplePathAlgorithm(QGeoCoordinate(0.0, 0.0))
@@ -80,25 +81,14 @@ QList<QGeoCoordinate> *SimplePathAlgorithm::calculateWaypoints(QGeoRectangle are
 
 void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones)
 {
-    int numberOfDrones = drones->size();
-    /*
-    std::_List_iterator<Drone*> it = drones->begin();
-    for(int i=0;i<numberOfDrones;i++){
-        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i*(area.width() / numberOfDrones));
-        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i+1)*(area.width() / numberOfDrones));
-        QGeoRectangle areaPerDrone = QGeoRectangle(topleft,bottomright);
-        double visionPerDrone = (*it)->visionWidth;
-        (*it)->waypoints= calculateWaypoints(areaPerDrone,visionPerDrone);
-        (*it)++;
-    }*/
-    int i = 0;
-    foreach (Drone *drone, *drones) {
-        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i * (area.width() / numberOfDrones));
-        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i + 1) * (area.width() / numberOfDrones));
+    int numDrones = drones->size();
+
+    for(int i = 0; i < numDrones; i++){
+        QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i * (area.width() / numDrones));
+        QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i + 1) * (area.width() / numDrones));
         QGeoRectangle areaPerDrone = QGeoRectangle(topleft, bottomright);
-        double visionPerDrone = drone->getVisionWidth();
-        drone->setWaypoints(calculateWaypoints(areaPerDrone, visionPerDrone));
-        i++;
+        double visionPerDrone = (*drones)[i]->getVisionWidth();
+        (*drones)[i]->setWaypoints(calculateWaypoints(areaPerDrone, visionPerDrone));
     }
 }
 

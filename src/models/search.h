@@ -12,7 +12,6 @@ class Search
 {
 public:
     Search();
-    //Search(QList<Drone> *droneList, QGeoRectangle area);
 
     ~Search();
 
@@ -24,16 +23,11 @@ public:
     QList<Drone *> *getDroneList() const;
     void setDroneList(QList<Drone *> *value);
 
-    QList<QGeoCoordinate> *getWaypoints() const;
-    void setWaypoints(QList<QGeoCoordinate> *value);
-
 private:
     QUuid searchID;
     QTime startTime;
     QGeoRectangle area;
     QList<Drone *> *droneList;
-    QList<QGeoCoordinate> *waypoints;
-
 };
 
 #endif // SEARCH_H
