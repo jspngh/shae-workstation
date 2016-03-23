@@ -103,7 +103,7 @@ void Drone::onPathCalculated(Search *s)
             droneInList = true;
     }
     if (droneInList) {
-         // the drone is selected for this search
+        // the drone is selected for this search
         qDebug() << "drone was selected";
 
         sendWaypoints();

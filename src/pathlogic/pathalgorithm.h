@@ -44,7 +44,7 @@ public:
     * and the second coordinate contains the bottom right point. The Order is important!
     * \param drones every drone in the list will be assigned an area
     */
-    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone*> *drones) = 0;
+    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones) = 0;
 
     // Setter
 

@@ -83,7 +83,7 @@ void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone 
 {
     int numDrones = drones->size();
 
-    for(int i = 0; i < numDrones; i++){
+    for (int i = 0; i < numDrones; i++) {
         QGeoCoordinate topleft = QGeoCoordinate(area.topLeft().latitude() , area.topLeft().longitude() + i * (area.width() / numDrones));
         QGeoCoordinate bottomright = QGeoCoordinate(area.bottomLeft().latitude() , area.bottomLeft().longitude() + (i + 1) * (area.width() / numDrones));
         QGeoRectangle areaPerDrone = QGeoRectangle(topleft, bottomright);
