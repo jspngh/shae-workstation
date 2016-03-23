@@ -333,6 +333,25 @@ QJsonDocument Drone::requestHeartbeat()
 Setting messages methods
 **************************/
 
+QJsonDocument Drone::setWorkstationConfiguration(QString ipAdress, int port)
+{
+    // Create json message
+    QJsonObject json = QJsonObject();
+    json["MessageType"] = QString("setting");
+    json["Message"] = QString("workstation_config");
+    QJsonObject config = QJsonObject();
+    config["IpAddress"] = ipAdress;
+    config["Port"] = port;
+    json["Configuration"] = config;
+    QJsonDocument jsondoc(json);
+
+    // Send the json message
+    QString message = jsondoc.toJson(QJsonDocument::Indented);
+
+    emit droneRequest(message);
+    return jsondoc;
+}
+
 QJsonDocument Drone::setSetting(RequestedDroneSetting setting, int value)
 {
     QList<RequestedDroneSetting> settingList = QList<RequestedDroneSetting>();

@@ -112,6 +112,10 @@ public:
     /**************************
     Setting messages methods
     **************************/
+    /*! \brief This method sends a message to let the drone know the workstation ip and port.
+    */
+    QJsonDocument setWorkstationConfiguration(QString ipAdress, int port);
+
     /*! \brief Sends a Json message to set a certain setting to a certain value.
      *  See RequestedDroneStatus enum to see which settings can be set.
      * This method actually uses the method to set mulitple settings, namely setSettings().
@@ -124,8 +128,8 @@ public:
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
     /*******************
-     * Signal
-     * ****************/
+    Signal
+    *******************/
 signals:
     void droneRequest(QString message);
 
