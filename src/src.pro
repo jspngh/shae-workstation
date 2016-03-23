@@ -21,6 +21,7 @@ UI_DIR = $$PWD/build/.ui
 SOURCES += \
     main.cpp
 
+
 # c++11
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
@@ -31,4 +32,7 @@ RESOURCES = application.qrc
 # Put subdirectories here
 include(ui/ui.pri)
 include(core/core.pri)
+
+
+
 

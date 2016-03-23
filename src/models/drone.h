@@ -128,11 +128,11 @@ public:
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
     /*******************
-    Signal
+    Signals
     *******************/
 signals:
     void droneRequest(QString message);
-
+    void droneStatusReceived(DroneStatus &status);
 
     /*********************
      Slots
@@ -146,8 +146,7 @@ private slots:
     void onDroneResponse(const QString &response);
     void onDroneResponseError(int socketError, const QString &message);
 
-signals:
-    void droneStatusReceived(DroneStatus &status);
+
 
 private:
     /*********

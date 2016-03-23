@@ -23,7 +23,7 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
 
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
 
-    auto res = connect(droneConnection, SIGNAL(droneResponse(const QString &)),
+    connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
