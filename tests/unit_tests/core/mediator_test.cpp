@@ -22,8 +22,8 @@ void Mediator_Test::testConnects()
     Slot1 slotObj;
 
     // inform mediator of existing signal and slot
-    this->mediator.addSignal(&signalObj, (char*) SIGNAL(setValue(int)), QString("setValue(int)"));
-    this->mediator.addSlot(&slotObj, (char*) SLOT(onSetValue(int)), QString("setValue(int)"));
+    this->mediator.addSignal(&signalObj, SIGNAL(setValue(int)), QString("setValue(int)"));
+    this->mediator.addSlot(&slotObj, SLOT(onSetValue(int)), QString("setValue(int)"));
 
     // inspect the connection
     QSignalSpy spy(&signalObj, SIGNAL(setValue(int)));
@@ -49,8 +49,8 @@ void Mediator_Test::testAddMethods()
     Slot1 slotObj;
 
     // inform mediator of existing signal and slot
-    this->mediator.addSignal(&signalObj, (char*) SIGNAL(setValue(int)), QString("setValue(int)"));
-    this->mediator.addSlot(&slotObj, (char*) SLOT(onSetValue(int)), QString("setValue(int)"));
+    this->mediator.addSignal(&signalObj, SIGNAL(setValue(int)), QString("setValue(int)"));
+    this->mediator.addSlot(&slotObj, SLOT(onSetValue(int)), QString("setValue(int)"));
 
     // trigger signal
     emit signalObj.setValue(v);
@@ -62,7 +62,7 @@ void Mediator_Test::testAddMethods()
 void  Mediator_Test::testCountAddSignal()
 {
     Signal1 signalObj;
-    int count = this->mediator.addSignal(&signalObj, (char*) SIGNAL(setValue(int)), QString("setValue(int)"));
+    int count = this->mediator.addSignal(&signalObj, SIGNAL(setValue(int)), QString("setValue(int)"));
 
     // verify that there is no matching slot when the signal was added to the mediator
     QVERIFY(count == 0);
@@ -71,7 +71,7 @@ void  Mediator_Test::testCountAddSignal()
 void  Mediator_Test::testCountAddSlot()
 {
     Slot1 slotObj;
-    int count = this->mediator.addSlot(&slotObj, (char*) SLOT(onSetValue(int)), QString("setValue(int)"));
+    int count = this->mediator.addSlot(&slotObj, SLOT(onSetValue(int)), QString("setValue(int)"));
 
     // verify that there is no matching signal when the slot was added to the mediator
     QVERIFY(count == 0);
@@ -82,8 +82,8 @@ void  Mediator_Test::testCount()
     Signal1 signalObj;
     Slot1 slotObj;
 
-    this->mediator.addSignal(&signalObj, (char*) SIGNAL(setValue(int)), QString("setValue(int)"));
-    int count = this->mediator.addSlot(&slotObj, (char*) SLOT(onSetValue(int)), QString("setValue(int)"));
+    this->mediator.addSignal(&signalObj, SIGNAL(setValue(int)), QString("setValue(int)"));
+    int count = this->mediator.addSlot(&slotObj, SLOT(onSetValue(int)), QString("setValue(int)"));
 
     // verify that there is a matching slot when the signal was added to the mediator
     QVERIFY(count == 1);
