@@ -30,13 +30,13 @@ public:
     ~Controller();
     void init();
     Mediator *getMediator() const;
-    QList<Drone> *getDrones() const;
+    QList<Drone*> *getDrones() const;
     Search *getSearch() const;
 
 private:
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<Drone> *drones;
+    QList<Drone*> *drones;
     Search *search;
 
     Persistence *persistenceController;

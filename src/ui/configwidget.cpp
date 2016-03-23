@@ -140,7 +140,7 @@ void ConfigWidget::startButtonPush()
         Search *s = controller->getSearch();
 
         // TODO: read the search area from the gui
-        QGeoRectangle area(QGeoCoordinate(12,12),QGeoCoordinate(12.5,12.5));
+        QGeoRectangle area(QGeoCoordinate(12,12),QGeoCoordinate(13,13));
         s->setArea(area);
 
         // TODO: read the drones that will be used in the search

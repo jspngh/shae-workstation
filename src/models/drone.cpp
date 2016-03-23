@@ -19,7 +19,7 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
     droneConnection = new DroneConnection(serverIp, (quint16) portNr);
     connectionThread = new QThread();
     droneConnection->moveToThread(connectionThread);
-    // connectionThread->start();
+    connectionThread->start();
 
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
 
@@ -96,7 +96,7 @@ void Drone::onPathCalculated(Search *s)
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
     for(int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
-        if(s->getDroneList()->at(i).getGuid() == guid)
+        if(s->getDroneList()->at(i)->getGuid() == guid)
             droneInList = true;
     }
     if(droneInList){
