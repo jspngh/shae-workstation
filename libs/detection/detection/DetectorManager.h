@@ -52,7 +52,7 @@ public:
     DetectionList applyDetector(cv::Mat &frame);
     std::string getDetectorType();
     DetectionList process(std::string seq);
-    std::vector<std::pair<double,double>> calculatePositions(DetectionList dl, std::pair<double,double> location);
+    std::vector<std::pair<double,double>> calculatePositions(DetectionList dl, std::pair<double,double> location, std::vector<std::pair<double,double>> xLUT, std::vector<std::pair<double,double>> yLUT);
 
 
 
@@ -60,6 +60,8 @@ private:
     Detector *detector;
     WindowSelection *windowSelection;
     int fps; //< Frames per second on which the sequence will be analysed
+    std::pair<double, double> derivePositionFromLUT(Detection d, std::vector<std::pair<double,double>> xLUT, std::vector<std::pair<double,double>> yLUT);
+
 };
 
 #endif /* DETECTORMANAGER_H_ */

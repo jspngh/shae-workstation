@@ -2,11 +2,13 @@
 
 using namespace std;
 
-DetectionController::DetectionController(Mediator *mediator, double fps, QString sequence, QObject *parent)
+DetectionController::DetectionController(Mediator *mediator, Search *search, double fps, QString sequence, QObject *parent)
     : QThread(parent)
 {
     this->fps = fps;
     this->sequence = sequence;
+    this->search = search;
+    parseConfiguration();
 }
 
 void DetectionController::run()
@@ -33,8 +35,11 @@ void DetectionController::run()
             capture >> frame;
             iteratorFrames += this->frameHop;
             DetectionList detectionList = this->manager.applyDetector(frame);
-            QGeoCoordinate frameLocation;
-            vector<pair<double,double>> locations = this->manager.calculatePositions(detectionList, pair<double,double>(frameLocation.longitude(),frameLocation.latitude()));
+            double timeFrame = iteratorFrames*this->fps;
+            //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
+            QGeoCoordinate frameLocation(0,0);
+            //TODO the xLUT and yLUT should be derived from the config file present in the Search object.
+            vector<pair<double,double>> locations = this->manager.calculatePositions(detectionList, pair<double,double>(frameLocation.longitude(),frameLocation.latitude()),this->xLUT, this->yLUT);
             for(int i = 0; i < detectionList.getSize(); i++){
                 emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first,locations[i].second),1));
                 nrDetections++;
@@ -57,3 +62,8 @@ int DetectionController::getNrDetections(){
     return this->nrDetections;
 }
 
+void DetectionController::parseConfiguration(){
+    double height = this->search->height;
+    double gimbalAngle = this->search->gimbalAngle;
+
+}

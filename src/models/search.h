@@ -8,10 +8,12 @@
 class Search
 {
 public:
-    Search();
+    Search(double height, double gimBalAngle);
     QUuid searchID;
     QList<Drone> droneList;
     QTime start;
+    double height;
+    double gimbalAngle;
 };
 
 #endif // SEARCH_H

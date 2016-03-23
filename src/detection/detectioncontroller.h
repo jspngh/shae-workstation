@@ -12,13 +12,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "detection/DetectorManager.h"
 #include "models/detectionresult.h"
+#include "models/search.h"
 #include "core/mediator.h"
 
 class DetectionController : public QThread{
     Q_OBJECT
 
 public:
-    explicit DetectionController(Mediator *mediator, double fps=2, QString sequence = "dependencies/drone_stream.mpg", QObject *parent = 0);
+    explicit DetectionController(Mediator *mediator, Search *search, double fps=2, QString sequence = "dependencies/drone_stream.mpg", QObject *parent = 0);
     ~DetectionController() {}
     void streamFinished();
     void run() Q_DECL_OVERRIDE;
@@ -38,6 +39,10 @@ private:
     double frameHop;
     int nrDetections;
     volatile bool streaming;
+    Search *search;
+    void parseConfiguration();
+    std::vector<std::pair<double,double>> xLUT;
+    std::vector<std::pair<double,double>> yLUT;
 };
 
 #endif // DETECTIONCONTROLLER_H

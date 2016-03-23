@@ -110,15 +110,47 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     return detections;
 }
 
-std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location){
+std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location, std::vector<std::pair<double,double>> xLUT, std::vector<std::pair<double,double>> yLUT){
     vector<std::pair<double,double>> result;
     for(int i = 0; i< dl.getSize();i++)
     {
-        result.push_back(std::pair<double,double>(0,0));
+        Detection D = dl.returnDetections()[i];
+        std::pair<double, double> coordinateFromLocation = derivePositionFromLUT(D, xLUT, yLUT);
+        result.push_back(std::pair<double,double>(coordinateFromLocation.first+location.first,coordinateFromLocation.second+location.second));
     }
     return result;
 }
 
+//the LUT contains either the x or y coordinates of an image with the corresponding distance with respect to the origin
+std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<std::pair<double,double>> xLUT, std::vector<std::pair<double,double>> yLUT){
+    double xPixel = (double)(d.getX());
+    double yPixel = (double)(d.getY() + d.getHeight());
+    double xLoc = 0.0;
+    double yLoc = 0.0;
+    for(int i = 0; i<xLUT.size();i++){
+            if(xPixel<=xLUT[i].first){
+                if(i==0){
+                    xLoc = xLUT[0].second;
+                }else{
+                    //use linear interpolation
+                    xLoc = xLUT[i-1].second*((xLUT[i].first-xPixel)/(xLUT[i].first-xLUT[i-1].first))+xLUT[i].second*((xPixel-xLUT[i-1].first)/(xLUT[i].first-xLUT[i-1].first));
+                }
+                break;
+            }
+    }
+    for(int i = 0; i<yLUT.size();i++){
+            if(yPixel<=yLUT[i].first){
+                if(i==0){
+                    yLoc = yLUT[0].second;
+                }else{
+                    //use linear interpolation
+                    yLoc = yLUT[i-1].second*((yLUT[i].first-yPixel)/(yLUT[i].first-yLUT[i-1].first))+yLUT[i].second*((yPixel-yLUT[i-1].first)/(yLUT[i].first-yLUT[i-1].first));
+                }
+                break;
+            }
+    }
+    return std::pair<double,double>(xLoc,yLoc);
+}
 
 
 
