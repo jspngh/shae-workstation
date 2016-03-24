@@ -3,10 +3,10 @@
 
 
 DroneHeartBeatReceiver::DroneHeartBeatReceiver(const QString ip, quint16 port, QObject *parent)
-    : QObject(parent), workstationIpAdress(ip), port(port)
+    : QObject(parent), workstationHeartbeatPort(port)
 {
     server = new QTcpServer();
-    server->listen(QHostAddress(ip), port);
+    server->listen(QHostAddress(controller->getWorkstationIP()), port);
 
     //connect receive slot to newConnection signal of Qt so this will get called on each connection
     connect(server, &QTcpServer::newConnection, this, &DroneHeartBeatReceiver::receiveHeartbeat);
@@ -55,5 +55,25 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
 
     clientConnection->disconnectFromHost();
 
+}
+
+quint16 DroneHeartBeatReceiver::getWorkstationHeartbeatPort() const
+{
+    return workstationHeartbeatPort;
+}
+
+void DroneHeartBeatReceiver::setWorkstationHeartbeatPort(const quint16 &value)
+{
+    workstationHeartbeatPort = value;
+}
+
+Controller *DroneHeartBeatReceiver::getController() const
+{
+    return controller;
+}
+
+void DroneHeartBeatReceiver::setController(Controller *value)
+{
+    controller = value;
 }
 

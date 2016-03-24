@@ -6,6 +6,7 @@
 
 #include "mediator.h"
 #include "communication/droneconnection.h"
+#include "communication/droneheartbeatreceiver.h"
 
 #include "persistence/persistence.h"
 #include "models/drone.h"
@@ -36,14 +37,13 @@ public:
     QString getWorkstationIP() const;
     //void setWorkstationIP(const QString &value);
 
-    quint16 getWorkstationHeartbeatPort() const;
-    //void setWorkstationHeartbeatPort(const quint16 &value);
+
 
 private:
 
 
     QString workstationIP;
-    quint16 workstationHeartbeatPort;
+
 
     MainWindow *mainWindow;
     Mediator *mediator;

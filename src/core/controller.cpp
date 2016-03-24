@@ -12,12 +12,12 @@ Controller::Controller(MainWindow *window, QObject *p)
     mediator = new Mediator();
 
 
-    //set workstationIP and heartbeatport
+    //set workstationIP
     foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
              workstationIP = address.toString();
     }
-    workstationHeartbeatPort = 6332;
+
 
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
@@ -56,6 +56,7 @@ void Controller::init()
 
     for (int i = 0; i < drones->size(); i++) {
         (*drones)[i]->setController(this);
+        (*drones)[i]->setWorkstationConfiguration(workstationIP, workstationHeartbeatPort);
     }
 }
 
@@ -83,12 +84,6 @@ QString Controller::getWorkstationIP() const
     return workstationIP;
 }
 
-
-
-quint16 Controller::getWorkstationHeartbeatPort() const
-{
-    return workstationHeartbeatPort;
-}
 
 
 

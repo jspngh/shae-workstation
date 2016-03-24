@@ -38,6 +38,8 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
             this, SLOT(onDroneResponse(QString)));
     connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int,QString)),
             this, SLOT(onDroneResponseError(int,QString)));
+    this->setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
+
 
 }
 
@@ -45,6 +47,8 @@ Drone::~Drone()
 {
     delete droneConnection;
     delete connectionThread;
+    delete heartbeatReceiver;
+    delete heartbeatThread;
 }
 
 /***********************

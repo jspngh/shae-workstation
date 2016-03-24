@@ -13,7 +13,7 @@
 
 #include "communication/droneconnection.h"
 
-
+class DroneHeartBeatReceiver;
 class Controller;
 class Search;
 
