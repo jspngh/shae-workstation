@@ -16,7 +16,7 @@ public:
     //! The default destructor.
     ~SimplePathAlgorithm();
 
-    /*! \brief calculateWaypoints unction calculates the waypoints for a drone to cover an area.
+    /*! \brief calculateWaypoints function calculates the waypoints for a drone to cover an area.
      * This is done in a very simple way, just going north and south while incrementally
      * going west or east, starting from the closest corner of the defined area.
      * It uses visionWidth to define how wide the vision is of the drone, necessary to calculate the path.

@@ -38,6 +38,9 @@ public:
      */
     virtual QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth) = 0;
 
+    //!The function to calculate waypoints in a polygonial area.
+    //virtual QList<QGeoCoordinate> *calculateWaypoints(QGeoShape area, double visionWidth) = 0;
+
     /*!
     * \brief setWaypointsForDrones divides a rectangular area in multiple rectangles and saves the resulting waypoints in each drone object.
     * \param area contains two QGeoCoordinate objects. The first QGeoCoordinate contains the coordinates of the top left point
@@ -45,6 +48,9 @@ public:
     * \param drones every drone in the list will be assigned an area
     */
     virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones) = 0;
+
+    //! The function to set the waypoints for all drones for a polygonial area.
+    //virtual void setWaypointsForDrones(QGeoShape area, QList<Drone *> *drones) = 0;
 
     // Setter
 
