@@ -41,6 +41,8 @@ private slots:
     void backButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
+    //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
+    void updateDroneTable();
 
 private:
     Ui::ConfigWidget *ui;
@@ -50,6 +52,16 @@ private:
 
     void writeConfigToFile();
     void initializeMap();
+
+    // connects all the slots and signals with the mediator
+    void setSignalSlots();
+    // fill the table with the available drones
+    // Note: can only be called once a controller is set because only the controller know the drones
+    void fillDroneTable();
+
+    enum DroneTableCol {
+        CHECK, TYPE, SENSOR, BATTERY, IP_PORT
+    };
 };
 
 #endif // CONFIGWIDGET_H

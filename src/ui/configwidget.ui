@@ -32,13 +32,6 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QSlider" name="precisionSlider">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
       <layout class="QHBoxLayout" name="precisionLayout">
        <item>
@@ -56,6 +49,13 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="precisionSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -158,43 +158,6 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <widget class="QTableWidget" name="droneTable">
-     <column>
-      <property name="text">
-       <string>#</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>ID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Sensor</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="../application.qrc">
-        <normaloff>:/ui/img/battery_318-665.jpg</normaloff>:/ui/img/battery_318-665.jpg</iconset>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../../../../../../../Desktop/symbol_check.png</normaloff>../../../../../../../Desktop/symbol_check.png</iconset>
-      </property>
-     </column>
-    </widget>
-   </item>
    <item row="2" column="1">
     <widget class="QWidget" name="searchField" native="true">
      <widget class="QWidget" name="verticalLayoutWidget">
@@ -257,10 +220,55 @@
      </item>
     </layout>
    </item>
+   <item row="2" column="0">
+    <widget class="QTableWidget" name="droneTable">
+     <property name="maximumSize">
+      <size>
+       <width>443</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="showGrid">
+      <bool>false</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string extracomment="test">Select</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignCenter</set>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Sensor</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Battery</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>IP:Port</string>
+      </property>
+     </column>
+    </widget>
+   </item>
   </layout>
  </widget>
- <resources>
-  <include location="../application.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

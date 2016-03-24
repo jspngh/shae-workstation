@@ -8,6 +8,7 @@
 #include <sstream>
 #include <QGeoRectangle>
 #include <QDebug>
+#include <QCheckBox>
 
 #include "core/controller.h"
 
@@ -17,11 +18,14 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
 {
     //setup UI
     ui->setupUi(this);
-    ui->droneTable->setColumnWidth(0, 35);
-    ui->droneTable->setColumnWidth(1, 110);
-    ui->droneTable->setColumnWidth(2, 110);
-    ui->droneTable->setColumnWidth(3, 50);
-    ui->droneTable->setColumnWidth(4, 40);
+//    ui->droneTable->setColumnWidth(NUM, 35);
+//    ui->droneTable->setColumnWidth(TYPE, 110);
+//    ui->droneTable->setColumnWidth(SENSOR, 110);
+//    ui->droneTable->setColumnWidth(BATTERY, 50);
+//    ui->droneTable->setColumnWidth(IP_PORT, 40);
+    ui->droneTable->verticalHeader()->hide();
+    ui->droneTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     ui->precisionSlider->setMaximum(100);
 
     //setup connections
@@ -131,7 +135,10 @@ void ConfigWidget::sliderChanged(int value)
 void ConfigWidget::setController(Controller *value)
 {
     controller = value;
-    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+
+    // now that the controller is set, some extra initialization is necessary
+    setSignalSlots();
+    fillDroneTable();
 }
 
 void ConfigWidget::startButtonPush()
@@ -230,3 +237,36 @@ void ConfigWidget::writeConfigToFile()
     outfile.close();
 
 }
+
+void ConfigWidget::setSignalSlots()
+{
+    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSlot(this, SLOT(updateDroneTable), QString("droneStatusReceived(DroneStatus)"));
+}
+
+void ConfigWidget::fillDroneTable()
+{
+    ui->droneTable->clearContents();
+    for(int i = 0; i < controller->getDrones()->size(); i++){
+        Drone *d = (*(controller->getDrones()))[i];
+        QString ip_port = d->getServerIp() + QString(':') + QString::number(d->getPortNr());
+        ui->droneTable->insertRow(ui->droneTable->rowCount());
+        int currentRow = ui->droneTable->rowCount() - 1;
+
+        // fill newly created row
+        //QCheckBox *checkbox = new QCheckBox(ui->droneTable->);
+        connect(checkbox, SIGNAL(stateChanged(int)), this, SLOT(cbstate(int)));
+        ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
+        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Solo 3DR")));
+        ui->droneTable->setItem(currentRow, SENSOR, new QTableWidgetItem(QString("Camera")));
+        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("33%")));
+        ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
+    }
+}
+
+void ConfigWidget::updateDroneTable()
+{
+
+}
+
+
