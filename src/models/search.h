@@ -12,7 +12,6 @@ class Search
 {
 public:
     Search();
-    Search(QList<Drone> *droneList, QGeoRectangle area);
 
     ~Search();
 
@@ -21,11 +20,8 @@ public:
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
 
-    QList<Drone> *getDroneList() const;
-    void setDroneList(QList<Drone> *value);
-
-    QList<QGeoCoordinate> *getWaypoints() const;
-    void setWaypoints(QList<QGeoCoordinate> *value);
+    QList<Drone *> *getDroneList() const;
+    void setDroneList(QList<Drone *> *value);
 
     double getGimbalAngle() const;
     void setGimbalAngle(double value);
@@ -37,8 +33,7 @@ private:
     QUuid searchID;
     QTime startTime;
     QGeoRectangle area;
-    QList<Drone> *droneList;
-    QList<QGeoCoordinate> *waypoints;
+    QList<Drone *> *droneList;
     double height;
     double gimbalAngle;
 };

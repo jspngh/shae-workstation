@@ -37,5 +37,11 @@ SOURCES += \
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
 
-#include(../../src/core/core.pri)
+# Code coverage
+LIBS += -lgcov
+QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
+QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
+
+include(../../src/core/core.pri)
+include(../../src/ui/ui.pri)
 

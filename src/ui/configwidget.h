@@ -45,7 +45,7 @@ private slots:
 private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView;
-    Controller* controller;
+    Controller *controller;
 
 
     void writeConfigToFile();

@@ -7,7 +7,6 @@
 Drone::Drone()
     : Drone(6331, "10.1.1.10", MIN_VISIONWIDTH)
 {
-
 }
 
 Drone::Drone(int portNr, QString serverIp, double visionWidth):
@@ -19,7 +18,7 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
     droneConnection = new DroneConnection(serverIp, (quint16) portNr);
     connectionThread = new QThread();
     droneConnection->moveToThread(connectionThread);
-    // connectionThread->start();
+    connectionThread->start();
 
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
 
@@ -29,10 +28,18 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
             this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
+Drone::Drone(const Drone &d)
+    : Drone()
+{
+}
+
 Drone::~Drone()
 {
+    connectionThread->quit();
+    connectionThread->wait();
     delete droneConnection;
     delete connectionThread;
+    delete waypoints;
 }
 
 /***********************
@@ -41,7 +48,7 @@ Getters/Setters
 void Drone::setController(Controller *c)
 {
     controller = c;
-    controller->getMediator()->addSlot(this, SLOT(onPathCalculated(Search*)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSlot(this, SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
@@ -60,7 +67,7 @@ QString Drone::getServerIp()
     return this->serverIp;
 }
 
-QList<QGeoCoordinate>* Drone::getWaypoints()
+QList<QGeoCoordinate> *Drone::getWaypoints()
 {
     return this->waypoints;
 }
@@ -95,15 +102,14 @@ void Drone::onPathCalculated(Search *s)
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
-    for(int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
-        if(s->getDroneList()->at(i).getGuid() == guid)
+    for (int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
+        if (s->getDroneList()->at(i)->getGuid() == guid)
             droneInList = true;
     }
-    if(droneInList){
+    if (droneInList) {
+        // the drone is selected for this search
         qDebug() << "drone was selected";
-        // the drone is selected
-        waypoints = s->getWaypoints();
-        qDebug() << waypoints->size();
+
         sendWaypoints();
         qDebug() << "sendWaypoints";
         startFlight();

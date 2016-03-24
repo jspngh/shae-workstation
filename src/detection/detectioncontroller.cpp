@@ -63,7 +63,7 @@ int DetectionController::getNrDetections(){
 }
 
 void DetectionController::parseConfiguration(){
-    double height = this->search->height;
-    double gimbalAngle = this->search->gimbalAngle;
+    double height = this->search->getHeight();
+    double gimbalAngle = this->search->getGimbalAngle();
 
 }

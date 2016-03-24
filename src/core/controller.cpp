@@ -13,8 +13,9 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-    drones = new QList<Drone>();
-    drones->append(Drone(6331, "127.0.0.1", 0.0001));
+    drones = new QList<Drone *>();
+    drones->append(new Drone(6331, "127.0.0.1", 0.0001));
+
 
     // create controllers
     //detectionController = new DetectionController(mediator);
@@ -24,10 +25,22 @@ Controller::Controller(MainWindow *window, QObject *p)
 
 Controller::~Controller()
 {
-    // TODO: stop all the threads
+    // stop all the threads in order to safely delete them afterwards
+    droneThread.quit();
+    droneThread.wait();
+    pathLogicThread.quit();
+    pathLogicThread.wait();
+    // persistenceThread.quit();
+    // persistenceThread.wait();
+
     delete mediator;
     delete search;
+
+    // special Qt function to delete QList of pointers
+    qDeleteAll(drones->begin(), drones->end());
+    drones->clear();
     delete drones;
+
     // delete detectionController;
     // delete persistenceController;
     delete pathLogicController;
@@ -35,20 +48,26 @@ Controller::~Controller()
 
 void Controller::init()
 {
+    // configure every component with the controller
+    mainWindow->getConfigWidget()->setController(this);
+    pathLogicController->setController(this);
+    for (int i = 0; i < drones->size(); i++)
+        (*drones)[i]->setController(this);
+
+    // set every component in a different thread
+    // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
+
     // detectionController->moveToThread(&detectorThread);
     // persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
+    for (int i = 0; i < drones->size(); i++)
+        (*drones)[i]->moveToThread(&droneThread);
 
+    // start all the threads
     // detectorThread.start();
     // persistenceThread.start();
+    droneThread.start();
     pathLogicThread.start();
-
-    mainWindow->getConfigWidget()->setController(this);
-    pathLogicController->setController(this);
-
-    for(int i = 0; i < drones->size(); i++){
-       (*drones)[i].setController(this);
-    }
 }
 
 /*****************
@@ -60,7 +79,7 @@ Mediator *Controller::getMediator() const
     return mediator;
 }
 
-QList<Drone> *Controller::getDrones() const
+QList<Drone *> *Controller::getDrones() const
 {
     return drones;
 }
