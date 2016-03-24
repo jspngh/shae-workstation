@@ -14,7 +14,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
     drones = new QList<Drone *>();
-    drones->append(new Drone(6330, "127.0.0.1", 0.0001));
+    drones->append(new Drone(6331, "127.0.0.1", 0.0001));
 
 
     // create controllers
