@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
+#include "communication/droneheartbeatreceiver.h"
 
 #include "communication/droneconnection.h"
 
@@ -110,6 +111,10 @@ public:
     /**************************
     Setting messages methods
     **************************/
+    /*! \brief This method sends a message to let the drone know the workstation ip and port.
+    */
+    QJsonDocument setWorkstationConfiguration(QString ipAdress, int port);
+
     /*! \brief Sends a Json message to set a certain setting to a certain value.
      *  See RequestedDroneStatus enum to see which settings can be set.
      * This method actually uses the method to set mulitple settings, namely setSettings().
@@ -121,27 +126,38 @@ public:
     */
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
+
     /*******************
-     * Signal
-     * ****************/
+    Signals
+    *******************/
+
 signals:
+    //! A signal generated to let droneconnection know that something needs to be sent.
+    //! is connected to droneconnection directly in the constructor of drone.
     void droneRequest(QString message);
 
+    //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
+    //! Is connected to the mediator
+    void droneStatusReceived(DroneStatus &status);
+
+    //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
+    //! Is connected to the mediator.
+    void droneHeartBeatReceived(DroneStatus &status);
 
     /*********************
      Slots
      *********************/
 
 private slots:
-    // slots connected via mediator
+    //! Connected via mediator
     void onPathCalculated(Search *s);
 
-    // slots between
+    //! Connected directly with droneconnection.
     void onDroneResponse(const QString &response);
+    //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
 
-signals:
-    void droneStatusReceived(DroneStatus &status);
+
 
 private:
     /*********
@@ -150,6 +166,8 @@ private:
 
     Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
+
+    DroneHeartBeatReceiver* heartbeatReceiver;
 
     QThread *connectionThread;
     DroneConnection *droneConnection;
