@@ -1,15 +1,11 @@
 #include "DetectorManager.h"
-#include "suppression/NonMaximumSuppression.h"
-#include "detectors/HOG/HOGDetector.h"
-#include "detectors/ACF/ACFDetector.h"
-#include "window_selection/SlidingWindow.h"
 
-#include <opencv2/opencv.hpp>
-#include <iostream>
 
 DetectorManager::DetectorManager()
 {
     this->detector = new HOGDetector();
+    //TODO: remove hardcoding of values
+
     this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150, 20, 20);
     this->fps = 2;
 }
@@ -110,47 +106,49 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     return detections;
 }
 
-std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location, std::vector<std::pair<double,double>> xLUT, std::vector<std::pair<double,double>> yLUT){
+std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT){
     vector<std::pair<double,double>> result;
     for(int i = 0; i< dl.getSize();i++)
     {
         Detection D = dl.returnDetections()[i];
-        std::pair<double, double> coordinateFromLocation = derivePositionFromLUT(D, xLUT, yLUT);
-        result.push_back(std::pair<double,double>(coordinateFromLocation.first+location.first,coordinateFromLocation.second+location.second));
+        std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
+        std::pair<double, double> temp1 = changeLatitude(location, distance.first);
+        std::pair<double, double> temp2 = changeLongitude(location, distance.second);
+        result.push_back(std::pair<double,double>(temp1.first,temp2.second));
     }
     return result;
 }
 
 //the LUT contains either the x or y coordinates of an image with the corresponding distance with respect to the origin
-std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<std::pair<double,double>> xLUT, std::vector<std::pair<double,double>> yLUT){
+std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT){
     double xPixel = (double)(d.getX());
     double yPixel = (double)(d.getY() + d.getHeight());
     double xLoc = 0.0;
     double yLoc = 0.0;
-    for(int i = 0; i<xLUT.size();i++){
-            if(xPixel<=xLUT[i].first){
+
+    for(int i = 0; i<yLUT.size();i++){
+            if(yPixel<=yLUT[i][0]){
                 if(i==0){
-                    xLoc = xLUT[0].second;
+                    yLoc = yLUT[i][1];
                 }else{
                     //use linear interpolation
-                    xLoc = xLUT[i-1].second*((xLUT[i].first-xPixel)/(xLUT[i].first-xLUT[i-1].first))+xLUT[i].second*((xPixel-xLUT[i-1].first)/(xLUT[i].first-xLUT[i-1].first));
+                    yLoc = (yLUT[i-1][1])*((yLUT[i][0]-yPixel)/(yLUT[i][0]-yLUT[i-1][0]))+yLUT[i][1]*((yPixel-yLUT[i-1][0])/(yLUT[i][0]-yLUT[i-1][0]));
                 }
                 break;
             }
     }
-    for(int i = 0; i<yLUT.size();i++){
-            if(yPixel<=yLUT[i].first){
+    for(int i = 0; i<xLUT.size();i++){
+            if(yPixel<=xLUT[i][0]){
                 if(i==0){
-                    yLoc = yLUT[0].second;
+                    //TODO: remove hardcoding of values
+                    xLoc = ((xPixel-1280/2)/xLUT[0][1])*xLUT[0][2]/2;
                 }else{
-                    //use linear interpolation
-                    yLoc = yLUT[i-1].second*((yLUT[i].first-yPixel)/(yLUT[i].first-yLUT[i-1].first))+yLUT[i].second*((yPixel-yLUT[i-1].first)/(yLUT[i].first-yLUT[i-1].first));
+                    //TODO: remove hardcoding of values
+                    xLoc = (((xPixel-1280/2)/xLUT[i][1])*xLUT[i][2]/2)*((xLUT[i][0]-yPixel)/(xLUT[i][0]-xLUT[i-1][0]))+(((xPixel-1280/2)/xLUT[i-1][1])*xLUT[i-1][2]/2)*((yPixel-xLUT[i-1][0])/(xLUT[i][0]-xLUT[i-1][0]));
                 }
                 break;
             }
     }
     return std::pair<double,double>(xLoc,yLoc);
 }
-
-
 

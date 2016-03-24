@@ -8,7 +8,9 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase()
 {
-    this->controller = new DetectionController(nullptr,2,"dependencies/testfootage.mp4");
+    QString footage = "dependencies/testfootage.mp4";
+    cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());
+    this->controller = new DetectionController(nullptr, nullptr,2,capture);
     QObject::connect(this->controller, &DetectionController::newDetection,
                      this, &DetectionController_Test::onNewDetection);
     this->numDetections = 0;
