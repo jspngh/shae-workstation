@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
+#include "communication/droneheartbeatreceiver.h"
 
 #include "communication/droneconnection.h"
 
@@ -127,9 +128,11 @@ public:
     */
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
+
     /*******************
     Signals
     *******************/
+
 signals:
     void droneRequest(QString message);
     void droneStatusReceived(DroneStatus &status);
@@ -155,6 +158,10 @@ private:
 
     Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
+
+
+    QThread* heartbeatThread;
+    DroneHeartBeatReceiver* heartbeatReceiver;
 
     QThread *connectionThread;
     DroneConnection *droneConnection;

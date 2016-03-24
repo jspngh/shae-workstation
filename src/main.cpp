@@ -21,6 +21,9 @@ int main(int argc, char *argv[])
 
     Controller controller(&w);
     controller.init();
+    controller.setWorkstationIP("127.0.0.1");
+    controller.setWorkstationHeartbeatPort(6332);
+
     qDebug() << "here3";
     return a.exec();
 }

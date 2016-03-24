@@ -11,6 +11,14 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
+
+    //set workstationIP and heartbeatport
+    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+             workstationIP = address.toString();
+    }
+    workstationHeartbeatPort = 6332;
+
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
     drones = new QList<Drone *>();
@@ -69,4 +77,18 @@ Search *Controller::getSearch() const
 {
     return search;
 }
+
+QString Controller::getWorkstationIP() const
+{
+    return workstationIP;
+}
+
+
+
+quint16 Controller::getWorkstationHeartbeatPort() const
+{
+    return workstationHeartbeatPort;
+}
+
+
 

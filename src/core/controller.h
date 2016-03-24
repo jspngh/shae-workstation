@@ -33,7 +33,18 @@ public:
     QList<Drone *> *getDrones() const;
     Search *getSearch() const;
 
+    QString getWorkstationIP() const;
+    //void setWorkstationIP(const QString &value);
+
+    quint16 getWorkstationHeartbeatPort() const;
+    //void setWorkstationHeartbeatPort(const quint16 &value);
+
 private:
+
+
+    QString workstationIP;
+    quint16 workstationHeartbeatPort;
+
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<Drone *> *drones;

@@ -27,6 +27,18 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
+
+    heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP(),
+                                                   controller->getWorkstationHeartbeatPort());
+    heartbeatThread = new QThread();
+    heartbeatReceiver->moveToThread(heartbeatThread);
+    heartbeatThread->start();
+
+    connect(heartbeatReceiver, SIGNAL(droneHeartBeat(QString)),
+            this, SLOT(onDroneResponse(QString)));
+    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int,QString)),
+            this, SLOT(onDroneResponseError(int,QString)));
+
 }
 
 Drone::~Drone()
@@ -127,6 +139,9 @@ void Drone::onDroneResponseError(int socketError, const QString &message)
 {
     qDebug() << message;
 }
+
+
+
 
 
 /***********************
