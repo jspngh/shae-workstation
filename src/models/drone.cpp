@@ -29,7 +29,6 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
 }
 
 Drone::Drone(const Drone &d)
-    : Drone()
 {
 }
 
