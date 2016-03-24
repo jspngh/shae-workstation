@@ -110,10 +110,10 @@ void Drone::onPathCalculated(Search *s)
         // the drone is selected for this search
         qDebug() << "drone was selected";
 
-        sendWaypoints();
-        qDebug() << "sendWaypoints";
         startFlight();
         qDebug() << "startFlight";
+        sendWaypoints();
+        qDebug() << "sendWaypoints";
     }
 }
 
