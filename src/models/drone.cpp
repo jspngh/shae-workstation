@@ -28,17 +28,8 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
 
-    heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP(),
-                                                   controller->getWorkstationHeartbeatPort());
-    heartbeatThread = new QThread();
-    heartbeatReceiver->moveToThread(heartbeatThread);
-    heartbeatThread->start();
 
-    connect(heartbeatReceiver, SIGNAL(droneHeartBeat(QString)),
-            this, SLOT(onDroneResponse(QString)));
-    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int,QString)),
-            this, SLOT(onDroneResponseError(int,QString)));
-    this->setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
+
 
 
 }
@@ -59,6 +50,18 @@ void Drone::setController(Controller *c)
     controller = c;
     controller->getMediator()->addSlot(this, (char*) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+
+    heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
+    //heartbeatThread = new QThread();
+    //heartbeatReceiver->moveToThread(heartbeatThread);
+    //heartbeatThread->start();
+
+    connect(heartbeatReceiver, SIGNAL(droneHeartBeat(QString)),
+            this, SLOT(onDroneResponse(QString)));
+    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int,QString)),
+            this, SLOT(onDroneResponseError(int,QString)));
+
+    setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
 }
 
 QUuid Drone::getGuid() const
@@ -130,7 +133,6 @@ void Drone::onPathCalculated(Search *s)
 void Drone::onDroneResponse(const QString &response)
 {
     qDebug() << "In processResponse";
-    qDebug() << response;
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);

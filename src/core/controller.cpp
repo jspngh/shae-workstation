@@ -17,6 +17,8 @@ Controller::Controller(MainWindow *window, QObject *p)
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
              workstationIP = address.toString();
     }
+    //TODO: delete override
+    workstationIP = "127.0.0.1";
 
 
     // create drones
@@ -56,7 +58,6 @@ void Controller::init()
 
     for (int i = 0; i < drones->size(); i++) {
         (*drones)[i]->setController(this);
-        (*drones)[i]->setWorkstationConfiguration(workstationIP, workstationHeartbeatPort);
     }
 }
 

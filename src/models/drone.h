@@ -13,7 +13,7 @@
 
 #include "communication/droneconnection.h"
 
-class DroneHeartBeatReceiver;
+
 class Controller;
 class Search;
 
@@ -159,8 +159,6 @@ private:
     Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
-
-    QThread* heartbeatThread;
     DroneHeartBeatReceiver* heartbeatReceiver;
 
     QThread *connectionThread;

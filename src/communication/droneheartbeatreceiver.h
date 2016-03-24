@@ -5,11 +5,10 @@
 #include <QTcpServer>
 #include <QAbstractSocket>
 #include <QtNetwork>
-#include "core/controller.h"
 #include <QHostAddress>
 
 
-class Controller;
+
 
 class DroneHeartBeatReceiver: public QObject
 {
@@ -17,11 +16,9 @@ class DroneHeartBeatReceiver: public QObject
 
 public:
     DroneHeartBeatReceiver();
-    DroneHeartBeatReceiver(const QString ip, quint16 port, QObject*p =0);
+    DroneHeartBeatReceiver(const QString ip, QObject*p =0);
     ~DroneHeartBeatReceiver();
 
-    Controller *getController() const;
-    void setController(Controller *value);
 
     quint16 getWorkstationHeartbeatPort() const;
     void setWorkstationHeartbeatPort(const quint16 &value);
@@ -37,10 +34,9 @@ signals:
     void droneHeartBeatError(int socketError, const QString &message);
 
 private:
-    Controller* controller;
+
     quint16 workstationHeartbeatPort;
     QTcpServer* server;
-
 };
 
 #endif // DRONEHEARTBEATRECEIVER_H

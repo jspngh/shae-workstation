@@ -7,6 +7,7 @@ import sys
 import time
 import datetime
 
+
 class HeartBeatThread (threading.Thread):
     def __init__(self, threadID):
         threading.Thread.__init__(self)
@@ -14,17 +15,18 @@ class HeartBeatThread (threading.Thread):
         self.quit = False
         self.workstation_ip = None
         self.workstation_port = None
-        self.workstation_socket = socket.socket(socket.AF_INET,      # Internet
-                                                socket.SOCK_STREAM)  # TCP
 
     def run(self):
         if self.workstation_ip is None or self.workstation_port is None:
             return
         print self.workstation_ip
         print self.workstation_port
-        self.workstation_socket.connect((self.workstation_port, self.workstation_ip))
         print "Running heartbeat thread"
-        while not quit:
+        while not self.quit:
+            workstation_socket = socket.socket(socket.AF_INET,      # Internet
+                                               socket.SOCK_STREAM)  # TCP
+            workstation_socket.connect((self.workstation_ip, self.workstation_port))
+
             control_socket = socket.socket(socket.AF_UNIX,      # Unix Domain Socket
                                            socket.SOCK_STREAM)  # TCP
             success = True
@@ -36,14 +38,13 @@ class HeartBeatThread (threading.Thread):
                 loc = {'Latitude': 51.022658, 'Longitude': 3.709956}
                 heart_beat = {'MessageType': 'status', 'Timestamp': timestamp, 'Location': loc, 'Reached WP': 0}
                 hb_message = json.dumps(heart_beat)
-
-                raw_length = control_socket.recv(4)
-                response_length = struct.unpack(">I", raw_length)[0]
-                response = control_socket.recv(response_length)
+                print "Heartbeat message: ", hb_message
+                workstation_socket.send(bytearray(struct.pack(">H", len(hb_message) + 4)))
                 response_length = bytearray(struct.pack(">I", len(hb_message)))
-                self.workstation_socket.send(response_length + hb_message)
+                workstation_socket.send(response_length + hb_message)
                 # close the connection
                 control_socket.close()
+                workstation_socket.close()
             except socket.error:
                 success = False
 
@@ -62,12 +63,12 @@ class HeartBeatThread (threading.Thread):
 
 serversocket = socket.socket(socket.AF_INET,  # Internet
                              socket.SOCK_STREAM)  # TCP
-serversocket.bind(("127.0.0.1", "6331"))
+serversocket.bind(("127.0.0.1", 6331))
 serversocket.listen(1)  # become a server socket, only 1 connection allowed
 
 heartbeat_thread = HeartBeatThread(0)
 
-while not quit:
+while True:
     client, address = serversocket.accept()
     length = client.recv(4)
     if length is not None:
