@@ -1,33 +1,30 @@
 #ifndef DRONECONNECTION_H
 #define DRONECONNECTION_H
 
-#include <QThread>
+#include <QObject>
 #include <QMutex>
 #include <QWaitCondition>
 #include "core/mediator.h"
 
-class DroneConnection: public QThread
+class DroneConnection: public QObject
 {
     Q_OBJECT
 
 public:
-    DroneConnection(Mediator *mediator, QObject *parent = 0);
+    DroneConnection(const QString hostName, quint16 port, QObject *p = 0);
     ~DroneConnection();
 
-    void droneRequest(const QString &hostName, quint16 port, const QString &message);
-    void run() Q_DECL_OVERRIDE;
+public slots:
+    void onDroneRequest(QString message);
 
 signals:
     void droneResponse(const QString &fortune);
     void droneResponseError(int socketError, const QString &message);
 
 private:
-    QString jsonMessage; /*!< The message to send, in Json format */
     QString droneIpAddress; /*!< The IP address of the drone, this will be 10.1.1.10 */
     quint16 port; /*!< The port number that will be used to connect to the drone */
-    QMutex mutex;
-    QWaitCondition cond;
-    bool quit;
+
 };
 
 #endif // DRONECONNECTION_H

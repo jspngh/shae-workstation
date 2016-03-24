@@ -6,7 +6,7 @@ Mediator::Mediator(QObject *parent)
 
 }
 
-int Mediator::addSignal(QObject *sender, char *signal, QString signalName)
+int Mediator::addSignal(QObject *sender, const char *signal, QString signalName)
 {
     int count = 0;
     this->mutex.lock();
@@ -33,7 +33,7 @@ int Mediator::addSignal(QObject *sender, char *signal, QString signalName)
     return count;
 }
 
-int Mediator::addSlot(QObject *receiver, char *slot, QString signalName)
+int Mediator::addSlot(QObject *receiver, const char *slot, QString signalName)
 {
     int count = 0;
 
