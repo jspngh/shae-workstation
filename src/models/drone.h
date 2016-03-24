@@ -132,19 +132,29 @@ public:
     *******************/
 
 signals:
+    //! A signal generated to let droneconnection know that something needs to be sent.
+    //! is connected to droneconnection directly in the constructor of drone.
     void droneRequest(QString message);
+
+    //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
+    //! Is connected to the mediator
     void droneStatusReceived(DroneStatus &status);
+
+    //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
+    //! Is connected to the mediator.
+    void droneHeartBeatReceived(DroneStatus &status);
 
     /*********************
      Slots
      *********************/
 
 private slots:
-    // slots connected via mediator
+    //! Connected via mediator
     void onPathCalculated(Search *s);
 
-    // slots between
+    //! Connected directly with droneconnection.
     void onDroneResponse(const QString &response);
+    //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
 
 

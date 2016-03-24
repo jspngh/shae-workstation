@@ -56,6 +56,7 @@ void Drone::setController(Controller *c)
     controller = c;
     controller->getMediator()->addSlot(this, (char*) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneHeartbeatReceived(DroneStatus)"));
 
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
@@ -141,7 +142,10 @@ void Drone::onDroneResponse(const QString &response)
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
-        emit droneStatusReceived(status);
+        if (status.getHeartbeat())
+            emit droneHeartBeatReceived(status);
+        else
+            emit droneStatusReceived(status);
     } else
         qDebug() << response;
 }
