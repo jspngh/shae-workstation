@@ -9,9 +9,12 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include "dronestatus.h"
-#include "core/mediator.h"
 
 #include "communication/droneconnection.h"
+
+
+class Controller;
+class Search;
 
 enum RequestedDroneStatus {
     Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
@@ -39,30 +42,38 @@ public:
     //! visionwidth to MIN_VISIONWIDTH
     //! serverIp to 10.1.1.10
     //! portNr to 6330
-    Drone(Mediator *mediator);
+    Drone();
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    Drone(Mediator *mediator, QUuid guid, int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
+    Drone(int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
     //! Destructor
     ~Drone();
+
+    //! Copy constructor
+    Drone(const Drone &d)
+    {
+
+    }
 
 
     /***********************
     Getters/Setters
     ************************/
-    QUuid getGuid();
+    void setController(Controller *ctrl);
+
+    QUuid getGuid() const;
 
     int getPortNr();
 
     QString getServerIp();
 
-    QList<QGeoCoordinate> &getWaypoints();
+    QList<QGeoCoordinate> *getWaypoints();
 
-    void setWaypoints(const QList<QGeoCoordinate> &waypoints);
+    void setWaypoints(QList<QGeoCoordinate> *waypoints);
 
     void addWaypoint(const QGeoCoordinate &waypoint);
 
-    double getVisionWidth();
+    double getVisionWidth() const;
 
     void setVisionWidth(double visionWidth);
 
@@ -112,8 +123,22 @@ public:
     */
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
+    /*******************
+     * Signal
+     * ****************/
+signals:
+    void droneRequest(QString message);
+
+
+    /*********************
+     Slots
+     *********************/
 
 private slots:
+    // slots connected via mediator
+    void onPathCalculated(Search *s);
+
+    // slots between
     void onDroneResponse(const QString &response);
     void onDroneResponseError(int socketError, const QString &message);
 
@@ -124,13 +149,16 @@ private:
     /*********
     Attributes
     **********/
+
+    Controller *controller;
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
+    QThread *connectionThread;
     DroneConnection *droneConnection;
     int portNr; /*!< The port number that will be used to connect to the actual drone */
     QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
 
-    QList<QGeoCoordinate> waypoints; //!< Keeps the list of waypoints the drone needs to fly.
+    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
 
     //!< This attribute tells how wide the vision of the drone is.
     //!< This is useful to calculate the waypoints.

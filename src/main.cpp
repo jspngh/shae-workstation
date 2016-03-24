@@ -14,22 +14,15 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-//    QFile file(":styles/main.qss");
-//    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//        a.setStyleSheet(file.readAll());
-//        file.close();
-//    }
-
     // testDrone();
 
     MainWindow w;
     w.show();
 
-    Controller *controller = new Controller(&w);
-    controller->run();
-
-    int ret = a.exec();
-    return ret;
+    Controller controller(&w);
+    controller.init();
+    qDebug() << "here3";
+    return a.exec();
 }
 
 // This is test code and should not be in main()
