@@ -7,7 +7,6 @@
 Drone::Drone()
     : Drone(6331, "10.1.1.10", MIN_VISIONWIDTH)
 {
-
 }
 
 Drone::Drone(int portNr, QString serverIp, double visionWidth):
@@ -27,6 +26,11 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
+}
+
+Drone::Drone(const Drone &d)
+    : Drone()
+{
 }
 
 Drone::~Drone()
