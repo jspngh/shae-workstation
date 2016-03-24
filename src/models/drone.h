@@ -43,18 +43,16 @@ public:
     //! visionwidth to MIN_VISIONWIDTH
     //! serverIp to 10.1.1.10
     //! portNr to 6330
-    Drone();
+    explicit Drone();
+
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    Drone(int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
-    //! Destructor
-    ~Drone();
+    explicit Drone(int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
 
     //! Copy constructor
-    Drone(const Drone &d)
-    {
-
-    }
+    explicit Drone(const Drone &d);
+    //! Destructor
+    ~Drone();
 
 
     /***********************

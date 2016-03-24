@@ -7,18 +7,9 @@ Search::Search()
     // TODO set time
 }
 
-//Search::Search(QList<Drone*> *droneList, QGeoRectangle area)
-//    : searchID(QUuid::createUuid()),
-//      droneList(droneList),
-//      area(area)
-//{
-//    // TODO set time
-//}
-
 Search::~Search()
 {
     delete droneList;
-    delete waypoints;
 }
 
 QTime Search::getStartTime() const
@@ -46,15 +37,6 @@ void Search::setDroneList(QList<Drone *> *value)
     droneList = value;
 }
 
-QList<QGeoCoordinate> *Search::getWaypoints() const
-{
-    return waypoints;
-}
-
-void Search::setWaypoints(QList<QGeoCoordinate> *value)
-{
-    waypoints = value;
-}
 
 
 

@@ -7,7 +7,6 @@
 Drone::Drone()
     : Drone(6331, "10.1.1.10", MIN_VISIONWIDTH)
 {
-
 }
 
 Drone::Drone(int portNr, QString serverIp, double visionWidth):
@@ -34,12 +33,19 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
 
 }
 
+Drone::Drone(const Drone &d)
+{
+}
+
 Drone::~Drone()
 {
+    connectionThread->quit();
+    connectionThread->wait();
     delete droneConnection;
     delete connectionThread;
     delete heartbeatReceiver;
-    delete heartbeatThread;
+    delete waypoints;
+
 }
 
 /***********************
@@ -119,14 +125,13 @@ void Drone::onPathCalculated(Search *s)
             droneInList = true;
     }
     if (droneInList) {
+        // the drone is selected for this search
         qDebug() << "drone was selected";
-        // the drone is selected
-        waypoints = s->getWaypoints();
-        qDebug() << waypoints->size();
-        sendWaypoints();
-        qDebug() << "sendWaypoints";
+
         startFlight();
         qDebug() << "startFlight";
+        sendWaypoints();
+        qDebug() << "sendWaypoints";
     }
 }
 

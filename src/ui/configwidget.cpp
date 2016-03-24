@@ -119,7 +119,7 @@ void ConfigWidget::initConfScreen(QString f)
         ui->locateField->setText("0");
         ui->longitudeField->setText("0");
         ui->latitudeField->setText("0");
-        mapView->setCenter(QGeoCoordinate(55.75 , 37.33));
+        mapView->setCenter(QGeoCoordinate(51.022692, 3.709853));
     }
 }
 
@@ -140,7 +140,7 @@ void ConfigWidget::startButtonPush()
         Search *s = controller->getSearch();
 
         // TODO: read the search area from the gui
-        QGeoRectangle area(QGeoCoordinate(12, 12), QGeoCoordinate(13, 13));
+        QGeoRectangle area(QGeoCoordinate(51.022960, 3.709623), QGeoCoordinate(51.022761, 3.709877));
         s->setArea(area);
 
         // TODO: read the drones that will be used in the search
@@ -148,8 +148,7 @@ void ConfigWidget::startButtonPush()
         s->setDroneList(controller->getDrones());
 
         emit startSearch(s);
-
-        qDebug() << "startSearch";
+        qDebug() << "emit PathAlgorithm::startSearch(Search *s)";
     }
 
 

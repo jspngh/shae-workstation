@@ -26,7 +26,7 @@ public:
      * \param signalName name of the signal. Note: the slot must choose the same signalName to connect both
      * \return the number of slots that implement the slot listing to the added signal
      */
-    int addSignal(QObject *sender, char *signal, QString signalName);
+    int addSignal(QObject *sender, const char *signal, QString signalName);
 
     /*!
      * \brief addSlot will connect the slot to every signal with the same signalName. (thread-safe function)
@@ -35,7 +35,7 @@ public:
      * \param signalName name of the signal. Note: the signal must choose the same signalName to connect both
      * \return the number of signal emitting the signal with the same signalName
      */
-    int addSlot(QObject *receiver, char *slot, QString signalName);
+    int addSlot(QObject *receiver, const char *slot, QString signalName);
 
     virtual ~Mediator() {}
 
@@ -67,8 +67,8 @@ private:
     class Element
     {
     public:
-        Element(QObject *obj, char *method, QString s)
-            : signalName(s), object(obj), method(method)
+        Element(QObject *obj, const char *method, QString s)
+            : signalName(s), object(obj), method(const_cast<char*>(method))
         {
 
         }
