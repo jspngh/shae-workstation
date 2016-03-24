@@ -43,7 +43,7 @@ Drone::~Drone()
     connectionThread->wait();
     delete droneConnection;
     delete connectionThread;
-    delete heartbeatReceiver;
+    //TODO: delete heartbeatReceiver;
     delete waypoints;
 
 }
