@@ -8,6 +8,7 @@
 class SimplePathAlgorithm : public PathAlgorithm
 {
 public:
+
     //! The default constructor that sets the start Coordinate from the superclass equal to (0,0)
     SimplePathAlgorithm();
     //! Constructor that sets the start Coordinate from the superclass equal to the parameter.
@@ -21,7 +22,7 @@ public:
      * It uses visionWidth to define how wide the vision is of the drone, necessary to calculate the path.
      * This method implements the pure virtual method from the super class.
      */
-    QList<QGeoCoordinate> calculateWaypoints(QGeoRectangle area, double visionWidth);
+    QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth);
 
     /*! \brief This function sets the waypoints of each drone in the list of drones, based on the area provided to the function.
      * This function splits the area in smaller areas so that each drone has its own area. Then it calculates the waypoints for each drone,

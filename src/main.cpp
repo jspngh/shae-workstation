@@ -12,7 +12,9 @@ void testDrone();
 
 int main(int argc, char *argv[])
 {
-   DetectionController(null, Search *search, double fps, QString sequence, QObject *parent)
+   //QList<Drone> *droneList; QGeoRectangle area;
+   //Search* s = new Search(droneList, area);
+   //Mediator* m;
+   //DetectionController(m, s, 2, QString("dependencies/testfootage.mp4"));
 
 }
-
