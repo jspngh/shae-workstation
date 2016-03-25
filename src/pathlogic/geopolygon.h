@@ -42,9 +42,9 @@ private:
     QList<QGeoCoordinate> coordinates;
 
     //The following attributes are only for internal caching use, these should never be set.
-    //! contains all coordinates from the upper hull, sorted from mostWest to mostEast.
+    //! contains all coordinates from the upper hull.
     QList<QGeoCoordinate> upperHull;
-    //! contains all coordinates from the lower hull, sorted from mostWest to mostEast;
+    //! contains all coordinates from the lower hull.
     QList<QGeoCoordinate> lowerHull;
     QGeoCoordinate mostWestCoordinate;
     QGeoCoordinate mostEastCoordinate;

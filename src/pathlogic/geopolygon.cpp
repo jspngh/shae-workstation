@@ -26,9 +26,35 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
     mostWestCoordinate = coordinates.front();
     mostEastCoordinate = coordinates.back();
 
-
-
     //TODO: create upperhull and lowerhull
+    int size = coordinates.size();
+    lowerHull = QList<QGeoCoordinate>();
+    for (int i = 0; i < size; ++i) {
+        while (lowerHull.size() >= 2 &&
+               crossProduct(lowerHull[lowerHull.size()-2],
+                            lowerHull[lowerHull.size()-1],
+                            coordinates[i]) <= 0.0){
+            lowerHull.pop_back();
+        }
+        lowerHull.push_back(coordinates[i]);
+
+    }
+
+    upperHull = QList<QGeoCoordinate>();
+    for (int i = 0; i < size; ++i) {
+        while (upperHull.size() >= 2 &&
+               crossProduct(upperHull[upperHull.size()-2],
+                            upperHull[upperHull.size()-1],
+                            coordinates[i]) <= 0.0){
+            upperHull.pop_back();
+        }
+        upperHull.push_back(coordinates[i]);
+
+    }
+    //TODO: set coordidnates
+
+
+
 
 
     //if not valid, just return default constructor
