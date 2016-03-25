@@ -136,7 +136,6 @@ void ConfigWidget::sliderChanged(int value)
 void ConfigWidget::setController(Controller *value)
 {
     controller = value;
-
     // now that the controller is set, some extra initialization is necessary
     setSignalSlots();
     fillDroneTable();

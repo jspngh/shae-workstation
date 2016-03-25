@@ -12,6 +12,16 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
+
+    //set workstationIP
+    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+             workstationIP = address.toString();
+    }
+    //TODO: delete override
+    workstationIP = "127.0.0.1";
+
+
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
     drones = new QList<Drone *>();
@@ -41,11 +51,14 @@ Controller::~Controller()
     // persistenceThread.wait();
 
     delete mediator;
-    delete search;
+
+   //TODO:what if no waypoints were assigned?
+    //delete search;
 
     // special Qt function to delete QList of pointers
     qDeleteAll(drones->begin(), drones->end());
     drones->clear();
+
     delete drones;
 
     // delete detectionController;
@@ -95,3 +108,9 @@ Search *Controller::getSearch() const
 {
     return search;
 }
+
+QString Controller::getWorkstationIP() const
+{
+    return workstationIP;
+}
+

@@ -1,22 +1,6 @@
 INCLUDEPATH += "core"
 DEPENDPATH += "core"
 
-#<<<<<<< Communication when merging
-#SOURCES += $$PWD/communication.cpp \
-#    $$PWD/drone.cpp \
-#    $$PWD/simplepathalgorithm.cpp \
-#    $$PWD/pathalgorithm.cpp \
-#    $$PWD/droneconnection.cpp \
-#    $$PWD/dronestatus.cpp \
-#    $$PWD/parseexception.cpp
-#HEADERS += $$PWD/communication.h \
-#    $$PWD/drone.h \
-#    $$PWD/pathalgorithm.h \
-#    $$PWD/simplepathalgorithm.h \
-#    $$PWD/droneconnection.h \
-#    $$PWD/dronestatus.h \
-#    $$PWD/parseexception.h
-#=======
 
 INCLUDEPATH += /usr/local/include/
 INCLUDEPATH += /usr/local/include/opencv2
