@@ -222,6 +222,12 @@
    </item>
    <item row="2" column="0">
     <widget class="QTableWidget" name="droneTable">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="maximumSize">
       <size>
        <width>443</width>
@@ -229,17 +235,29 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string extracomment="Select the drones that will be used in the search"/>
      </property>
      <property name="whatsThis">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string/>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>false</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
      <property name="showGrid">
       <bool>false</bool>
      </property>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>40</number>
+     </attribute>
      <column>
       <property name="text">
-       <string extracomment="test">Select</string>
+       <string/>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -248,11 +266,6 @@
      <column>
       <property name="text">
        <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Sensor</string>
       </property>
      </column>
      <column>

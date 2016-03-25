@@ -8,6 +8,9 @@
 #include <QMainWindow>
 #include <QMMapView.h>
 #include <QFile>
+#include <QPair>
+#include <QList>
+#include <QUuid>
 
 #include "models/search.h"
 
@@ -49,8 +52,6 @@ private:
     QMMapView *mapView;
     Controller *controller;
 
-
-    void writeConfigToFile();
     void initializeMap();
 
     // connects all the slots and signals with the mediator
@@ -59,8 +60,10 @@ private:
     // Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
 
+    QList<QPair<int, Drone*>> dronesInTable;
+
     enum DroneTableCol {
-        CHECK, TYPE, SENSOR, BATTERY, IP_PORT
+        CHECK, TYPE, BATTERY, IP_PORT
     };
 };
 
