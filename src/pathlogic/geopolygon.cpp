@@ -4,6 +4,17 @@
 GeoPolygon::GeoPolygon()
     :QGeoShape()
 {
+    mostWestCoordinate = QGeoCoordinate(0.0,0.0);
+    mostEastCoordinate = QGeoCoordinate(0.0,1.0);
+    lowerHull = QList<QGeoCoordinate>();
+    upperHull = QList<QGeoCoordinate>();
+    lowerHull.push_back(mostWestCoordinate);
+    lowerHull.push_back(mostEastCoordinate);
+    upperHull.push_back(mostWestCoordinate);
+    upperHull.push_back(QGeoCoordinate(1.0,0.4));
+    upperHull.push_back(QGeoCoordinate(1.0,0.6));
+    upperHull.push_back(mostEastCoordinate);
+    coordinates = fromHull(upperHull, lowerHull);
 
 }
 
@@ -39,17 +50,23 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
         upperHull.push_back(coordinates[i]);
 
     }
-    this->coordinates = upperHull;
+    this->coordinates = fromHull(upperHull, lowerHull);
 
-    QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
-    lower.pop_back();
-    lower.pop_front();
-    this->coordinates.append(lower);
+}
 
-
-
-
-
+QList<QGeoCoordinate> GeoPolygon::fromHull(QList<QGeoCoordinate> upper, QList<QGeoCoordinate> lower)
+{
+    QList<QGeoCoordinate> list = QList<QGeoCoordinate>(upper);
+    QList<QGeoCoordinate> lowerlist = QList<QGeoCoordinate>(lower);
+    //pop the back and front, since upperhull already should contain these.
+    lowerlist.pop_back();
+    lowerlist.pop_front();
+    //start from the end of the lowerhull, and add it to coordinates to create a list in clockwise order.
+    while(!lowerlist.empty()){
+        list.append(lowerlist.back());
+        lowerlist.pop_back();
+    }
+    return list;
 }
 
 int GeoPolygon::compare(const QGeoCoordinate left, const QGeoCoordinate right)

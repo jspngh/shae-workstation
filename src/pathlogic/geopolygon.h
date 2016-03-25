@@ -12,8 +12,7 @@ class GeoPolygon : public QGeoShape
 public:
     /*!
      * \brief GeoPolygon default constructor
-     * Doesn't do anything for now
-     * TODO: implement
+     * Creates a simple polygon around (0.0,0.0)
      */
     GeoPolygon();
     /*!
@@ -23,6 +22,15 @@ public:
      * in its area, but not necessarily contains all the coordinates on its border (saved in the coordinates attribute.
      */
     GeoPolygon(QList<QGeoCoordinate> coordinates);
+
+    /*!
+     * \brief fromHull returns the field coordinates if upperhull and lowerhull are already calculated.
+     * \param upper is a list of coordinates describing the upperHull.
+     * \param lower is a list of coordinates describing the lowerHull.
+     * \return A list of coordinates, usefull for setting the coordinates field after calculating
+     *  upperHull and lowerHull in the constructor.
+     */
+    static QList<QGeoCoordinate> fromHull(QList<QGeoCoordinate> upper, QList<QGeoCoordinate> lower);
 
     //! TODO
     QGeoRectangle getBoundingQGeoRectangle();
