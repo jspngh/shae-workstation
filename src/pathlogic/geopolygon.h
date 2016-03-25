@@ -10,9 +10,21 @@
 class GeoPolygon : public QGeoShape
 {
 public:
+    /*!
+     * \brief GeoPolygon default constructor
+     * Doesn't do anything for now
+     * TODO: implement
+     */
     GeoPolygon();
+    /*!
+     * \brief GeoPolygon constructor that should be used
+     * \param coordinates, a list containing coordinates that should be inside the polygon.
+     * The constructor will create a convex polygon that will contain all coordinates
+     * in its area, but not necessarily contains all the coordinates on its border (saved in the coordinates attribute.
+     */
     GeoPolygon(QList<QGeoCoordinate> coordinates);
 
+    //! TODO
     QGeoRectangle getBoundingQGeoRectangle();
 
     /*! \brief This functions calculates the z-component of the cross product to know if the points
@@ -20,13 +32,36 @@ public:
         \return returns positive if OAB makes a counter-clockwise turn,
         negative if clockwise and zero if points are collinear. */
     double crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordinate B);
+
+    //! Compares two coordinates, used to sort a list of coordinates in the constructor of the GeoPolygon.
+    static int compare(const QGeoCoordinate left, const QGeoCoordinate right);
+
+    //! Checks if the saved coordinates forms a valid convex polygon.
+    //! TODO: implement rest of checks.
+    bool isValid() const;
+
+    //! Makes a string of a polygon for debugging purposes.
+    QString toString();
+
     /***********
      * Getters *
      ***********/
+    /*!
+     * \brief getCoordinates
+     * \return List of all the coordinates from the polygon, sorted clockwise starting from the mostWestCoordinate.
+     */
     QList<QGeoCoordinate> getCoordinates() const;
 
+    /*!
+     * \brief getUpperHull
+     * \return List of coordinates in upper hull, including mostEastCoordinate and mostEastCoordinate, sorted from West to East.
+     */
     QList<QGeoCoordinate> getUpperHull() const;
 
+    /*!
+     * \brief getLowerHull
+     * \return List of coordinates in lower hull, including mostEastCoordinate and mostEastCoordinate, sorted from West to East.
+     */
     QList<QGeoCoordinate> getLowerHull() const;
 
     QGeoCoordinate getMostWestCoordinate() const;
@@ -35,16 +70,14 @@ public:
 
 private:
 
-    //! Checks if the list of coordinates forms a valid convex polygon.
-    bool isValid() const;
 
     //! The list of coordinates contained by the polygon.
     QList<QGeoCoordinate> coordinates;
 
     //The following attributes are only for internal caching use, these should never be set.
-    //! contains all coordinates from the upper hull.
+    //! contains all coordinates from the upper hull, including mostWest and mostEast, sorted from West to East.
     QList<QGeoCoordinate> upperHull;
-    //! contains all coordinates from the lower hull.
+    //! contains all coordinates from the lower hull, including mostWest and mostEast, sorted from West to East.
     QList<QGeoCoordinate> lowerHull;
     QGeoCoordinate mostWestCoordinate;
     QGeoCoordinate mostEastCoordinate;

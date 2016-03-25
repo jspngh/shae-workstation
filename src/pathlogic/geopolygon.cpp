@@ -2,31 +2,19 @@
 #include <algorithm>
 
 GeoPolygon::GeoPolygon()
+    :QGeoShape()
 {
 
 }
 
 GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
+    :QGeoShape()
 {
-    //TODO: set mostWestCoordinate and set mostEastCoordinate
-    /*
-    double minLongitude = 180;
-    double maxLongitude = -180;
-
-    foreach(QGeoCoordinate coordinate, coordinates){
-        if(coordinate.longitude() > maxLongitude )
-            maxLongitude = coordinate.longitude();
-            mostEastCoordinate = coordinate;
-        if(coordinate.longitude() < minLongitude)
-            minLongitude = coordinate.longitude();
-            mostWestCoordinate = coordinate;
-    }
-    */
     std::sort(coordinates.begin(), coordinates.end(), compare);
     mostWestCoordinate = coordinates.front();
     mostEastCoordinate = coordinates.back();
 
-    //TODO: create upperhull and lowerhull
+    //create upperhull and lowerhull
     int size = coordinates.size();
     lowerHull = QList<QGeoCoordinate>();
     for (int i = 0; i < size; ++i) {
@@ -45,26 +33,26 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
         while (upperHull.size() >= 2 &&
                crossProduct(upperHull[upperHull.size()-2],
                             upperHull[upperHull.size()-1],
-                            coordinates[i]) <= 0.0){
+                            coordinates[i]) >= 0.0){
             upperHull.pop_back();
         }
         upperHull.push_back(coordinates[i]);
 
     }
-    //TODO: set coordidnates
+    this->coordinates = upperHull;
+
+    QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
+    lower.pop_back();
+    lower.pop_front();
+    this->coordinates.append(lower);
 
 
 
 
 
-    //if not valid, just return default constructor
-    if(!isValid()){
-        qDebug()<< "The polygon area created is not valid, using the default constructor now instead";
-        return GeoPolygon();
-    }
 }
 
-int compare(const QGeoCoordinate left, const QGeoCoordinate right)
+int GeoPolygon::compare(const QGeoCoordinate left, const QGeoCoordinate right)
 {
     if(left.longitude() == right.longitude())
         return left.latitude() < right.latitude();
@@ -85,17 +73,19 @@ bool GeoPolygon::isValid() const
 {
     //check if mostEast en mostWest are correct
     foreach(QGeoCoordinate coordinate, coordinates){
-        if (coordinate.longitude() < mostWestCoordinate)
+        if (coordinate.longitude() < mostWestCoordinate.longitude())
             return false;
-        if(coordinate.longitude() > mostEastCoordinate)
+        if(coordinate.longitude() > mostEastCoordinate.longitude())
             return false;
     }
 
 
     //mostleft and most right should be in both hulls at resp. front and back
-    if(upperHull.front() != mostWestCoordinate || lowerHull.front() != mostWestCoordinate)
+    if(upperHull.front() != mostWestCoordinate)
        return false;
-    if(upperHull.back() != mostWestCoordinate || lowerHull.back() != mostWestCoordinate)
+    if(lowerHull.front() != mostWestCoordinate)
+        return false;
+    if(upperHull.back() != mostEastCoordinate || lowerHull.back() != mostEastCoordinate)
        return false;
 
     //TODO: check if upperhull curves clockwise
@@ -107,6 +97,22 @@ bool GeoPolygon::isValid() const
 
 
     return true;
+}
+
+QString GeoPolygon::toString()
+{
+    QString string = QString();
+    foreach(QGeoCoordinate coordinate, coordinates){
+        string +=(coordinate.toString()) + (QString("   ||   "));
+    }
+    return string;
+}
+
+QGeoRectangle GeoPolygon::getBoundingQGeoRectangle()
+{
+    //TODO
+
+    return QGeoRectangle();
 }
 
 QList<QGeoCoordinate> GeoPolygon::getCoordinates() const
