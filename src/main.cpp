@@ -13,7 +13,7 @@ int quicktestgeopolygon()
     list.push_back(QGeoCoordinate(2.0,2.0));
 
     list.push_back(QGeoCoordinate(0.0,4.0));
-    list.push_back(QGeoCoordinate(-1.0,3.0));
+    list.push_back(QGeoCoordinate(-1.5,3.0));
     list.push_back(QGeoCoordinate(-2.0,2.0));
     list.push_back(QGeoCoordinate(-1.0,1.0));
 
