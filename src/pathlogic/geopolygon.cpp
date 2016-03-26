@@ -76,6 +76,13 @@ int GeoPolygon::compare(const QGeoCoordinate left, const QGeoCoordinate right)
     else return left.longitude() < right.longitude();
 }
 
+int GeoPolygon::compareLatitude(const QGeoCoordinate left, const QGeoCoordinate right)
+{
+    if(left.latitude() == right.latitude())
+        return left.longitude() < right.longitude();
+    else return left.latitude() < right.latitude();
+}
+
 double GeoPolygon::crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordinate B)
 {
     return (A.longitude() - O.longitude())
@@ -127,9 +134,9 @@ QString GeoPolygon::toString()
 
 QGeoRectangle GeoPolygon::getBoundingQGeoRectangle()
 {
-    //TODO
-
-    return QGeoRectangle();
+    //Constructs a new geo rectangle,
+    //of minimum size, containing all of the coordinates.
+    return QGeoRectangle(coordinates);
 }
 
 QList<QGeoCoordinate> GeoPolygon::getCoordinates() const

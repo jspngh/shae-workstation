@@ -32,7 +32,7 @@ public:
      */
     static QList<QGeoCoordinate> fromHull(QList<QGeoCoordinate> upper, QList<QGeoCoordinate> lower);
 
-    //! TODO
+    //! Constructs a new QGeoRectangle, of minimum size, containing all of the coordinates.
     QGeoRectangle getBoundingQGeoRectangle();
 
     /*! \brief This functions calculates the z-component of the cross product to know if the points
@@ -43,6 +43,9 @@ public:
 
     //! Compares two coordinates, used to sort a list of coordinates in the constructor of the GeoPolygon.
     static int compare(const QGeoCoordinate left, const QGeoCoordinate right);
+
+    //! Compares two coordinates, but sort first according to latitude.
+    static int compareLatitude(const QGeoCoordinate left, const QGeoCoordinate right);
 
     //! Checks if the saved coordinates forms a valid convex polygon.
     //! TODO: implement rest of checks.
