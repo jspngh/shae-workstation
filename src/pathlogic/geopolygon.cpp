@@ -112,13 +112,19 @@ bool GeoPolygon::isValid() const
     if(upperHull.back() != mostEastCoordinate || lowerHull.back() != mostEastCoordinate)
        return false;
 
-    //TODO: check if upperhull curves clockwise
+    //check if upperhull curves clockwise
+    for(int i = 2; i< upperHull.size(); i++){
+        if(crossProduct( upperHull[i-2], upperHull[i-1], upperHull[i] ) >= 0.0)
+            return false;
+    }
 
+    //check if lowerhull curves counter-clockwise
+    for(int i = 2; i< lowerHull.size(); i++){
+        if(crossProduct( lowerHull[i-2], lowerHull[i-1], lowerHull[i]) <= 0.0)
+            return false;
+    }
 
-    //TODO: check if lowerhull curves counter-clockwise
-
-
-    //TODO: check if lowerhull is completely below upperhull.
+    //check if lowerhull is completely below upperhull.
     QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
     lower.pop_back();
     lower.pop_front();

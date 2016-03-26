@@ -40,7 +40,7 @@ public:
         make a clock-wise turn or not, useful for checking if a hull is valid.
         \return returns positive if OAB makes a counter-clockwise turn,
         negative if clockwise and zero if points are collinear. */
-    double crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordinate B);
+    static double crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordinate B);
 
     //! Compares two coordinates, used to sort a list of coordinates in the constructor of the GeoPolygon.
     static int compare(const QGeoCoordinate left, const QGeoCoordinate right);
