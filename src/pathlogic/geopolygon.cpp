@@ -114,10 +114,20 @@ bool GeoPolygon::isValid() const
 
     //TODO: check if upperhull curves clockwise
 
+
     //TODO: check if lowerhull curves counter-clockwise
 
-    //TODO: check if lowerhull is completely below upperhull.
 
+    //TODO: check if lowerhull is completely below upperhull.
+    QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
+    lower.pop_back();
+    lower.pop_front();
+    std::sort(lower.begin(), lower.end(), compareLatitude);
+    QGeoCoordinate highestOfLower = lower.back();
+    foreach(QGeoCoordinate coordinate, upperHull){
+        if(coordinate.latitude() < highestOfLower.latitude())
+            return false;
+    }
 
 
     return true;

@@ -12,7 +12,8 @@ class GeoPolygon : public QGeoShape
 public:
     /*!
      * \brief GeoPolygon default constructor
-     * Creates a simple polygon around (0.0,0.0)
+     * Creates a simple test polygon around (0.0,0.0)
+     * Should not be used for serious purposes.
      */
     GeoPolygon();
     /*!
