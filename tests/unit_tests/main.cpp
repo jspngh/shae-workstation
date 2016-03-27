@@ -9,6 +9,7 @@
 #include "core/json_messages_test.h"
 #include "core/mediator_test.h"
 
+#include <QList>
 #include <QTest>
 #include <QApplication>
 
@@ -16,31 +17,30 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    SimplePathAlgorithm_Test test1;
-    Json_Messages_Test test2;
-    DetectionController_Test test3;
-    //DAO tests
-    SearchDAO_Test test4;
-    DetectionResultDAO_Test test5;
-    DroneDAO_Test test6;
-    DroneSearchDAO_Test test7;
-    DroneStatusDAO_Test test8;
-    VideoSequenceDAO_Test test9;
-    //mediator tests
-    Mediator_Test test10;
+    Persistence *testPersistence = new Persistence();
+    QSqlDatabase* testDataBase = testPersistence->getDatabase();
 
-    QTest::qExec(&test1);
-    QTest::qExec(&test2);
-    QTest::qExec(&test3);
-    QTest::qExec(&test4);
-    QTest::qExec(&test5);
-    QTest::qExec(&test6);
-    QTest::qExec(&test7);
-    QTest::qExec(&test8);
-    QTest::qExec(&test9);
-    QTest::qExec(&test10);
+    QList<QObject*> tests;
+    tests.append(new SimplePathAlgorithm_Test());
+    tests.append(new Json_Messages_Test());
+    tests.append(new DetectionController_Test());
+    tests.append(new Mediator_Test());
+    tests.append(new SearchDAO_Test(testDataBase));
+    tests.append(new DetectionResultDAO_Test(testDataBase));
+    tests.append(new DroneDAO_Test(testDataBase));
+    tests.append(new DroneSearchDAO_Test(testDataBase));
+    tests.append(new DroneStatusDAO_Test(testDataBase));
+    tests.append(new VideoSequenceDAO_Test(testDataBase));
 
-    // a.exec();
+    foreach(QObject* test, tests) {
+        QTest::qExec(test, a.arguments());
+    }
+
+    qDeleteAll(tests.begin(), tests.end());
 
     return 0;
 }
+
+
+
+

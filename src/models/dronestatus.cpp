@@ -31,7 +31,7 @@ DroneStatus DroneStatus::fromJsonString(QString string)
 
     //not a Json message
 
-    if(!jsondoc.isObject()){
+    if (!jsondoc.isObject()) {
         qDebug() << "Not a Json object";
         throw ParseException("Not a Json object", string);
     }
@@ -39,9 +39,9 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     QString messageType = json["MessageType"].toString();
 
     //not a status message
-    if(messageType != "status"){
+    if (messageType != "status") {
         qDebug() << "Not a status message";
-         throw ParseException("Not a status message", string);
+        throw ParseException("Not a status message", string);
     }
     QJsonValue value = json["Orientation"];
     if (! value.isUndefined()) {

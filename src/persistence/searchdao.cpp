@@ -15,7 +15,7 @@ Search SearchDAO::dbSaveSearch(Search search){
     query.prepare("INSERT INTO searches (searchID, start) "
                   "VALUES (:searchID, :start)");
     query.bindValue(":searchID", search.getSearchID());
-    query.bindValue(":start", search.getStart());
+    query.bindValue(":start", search.getStartTime());
     if(query.exec())
     {
        qDebug() << "insert succes";

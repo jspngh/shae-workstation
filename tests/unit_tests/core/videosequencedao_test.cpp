@@ -7,24 +7,13 @@
 #include "persistence/videosequencedao.h"
 #include "models/videosequence.h"
 
-VideoSequenceDAO_Test::VideoSequenceDAO_Test()
+VideoSequenceDAO_Test::VideoSequenceDAO_Test(QSqlDatabase* db)
 {
-    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
-
-    if (!projectShaeDatabase.open())
-    {
-       qDebug() << "Error: connection with database fail";
-    }
-    else
-    {
-       qDebug() << "Database: connection ok";
-    }
+    projectShaeDatabase = db;
 }
 
 VideoSequenceDAO_Test::~VideoSequenceDAO_Test()
 {
-    projectShaeDatabase.close();
 }
 
 void VideoSequenceDAO_Test::initTestCase()
@@ -37,7 +26,7 @@ void VideoSequenceDAO_Test::cleanupTestCase()
 
 void VideoSequenceDAO_Test::testSimpleVideoSequenceDAO()
 {
-    VideoSequenceDAO sd = VideoSequenceDAO(&projectShaeDatabase);
+    VideoSequenceDAO sd = VideoSequenceDAO(projectShaeDatabase);
 
     VideoSequence s = VideoSequence(QUuid::createUuid(), QTime(8,8,8), QTime(9,9,9), 10 , "pathtofile");
     QUuid searchID = QUuid::createUuid();

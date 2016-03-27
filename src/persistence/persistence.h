@@ -22,8 +22,11 @@ class Persistence : public QObject
 
     Q_OBJECT
 public:
+    Persistence();
     Persistence(Mediator *mediator, QObject *parent = 0);
     ~Persistence();
+
+    QSqlDatabase* getDatabase();
 
 signals:
     void onSaveSearch(Search search);

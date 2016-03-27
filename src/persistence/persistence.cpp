@@ -5,6 +5,11 @@
 #include <QStandardPaths>
 #include <QSqlQuery>
 
+Persistence::Persistence()
+{
+    initDatabase();
+}
+
 Persistence::Persistence(Mediator *mediator, QObject *parent):
     QObject(parent)
 {
@@ -20,6 +25,10 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
 
 Persistence::~Persistence(){
     projectShaeDatabase.close();
+}
+
+QSqlDatabase* Persistence::getDatabase(){
+    return &projectShaeDatabase;
 }
 
 void Persistence::saveSearch(Search &search)

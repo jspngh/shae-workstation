@@ -7,24 +7,13 @@
 #include "persistence/dronestatusdao.h"
 #include "models/dronestatus.h"
 
-DroneStatusDAO_Test::DroneStatusDAO_Test()
+DroneStatusDAO_Test::DroneStatusDAO_Test(QSqlDatabase* db)
 {
-    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
-
-    if (!projectShaeDatabase.open())
-    {
-       qDebug() << "Error: connection with database fail";
-    }
-    else
-    {
-       qDebug() << "Database: connection ok";
-    }
+    projectShaeDatabase = db;
 }
 
 DroneStatusDAO_Test::~DroneStatusDAO_Test()
 {
-    projectShaeDatabase.close();
 }
 
 void DroneStatusDAO_Test::initTestCase()
@@ -37,7 +26,7 @@ void DroneStatusDAO_Test::cleanupTestCase()
 
 void DroneStatusDAO_Test::testSimpleDroneStatusDAO()
 {
-    DroneStatusDAO sd = DroneStatusDAO(&projectShaeDatabase);
+    DroneStatusDAO sd = DroneStatusDAO(projectShaeDatabase);
 
     DroneStatus one = DroneStatus(QDateTime(QDate(2016 , 5, 6) ,QTime(5,5,5)), QDateTime(QDate(2016 , 5, 6) ,QTime(5,5,6)), QGeoCoordinate(5,5,5), 5.5, 5.5, 5.5, 5.5, -123456789);
     DroneStatus two = DroneStatus(QDateTime(QDate(2016 , 5, 6) ,QTime(6,6,6)), QDateTime(QDate(2016 , 5, 6) ,QTime(6,6,7)), QGeoCoordinate(6,6,6), 5.5, 5.5, 5.5, 5.5, -123456789);

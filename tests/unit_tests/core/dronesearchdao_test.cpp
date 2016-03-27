@@ -6,24 +6,13 @@
 #include <QtTest/QtTest>
 #include "persistence/dronesearchdao.h"
 
-DroneSearchDAO_Test::DroneSearchDAO_Test()
+DroneSearchDAO_Test::DroneSearchDAO_Test(QSqlDatabase* db)
 {
-    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    projectShaeDatabase.setDatabaseName(QString("/home/vpolflie/Documents/Eerst_Master_Computer_Wetenschappen/Design_Project/workstation/src/persistence/projectShae.db"));
-
-    if (!projectShaeDatabase.open())
-    {
-       qDebug() << "Error: connection with database fail";
-    }
-    else
-    {
-       qDebug() << "Database: connection ok";
-    }
+    projectShaeDatabase = db;
 }
 
 DroneSearchDAO_Test::~DroneSearchDAO_Test()
 {
-    projectShaeDatabase.close();
 }
 
 void DroneSearchDAO_Test::initTestCase()
@@ -36,7 +25,7 @@ void DroneSearchDAO_Test::cleanupTestCase()
 
 void DroneSearchDAO_Test::testSimpleDroneSearchDAO()
 {
-    DroneSearchDAO sd = DroneSearchDAO(&projectShaeDatabase);
+    DroneSearchDAO sd = DroneSearchDAO(projectShaeDatabase);
 
     QList<QGeoCoordinate> s = QList<QGeoCoordinate>();
     for(int i = 0; i < 10; i ++)

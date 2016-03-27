@@ -1,49 +1,93 @@
 #include "controller.h"
 #include <QUuid>
 
-Controller::Controller(MainWindow *window, QObject *parent) :
-    QThread(parent)
+Controller::Controller(MainWindow *window, QObject *p)
+    : QObject(p)
 {
     mainWindow = window;
 
-    drones = new QSet<Drone *>();
+    search = new Search();
+
+    // create the mediator. Note: the same mediator object must be shared among all the components!
+    mediator = new Mediator();
+
+    // create drones
+    // TODO: drone info (IP, port, etc) should be set elsewhere
+    drones = new QList<Drone *>();
+    drones->append(new Drone(6330, "10.1.1.10", 0.0001));
+    // real drone: 10.1.1.10:6330
+    // simulator: 127.0.0.1:6331
+
+
+
+    // create controllers
+    //detectionController = new DetectionController(mediator);
+    //persistenceController = new Persistence(mediator);
+    pathLogicController = new SimplePathAlgorithm();
 }
 
 Controller::~Controller()
 {
+    // stop all the threads in order to safely delete them afterwards
+    droneThread.quit();
+    droneThread.wait();
+    pathLogicThread.quit();
+    pathLogicThread.wait();
+    // persistenceThread.quit();
+    // persistenceThread.wait();
+
+    delete mediator;
+    delete search;
+
+    // special Qt function to delete QList of pointers
+    qDeleteAll(drones->begin(), drones->end());
+    drones->clear();
+    delete drones;
+
+    // delete detectionController;
+    // delete persistenceController;
+    delete pathLogicController;
 }
 
-void Controller::run()
+void Controller::init()
 {
-    createMediator();
-    createPersistence();
-    createDrone();
-    createDetectionController();
+    // configure every component with the controller
+    mainWindow->getConfigWidget()->setController(this);
+    pathLogicController->setController(this);
+    for (int i = 0; i < drones->size(); i++)
+        (*drones)[i]->setController(this);
+
+    // set every component in a different thread
+    // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
+
+    // detectionController->moveToThread(&detectorThread);
+    // persistenceController->moveToThread(&persistenceThread);
+    pathLogicController->moveToThread(&pathLogicThread);
+    for (int i = 0; i < drones->size(); i++)
+        (*drones)[i]->moveToThread(&droneThread);
+
+    // start all the threads
+    // detectorThread.start();
+    // persistenceThread.start();
+    droneThread.start();
+    pathLogicThread.start();
 }
 
-void Controller::createMediator()
+/*****************
+ *    Getters
+ *****************/
+
+Mediator *Controller::getMediator() const
 {
-    mediator = new Mediator();
-    mainWindow->setMediator(mediator);
+    return mediator;
 }
 
-void Controller::createDetectionController()
+QList<Drone *> *Controller::getDrones() const
 {
-    detectionController = new DetectionController(mediator);
-    detectionController->moveToThread(&detectorThread);
+    return drones;
 }
 
-//! this should ideally be done by the communication module
-void Controller::createDrone()
+Search *Controller::getSearch() const
 {
-    QUuid droneId = QUuid::createUuid();
-    Drone *drone = new Drone(mediator, droneId, 6331, "127.0.0.1", 0.0001);
-    drones->insert(drone);
+    return search;
 }
-
-void Controller::createPersistence()
-{
-    persistence = new Persistence(mediator);
-    persistence->moveToThread(&persistenceThread);
-}
-
