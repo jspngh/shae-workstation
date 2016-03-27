@@ -22,7 +22,7 @@ Search SearchDAO::dbSaveSearch(Search search){
     }
     else
     {
-       qDebug() << "addPerson error:  "
+       qDebug() << "addsearch error:  "
                 << query.lastError();
     }
     return search;

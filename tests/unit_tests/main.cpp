@@ -36,6 +36,8 @@ int main(int argc, char *argv[])
         QTest::qExec(test, a.arguments());
     }
 
+    delete testPersistence;
+    delete testDataBase;
     qDeleteAll(tests.begin(), tests.end());
 
     return 0;
