@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
+#include "EmptyAreaException.h"
 #include "QtMapKit.h"
 
 class QMMapViewPrivate;
@@ -84,6 +85,13 @@ public:
     qreal tilt() const;
 
     /*!
+     * \brief Returns the selected area on the map.
+     * \throws EmptyAreaException if there was no area selected.
+     * \returns The selected area on the map, or null if there is none.
+     */
+    QGeoRectangle selectedArea() const;
+
+    /*!
      * \brief Returns whether an area can be selected on the map.
      */
     bool isSelectable() const;
@@ -92,6 +100,9 @@ public:
      * \brief Call this when the shift key is pressed
      */
     void shiftKeyPressed(bool down);
+
+private:
+    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject);
 
 public slots:
     /*!
@@ -144,6 +155,9 @@ public slots:
 
 protected:
     void resizeEvent(QResizeEvent *);
+
+private:
+    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject) const;
 
 signals:
     void mapLoaded();

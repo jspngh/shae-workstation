@@ -66,6 +66,23 @@
         qMapView.jsSelectedAreaDeleted();
     };
 
+    /* Returns the selected area
+     * @return {object} An object literal, containing north, south, east &
+     * west properties.
+     */
+    MapSelection.prototype.getSelectedArea = function() {
+        if(this.selectedArea == null) return null;
+
+        var northEast = this.selectedArea.getBounds().getNorthEast();
+        var southWest = this.selectedArea.getBounds().getSouthWest();
+        return {
+            north: northEast.lat(),
+            east: northEast.lng(),
+            south: southWest.lat(),
+            west: southWest.lng()
+        };
+    };
+
     window.MapSelection = MapSelection;
 })();
 

@@ -140,16 +140,13 @@ void ConfigWidget::startButtonPush()
     if (controller) {
         Search *s = controller->getSearch();
 
-        // TODO: read the search area from the gui
-        QGeoRectangle area(QGeoCoordinate(51.022983, 3.709507), QGeoCoordinate(51.022632, 3.710156));
-        s->setArea(area);
+        s->setArea(mapView->selectedArea());
 
         // TODO: read the drones that will be used in the search
         // for now, we pick every drone that is set in the controller
         s->setDroneList(controller->getDrones());
 
         emit startSearch(s);
-        qDebug() << "emit PathAlgorithm::startSearch(Search *s)";
     }
 
 

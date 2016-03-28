@@ -164,11 +164,8 @@ QMMapView::MapType QMMapView::mapType() const
 
 QGeoRectangle QMMapView::region() const
 {
-    QVariantMap result = d_ptr->evaluateJavaScript("mapKit.getMapBounds();").toMap();
-    return QGeoRectangle(QGeoCoordinate(result["south"].toReal(),
-                                        result["west"].toReal()),
-                         QGeoCoordinate(result["north"].toReal(),
-                                        result["east"].toReal()));
+    QVariant result = d_ptr->evaluateJavaScript("mapKit.getMapBounds();");
+    return jsonObjectToQGeoRectangle(result);
 }
 
 QGeoCoordinate QMMapView::center() const
@@ -191,6 +188,29 @@ qreal QMMapView::heading() const
 qreal QMMapView::tilt() const
 {
     return d_ptr->evaluateJavaScript("mapKit.map.getTilt();").toReal();
+}
+
+QGeoRectangle QMMapView::selectedArea() const
+{
+    QString script = QString("mapKit.mapSelection.getSelectedArea();");
+    QVariant result = d_ptr->evaluateJavaScript(script);
+    return jsonObjectToQGeoRectangle(result);
+}
+
+QGeoRectangle QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
+{
+    if(jsObject.isNull() || !jsObject.isValid())
+        throw new EmptyAreaException();
+
+    QVariantMap objectMap = jsObject.toMap();
+    if(!(objectMap.contains("north") && objectMap.contains("south")
+            && objectMap.contains("east") && objectMap.contains("west")))
+        throw new EmptyAreaException();
+
+    return QGeoRectangle(QGeoCoordinate(objectMap.value("north").toReal(),
+                                        objectMap.value("west").toReal()),
+                         QGeoCoordinate(objectMap.value("south").toReal(),
+                                        objectMap.value("east").toReal()));
 }
 
 void QMMapView::setMapType(MapType type)
