@@ -209,12 +209,14 @@ void ConfigWidget::fillDroneTable()
         ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
 
         dronesInTable.append(QPair<int, Drone*>(row, d));
+
+        d->requestStatus();
     }
 }
 
 void ConfigWidget::updateDroneTable()
 {
-
+    qDebug() << "updateDroneTable";
 }
 
 
