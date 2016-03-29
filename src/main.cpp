@@ -26,10 +26,10 @@ int quicktestgeopolygon()
 
 int quicktestPolygonPath()
 {
-    PolygonPathAlgorithm algo = PolygonPathAlgorithm(QGeoCoordinate(-1.0,-1.0));
+    PolygonPathAlgorithm algo = PolygonPathAlgorithm(QGeoCoordinate(1.0,1.0));
     GeoPolygon area = GeoPolygon();
     qDebug() << area.toString();
-    auto list = algo.calculateWaypoints(area , 0.2);
+    auto list = algo.calculateWaypoints(area , 0.15);
     for( const QGeoCoordinate& coor : (*list) ){
         qDebug() << coor.latitude() << coor.longitude();
     }

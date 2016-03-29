@@ -72,7 +72,7 @@ QList<QGeoCoordinate>* PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
         QGeoCoordinate south = PathAlgorithm::goDirectionBetween(pair.first, pair.first,
                                                                  pair.second,
                                                                  list->back().longitude() - pair.first.longitude(),
-                                                                 direction);
+                                                                 EAST);
         list->push_back(south);
         qDebug() << list->back();
 
@@ -96,7 +96,7 @@ QList<QGeoCoordinate>* PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
         QGeoCoordinate north = PathAlgorithm::goDirectionBetween(pair.first, pair.first,
                                                                  pair.second,
                                                                  list->back().longitude() - pair.first.longitude(),
-                                                                 direction);
+                                                                 EAST);
         list->push_back(north);
         qDebug() << list->back();
 
