@@ -34,7 +34,7 @@ DroneModule::DroneModule(int portNr, QString serverIp, double visionWidth):
 
 }
 
-DroneModule::DroneModule(const Drone &d)
+DroneModule::DroneModule(const DroneModule &d)
 {
 }
 

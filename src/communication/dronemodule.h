@@ -50,7 +50,7 @@ public:
     explicit DroneModule(int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
 
     //! Copy constructor
-    explicit DroneModule(const Drone &d);
+    explicit DroneModule(const DroneModule &d);
     //! Destructor
     ~DroneModule();
 

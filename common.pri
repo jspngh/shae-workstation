@@ -21,8 +21,7 @@ HEADERS += \
     $$PWD/src/pathlogic/*.h \
     $$PWD/src/persistence/*.h \
     $$PWD/src/utils/*.h \
-    $$PWD/src/videocontroller/*.h \
-    $$PWD/src/communication/dronemodule.h
+    $$PWD/src/videocontroller/*.h
 
 SOURCES += \
     $$PWD/src/communication/*.cpp \
@@ -32,7 +31,6 @@ SOURCES += \
     $$PWD/src/pathlogic/*.cpp \
     $$PWD/src/persistence/*.cpp \
     $$PWD/src/utils/*.cpp \
-    $$PWD/src/videocontroller/*.cpp \
-    $$PWD/src/communication/dronemodule.cpp
+    $$PWD/src/videocontroller/*.cpp
 
 
