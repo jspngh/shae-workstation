@@ -60,7 +60,7 @@ private:
     // Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
 
-    QList<QPair<int, Drone*>> dronesInTable;
+    QList<QPair<int, DroneModule*>> dronesInTable;
 
     enum DroneTableCol {
         CHECK, TYPE, BATTERY, IP_PORT

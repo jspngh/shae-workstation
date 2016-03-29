@@ -24,15 +24,15 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-    drones = new QList<Drone *>();
-    drones->append(new Drone(6330, "10.1.1.10", 0.0001));
-    drones->append(new Drone(6330, "127.0.0.1", 0.0001));
-    drones->append(new Drone(3333, "192.158.32.2", 0.0001));
-    drones->append(new Drone(5555, "120.23.23.12", 0.0001));
+
+    drones = new QList<DroneModule *>();
+    drones->append(new DroneModule(6330, "10.1.1.10", 0.0001));
+    drones->append(new DroneModule(6330, "127.0.0.1", 0.0001));
+    drones->append(new DroneModule(3333, "192.158.32.2", 0.0001));
+    drones->append(new DroneModule(5555, "120.23.23.12", 0.0001));
+
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6330
-
-
 
     // create controllers
     //detectionController = new DetectionController(mediator);
@@ -99,7 +99,7 @@ Mediator *Controller::getMediator() const
     return mediator;
 }
 
-QList<Drone *> *Controller::getDrones() const
+QList<DroneModule *> *Controller::getDrones() const
 {
     return drones;
 }
