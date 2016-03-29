@@ -24,7 +24,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
     drones = new QList<Drone *>();
-    drones->append(new Drone(6330, "10.1.1.10", 0.0001));
+    drones->append(new Drone(6330, workstationIP, 0.0001));
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6331
 

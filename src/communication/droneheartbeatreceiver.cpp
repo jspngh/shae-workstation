@@ -21,7 +21,7 @@ DroneHeartBeatReceiver::~DroneHeartBeatReceiver()
 //this method only gets called by a signal if a client is trying to connect.
 void DroneHeartBeatReceiver::receiveHeartbeat()
 {
-    const int Timeout = 5 * 1000;
+    const int Timeout = 20 * 1000;
     qDebug() << "receiveHeartbeat";
 
     //get socket that is connected

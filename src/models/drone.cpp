@@ -26,11 +26,6 @@ Drone::Drone(int portNr, QString serverIp, double visionWidth):
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
-
-
-
-
-
 }
 
 Drone::Drone(const Drone &d)
@@ -45,7 +40,6 @@ Drone::~Drone()
     delete connectionThread;
     //TODO: delete heartbeatReceiver;
     delete waypoints;
-
 }
 
 /***********************
@@ -154,9 +148,6 @@ void Drone::onDroneResponseError(int socketError, const QString &message)
 {
     qDebug() << message;
 }
-
-
-
 
 
 /***********************
@@ -367,11 +358,11 @@ QJsonDocument Drone::setWorkstationConfiguration(QString ipAdress, int port)
 {
     // Create json message
     QJsonObject json = QJsonObject();
-    json["MessageType"] = QString("setting");
+    json["MessageType"] = QString("settings");
     json["Message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
     config["IpAddress"] = ipAdress;
-    config["Port"] = port;
+    config["Port"] = QString::number(port);
     json["Configuration"] = config;
     QJsonDocument jsondoc(json);
 
