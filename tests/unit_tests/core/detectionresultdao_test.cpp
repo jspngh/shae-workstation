@@ -7,9 +7,16 @@
 #include "persistence/searchdao.h"
 #include "models/search.h"
 
-DetectionResultDAO_Test::DetectionResultDAO_Test(QSqlDatabase* db)
+DetectionResultDAO_Test::DetectionResultDAO_Test()
 {
-    projectShaeDatabase = db;
+    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
+    projectShaeDatabase.setDatabaseName("database.sqlite");
+    if(projectShaeDatabase.open())
+    {
+        qDebug() << "database connection succes" ;
+    } else {
+        qDebug() << "database connection error";
+    }
 }
 
 DetectionResultDAO_Test::~DetectionResultDAO_Test()
@@ -27,7 +34,7 @@ void DetectionResultDAO_Test::cleanupTestCase()
 
 void DetectionResultDAO_Test::testSimpleDetectionResultDAO()
 {
-    DetectionResultDAO sd = DetectionResultDAO(projectShaeDatabase);
+    DetectionResultDAO sd = DetectionResultDAO(&projectShaeDatabase);
 
     DetectionResult s = DetectionResult(QGeoCoordinate(5,5), 5.5, VideoSequence(QUuid::createUuid()));
     QUuid searchID = QUuid::createUuid();

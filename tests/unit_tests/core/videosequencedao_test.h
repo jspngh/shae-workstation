@@ -16,7 +16,7 @@ class VideoSequenceDAO_Test : public QObject
     Q_OBJECT
 
 public:
-    VideoSequenceDAO_Test(QSqlDatabase* db);
+    VideoSequenceDAO_Test();
     ~VideoSequenceDAO_Test();
 
 private Q_SLOTS:
@@ -27,7 +27,7 @@ private Q_SLOTS:
      */
     void testSimpleVideoSequenceDAO();
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase projectShaeDatabase;
 };
 
 #endif // VIDEOSEQUENCEDAO_TEST_H

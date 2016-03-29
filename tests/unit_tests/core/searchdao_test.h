@@ -16,7 +16,7 @@ class SearchDAO_Test : public QObject
     Q_OBJECT
 
 public:
-    SearchDAO_Test(QSqlDatabase* db);
+    SearchDAO_Test();
     ~SearchDAO_Test();
 
 private Q_SLOTS:
@@ -27,7 +27,7 @@ private Q_SLOTS:
      */
     void testSimpleSearchDAO();
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase projectShaeDatabase;
 };
 
 #endif // SEARCHDAO_TEST_H

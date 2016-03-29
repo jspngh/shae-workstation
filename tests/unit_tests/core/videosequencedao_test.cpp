@@ -7,9 +7,16 @@
 #include "persistence/videosequencedao.h"
 #include "models/videosequence.h"
 
-VideoSequenceDAO_Test::VideoSequenceDAO_Test(QSqlDatabase* db)
+VideoSequenceDAO_Test::VideoSequenceDAO_Test()
 {
-    projectShaeDatabase = db;
+    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
+    projectShaeDatabase.setDatabaseName("database.sqlite");
+    if(projectShaeDatabase.open())
+    {
+        qDebug() << "database connection succes" ;
+    } else {
+        qDebug() << "database connection error";
+    }
 }
 
 VideoSequenceDAO_Test::~VideoSequenceDAO_Test()
@@ -26,7 +33,7 @@ void VideoSequenceDAO_Test::cleanupTestCase()
 
 void VideoSequenceDAO_Test::testSimpleVideoSequenceDAO()
 {
-    VideoSequenceDAO sd = VideoSequenceDAO(projectShaeDatabase);
+    VideoSequenceDAO sd = VideoSequenceDAO(&projectShaeDatabase);
 
     VideoSequence s = VideoSequence(QUuid::createUuid(), QTime(8,8,8), QTime(9,9,9), 10 , "pathtofile");
     QUuid searchID = QUuid::createUuid();

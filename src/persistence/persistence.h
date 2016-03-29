@@ -26,8 +26,6 @@ public:
     Persistence(Mediator *mediator, QObject *parent = 0);
     ~Persistence();
 
-    QSqlDatabase* getDatabase();
-
 signals:
     void onSaveSearch(Search search);
     void onRetrieveSearch(Search search);

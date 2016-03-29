@@ -26,7 +26,8 @@ HEADERS += \
     core/dronesearchdao_test.h \
     core/dronestatusdao_test.h \
     core/videosequencedao_test.h \
-    core/mediator_test.h
+    core/mediator_test.h \
+    core/databasecreator.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
@@ -39,7 +40,8 @@ SOURCES += \
     core/dronesearchdao_test.cpp \
     core/dronestatusdao_test.cpp \
     core/videosequencedao_test.cpp \
-    core/mediator_test.cpp
+    core/mediator_test.cpp \
+    core/databasecreator.cpp
 
 
 # c++11

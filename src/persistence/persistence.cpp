@@ -13,7 +13,7 @@ Persistence::Persistence()
 Persistence::Persistence(Mediator *mediator, QObject *parent):
     QObject(parent)
 {
-    initDatabase();
+    Persistence::initDatabase();
 
     dronedao = DroneDAO(&projectShaeDatabase);
     detectionresultdao = DetectionResultDAO(&projectShaeDatabase);
@@ -25,10 +25,6 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
 
 Persistence::~Persistence(){
     projectShaeDatabase.close();
-}
-
-QSqlDatabase* Persistence::getDatabase(){
-    return &projectShaeDatabase;
 }
 
 void Persistence::saveSearch(Search &search)

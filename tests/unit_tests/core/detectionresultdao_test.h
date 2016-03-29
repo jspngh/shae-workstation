@@ -17,7 +17,7 @@ class DetectionResultDAO_Test : public QObject
     Q_OBJECT
 
 public:
-    DetectionResultDAO_Test(QSqlDatabase* db);
+    DetectionResultDAO_Test();
     ~DetectionResultDAO_Test();
 
 private Q_SLOTS:
@@ -28,7 +28,7 @@ private Q_SLOTS:
      */
     void testSimpleDetectionResultDAO();
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase projectShaeDatabase;
 };
 
 #endif // DETECTIONRESULTDAO_TEST_H

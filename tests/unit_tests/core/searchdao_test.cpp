@@ -7,9 +7,9 @@
 #include "persistence/searchdao.h"
 #include "models/search.h"
 
-SearchDAO_Test::SearchDAO_Test(QSqlDatabase* db)
+SearchDAO_Test::SearchDAO_Test()
 {
-    projectShaeDatabase = db;
+
 }
 
 SearchDAO_Test::~SearchDAO_Test()
@@ -18,6 +18,24 @@ SearchDAO_Test::~SearchDAO_Test()
 
 void SearchDAO_Test::initTestCase()
 {
+    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
+
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    if(!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+    QString name = "database.sqlite";
+
+    QString base = folder.append(name);
+    projectShaeDatabase.setDatabaseName(base);
+
+    if(projectShaeDatabase.open())
+    {
+        qDebug() << "database connection succes" ;
+    } else {
+        qDebug() << "database connection error";
+    }
 }
 
 void SearchDAO_Test::cleanupTestCase()
@@ -26,7 +44,8 @@ void SearchDAO_Test::cleanupTestCase()
 
 void SearchDAO_Test::testSimpleSearchDAO()
 {
-    SearchDAO sd = SearchDAO(projectShaeDatabase);
+
+    SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
     Search s = Search(QUuid::createUuid(),QTime(7,6));
 

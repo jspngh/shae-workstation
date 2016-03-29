@@ -10,6 +10,13 @@ SearchDAO::SearchDAO(QSqlDatabase* projectShaeDatabase){
 }
 
 Search SearchDAO::dbSaveSearch(Search search){
+    if(projectShaeDatabase->open())
+    {
+        qDebug() << "database connection succes" ;
+    } else {
+        qDebug() << "database connection error";
+    }
+
     // todo check if args are ok
     QSqlQuery query;
     query.prepare("INSERT INTO searches (searchID, start) "

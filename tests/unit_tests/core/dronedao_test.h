@@ -16,7 +16,7 @@ class DroneDAO_Test : public QObject
     Q_OBJECT
 
 public:
-    DroneDAO_Test(QSqlDatabase* db);
+    DroneDAO_Test();
     ~DroneDAO_Test();
 
 private Q_SLOTS:
@@ -27,7 +27,7 @@ private Q_SLOTS:
      */
     void testSimpleDroneDAO();
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase projectShaeDatabase;
 };
 
 #endif // DRONEDAO_TEST_H

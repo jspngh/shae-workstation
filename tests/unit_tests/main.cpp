@@ -8,6 +8,7 @@
 #include "core/videosequencedao_test.h"
 #include "core/json_messages_test.h"
 #include "core/mediator_test.h"
+#include "core/databasecreator.h"
 
 #include <QList>
 #include <QTest>
@@ -17,27 +18,25 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    Persistence *testPersistence = new Persistence();
-    QSqlDatabase* testDataBase = testPersistence->getDatabase();
+    DatabaseCreator db = DatabaseCreator();
+    db.initDatabase();
 
     QList<QObject*> tests;
     tests.append(new SimplePathAlgorithm_Test());
     tests.append(new Json_Messages_Test());
     tests.append(new DetectionController_Test());
     tests.append(new Mediator_Test());
-    tests.append(new SearchDAO_Test(testDataBase));
-    tests.append(new DetectionResultDAO_Test(testDataBase));
-    tests.append(new DroneDAO_Test(testDataBase));
-    tests.append(new DroneSearchDAO_Test(testDataBase));
-    tests.append(new DroneStatusDAO_Test(testDataBase));
-    tests.append(new VideoSequenceDAO_Test(testDataBase));
+    tests.append(new SearchDAO_Test());
+    tests.append(new DetectionResultDAO_Test());
+    tests.append(new DroneDAO_Test());
+    tests.append(new DroneSearchDAO_Test());
+    tests.append(new DroneStatusDAO_Test());
+    tests.append(new VideoSequenceDAO_Test());
 
     foreach(QObject* test, tests) {
         QTest::qExec(test, a.arguments());
     }
 
-    delete testPersistence;
-    delete testDataBase;
     qDeleteAll(tests.begin(), tests.end());
 
     return 0;

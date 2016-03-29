@@ -7,9 +7,16 @@
 #include "persistence/searchdao.h"
 #include "models/search.h"
 
-DroneDAO_Test::DroneDAO_Test(QSqlDatabase* db)
+DroneDAO_Test::DroneDAO_Test()
 {
-    projectShaeDatabase = db;
+    projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
+    projectShaeDatabase.setDatabaseName("database.sqlite");
+    if(projectShaeDatabase.open())
+    {
+        qDebug() << "database connection succes" ;
+    } else {
+        qDebug() << "database connection error";
+    }
 }
 
 DroneDAO_Test::~DroneDAO_Test()
