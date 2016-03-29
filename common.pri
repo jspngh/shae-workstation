@@ -32,5 +32,3 @@ SOURCES += \
     $$PWD/src/persistence/*.cpp \
     $$PWD/src/utils/*.cpp \
     $$PWD/src/videocontroller/*.cpp
-
-

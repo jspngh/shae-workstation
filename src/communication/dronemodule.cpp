@@ -21,7 +21,7 @@ DroneModule::DroneModule(int portNr, QString serverIp, double visionWidth)
     droneConnection->moveToThread(connectionThread);
     streamConnection->moveToThread(streamThread);
     connectionThread->start();
-    streamConnection->start();
+    streamThread->start();
 
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(streamRequest(QString)), streamConnection, SLOT(onStreamRequest(QString)));
