@@ -19,7 +19,8 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    communication/streamconnection.cpp
 
 
 # c++11
@@ -32,6 +33,9 @@ RESOURCES = application.qrc
 # Put subdirectories here
 include(ui/ui.pri)
 include(core/core.pri)
+
+HEADERS += \
+    communication/streamconnection.h
 
 
 

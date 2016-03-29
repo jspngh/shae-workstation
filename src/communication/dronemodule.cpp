@@ -15,18 +15,24 @@ DroneModule::DroneModule(int portNr, QString serverIp, double visionWidth)
 {
     drone = Drone(portNr, serverIp, visionWidth);
     droneConnection = new DroneConnection(serverIp, (quint16) portNr);
+    streamConnection = new StreamConnection(serverIp, (quint16) portNr);
     connectionThread = new QThread();
+    streamThread = new QThread();
     droneConnection->moveToThread(connectionThread);
+    streamConnection->moveToThread(streamThread);
     connectionThread->start();
+    streamConnection->start();
 
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
+    connect(this, SIGNAL(streamRequest(QString)), streamConnection, SLOT(onStreamRequest(QString)));
 
     connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
-            this, SLOT(onDroneResponseError(int, const QString &)));
-
-
+                       this, SLOT(onDroneResponseError(int, const QString &)));
+    // TODO: create a seperate onStreamError slot
+    connect(streamConnection, SIGNAL(streamError(int, const QString &)),
+                        this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
 DroneModule::DroneModule(const DroneModule &d)

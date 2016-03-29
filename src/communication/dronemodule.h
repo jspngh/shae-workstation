@@ -12,6 +12,7 @@
 #include "models/dronestatus.h"
 #include "communication/droneheartbeatreceiver.h"
 #include "communication/droneconnection.h"
+#include "communication/streamconnection.h"
 #include "models/drone.h"
 
 
@@ -140,6 +141,9 @@ signals:
     //! is connected to droneconnection directly in the constructor of drone.
     void droneRequest(QString message);
 
+    //! A signal generated to start the stream on the physical drone
+    void streamRequest();
+
     //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
     //! Is connected to the mediator
     void droneStatusReceived(DroneStatus status);
@@ -173,6 +177,10 @@ private:
     QThread *connectionThread;
 
     DroneConnection *droneConnection;
+
+    QThread *streamThread;
+
+    StreamConnection *streamConnection;
 
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
 
