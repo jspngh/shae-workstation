@@ -62,10 +62,106 @@ void GeoPolygon_test::testDefaultConstructor()
     QVERIFY(upper.isEmpty());
 
 }
+void GeoPolygon_test::testDefaultConstructor2()
+{
+    GeoPolygon p = GeoPolygon();
+    QVERIFY(p.isValid());
+}
 
 void GeoPolygon_test::testConstructor()
 {
-    //tODO
+    QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
+    list.push_back(QGeoCoordinate(0.0,0.0));
+    list.push_back(QGeoCoordinate(2.0,1.0));
+    list.push_back(QGeoCoordinate(3.0,2.0));
+    list.push_back(QGeoCoordinate(3.0,3.0));
+    list.push_back(QGeoCoordinate(2.99999,3.0001));
+    list.push_back(QGeoCoordinate(0.0,4.0));
+    list.push_back(QGeoCoordinate(-10.0,3.0));
+
+    //this one is strange, and would make the polygon non-convex, if the constructor could not handle this.
+    list.push_back(QGeoCoordinate(9.0,2.0));
+    list.push_back(QGeoCoordinate(-1.0,0.0));
+
+
+    GeoPolygon p = GeoPolygon(list);
+    //valid
+    QVERIFY(p.isValid());
+}
+
+void GeoPolygon_test::testConstructor2()
+{
+    QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
+    list.push_back(QGeoCoordinate(-1.0,0.0));
+    list.push_back(QGeoCoordinate(0.0,0.0));
+    list.push_back(QGeoCoordinate(2.0,1.0));
+    list.push_back(QGeoCoordinate(3.0,2.0));
+    list.push_back(QGeoCoordinate(3.0,3.0));
+    list.push_back(QGeoCoordinate(2.99999,3.0001));
+    list.push_back(QGeoCoordinate(0.0,4.0));
+    list.push_back(QGeoCoordinate(-10.0,3.0));
+    list.push_back(QGeoCoordinate(-9.0,2.0));
+
+
+
+    GeoPolygon area = GeoPolygon(list);
+    //the constructor should make a valid polygon
+    QVERIFY(area.isValid());
+
+    QList<QGeoCoordinate> coordinates = area.getCoordinates();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(-1.0,0.0)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == QGeoCoordinate(0.0,0.0));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(2.0,1.0)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(3.0,2.0)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(3.0,3.0)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(2.99999,3.0001)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(0.0,4.0)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(-10.0,3.0)));
+    coordinates.pop_front();
+    QVERIFY(coordinates.front() == (QGeoCoordinate(-9.0,2.0)));
+    coordinates.pop_front();
+
+    QVERIFY(coordinates.isEmpty());
+
+    QVERIFY(area.getMostWestCoordinate() == QGeoCoordinate(-1.0,0.0));
+    QVERIFY(area.getMostEastCoordinate() == QGeoCoordinate(0.0,4.0));
+
+    QList<QGeoCoordinate> upper = area.getUpperHull();
+    QList<QGeoCoordinate> lower = area.getLowerHull();
+
+    QVERIFY(upper.front() == QGeoCoordinate(-1.0,0.0));
+    upper.pop_front();
+    QVERIFY(upper.front() == QGeoCoordinate(0.0,0.0));
+    upper.pop_front();
+    QVERIFY(upper.front() == (QGeoCoordinate(2.0,1.0)));
+    upper.pop_front();
+    QVERIFY(upper.front() == (QGeoCoordinate(3.0,2.0)));
+    upper.pop_front();
+    QVERIFY(upper.front() == (QGeoCoordinate(3.0,3.0)));
+    upper.pop_front();
+    QVERIFY(upper.front() == (QGeoCoordinate(2.99999,3.0001)));
+    upper.pop_front();
+    QVERIFY(upper.front() == (QGeoCoordinate(0.0,4.0)));
+    upper.pop_front();
+    QVERIFY(upper.isEmpty());
+
+    QVERIFY(lower.front() == (QGeoCoordinate(-1.0,0.0)));
+    lower.pop_front();
+    QVERIFY(lower.front() == (QGeoCoordinate(-9.0,2.0)));
+    lower.pop_front();
+    QVERIFY(lower.front() == (QGeoCoordinate(-10.0,3.0)));
+    lower.pop_front();
+    QVERIFY(lower.front() == (QGeoCoordinate(0.0,4.0)));
+    lower.pop_front();
+    QVERIFY(upper.isEmpty());
+
 }
 
 void GeoPolygon_test::testFromHull()
@@ -102,7 +198,12 @@ void GeoPolygon_test::testFromHull()
 
 void GeoPolygon_test::testGetBoundingQGeoRectangle()
 {
-    //TODO
+    GeoPolygon area = GeoPolygon();
+    QGeoRectangle rect = area.getBoundingQGeoRectangle();
+    QVERIFY(rect.topLeft() == QGeoCoordinate(1.0,0.0));
+    QVERIFY(rect.topRight() == QGeoCoordinate(1.0,1.0));
+    QVERIFY(rect.bottomLeft() == QGeoCoordinate(0.0,0.0));
+    QVERIFY(rect.bottomRight() == QGeoCoordinate(0.0,1.0));
 }
 
 void GeoPolygon_test::testCrossProduct()
@@ -194,12 +295,5 @@ void GeoPolygon_test::testCompareLatitude6()
 }
 
 
-void GeoPolygon_test::testIsValid()
-{
 
-}
 
-void GeoPolygon_test::testToSring()
-{
-
-}

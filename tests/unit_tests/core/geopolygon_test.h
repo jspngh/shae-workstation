@@ -16,7 +16,9 @@ private Q_SLOTS:
     void cleanUpTestCase();
 
     void testDefaultConstructor();
+    void testDefaultConstructor2();
     void testConstructor();
+    void testConstructor2();
     void testFromHull();
     void testGetBoundingQGeoRectangle();
     void testCrossProduct();
@@ -32,8 +34,6 @@ private Q_SLOTS:
     void testCompareLatitude4();
     void testCompareLatitude5();
     void testCompareLatitude6();
-    void testIsValid();
-    void testToSring();
 };
 
 #endif // GEOPOLYGON_TEST_H
