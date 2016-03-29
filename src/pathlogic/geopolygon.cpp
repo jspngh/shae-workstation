@@ -1,5 +1,6 @@
 #include "geopolygon.h"
 #include <algorithm>
+#include <QtDebug>
 
 GeoPolygon::GeoPolygon()
     :QGeoShape()
@@ -16,6 +17,9 @@ GeoPolygon::GeoPolygon()
     upperHull.push_back(mostEastCoordinate);
     coordinates = fromHull(upperHull, lowerHull);
 
+    if(!isValid()){
+        qDebug() << "Something is wrong with the construction of this GeoPolygon";
+    }
 }
 
 GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
@@ -51,6 +55,9 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
 
     }
     this->coordinates = fromHull(upperHull, lowerHull);
+    if(!isValid()){
+        qDebug() << "Something is wrong with the construction of this GeoPolygon";
+    }
 
 }
 
@@ -128,13 +135,14 @@ bool GeoPolygon::isValid() const
     QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
     lower.pop_back();
     lower.pop_front();
-    std::sort(lower.begin(), lower.end(), compareLatitude);
-    QGeoCoordinate highestOfLower = lower.back();
-    foreach(QGeoCoordinate coordinate, upperHull){
-        if(coordinate.latitude() < highestOfLower.latitude())
-            return false;
+    if(!lower.isEmpty()){
+        std::sort(lower.begin(), lower.end(), compareLatitude);
+        QGeoCoordinate highestOfLower = lower.back();
+        foreach(QGeoCoordinate coordinate, upperHull){
+            if(coordinate.latitude() < highestOfLower.latitude())
+                return false;
+        }
     }
-
 
     return true;
 }

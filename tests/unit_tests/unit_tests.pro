@@ -21,14 +21,18 @@ HEADERS += \
     core/simplepathalgorithm_test.h \
     core/json_messages_test.h \
     core/detectioncontroller_test.h \
-    core/mediator_test.h
+    core/mediator_test.h \
+    core/polygonpathalgorithm_test.h \
+    core/geopolygon_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
     main.cpp \
-    core/mediator_test.cpp
+    core/mediator_test.cpp \
+    core/polygonpathalgorithm_test.cpp \
+    core/geopolygon_test.cpp
 
 
 # c++11
