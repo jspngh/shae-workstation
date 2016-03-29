@@ -66,15 +66,19 @@ public:
 
     QString getServerIp();
 
+    double getVisionWidth() const;
+
+    void setVisionWidth(double visionWidth);
+
+    Drone getDrone() const;
+
+    void setDrone(const Drone &value);
+
     QList<QGeoCoordinate> *getWaypoints();
 
     void setWaypoints(QList<QGeoCoordinate> *waypoints);
 
     void addWaypoint(const QGeoCoordinate &waypoint);
-
-    double getVisionWidth() const;
-
-    void setVisionWidth(double visionWidth);
 
     /***********************
     Navigation message methods

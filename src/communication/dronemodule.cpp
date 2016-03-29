@@ -67,6 +67,17 @@ void DroneModule::setController(Controller *c)
     setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
 }
 
+Drone DroneModule::getDrone() const
+{
+    return drone;
+}
+
+void DroneModule::setDrone(const Drone &value)
+{
+    drone = value;
+}
+
+
 QUuid DroneModule::getGuid() const
 {
     return drone.getGuid();
@@ -147,9 +158,6 @@ void DroneModule::onDroneResponseError(int socketError, const QString &message)
 {
     qDebug() << message;
 }
-
-
-
 
 
 /***********************
