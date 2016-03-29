@@ -21,7 +21,7 @@ void DetectionController_Test::initTestCase()
 
 void DetectionController_Test::testProcessSequence()
 {
-    std::cout << "Main thread in: " << QThread::currentThreadId() << std::endl;
+    qDebug() << "Main thread in: " << QThread::currentThreadId();
 
     this->controller->processSequence(QString("footage/GOPR0016_cropped.mp4"));
 
@@ -39,7 +39,7 @@ void DetectionController_Test::cleanupTestCase()
 void DetectionController_Test::onNewDetection()
 {
     ++(this->numDetections);
-    std::cout <<  "new detection #" << (this->numDetections) << std::endl;
+    qDebug() <<  "new detection #" << (this->numDetections);
 }
 
 
