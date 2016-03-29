@@ -4,16 +4,18 @@ Search::Search()
     : searchID(QUuid::createUuid())
 {
     // TODO set time
+    //droneList = new QList<Drone*>;
 }
 
-Search::~Search()
+/*Search::~Search()
 {
     delete droneList;
-}
+}*/
 
 Search::Search(QUuid searchID, QTime start){
     this->searchID = searchID;
     this->startTime = start;
+    //droneList = new QList<Drone*>;
 }
 
 QUuid Search::getSearchID()

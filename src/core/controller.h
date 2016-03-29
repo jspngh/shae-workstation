@@ -6,6 +6,7 @@
 
 #include "mediator.h"
 #include "communication/droneconnection.h"
+#include "communication/droneheartbeatreceiver.h"
 
 #include "persistence/persistence.h"
 #include "models/drone.h"
@@ -33,7 +34,17 @@ public:
     QList<Drone *> *getDrones() const;
     Search *getSearch() const;
 
+    QString getWorkstationIP() const;
+    //void setWorkstationIP(const QString &value);
+
+
+
 private:
+
+
+    QString workstationIP;
+
+
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<Drone *> *drones;

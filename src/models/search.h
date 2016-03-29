@@ -13,7 +13,7 @@ class Search
 public:
     //constructors
     Search();
-    ~Search();
+    //~Search();
 
     QTime getStartTime() const;
 
