@@ -14,17 +14,20 @@ public:
     ~PolygonPathAlgorithm();
     /*!
      * \brief calculateWaypoints calculates waypointcoordinates to cover a certain area, when given a certain visionwidth.
-     * \param area contains two QGeoCoordinate objects. The first QGeoCoordinate contains the coordinates of the top left point
-     * and the second coordinate contains the bottom right point. The Order is important!
-     * \param visionWidth width in degrees the drone's camera sees
-     * \return a pointer to a list of coordinates. The coordinates are the waypoints for the drone.
-     * This function will just use the calculateWaypoints(QGeoShape area, double visionWidth) function of this class.
+     * makes a polygon of the rectangle and uses the polygon method.
      */
     QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth);
 
-    //! Same but for a GeoPolygon area, more advanced.
+    /*!
+     * \brief calculateWaypoints calculates waypointcoordinates to cover a certain area, when given a certain visionwidth.
+     * The method to use for a GeoPolygon area.
+     */
     QList<QGeoCoordinate> *calculateWaypoints(GeoPolygon area, double visionWidth);
 
+    /*!
+     * \brief setWaypointsForDrones sets the waypoints attribute of each drone.
+     * Converts the rectangle to a polygon and then uses that method.
+     */
     void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
 
     //! Same but for a GeoPolygon area.
