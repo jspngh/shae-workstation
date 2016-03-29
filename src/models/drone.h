@@ -4,6 +4,12 @@
 #include <QString>
 #include <QUuid>
 
+/**
+ * \brief The Drone class holds the data belonging to a drone.
+ * The logic of a drone is implemented in the DroneModule class.
+ * A DroneModule instance has a drone instance as member.
+ */
+
 class Drone {
 
 public:
