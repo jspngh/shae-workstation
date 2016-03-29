@@ -20,6 +20,7 @@ int quicktestgeopolygon()
     GeoPolygon polygon = GeoPolygon(list);
     bool b = polygon.isValid();
     qDebug() << polygon.toString();
+    qDebug() << b;
     return 0;
 }
 

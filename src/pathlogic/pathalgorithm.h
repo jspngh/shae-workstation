@@ -5,6 +5,7 @@
 
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
+#include "geopolygon.h"
 
 #include "models/drone.h"
 #include "models/search.h"
@@ -39,7 +40,7 @@ public:
     virtual QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth) = 0;
 
     //!The function to calculate waypoints in a polygonial area.
-    //virtual QList<QGeoCoordinate> *calculateWaypoints(QGeoShape area, double visionWidth) = 0;
+    virtual QList<QGeoCoordinate> *calculateWaypoints(GeoPolygon area, double visionWidth) = 0;
 
     /*!
     * \brief setWaypointsForDrones divides a rectangular area in multiple rectangles and saves the resulting waypoints in each drone object.
@@ -50,7 +51,7 @@ public:
     virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones) = 0;
 
     //! The function to set the waypoints for all drones for a polygonial area.
-    //virtual void setWaypointsForDrones(QGeoShape area, QList<Drone *> *drones) = 0;
+    virtual void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones) = 0;
 
     // Setter
 

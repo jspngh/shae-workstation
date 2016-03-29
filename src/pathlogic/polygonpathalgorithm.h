@@ -22,7 +22,13 @@ public:
      */
     QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth);
 
+    //! Same but for a GeoPolygon area, more advanced.
+    QList<QGeoCoordinate> *calculateWaypoints(GeoPolygon area, double visionWidth);
+
     void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
+
+    //! Same but for a GeoPolygon area.
+    void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones);
 
 };
 

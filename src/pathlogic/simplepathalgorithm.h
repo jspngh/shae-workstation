@@ -24,12 +24,27 @@ public:
      */
     QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth);
 
+    /*!
+     * \brief calculateWaypoints for a polygonial area,
+     * but this method will just use the SimplePathAlgorithm for the bounding rectangle.
+     * Thus the drone will go out of bounds when this meethod is used on a polygon. Use the polygonAlgorithm for the real calculation for a polygon.
+     */
+    QList<QGeoCoordinate> *calculateWaypoints(GeoPolygon area, double visionWidth);
+
+
+
     /*! \brief setWaypointsForDrones function sets the waypoints of each drone in the list of drones, based on the area provided to the function.
      * This function splits the area in smaller areas so that each drone has its own area. Then it calculates the waypoints for each drone,
      * based on their area, using the \ref calculateWaypoints() method.
     */
-
     void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
+
+    /*! \brief setWaypointsForDrones function sets the waypoints of each drone in the list of drones, based on the area provided to the function.
+     * This function splits the area in smaller areas so that each drone has its own area. Then it calculates the waypoints for each drone,
+     * based on their area, using the \ref calculateWaypoints() method.
+     * Thus this method also uses the bounding rectangle for the GeoPolygon area. Use with caution!
+    */
+    void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones);
 
 };
 

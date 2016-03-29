@@ -78,6 +78,11 @@ QList<QGeoCoordinate> *SimplePathAlgorithm::calculateWaypoints(QGeoRectangle are
     return list;
 }
 
+QList<QGeoCoordinate> SimplePathAlgorithm::*calculateWaypoints(GeoPolygon area, double visionWidth)
+{
+    return calculateWaypoints(area.getBoundingQGeoRectangle(), visionWidth);
+}
+
 
 void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones)
 {
@@ -90,5 +95,10 @@ void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone 
         double visionPerDrone = (*drones)[i]->getVisionWidth();
         (*drones)[i]->setWaypoints(calculateWaypoints(areaPerDrone, visionPerDrone));
     }
+}
+
+void SimplePathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones)
+{
+    setWaypointsForDrones(area.getBoundingQGeoRectangle(), drones);
 }
 
