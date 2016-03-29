@@ -78,7 +78,7 @@ QList<QGeoCoordinate> *SimplePathAlgorithm::calculateWaypoints(QGeoRectangle are
     return list;
 }
 
-QList<QGeoCoordinate> SimplePathAlgorithm::*calculateWaypoints(GeoPolygon area, double visionWidth)
+QList<QGeoCoordinate>* SimplePathAlgorithm::calculateWaypoints(GeoPolygon area, double visionWidth)
 {
     return calculateWaypoints(area.getBoundingQGeoRectangle(), visionWidth);
 }

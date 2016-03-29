@@ -2,6 +2,7 @@
 #define POLYGONPATHALGORITHM_H
 #include "pathalgorithm.h"
 #include <QGeoRectangle>
+#include <QPair>
 
 
 class PolygonPathAlgorithm : public PathAlgorithm
@@ -10,6 +11,8 @@ public:
     PolygonPathAlgorithm();
 
     PolygonPathAlgorithm(QGeoCoordinate start);
+
+    PolygonPathAlgorithm(const PolygonPathAlgorithm&);
 
     ~PolygonPathAlgorithm();
     /*!
@@ -32,6 +35,10 @@ public:
 
     //! Same but for a GeoPolygon area.
     void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones);
+
+
+protected:
+    QPair<QGeoCoordinate,QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
 
 };
 

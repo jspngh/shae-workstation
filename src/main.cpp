@@ -2,10 +2,10 @@
 #include "core/controller.h"
 #include "mainwindow.h"
 #include "pathlogic/geopolygon.h"
+#include "pathlogic/polygonpathalgorithm.h"
 
 int quicktestgeopolygon()
 {
-    //TODO:There is still some error
     qDebug() << GeoPolygon().toString();
     QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
     list.push_back(QGeoCoordinate(1.0,1.0));
@@ -24,6 +24,18 @@ int quicktestgeopolygon()
     return 0;
 }
 
+int quicktestPolygonPath()
+{
+    PolygonPathAlgorithm algo = PolygonPathAlgorithm(QGeoCoordinate(-1.0,-1.0));
+    GeoPolygon area = GeoPolygon();
+    qDebug() << area.toString();
+    auto list = algo.calculateWaypoints(area , 0.2);
+    for( const QGeoCoordinate& coor : (*list) ){
+        qDebug() << coor.latitude() << coor.longitude();
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -33,7 +45,7 @@ int main(int argc, char *argv[])
 
     Controller controller(&w);
     controller.init();
-    quicktestgeopolygon();
+    quicktestPolygonPath();
 
     return a.exec();
 }

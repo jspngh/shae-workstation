@@ -143,7 +143,7 @@ QString GeoPolygon::toString()
 {
     QString string = QString();
     foreach(QGeoCoordinate coordinate, coordinates){
-        string +=(coordinate.toString()) + (QString("   ||   "));
+        string +=(coordinate.toString(QGeoCoordinate::DegreesMinutesSeconds)) + (QString("   ||   "));
     }
     return string;
 }
