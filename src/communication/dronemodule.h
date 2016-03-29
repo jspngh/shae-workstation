@@ -8,10 +8,11 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+
 #include "models/dronestatus.h"
 #include "communication/droneheartbeatreceiver.h"
-
 #include "communication/droneconnection.h"
+#include "models/drone.h"
 
 
 class Controller;
@@ -24,10 +25,9 @@ enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
 };
 
-/*! \brief This is the class that represents a drone on the workstation.
- * This class can be used to send messages to the drone.
- *  Note that each message methods sends a message, but returns a QJsondoc as well for testing and debugging purposes.
-
+/*! \brief DroneModule class contains a drone model and all the logic belonging to a drone.
+ * The model (a instance of the class Drone) contains the data of a drone (ip, port, id, ...)
+ * This class (DroneModule) is a add the logic to this drone model.
 */
 class DroneModule : public QObject
 {
@@ -138,11 +138,11 @@ signals:
 
     //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
     //! Is connected to the mediator
-    void droneStatusReceived(DroneStatus &status);
+    void droneStatusReceived(DroneStatus status);
 
     //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
     //! Is connected to the mediator.
-    void droneHeartBeatReceived(DroneStatus &status);
+    void droneHeartBeatReceived(DroneStatus status);
 
     /*********************
      Slots
@@ -160,28 +160,19 @@ private slots:
 
 
 private:
-    /*********
-    Attributes
-    **********/
+    Drone drone; //!< model containing the data of a drone that will be stored in the database
 
     Controller *controller;
-    QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
 
     DroneHeartBeatReceiver* heartbeatReceiver;
 
     QThread *connectionThread;
+
     DroneConnection *droneConnection;
-    int portNr; /*!< The port number that will be used to connect to the actual drone */
-    QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
 
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
 
-    //!< This attribute tells how wide the vision of the drone is.
-    //!< This is useful to calculate the waypoints.
-    //!< It should use the same scale as the coordinates used in the waypointplanning algorithms.
-    double visionWidth;
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
-
 };
 
 #endif // DRONEMODULE_H
