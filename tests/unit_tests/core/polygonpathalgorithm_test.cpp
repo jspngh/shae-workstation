@@ -71,3 +71,5 @@ void PolygonPathAlgorithm_Test::testCalculateWaypointsPolygon()
     delete calculatedList;
     delete testList;
 }
+
+

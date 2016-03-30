@@ -19,7 +19,7 @@ private Q_SLOTS:
 
     void testCalculateWaypointsPolygon();
 
-
+    void testCalculateWaypointsReactangle();
 
 };
 

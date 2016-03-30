@@ -17,7 +17,8 @@ public:
     ~PolygonPathAlgorithm();
     /*!
      * \brief calculateWaypoints calculates waypointcoordinates to cover a certain area, when given a certain visionwidth.
-     * makes a polygon of the rectangle and uses the polygon method.
+     * makes a polygon of the rectangle and uses the polygon method.Should not be used in real applications,
+     *  since simplepathalgorithm is way better (more efficient + more accurate) for rectangular areas.
      */
     QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth);
 
@@ -29,7 +30,8 @@ public:
 
     /*!
      * \brief setWaypointsForDrones sets the waypoints attribute of each drone.
-     * Converts the rectangle to a polygon and then uses that method.
+     * Converts the rectangle to a polygon and then uses that method. Should not be used in real applications,
+     *  since simplepathalgorithm is way better (more efficient + more accurate) for rectangular areas.
      */
     void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
 
