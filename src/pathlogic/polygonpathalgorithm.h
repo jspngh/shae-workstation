@@ -24,7 +24,7 @@ public:
 
     /*!
      * \brief calculateWaypoints calculates waypointcoordinates to cover a certain area, when given a certain visionwidth.
-     * The method to use for a GeoPolygon area.
+     * The method to use for a GeoPolygon area. Warning: some coordinates may be a little bit out of the area, but no more than visionWidth.
      */
     QList<QGeoCoordinate> *calculateWaypoints(GeoPolygon area, double visionWidth);
 
@@ -35,7 +35,7 @@ public:
      */
     void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
 
-    //! Same but for a GeoPolygon area.
+    //! setWaypointsForDrones sets the waypoints attribute of each drone.
     void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones);
 
 

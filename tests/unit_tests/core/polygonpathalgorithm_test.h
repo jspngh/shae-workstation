@@ -17,9 +17,8 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-    void testCalculateWaypointsPolygon();
-
-    void testCalculateWaypointsReactangle();
+    void testCalculateWaypoints();
+    void testSetWaypointsForDrones();
 
 };
 
