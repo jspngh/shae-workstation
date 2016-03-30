@@ -14,6 +14,12 @@ PathAlgorithm::PathAlgorithm(QGeoCoordinate start, QObject *p)
 
 }
 
+PathAlgorithm::PathAlgorithm(const PathAlgorithm& algo)
+{
+    start = algo.start;
+    controller = algo.controller;
+}
+
 PathAlgorithm::~PathAlgorithm()
 {
 

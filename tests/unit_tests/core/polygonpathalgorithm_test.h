@@ -3,6 +3,7 @@
 #include <QString>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
+#include "pathlogic/polygonpathalgorithm.h"
 
 class PolygonPathAlgorithm_Test : public QObject
 {
@@ -16,7 +17,10 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-    void testPolygonPathAlgorithm();
+    void testCalculateWaypointsPolygon();
+
+
+
 };
 
 #endif // POLYGONPATHALGORITHM_TEST_H
