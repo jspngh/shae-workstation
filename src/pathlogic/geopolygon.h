@@ -2,6 +2,8 @@
 #define GEOPOLYGON_H
 #include <QGeoShape>
 #include <QGeoRectangle>
+#include <QList>
+#include <QGeoCoordinate>
 
 /*!
  * \brief The GeoPolygon class describes a convex polygon area.
