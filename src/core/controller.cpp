@@ -26,10 +26,11 @@ Controller::Controller(MainWindow *window, QObject *p)
     // TODO: drone info (IP, port, etc) should be set elsewhere
 
     drones = new QList<DroneModule *>();
-    drones->append(new DroneModule(6330, "10.1.1.10", 0.0001));
-    drones->append(new DroneModule(6330, "127.0.0.1", 0.0001));
-    drones->append(new DroneModule(3333, "192.158.32.2", 0.0001));
-    drones->append(new DroneModule(5555, "120.23.23.12", 0.0001));
+
+    drones->append(new DroneModule(6330, 5502, "10.1.1.10", 0.0001));
+    drones->append(new DroneModule(6330, 5502, "127.0.0.1", 0.0001));
+    drones->append(new DroneModule(3333, 5502, "192.158.32.2", 0.0001));
+    drones->append(new DroneModule(5555, 5502, "120.23.23.12", 0.0001));
 
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6330
@@ -71,8 +72,10 @@ void Controller::init()
     // configure every component with the controller
     mainWindow->getConfigWidget()->setController(this);
     pathLogicController->setController(this);
-    for (int i = 0; i < drones->size(); i++)
+    for (int i = 0; i < drones->size(); i++) {
         (*drones)[i]->setController(this);
+        (*drones)[i]->getStream();
+    }
 
     // set every component in a different thread
     // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)

@@ -2,14 +2,15 @@
 
 
 Drone::Drone()
-    : Drone(6331, "10.1.1.10", MIN_VISIONWIDTH)
+    : Drone(6331, 5502, "10.1.1.10", MIN_VISIONWIDTH)
 {
 
 }
 
-Drone::Drone(int portNr, QString serverIp, double visionWidth):
+Drone::Drone(int dataPort, int streamPort, QString serverIp, double visionWidth):
     guid(QUuid::createUuid()),
-    portNr(portNr),
+    dataPort(dataPort),
+    streamPort(streamPort),
     serverIp(serverIp),
     visionWidth(visionWidth)
 {
@@ -37,7 +38,7 @@ QUuid Drone::getGuid() const
 
 int Drone::getPortNr()
 {
-    return this->portNr;
+    return this->dataPort;
 }
 
 QString Drone::getServerIp()
