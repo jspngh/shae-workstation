@@ -4,7 +4,10 @@
 #include <QGeoRectangle>
 #include <QPair>
 
-
+/*!
+ * \brief The PolygonPathAlgorithm class can compute a path for drones inside a polygon.
+ * Around edges it can be a little bit innacurate due to differentation of hulls.
+ */
 class PolygonPathAlgorithm : public PathAlgorithm
 {
 public:
