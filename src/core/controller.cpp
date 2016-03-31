@@ -90,9 +90,7 @@ void Controller::init()
     // for now, this is a simple sleep construction
     d->setController(this);
     d->getStream();
-    //TODO remove explicit linking of streampath
-    QString streamPath = QString("rtp://127.0.0.1:5000");
-    //QString streamPath = d->getDrone().getStreamPath();
+    QString streamPath = d->getDrone().getStreamPath();
     VideoSequence sequence  = videoController->onStartStream(streamPath);
     cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
     // allow the stream to buffer

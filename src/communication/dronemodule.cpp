@@ -13,7 +13,7 @@ DroneModule::DroneModule()
 
 DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
 {
-    drone = Drone(dataPort, streamPort, serverIp, streamPath, visionWidth);
+    drone = new Drone(dataPort, streamPort, serverIp, streamPath, visionWidth);
     droneConnection = new DroneConnection(serverIp, (quint16) dataPort);
     streamConnection = new StreamConnection(serverIp, (quint16) streamPort);
     connectionThread = new QThread();
@@ -44,6 +44,7 @@ DroneModule::~DroneModule()
     connectionThread->quit();
     connectionThread->wait();
     delete droneConnection;
+    delete drone;
     delete connectionThread;
     //TODO: delete heartbeatReceiver;
     delete waypoints;
@@ -84,12 +85,12 @@ void DroneModule::stopStream()
     streamConnection->stopConnection();
 }
 
-Drone DroneModule::getDrone() const
+Drone* DroneModule::getDrone()
 {
     return drone;
 }
 
-void DroneModule::setDrone(const Drone &value)
+void DroneModule::setDrone(Drone* value)
 {
     drone = value;
 }
@@ -97,27 +98,27 @@ void DroneModule::setDrone(const Drone &value)
 
 QUuid DroneModule::getGuid() const
 {
-    return drone.getGuid();
+    return drone->getGuid();
 }
 
 int DroneModule::getPortNr()
 {
-    return drone.getPortNr();
+    return drone->getPortNr();
 }
 
 QString DroneModule::getServerIp()
 {
-    return drone.getServerIp();
+    return drone->getServerIp();
 }
 
 double DroneModule::getVisionWidth() const
 {
-    return drone.getVisionWidth();
+    return drone->getVisionWidth();
 }
 
 void DroneModule::setVisionWidth(double visionWidth)
 {
-    drone.setVisionWidth(visionWidth);
+    drone->setVisionWidth(visionWidth);
 }
 
 QList<QGeoCoordinate> *DroneModule::getWaypoints()
@@ -147,7 +148,7 @@ void DroneModule::onPathCalculated(Search *s)
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
     for (int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
-        if (s->getDroneList()->at(i)->getGuid() == drone.getGuid())
+        if (s->getDroneList()->at(i)->getGuid() == drone->getGuid())
             droneInList = true;
     }
     if (droneInList) {
