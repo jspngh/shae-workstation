@@ -21,8 +21,8 @@ public:
     explicit VideoController_Test(QObject *parent = 0);
 
 signals:
-    void startStream(QUuid drone, QString inputFile);
-    void stopStream(QUuid drone);
+    void startStream(Drone* drone);
+    void stopStream(Drone* drone);
 
 
 private Q_SLOTS:

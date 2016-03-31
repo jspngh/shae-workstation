@@ -6,14 +6,14 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    : DroneModule(6331, 5502, "10.1.1.10", MIN_VISIONWIDTH)
+    : DroneModule(6331, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
 {
 
 }
 
-DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, double visionWidth)
+DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
 {
-    drone = Drone(dataPort, streamPort, serverIp, visionWidth);
+    drone = Drone(dataPort, streamPort, serverIp, streamPath, visionWidth);
     droneConnection = new DroneConnection(serverIp, (quint16) dataPort);
     streamConnection = new StreamConnection(serverIp, (quint16) streamPort);
     connectionThread = new QThread();

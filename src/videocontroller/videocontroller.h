@@ -12,6 +12,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "models/videosequence.h"
+#include "models/drone.h"
+
 
 class VideoController : public QObject
 {
@@ -25,12 +27,13 @@ public slots:
     /*!
      * \brief onStartStream() is a slot that listens to a signal to start the stream. The inputfile is used to start the stream.
      * This string can either contain an rtp address (formatted as rtp://XXX.XXX.XXX.XXX) or as an sdp file (formatted as xxx.sdp)
+     * As this slot is non-blocking, the VideoSequence is both emitted and returned
      */
-    void onStartStream(QUuid drone, QString inputFile);
+    VideoSequence onStartStream(Drone* drone);
     /*!
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
      */
-    void onStopStream(QUuid drone);
+    void onStopStream(Drone* drone);
 signals:
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been started.
