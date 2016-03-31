@@ -48,7 +48,7 @@ public:
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    explicit DroneModule(int portNr, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
+    explicit DroneModule(int dataPort, int streamPort, QString serverIp, double visionWidth = MIN_VISIONWIDTH);
 
     //! Copy constructor
     explicit DroneModule(const DroneModule &d);
@@ -60,6 +60,10 @@ public:
     Getters/Setters
     ************************/
     void setController(Controller *ctrl);
+
+    void getStream();
+
+    void stopStream();
 
     QUuid getGuid() const;
 
