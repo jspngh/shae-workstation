@@ -4,26 +4,27 @@
 #include "core/json_messages_test.h"
 #include "core/mediator_test.h"
 #include "models/detectionresult.h"
-
-#include <iostream>
+#include <QList>
 #include <QTest>
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
     qRegisterMetaType<DetectionResult>("DetectionResult");
-    SimplePathAlgorithm_Test test1;
-    DetectionController_Test test2;
-    VideoController_Test test3;
-    Json_Messages_Test test4;
-    Mediator_Test test5;
+    QApplication a(argc, argv);
+    QList<QObject*> tests;
+    tests.append(new SimplePathAlgorithm_Test());
+    tests.append(new Json_Messages_Test());
+    tests.append(new DetectionController_Test());
+    tests.append(new VideoController_Test());
+    tests.append(new Mediator_Test());
 
-    QTest::qExec(&test1);
-    QTest::qExec(&test2);
-    QTest::qExec(&test3);
-    QTest::qExec(&test4);
-    QTest::qExec(&test5);
+    foreach(QObject* test, tests) {
+        QTest::qExec(test, a.arguments());
+    }
+
+    qDeleteAll(tests.begin(), tests.end());
 
     return 0;
 }
+

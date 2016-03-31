@@ -11,6 +11,7 @@
 #include <fstream>
 
 
+
 #include "videocontroller/videocontroller.h"
 
 class VideoController_Test : public QObject
@@ -20,7 +21,7 @@ public:
     explicit VideoController_Test(QObject *parent = 0);
 
 signals:
-    void startStream(QUuid drone, QString sdpFile);
+    void startStream(QUuid drone, QString inputFile);
     void stopStream(QUuid drone);
 
 

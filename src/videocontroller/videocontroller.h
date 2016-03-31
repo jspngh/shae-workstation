@@ -21,7 +21,7 @@ public:
     ~VideoController() {}
 
 public slots:
-    void onStartStream(QUuid drone, QString sdpFile);
+    void onStartStream(QUuid drone, QString inputFile);
     void onStopStream(QUuid drone);
 signals:
     void streamStarted(VideoSequence seq);

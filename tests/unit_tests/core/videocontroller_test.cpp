@@ -31,8 +31,10 @@ void VideoController_Test::testCreateFile()
 {
     bool fileExists = false;
     QUuid id;
-    emit this->startStream(id, QString("dependencies/test.sdp"));
-    sleep(5);
+    qDebug("opening the stream");
+    emit this->startStream(id, QString("rtp://127.0.0.1:5000"));
+    QThread::sleep(10);
+    qDebug("testing if stream was successfully captured");
     emit this->stopStream(id);
     if (FILE *file = fopen("dependencies/drone_stream.mpg", "r"))
     {

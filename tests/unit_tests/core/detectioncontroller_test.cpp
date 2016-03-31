@@ -8,9 +8,14 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase()
 {
+    Search* s = new Search();
+    s->setHeight(3);
+    s->setGimbalAngle(65);
+    Mediator* m;
+    // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
     cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());
-    this->controller = new DetectionController(nullptr, nullptr,2,capture);
+    this->controller = new DetectionController(m, s, 2, capture);
     QObject::connect(this->controller, &DetectionController::newDetection,
                      this, &DetectionController_Test::onNewDetection);
     this->numDetections = 0;
@@ -27,14 +32,13 @@ void DetectionController_Test::testProcessSequence()
     //check if the controller has signalled detections in the past 10s
     QThread::sleep(10);
     int count = this->controller->getNrDetections();
-    //a hard shutdown of the controller is required, because if this method waits for the thread, then no signals will be received in the meanwhile
-    this->controller->quit();
-    delete this->controller;
     QVERIFY(count > 1);
 }
 
 void DetectionController_Test::cleanupTestCase()
 {
+    this->controller->wait();
+    delete this->controller;
 
 }
 

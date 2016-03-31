@@ -5,20 +5,28 @@ VideoController::VideoController(QObject *parent): QObject(parent)
 
 }
 
-void VideoController::onStartStream(QUuid drone, QString sdpFile){
+void VideoController::onStartStream(QUuid drone, QString inputFile){
     const char * vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
     // Launch VLC
-    this->inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
-
+    qDebug("received signal");
+    inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+    qDebug("vlc instantiated");
     /* Create a new item */
-
-    m = libvlc_media_new_path(inst, sdpFile.toStdString().c_str());
+    if(inputFile.contains(QString("rtp://"))){
+        qDebug("rtp stream");
+        m = libvlc_media_new_location(inst, inputFile.toStdString().c_str());
+    }else{
+        qDebug("sdp file");
+        m = libvlc_media_new_path(inst, inputFile.toStdString().c_str());
+    }
+    qDebug("stream opened");
 
     /* Create a media player playing environement */
     mp = libvlc_media_player_new_from_media (m);
 
     /* play the media_player */
     libvlc_media_player_play (mp);
+    qDebug("stream capture started");
 
 
     emit this->streamStarted(VideoSequence(QString("dependencies/drone_stream.mpg"),QUuid::createUuid()));

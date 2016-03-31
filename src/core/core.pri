@@ -1,8 +1,6 @@
 INCLUDEPATH += "core"
 DEPENDPATH += "core"
 
-
-
 INCLUDEPATH += /usr/local/include/
 INCLUDEPATH += /usr/local/include/opencv2
 CONFIG+=link_pkgconfig

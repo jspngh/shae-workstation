@@ -131,7 +131,7 @@ void ConfigWidget::sliderChanged(int value)
 void ConfigWidget::setController(Controller *value)
 {
     controller = value;
-    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, (char*)  SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 void ConfigWidget::startButtonPush()
@@ -140,7 +140,7 @@ void ConfigWidget::startButtonPush()
         Search *s = controller->getSearch();
 
         // TODO: read the search area from the gui
-        QGeoRectangle area(QGeoCoordinate(51.022983, 3.709507), QGeoCoordinate(51.022632, 3.710156));
+        QGeoRectangle area(QGeoCoordinate(51.022960, 3.709623), QGeoCoordinate(51.022761, 3.709877));
         s->setArea(area);
 
         // TODO: read the drones that will be used in the search
