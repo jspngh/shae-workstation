@@ -88,7 +88,6 @@ void Controller::init()
     d->moveToThread(&droneThread);
     //TODO: wait until the first waypoint has been reached
     // for now, this is a simple sleep construction
-    QThread::sleep(5);
     d->setController(this);
     d->getStream();
     //TODO remove explicit linking of streampath
@@ -97,7 +96,6 @@ void Controller::init()
     VideoSequence sequence  = videoController->onStartStream(streamPath);
     cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
     // allow the stream to buffer
-    QThread::sleep(5);
     detectionController->setSequence(capture);
     // start all the threads
     detectionController->start();

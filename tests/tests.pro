@@ -2,7 +2,6 @@
 ###############################################
 
 TEMPLATE = subdirs
-QMAKE_CXX = ccache g++
 
 SUBDIRS = \
     unit_tests \

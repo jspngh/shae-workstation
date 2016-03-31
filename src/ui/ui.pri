@@ -1,8 +1,6 @@
 INCLUDEPATH += "ui"
 DEPENDPATH += "ui"
 
-QMAKE_CXX = ccache g++
-
 SOURCES += \
     $$PWD/mainwindow.cpp \
     $$PWD/welcomewidget.cpp \
