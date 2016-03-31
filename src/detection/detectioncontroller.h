@@ -14,12 +14,16 @@ class DetectionController : public QObject
 public:
     DetectionController(Mediator *mediator, QObject *parent = 0);
     ~DetectionController() {}
+    // Setter
+
+    void setController(Controller *value);
 
 public slots:
     void processSequence(QString seq);
 
 signals:
     void newDetection();
+
 
 private:
     DetectorManager manager;

@@ -75,7 +75,7 @@ void DroneModule::setController(Controller *c)
 
 void DroneModule::getStream()
 {
-    qDebug() << "DroneModulle:: getting stream";
+    qDebug() << "DroneModule:: getting stream";
     emit streamRequest();
 }
 

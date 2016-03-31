@@ -27,16 +27,13 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     drones = new QList<DroneModule *>();
 
-    drones->append(new DroneModule(6330, 5502, "10.1.1.10", 0.0001));
     drones->append(new DroneModule(6330, 5502, "127.0.0.1", 0.0001));
-    drones->append(new DroneModule(3333, 5502, "192.158.32.2", 0.0001));
-    drones->append(new DroneModule(5555, 5502, "120.23.23.12", 0.0001));
 
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6330
 
     // create controllers
-    //detectionController = new DetectionController(mediator);
+    detectionController = new DetectionController(mediator);
     //persistenceController = new Persistence(mediator);
     pathLogicController = new SimplePathAlgorithm();
 }
@@ -72,11 +69,6 @@ void Controller::init()
     // configure every component with the controller
     mainWindow->getConfigWidget()->setController(this);
     pathLogicController->setController(this);
-    for (int i = 0; i < drones->size(); i++) {
-        (*drones)[i]->setController(this);
-        (*drones)[i]->getStream();
-    }
-
     // set every component in a different thread
     // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
 
@@ -85,13 +77,22 @@ void Controller::init()
     pathLogicController->moveToThread(&pathLogicThread);
     for (int i = 0; i < drones->size(); i++)
         (*drones)[i]->moveToThread(&droneThread);
-
-    // start all the threads
-    // detectorThread.start();
-    // persistenceThread.start();
-    droneThread.start();
     pathLogicThread.start();
+    //TODO: wait until the first waypoint has been reached
+    // for now, this is a simple sleep construction
+    QThread::sleep(5);
+    for (int i = 0; i < drones->size(); i++) {
+        (*drones)[i]->setController(this);
+        (*drones)[i]->getStream();
+    }
+    // allow the stream to buffer
+    QThread::sleep(5);
+    // start all the threads
+    detectionController->moveToThread(&detectorThread);
+   // persistenceThread.start();
 }
+
+
 
 /*****************
  *    Getters

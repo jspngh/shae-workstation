@@ -30,6 +30,7 @@ public:
     Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
+    void initStream();
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones() const;
     Search *getSearch() const;

@@ -17,3 +17,9 @@ void DetectionController::processSequence(QString seq)
     emit this->newDetection();
 }
 
+void DetectionController::setController(Controller *value)
+{
+    controller = value;
+    controller->getMediator()->addSignal(this, (char*) SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSlot(this, (char*) SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
+}
