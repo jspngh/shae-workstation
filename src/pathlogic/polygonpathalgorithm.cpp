@@ -145,28 +145,38 @@ void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *>
     double areaWidth = area.getMostEastCoordinate().longitude() - area.getMostWestCoordinate().longitude();
     double widthPerDrone = areaWidth / (double) numDrones;
 
-    double border= area.getMostWestCoordinate().longitude();
+    double border= area.getMostWestCoordinate().longitude()+widthPerDrone;
     QGeoCoordinate upperBorder = area.getMostWestCoordinate();
     QGeoCoordinate lowerBorder = area.getMostWestCoordinate();
 
     for( Drone* drone : *drones){
         QList<QGeoCoordinate> coordListPerDrone;
 
-        if(!coordListPerDrone.contains(upperBorder))
+        if(!coordListPerDrone.contains(upperBorder)){
             coordListPerDrone.push_back(upperBorder);
-        if(!coordListPerDrone.contains(lowerBorder))
+             //qDebug() << "added " << coordListPerDrone.back();
+        }
+        if(!coordListPerDrone.contains(lowerBorder)){
             coordListPerDrone.push_back(lowerBorder);
+            //qDebug() << "added " << coordListPerDrone.back();
+        }
+
+
 
         for( QGeoCoordinate upper : area.getUpperHull()){
-            if(upper.longitude() - border <= 0.0)
+            if(!coordListPerDrone.contains(upper) && upper.longitude() <= border && upper.longitude() >= (border - widthPerDrone)){
                 coordListPerDrone.push_back(upper);
+                //qDebug() << "added " << coordListPerDrone.back();
+            }
         }
         for( QGeoCoordinate lower : area.getLowerHull()){
-            if(lower.longitude() - border <= 0.0)
+            if(!coordListPerDrone.contains(lower) && lower.longitude() <= border && lower.longitude() >= (border - widthPerDrone)){
                 coordListPerDrone.push_back(lower);
+                //qDebug() << "added " << coordListPerDrone.back();
+            }
         }
         auto upperPair = getNeighbouringEdges(QGeoCoordinate(0, border), area.getUpperHull());
-        if(upperPair.second.longitude() < area.getMostEastCoordinate().latitude()){
+        if(upperPair.second.longitude() <= area.getMostEastCoordinate().longitude()){
 
             upperBorder = PathAlgorithm::goDirectionBetween(upperPair.first, upperPair.first,
                                                                              upperPair.second,
@@ -176,10 +186,14 @@ void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *>
         else
             upperBorder = area.getMostEastCoordinate();
 
-        coordListPerDrone.push_back(upperBorder);
+        if(!coordListPerDrone.contains(upperBorder)){
+            coordListPerDrone.push_back(upperBorder);
+           // qDebug() << "added " << coordListPerDrone.back();
+        }
+
 
         auto lowerPair = getNeighbouringEdges(QGeoCoordinate(0, border), area.getLowerHull());
-        if(lowerPair.second.longitude() < area.getMostEastCoordinate().latitude()){
+        if(lowerPair.second.longitude() <= area.getMostEastCoordinate().longitude()){
 
             lowerBorder = PathAlgorithm::goDirectionBetween(lowerPair.first, lowerPair.first,
                                                                              lowerPair.second,
@@ -188,7 +202,11 @@ void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *>
         }
         else
             lowerBorder = area.getMostEastCoordinate();
-        coordListPerDrone.push_back(lowerBorder);
+
+        if(!coordListPerDrone.contains(lowerBorder)){
+            coordListPerDrone.push_back(lowerBorder);
+            //qDebug() << "added " << coordListPerDrone.back();
+        }
 
 
         double visionPerDrone = drone->getVisionWidth();

@@ -180,7 +180,9 @@ private:
     //!< This is useful to calculate the waypoints.
     //!< It should use the same scale as the coordinates used in the waypointplanning algorithms.
     double visionWidth;
-    static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
+
+public:
+    static constexpr double MIN_VISIONWIDTH = 0.00000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 
 };
 
