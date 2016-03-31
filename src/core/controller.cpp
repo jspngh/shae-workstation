@@ -9,11 +9,19 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
+    //set workstationIP
+    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+             workstationIP = address.toString();
+    }
+    //TODO: delete override
+    workstationIP = "127.0.0.1";
+
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-    drones = new QList<Drone *>();
-    drones->append(new Drone(6331, "127.0.0.1", 0.0001));
-
+    drones.append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
+    // real drone: 10.1.1.10:6330
+    // simulator: 127.0.0.1:6331
 
     // create controllers
     //detectionController = new DetectionController(mediator);
@@ -33,11 +41,6 @@ Controller::~Controller()
 
     delete mediator;
 
-    // special Qt function to delete QList of pointers
-    qDeleteAll(drones->begin(), drones->end());
-    drones->clear();
-    delete drones;
-
     // delete detectionController;
     // delete persistenceController;
     delete pathLogicController;
@@ -49,8 +52,10 @@ void Controller::init()
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
     pathLogicController->setMediator(mediator);
-    for (int i = 0; i < drones->size(); i++)
-        (*drones)[i]->setController(this);
+    for (int i = 0; i < drones.size(); i++) {
+        drones[i]->setController(this);
+        drones[i]->getStream();
+    }
 
     // set every component in a different thread
     // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
@@ -58,8 +63,8 @@ void Controller::init()
     // detectionController->moveToThread(&detectorThread);
     // persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
-    for (int i = 0; i < drones->size(); i++)
-        (*drones)[i]->moveToThread(&droneThread);
+    for (int i = 0; i < drones.size(); i++)
+        drones[i]->moveToThread(&droneThread);
 
     // start all the threads
     // detectorThread.start();
@@ -77,8 +82,13 @@ Mediator *Controller::getMediator() const
     return mediator;
 }
 
-QList<Drone *> *Controller::getDrones() const
+QList<DroneModule *> Controller::getDrones() const
 {
     return drones;
+}
+
+QString Controller::getWorkstationIP() const
+{
+    return workstationIP;
 }
 

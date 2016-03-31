@@ -4,14 +4,12 @@
 #include <QTime>
 #include <QList>
 #include <QGeoRectangle>
-
-#include "models/drone.h"
+#include "communication/dronemodule.h"
 
 class Search
 {
 public:
     Search();
-
     ~Search();
 
     QTime getStartTime() const;
@@ -19,14 +17,22 @@ public:
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
 
-    QList<Drone *> getDroneList() const;
-    void setDroneList(QList<Drone *> value);
+    QList<DroneModule *> getDroneList() const;
+    void setDroneList(QList<DroneModule *> value);
+
+    int getGimbalAngle() const;
+    void setGimbalAngle(int value);
+
+    int getHeight() const;
+    void setHeight(int value);
 
 private:
     QUuid searchID;
     QTime startTime;
     QGeoRectangle area;
-    QList<Drone *> droneList;
+    int height;
+    int gimbalAngle;
+    QList<DroneModule *> droneList;
 };
 
 #endif // SEARCH_H

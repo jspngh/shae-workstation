@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
+#include "communication/dronemodule.h"
 #include "core/mediator.h"
 #include "models/drone.h"
 #include "models/search.h"
@@ -39,10 +40,9 @@ public:
     * and the second coordinate contains the bottom right point. The Order is important!
     * \param drones every drone in the list will be assigned an area
     */
-    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> drones) = 0;
+    virtual void setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> drones) = 0;
 
     // Setter
-
     void setMediator(Mediator *mediator);
 
 protected:

@@ -1,12 +1,13 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <QThread>
 #include <QList>
+#include <QThread>
 #include "communication/droneconnection.h"
+#include "communication/droneheartbeatreceiver.h"
+#include "communication/dronemodule.h"
 #include "detection/detectioncontroller.h"
 #include "mediator.h"
-#include "models/drone.h"
 #include "pathlogic/simplepathalgorithm.h"
 #include "persistence/persistence.h"
 #include "ui/mainwindow.h"
@@ -26,12 +27,15 @@ public:
     ~Controller();
     void init();
     Mediator *getMediator() const;
-    QList<Drone *> *getDrones() const;
+    QList<DroneModule *> getDrones() const;
+    QString getWorkstationIP() const;
+    //void setWorkstationIP(const QString &value);
 
 private:
+    QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<Drone *> *drones;
+    QList<DroneModule *> drones;
 
     Persistence *persistenceController;
     DetectionController *detectionController;

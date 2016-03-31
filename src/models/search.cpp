@@ -1,6 +1,5 @@
 #include "search.h"
 
-
 Search::Search()
     : searchID(QUuid::createUuid())
 {
@@ -26,13 +25,33 @@ void Search::setArea(const QGeoRectangle &value)
     area = value;
 }
 
-QList<Drone *> Search::getDroneList() const
+QList<DroneModule *> Search::getDroneList() const
 {
     return droneList;
 }
 
-void Search::setDroneList(QList<Drone *> value)
- {
+void Search::setDroneList(QList<DroneModule *> value)
+{
     droneList = value;
+}
+
+int Search::getGimbalAngle() const
+{
+    return gimbalAngle;
+}
+
+void Search::setGimbalAngle(int value)
+{
+    gimbalAngle = value;
+}
+
+int Search::getHeight() const
+{
+    return height;
+}
+
+void Search::setHeight(int value)
+{
+    height = value;
 }
 

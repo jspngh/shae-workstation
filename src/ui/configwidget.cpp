@@ -157,9 +157,9 @@ void ConfigWidget::locateButtonPush()
         mapView->setCenter(ui->locateField->text());
     } else if (choice == "Coordinates") {
         mapView->setCenter(QGeoCoordinate(
-                               ui->latitudeField->text().toDouble(),
-                               ui->longitudeField->text().toDouble()
-                           ));
+            ui->latitudeField->text().toDouble(),
+            ui->longitudeField->text().toDouble()
+        ));
     } else {
         qWarning() << "User chose something else than \"Location\" or \"Coordinates\"";
     }
@@ -218,5 +218,5 @@ void ConfigWidget::writeConfigToFile()
     }
 
     outfile.close();
-
 }
+

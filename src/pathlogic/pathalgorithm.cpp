@@ -30,19 +30,19 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
 {
     switch (direction) {
     case NORTH:
-        return   QGeoCoordinate(start.latitude() + distance, start.longitude());
+        return QGeoCoordinate(start.latitude() + distance, start.longitude());
         break;
     case SOUTH:
-        return   QGeoCoordinate(start.latitude() - distance, start.longitude());
+        return QGeoCoordinate(start.latitude() - distance, start.longitude());
         break;
     case WEST:
-        return   QGeoCoordinate(start.latitude(), start.longitude() - distance);
+        return QGeoCoordinate(start.latitude(), start.longitude() - distance);
         break;
     case EAST:
-        return   QGeoCoordinate(start.latitude(), start.longitude() + distance);
+        return QGeoCoordinate(start.latitude(), start.longitude() + distance);
         break;
     default:
-        return start ;
+        return start;
         break;
     }
 
