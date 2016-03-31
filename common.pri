@@ -3,6 +3,7 @@
 QT  += core gui webkit positioning
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
+QMAKE_CXX = ccache g++
 CONFIG += c++11
 INCLUDEPATH += /usr/local/include/
 INCLUDEPATH += /usr/local/include/opencv2

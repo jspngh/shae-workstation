@@ -7,7 +7,11 @@ Controller::Controller(MainWindow *window, QObject *p)
 {
     mainWindow = window;
 
+    //configure the search (should be done through the interface)
     search = new Search();
+    search->setHeight(3);
+    search->setGimbalAngle(65);
+    search->setFpsProcessing(2);
 
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
@@ -27,18 +31,17 @@ Controller::Controller(MainWindow *window, QObject *p)
     // TODO: drone info (IP, port, etc) should be set elsewhere
 
     drones = new QList<DroneModule *>();
-    drones->append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
+    drones->append(new DroneModule(6330, 5502, "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6331
 
-    drones->append(new DroneModule(6330, 5502, "127.0.0.1", 0.0001));
 
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6330
 
     // create controllers
-    detectionController = new DetectionController(mediator);
-    //persistenceController = new Persistence(mediator);
+    detectionController = new DetectionController(search);
+    videoController = new VideoController();
     pathLogicController = new SimplePathAlgorithm();
 }
 
@@ -70,6 +73,9 @@ Controller::~Controller()
 
 void Controller::init()
 {
+    // init the controller for single drone use.
+    DroneModule* d = drones->first();
+
     // configure every component with the controller
     mainWindow->getConfigWidget()->setController(this);
     pathLogicController->setController(this);
@@ -79,20 +85,22 @@ void Controller::init()
     // detectionController->moveToThread(&detectorThread);
     // persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
-    for (int i = 0; i < drones->size(); i++)
-        (*drones)[i]->moveToThread(&droneThread);
-    pathLogicThread.start();
+    d->moveToThread(&droneThread);
     //TODO: wait until the first waypoint has been reached
     // for now, this is a simple sleep construction
     QThread::sleep(5);
-    for (int i = 0; i < drones->size(); i++) {
-        (*drones)[i]->setController(this);
-        (*drones)[i]->getStream();
-    }
+    d->setController(this);
+    d->getStream();
+    //TODO remove explicit linking of streampath
+    QString streamPath = QString("rtp://127.0.0.1:5000");
+    //QString streamPath = d->getDrone().getStreamPath();
+    VideoSequence sequence  = videoController->onStartStream(streamPath);
+    cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
     // allow the stream to buffer
     QThread::sleep(5);
+    detectionController->setSequence(capture);
     // start all the threads
-    detectionController->moveToThread(&detectorThread);
+    detectionController->start();
    // persistenceThread.start();
 }
 

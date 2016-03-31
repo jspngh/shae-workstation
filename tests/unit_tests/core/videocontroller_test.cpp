@@ -31,12 +31,12 @@ void VideoController_Test::testCreateFile()
 {
     bool fileExists = false;
     Drone * drone = new Drone();
-    drone->setStreamPath("rtp://127.0.0.1:5000");
+    drone->setStreamPath(QString("rtp://127.0.0.1:5000"));
     qDebug("opening the stream");
-    emit this->startStream(drone);
+    emit this->startStream(drone->getStreamPath());
     QThread::sleep(10);
     qDebug("testing if stream was successfully captured");
-    emit this->stopStream(drone);
+    emit this->stopStream();
     if (FILE *file = fopen("dependencies/drone_stream.mpg", "r"))
     {
         std::ifstream in("dependencies/drone_stream.mpg", std::ifstream::ate | std::ifstream::binary);

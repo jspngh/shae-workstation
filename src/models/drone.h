@@ -31,8 +31,9 @@ public:
 
     void setVisionWidth(double visionWidth);
 
-    QString getStreamPath() const;
-    void setStreamPath(const QString &value);
+    QString getStreamPath();
+    void setStreamPath(QString value);
+
 
 private:
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.

@@ -35,7 +35,9 @@ SOURCES += \
 
 # c++11
 CONFIG += c++11
+QMAKE_CXX = ccache g++
 QMAKE_CXXFLAGS += -std=c++11
+
 
 # Code coverage
 LIBS += -lgcov

@@ -12,16 +12,18 @@
 #include "communication/dronemodule.h"
 #include "detection/detectioncontroller.h"
 #include "pathlogic/simplepathalgorithm.h"
+#include "videocontroller/videocontroller.h"
+
 #include "ui/mainwindow.h"
 
 
 
 //namespace Core {
 //class Controller;
-//}
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
  */
+
 class Controller: public QObject
 {
     Q_OBJECT
@@ -30,7 +32,6 @@ public:
     Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
-    void initStream();
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones() const;
     Search *getSearch() const;
@@ -53,12 +54,14 @@ private:
     Search *search;
 
     Persistence *persistenceController;
+    VideoController *videoController;
     DetectionController *detectionController;
     PathAlgorithm *pathLogicController;
 
     QThread pathLogicThread;
     QThread droneThread;
     QThread detectorThread;
+    QThread videoThread;
     QThread persistenceThread;
 };
 

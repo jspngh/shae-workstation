@@ -57,13 +57,14 @@ void Drone::setVisionWidth(double visionWidth)
     this->visionWidth = visionWidth;
 }
 
-QString Drone::getStreamPath() const
+QString Drone::getStreamPath()
 {
     return streamPath;
 }
 
-void Drone::setStreamPath(const QString &value)
+void Drone::setStreamPath(QString value)
 {
     streamPath = value;
 }
+
 
