@@ -1,8 +1,8 @@
 #include "pathalgorithm.h"
-#include "core/controller.h"
+#include <QDebug>
 
 PathAlgorithm::PathAlgorithm(QObject *p)
-    : PathAlgorithm(QGeoCoordinate(0.0, 0.0))
+    : PathAlgorithm(QGeoCoordinate(0.0, 0.0), p)
 {
 
 }
@@ -19,13 +19,12 @@ PathAlgorithm::~PathAlgorithm()
 
 }
 
-void PathAlgorithm::setController(Controller *value)
+void PathAlgorithm::setMediator(Mediator *mediator)
 {
-    controller = value;
-    controller->getMediator()->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
+    this->mediator = mediator;
+    mediator->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    mediator->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
 }
-
 
 QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direction, double distance)
 {

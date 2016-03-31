@@ -6,8 +6,6 @@ Controller::Controller(MainWindow *window, QObject *p)
 {
     mainWindow = window;
 
-    search = new Search();
-
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
@@ -34,7 +32,6 @@ Controller::~Controller()
     // persistenceThread.wait();
 
     delete mediator;
-    delete search;
 
     // special Qt function to delete QList of pointers
     qDeleteAll(drones->begin(), drones->end());
@@ -49,8 +46,9 @@ Controller::~Controller()
 void Controller::init()
 {
     // configure every component with the controller
-    mainWindow->getConfigWidget()->setController(this);
-    pathLogicController->setController(this);
+    mainWindow->getConfigWidget()->setMediator(mediator);
+    mainWindow->getOverviewWidget()->setMediator(mediator);
+    pathLogicController->setMediator(mediator);
     for (int i = 0; i < drones->size(); i++)
         (*drones)[i]->setController(this);
 
@@ -82,10 +80,5 @@ Mediator *Controller::getMediator() const
 QList<Drone *> *Controller::getDrones() const
 {
     return drones;
-}
-
-Search *Controller::getSearch() const
-{
-    return search;
 }
 

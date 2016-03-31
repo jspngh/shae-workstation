@@ -101,8 +101,8 @@ void Drone::onPathCalculated(Search *s)
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
-    for (int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
-        if (s->getDroneList()->at(i)->getGuid() == guid)
+    for (int i = 0; i < s->getDroneList().size() && !droneInList; i++)    {
+        if (s->getDroneList().at(i)->getGuid() == guid)
             droneInList = true;
     }
     if (droneInList) {

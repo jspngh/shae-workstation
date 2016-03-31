@@ -2,15 +2,11 @@
 #define PATHALGORITHM_H
 
 #include <QObject>
-
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
-
+#include "core/mediator.h"
 #include "models/drone.h"
 #include "models/search.h"
-
-class Controller;
-
 
 enum Direction {
     NORTH, SOUTH, EAST, WEST
@@ -22,7 +18,6 @@ class PathAlgorithm: public QObject
     Q_OBJECT
 
 public:
-
     QGeoCoordinate start; //!< We will need this to efficiently divide search areas over the available drones, and to plan the beginning of the path as close to the start as possible.
 
     PathAlgorithm(QObject *p = 0);
@@ -44,11 +39,11 @@ public:
     * and the second coordinate contains the bottom right point. The Order is important!
     * \param drones every drone in the list will be assigned an area
     */
-    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones) = 0;
+    virtual void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> drones) = 0;
 
     // Setter
 
-    void setController(Controller *value);
+    void setMediator(Mediator *mediator);
 
 protected:
     //! returns a new coordinate based on a certain distance and direction from a previous coordinate.
@@ -60,14 +55,9 @@ private slots:
 signals:
     void pathCalculated(Search *s);
 
-
-
 private:
-    Controller *controller;
+    Mediator *mediator;
 
 };
-
-
-
 
 #endif // PATHALGORITHM_H

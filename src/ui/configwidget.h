@@ -8,10 +8,8 @@
 #include <QMainWindow>
 #include <QMMapView.h>
 #include <QFile>
-
 #include "models/search.h"
-
-class Controller;
+#include "core/mediator.h"
 
 namespace Ui {
 class ConfigWidget;
@@ -26,7 +24,7 @@ public:
     ~ConfigWidget();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void setController(Controller *value);
+    void setMediator(Mediator *mediator);
 
 signals:
     void startSearch(Search *s);
@@ -45,8 +43,7 @@ private slots:
 private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView;
-    Controller *controller;
-
+    Mediator *mediator;
 
     void writeConfigToFile();
     void initializeMap();

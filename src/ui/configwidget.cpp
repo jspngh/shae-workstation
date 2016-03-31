@@ -9,8 +9,6 @@
 #include <QGeoRectangle>
 #include <QDebug>
 
-#include "core/controller.h"
-
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConfigWidget)
@@ -129,26 +127,20 @@ void ConfigWidget::sliderChanged(int value)
     ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
 }
 
-void ConfigWidget::setController(Controller *value)
+void ConfigWidget::setMediator(Mediator *mediator)
 {
-    controller = value;
-    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    this->mediator = mediator;
+    mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 void ConfigWidget::startButtonPush()
 {
-    if (controller) {
-        Search *s = controller->getSearch();
-
+    if (mediator) {
+        Search *s = new Search();
         s->setArea(mapView->selectedArea());
-
-        // TODO: read the drones that will be used in the search
-        // for now, we pick every drone that is set in the controller
-        s->setDroneList(controller->getDrones());
 
         emit startSearch(s);
     }
-
 
     ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
@@ -169,7 +161,7 @@ void ConfigWidget::locateButtonPush()
                                ui->longitudeField->text().toDouble()
                            ));
     } else {
-        //herpaderp, this shouldn't happen
+        qWarning() << "User chose something else than \"Location\" or \"Coordinates\"";
     }
 }
 

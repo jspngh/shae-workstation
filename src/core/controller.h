@@ -3,21 +3,17 @@
 
 #include <QThread>
 #include <QList>
-
-#include "mediator.h"
 #include "communication/droneconnection.h"
-
-#include "persistence/persistence.h"
-#include "models/drone.h"
 #include "detection/detectioncontroller.h"
+#include "mediator.h"
+#include "models/drone.h"
 #include "pathlogic/simplepathalgorithm.h"
+#include "persistence/persistence.h"
 #include "ui/mainwindow.h"
 
-
-
-//namespace Core {
-//class Controller;
-//}
+namespace Core {
+class Controller;
+}
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
  */
@@ -31,13 +27,11 @@ public:
     void init();
     Mediator *getMediator() const;
     QList<Drone *> *getDrones() const;
-    Search *getSearch() const;
 
 private:
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<Drone *> *drones;
-    Search *search;
 
     Persistence *persistenceController;
     DetectionController *detectionController;
