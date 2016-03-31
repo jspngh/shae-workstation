@@ -1,5 +1,7 @@
 # binary files
 bin/*
+!bin/tests/dependencies/*
+!bin/debug/dependencies/* 
 
 # included files
 libs/*/include

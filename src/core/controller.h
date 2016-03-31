@@ -9,7 +9,7 @@
 #include "communication/droneheartbeatreceiver.h"
 
 #include "persistence/persistence.h"
-#include "models/drone.h"
+#include "communication/dronemodule.h"
 #include "detection/detectioncontroller.h"
 #include "pathlogic/simplepathalgorithm.h"
 #include "ui/mainwindow.h"
@@ -31,7 +31,7 @@ public:
     ~Controller();
     void init();
     Mediator *getMediator() const;
-    QList<Drone *> *getDrones() const;
+    QList<DroneModule *> *getDrones() const;
     Search *getSearch() const;
 
     QString getWorkstationIP() const;
@@ -45,9 +45,10 @@ private:
     QString workstationIP;
 
 
+
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<Drone *> *drones;
+    QList<DroneModule *> *drones;
     Search *search;
 
     Persistence *persistenceController;

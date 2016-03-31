@@ -40,29 +40,33 @@ void DroneConnection::onDroneRequest(QString m)
     out << message.toUtf8();
     socket.write(block);
 
-    while (socket.bytesAvailable() < (int)sizeof(quint32)) {
+    while (socket.bytesAvailable() < (int)sizeof(quint16)) {
         if (!socket.waitForReadyRead(Timeout)) {
             emit droneResponseError(socket.error(), socket.errorString());
             return;
         }
     }
 
-    quint32 blockSize;
+    quint16 statusCode;
     QDataStream in(&socket);
     in.setVersion(QDataStream::Qt_4_0);
-    in >> blockSize;
-    qDebug() << blockSize;
-    //
-    // while (socket.bytesAvailable() < blockSize) {
-    //     if (!socket.waitForReadyRead(Timeout)) {
-    //         emit droneResponseError(socket.error(), socket.errorString());
-    //         return;
-    //     }
-    // }
-    //
-    // QByteArray raw;
-    // in >> raw;
-    // QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
-    //
-    // emit droneResponse(response);
+    in >> statusCode;
+
+    if(statusCode == 300) {
+        quint16 blockSize;
+        in >> blockSize;
+
+        while (socket.bytesAvailable() < blockSize) {
+            if (!socket.waitForReadyRead(Timeout)) {
+                emit droneResponseError(socket.error(), socket.errorString());
+                return;
+            }
+        }
+
+        QByteArray raw;
+        in >> raw;
+        QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
+
+        emit droneResponse(response);
+    }
 }

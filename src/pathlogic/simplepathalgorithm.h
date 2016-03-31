@@ -37,7 +37,7 @@ public:
      * This function splits the area in smaller areas so that each drone has its own area. Then it calculates the waypoints for each drone,
      * based on their area, using the \ref calculateWaypoints() method.
     */
-    void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
+    void setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> *drones);
 
     /*! \brief setWaypointsForDrones function sets the waypoints of each drone in the list of drones, based on the area provided to the function.
      * This function splits the area in smaller areas so that each drone has its own area. Then it calculates the waypoints for each drone,

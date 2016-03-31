@@ -7,8 +7,6 @@
 TARGET = frontend
 TEMPLATE = app
 
-include(../common.pri)
-
 # Put all releases in build-folder
 release: DESTDIR = $$PWD/../bin/release
 debug: DESTDIR = $$PWD/../bin/debug
@@ -31,8 +29,5 @@ RESOURCES = application.qrc
 
 # Put subdirectories here
 include(ui/ui.pri)
-include(core/core.pri)
-
-
-
-
+include(../common.pri)
+#include(core/core.pri)
