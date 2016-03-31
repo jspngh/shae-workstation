@@ -40,3 +40,23 @@ void Search::setDroneList(QList<DroneModule *> *value)
 
 
 
+
+int Search::getGimbalAngle() const
+{
+    return gimbalAngle;
+}
+
+void Search::setGimbalAngle(int value)
+{
+    gimbalAngle = value;
+}
+
+int Search::getHeight() const
+{
+    return height;
+}
+
+void Search::setHeight(int value)
+{
+    height = value;
+}

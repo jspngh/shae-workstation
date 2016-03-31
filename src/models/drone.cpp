@@ -2,16 +2,17 @@
 
 
 Drone::Drone()
-    : Drone(6331, 5502, "10.1.1.10", MIN_VISIONWIDTH)
+    : Drone(6331, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
 {
 
 }
 
-Drone::Drone(int dataPort, int streamPort, QString serverIp, double visionWidth):
+Drone::Drone(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth):
     guid(QUuid::createUuid()),
     dataPort(dataPort),
     streamPort(streamPort),
     serverIp(serverIp),
+    streamPath(streamPath),
     visionWidth(visionWidth)
 {
 
@@ -54,5 +55,15 @@ double Drone::getVisionWidth() const
 void Drone::setVisionWidth(double visionWidth)
 {
     this->visionWidth = visionWidth;
+}
+
+QString Drone::getStreamPath() const
+{
+    return streamPath;
+}
+
+void Drone::setStreamPath(const QString &value)
+{
+    streamPath = value;
 }
 

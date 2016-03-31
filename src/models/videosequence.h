@@ -8,10 +8,8 @@
 class VideoSequence
 {
 public:
-    VideoSequence();
-    QTime start;
-    QTime end;
-    int frameCount;
+    VideoSequence(QString path, QUuid videoId);
+private:
     QString path;
     QUuid videoId;
 };

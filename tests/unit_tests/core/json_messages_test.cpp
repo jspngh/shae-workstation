@@ -8,7 +8,7 @@ Json_Messages_Test::Json_Messages_Test()
 }
 void Json_Messages_Test::initTestCase()
 {
-    drone = new DroneModule(6331, 5502, "127.0.0.1", 0.0001);
+    drone = new DroneModule(6331, 5502, "127.0.0.1", "rtp://127.0.0.1:5000", 0.0001);
     QList<QGeoCoordinate> *waypointList = new QList<QGeoCoordinate>();
     waypointList->push_back(QGeoCoordinate(1.0, 1.0));
     waypointList->push_back(QGeoCoordinate(2.0, 2.0));

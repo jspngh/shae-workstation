@@ -30,8 +30,7 @@ SOURCES += \
     $$PWD/detection/detectors/ACF/*.cpp \
     $$PWD/detection/suppression/*.cpp \
     $$PWD/detection/window_selection/*.cpp \
-    $$PWD/utils/*.cpp \
-
+    $$PWD/utils/*.cpp
 HEADERS += \
     $$PWD/core/*.h \
     $$PWD/detection/*.h \
@@ -39,5 +38,5 @@ HEADERS += \
     $$PWD/detection/detectors/ACF/*.h \
     $$PWD/detection/suppression/*.h \
     $$PWD/detection/window_selection/*.h \
-    $$PWD/utils/*.h \
+    $$PWD/utils/*.h
 

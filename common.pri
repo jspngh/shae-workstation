@@ -4,11 +4,17 @@ QT  += core gui webkit positioning
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
 CONFIG += c++11
-
+INCLUDEPATH += /usr/local/include/
+INCLUDEPATH += /usr/local/include/opencv2
+CONFIG+=link_pkgconfig
+PKGCONFIG+=opencv
 # Libraries
 LIBS +=  \
     -L"$$PWD/libs/qtmapkit/bin/" -lqtmapkit \
     -L"$$PWD/libs/detection/bin/" -ldetection
+LIBS += -lvlc
+
+
 INCLUDEPATH += \
     "$$PWD/libs/qtmapkit/include/" \
     "$$PWD/libs/detection/"
