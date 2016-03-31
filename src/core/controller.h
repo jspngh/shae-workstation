@@ -45,6 +45,7 @@ private:
     QString workstationIP;
 
 
+
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<DroneModule *> *drones;

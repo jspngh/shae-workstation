@@ -6,6 +6,7 @@
 #include <QtTest/QtTest>
 #include "communication/dronemodule.h"
 
+
 class Json_Messages_Test: public QObject
 {
     Q_OBJECT

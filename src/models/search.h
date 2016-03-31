@@ -23,10 +23,18 @@ public:
     QList<DroneModule *> *getDroneList() const;
     void setDroneList(QList<DroneModule *> *value);
 
+    int getGimbalAngle() const;
+    void setGimbalAngle(int value);
+
+    int getHeight() const;
+    void setHeight(int value);
+
 private:
     QUuid searchID;
     QTime startTime;
     QGeoRectangle area;
+    int height;
+    int gimbalAngle;
     QList<DroneModule *> *droneList;
 };
 
