@@ -1,27 +1,14 @@
 #include "GeoUtils.h"
 
-/*
-import math
+/*! \file geo utility functions that allow to calculate geocoordinates based on a given coordinate and the distance in terms of longitude/latitude
 
-# Distances are measured in miles.
-# Longitudes and latitudes are measured in degrees.
-# Earth is assumed to be perfectly spherical.
+*/
 
-earth_radius = 3960.0
-degrees_to_radians = math.pi/180.0
-radians_to_degrees = 180.0/math.pi
+/*!
+    \brief calculate a new geocoordinate based on an original coordinate, and the distance that is traversed.
+    the distance is expressed in meters latitude (positive distance, being a distance in the north direction, negative distance being a distance in the south direction)
 
-def change_in_latitude(miles):
-    "Given a distance north, return the change in latitude."
-    return (miles/earth_radius)*radians_to_degrees
-
-def change_in_longitude(latitude, miles):
-    "Given a latitude and a distance west, return the change in longitude."
-    # Find the radius of a circle around the earth at given latitude.
-    r = earth_radius*math.cos(latitude*degrees_to_radians)
-    return (miles/r)*radians_to_degrees
-    */
-
+*/
 std::pair<double,double> changeLatitude(std::pair<double,double> coordinate, double distance)
 {
     double earthRadius = 6378100.0;
@@ -29,6 +16,12 @@ std::pair<double,double> changeLatitude(std::pair<double,double> coordinate, dou
 
     return std::pair<double,double>(coordinate.first+changeLatitude, coordinate.second);
 }
+
+/*!
+    \brief calculate a new geocoordinate based on an original coordinate, and the distance that is traversed.
+    the distance is expressed in meters longitude (positive distance, being a distance in the east direction, negative distance being a distance in the west direction)
+
+*/
 std::pair<double,double> changeLongitude(std::pair<double,double> coordinate, double distance)
 {
     double earthRadius = 6378100.0;

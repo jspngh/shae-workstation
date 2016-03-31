@@ -13,7 +13,6 @@ DetectionController::DetectionController(Mediator *mediator, Search *search, dou
 
 void DetectionController::run()
 {
-    qDebug() << "entered run";
     this->streaming = true;
     // process a sequence
     cv::Mat frame;

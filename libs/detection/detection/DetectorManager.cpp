@@ -106,20 +106,36 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     return detections;
 }
 
+//based on the location from which the frame is taken, the positions of the detections in the frame can be derived.
+//location contains the geocoordinate of the frame
+//dl contains the detections associated with the frame
+//xLUT and yLUT contain lookuptables required to map the pixel locations in the frame on a geocoordinate
 std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT){
     vector<std::pair<double,double>> result;
     for(int i = 0; i< dl.getSize();i++)
     {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
+        //distance contains an x,y distance pair, that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
         std::pair<double, double> temp2 = changeLongitude(location, distance.second);
+        //save the location of the detection
         result.push_back(std::pair<double,double>(temp1.first,temp2.second));
     }
     return result;
 }
 
-//the LUT contains either the x or y coordinates of an image with the corresponding distance with respect to the origin
+/*
+the yLUT contains vectors of doubles. each vector in an yLUT contains as a first number the distance in pixel value
+and as a second number the distance in meters (vertical distance with respect to the origin of the frame)
+the xLUT contains vectors of doubles. the first number of an xLUT vector contains the y position in pixel value,
+the second number contains a distance in pixel value, and the final number contains the corresponding distance in meters.
+positions are derivde from the LUT based on linear interpolation
+    1. determine the yLUT vector with a pixelvalue that lies closest, but above the y pixelvalue of the detection.
+    2. interpolate the vertical distance based on the 2 closest yLUT vectors.
+    3. use the y pixelvalue of the detection to determine the xLUT vector.
+    4. interpolate the horizontal distance based on the xLUT vector.
+*/
 std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT){
     double xPixel = (double)(d.getX());
     double yPixel = (double)(d.getY() + d.getHeight());
