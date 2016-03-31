@@ -15,7 +15,7 @@ class DroneStatus
 {
 public:
     DroneStatus();
-    DroneStatus(const DroneStatus& d);
+    DroneStatus(const DroneStatus &d);
     ~DroneStatus();
 
     //! Creates a droneStatus object from a Json status messages that can be received from the drone.

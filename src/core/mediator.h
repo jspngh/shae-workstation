@@ -70,7 +70,7 @@ private:
     {
     public:
         Element(QObject *obj, const char *method, QString s)
-            : signalName(s), object(obj), method(const_cast<char*>(method))
+            : signalName(s), object(obj), method(const_cast<char *>(method))
         {
 
         }

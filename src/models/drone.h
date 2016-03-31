@@ -10,7 +10,8 @@
  * A DroneModule instance has a drone instance as member.
  */
 
-class Drone {
+class Drone
+{
 
 public:
     Drone();

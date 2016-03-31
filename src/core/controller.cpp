@@ -16,7 +16,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     //set workstationIP
     foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
-             workstationIP = address.toString();
+            workstationIP = address.toString();
     }
     //TODO: delete override
     workstationIP = "127.0.0.1";
@@ -53,7 +53,7 @@ Controller::~Controller()
 
     delete mediator;
 
-   //TODO:what if no waypoints were assigned?
+    //TODO:what if no waypoints were assigned?
     //delete search;
 
     // special Qt function to delete QList of pointers

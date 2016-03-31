@@ -11,13 +11,13 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QList<QObject*> tests;
+    QList<QObject *> tests;
     tests.append(new SimplePathAlgorithm_Test());
     tests.append(new Json_Messages_Test());
     tests.append(new DetectionController_Test());
     tests.append(new Mediator_Test());
 
-    foreach(QObject* test, tests) {
+    foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
 

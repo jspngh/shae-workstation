@@ -176,7 +176,7 @@ private:
 
     Controller *controller;
 
-    DroneHeartBeatReceiver* heartbeatReceiver;
+    DroneHeartBeatReceiver *heartbeatReceiver;
 
     QThread *connectionThread;
 
