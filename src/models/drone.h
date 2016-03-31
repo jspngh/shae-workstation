@@ -34,6 +34,7 @@ public:
     int getStreamPortNr();
 
     QString getStreamPath() const;
+
     void setStreamPath(const QString &value);
 
 private:

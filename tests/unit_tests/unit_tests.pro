@@ -50,6 +50,7 @@ SOURCES += \
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
 
+
 # Code coverage
 LIBS += -lgcov
 QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0

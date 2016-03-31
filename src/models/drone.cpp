@@ -78,3 +78,4 @@ void Drone::setStreamPath(const QString &value)
     streamPath = value;
 }
 
+

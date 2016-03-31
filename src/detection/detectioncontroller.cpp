@@ -1,12 +1,11 @@
 #include "detectioncontroller.h"
+#include "core/controller.h"
 
 using namespace std;
 
-DetectionController::DetectionController(Mediator *mediator, Search *search, double fps, cv::VideoCapture sequence, QObject *parent)
+DetectionController::DetectionController(Search *search, QObject *parent)
     : QThread(parent)
 {
-    this->fps = fps;
-    this->sequence = sequence;
     this->search = search;
     parseConfiguration();
 }
@@ -23,11 +22,10 @@ void DetectionController::run()
         int iteratorFrames = 0;
         double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
         // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
-        this->frameHop = fpsOriginal / (double) this->fps;
+        this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
 
         do
         {
-
             //allow for frames to buffer
             QThread::sleep(1);       //check if new frames have arrived
             numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
@@ -39,7 +37,7 @@ void DetectionController::run()
 
                 iteratorFrames += this->frameHop;
                 DetectionList detectionList = this->manager.applyDetector(frame);
-                double timeFrame = iteratorFrames*this->fps;
+                double timeFrame = iteratorFrames*this->search->getFpsProcessing();
                 //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
                 QGeoCoordinate frameLocation(10,10);
                 //TODO the xLUT and yLUT should be derived from the config file present in the Search object.
@@ -57,6 +55,13 @@ void DetectionController::run()
     }
 }
 
+void DetectionController::setController(Controller *value)
+{
+    controller = value;
+    controller->getMediator()->addSignal(this, (char*) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
+    controller->getMediator()->addSlot(this, (char*) SIGNAL(detectionFinished()), QString("detectionFinished()"));
+}
+
 void DetectionController::streamFinished(){
     this->streaming = false;
 }
@@ -64,6 +69,16 @@ void DetectionController::streamFinished(){
 
 int DetectionController::getNrDetections(){
     return this->nrDetections;
+}
+
+cv::VideoCapture DetectionController::getSequence() const
+{
+    return sequence;
+}
+
+void DetectionController::setSequence(const cv::VideoCapture &value)
+{
+    sequence = value;
 }
 
 void DetectionController::parseConfiguration(){
@@ -115,5 +130,4 @@ void DetectionController::parseConfiguration(){
         }
 
     }
-
 }

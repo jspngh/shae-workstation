@@ -19,10 +19,10 @@ public:
     QTime getStart();
     QTime getEnd();
     int getFrameCount();
-    QString getPath();
 
-    //hulpfuncties
-    void setVariables(QTime start, QTime end, int frameCount, QString path);
+    QString getPath() const;
+    void setPath(const QString &value);
+
 private:
     QTime start;
     QTime end;

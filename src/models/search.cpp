@@ -70,3 +70,13 @@ void Search::setHeight(int value)
 {
     height = value;
 }
+
+int Search::getFpsProcessing() const
+{
+    return fpsProcessing;
+}
+
+void Search::setFpsProcessing(int value)
+{
+    fpsProcessing = value;
+}

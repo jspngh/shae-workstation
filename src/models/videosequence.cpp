@@ -44,7 +44,12 @@ int VideoSequence::getFrameCount()
     return frameCount;
 }
 
-QString VideoSequence::getPath()
+QString VideoSequence::getPath() const
 {
     return path;
+}
+
+void VideoSequence::setPath(const QString &value)
+{
+    path = value;
 }
