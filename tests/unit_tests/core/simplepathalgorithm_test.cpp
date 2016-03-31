@@ -173,6 +173,10 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmPolygon()
 
 
 
+
+
+
+
 // TODO: this should become an integration test (since it involves 2 components)
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
 {
@@ -317,4 +321,49 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
     delete droneA;
     delete droneB;
     delete drones;
+}
+
+void SimplePathAlgorithm_Test::testSimplePathAlgorithmPolygonMultipleDrones()
+{
+    GeoPolygon polygonArea = GeoPolygon();
+    QGeoRectangle rectangleArea = polygonArea.getBoundingQGeoRectangle();
+    QGeoCoordinate start =  QGeoCoordinate(-20.0, 20.0);
+    SimplePathAlgorithm algorithm(start);
+    QList<DroneModule *> *drones = new QList<DroneModule *>();
+    DroneModule *droneA = new DroneModule();
+    droneA->setVisionWidth(0.3);
+    DroneModule *droneB = new DroneModule();
+    droneB->setVisionWidth(0.2);
+    drones->push_back(droneA);
+    drones->push_back(droneB);
+
+    algorithm.setWaypointsForDrones(polygonArea, drones);
+    auto droneListAPoly = *(droneA->getWaypoints());
+    auto droneListBPoly = *(droneB->getWaypoints());
+
+    algorithm.setWaypointsForDrones(rectangleArea, drones);
+    auto droneListARect = *(droneA->getWaypoints());
+    auto droneListBRect = *(droneB->getWaypoints());
+
+    double epsilon = 0.000001;
+    int size = droneListAPoly.size();
+    QVERIFY(size  = droneListARect.size());
+    for (int i = 0; i < size; i++) {
+
+        //Compare
+        QVERIFY(fabs((droneListAPoly)[i].latitude() - (droneListARect)[i].latitude()) < epsilon);
+        QVERIFY(fabs((droneListAPoly)[i].longitude() - (droneListARect)[i].longitude()) < epsilon);
+
+    }
+
+    size = droneListBPoly.size();
+    QVERIFY(size  = droneListARect.size());
+    for (int i = 0; i < size; i++) {
+
+        //Compare
+        QVERIFY(fabs((droneListBPoly)[i].latitude() - (droneListBRect)[i].latitude()) < epsilon);
+        QVERIFY(fabs((droneListBPoly)[i].longitude() - (droneListBRect)[i].longitude()) < epsilon);
+
+    }
+
 }
