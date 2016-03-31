@@ -7,20 +7,17 @@
 #include <QtTest>
 #include <string>
 #include <QThread>
-
+#include <QWaitCondition>
 #include "detection/detectioncontroller.h"
 
 class DetectionController_Test : public QObject
 {
     Q_OBJECT
 public:
-    explicit DetectionController_Test(QObject *parent = 0);
-
-signals:
-    void newSequence(QString seq);
+    DetectionController_Test(QObject *parent = 0);
 
 private:
-    void onNewDetection();
+    void onNewDetection(DetectionResult result);
 
 private Q_SLOTS:
     void testProcessSequence();
@@ -28,10 +25,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    DetectionController *controller;
-    QThread *controllerThread;
-
-    Qt::HANDLE threadId; // the threadId of the the thread creating this object
+    DetectionController* controller;
     int numDetections = 0; // will count the number of times the onNewDetection slot is emitted
 };
 

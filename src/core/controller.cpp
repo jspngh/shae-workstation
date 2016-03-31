@@ -22,10 +22,14 @@ Controller::Controller(MainWindow *window, QObject *p)
     workstationIP = "127.0.0.1";
 
 
+
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
 
     drones = new QList<DroneModule *>();
+    drones->append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
+    // real drone: 10.1.1.10:6330
+    // simulator: 127.0.0.1:6331
 
     drones->append(new DroneModule(6330, 5502, "127.0.0.1", 0.0001));
 
