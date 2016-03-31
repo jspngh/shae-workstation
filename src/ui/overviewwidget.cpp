@@ -38,6 +38,7 @@ void OverviewWidget::onSearchStarted(Search *s)
                             s->getArea().center(),
                             11,
                             true);
+    mapView->fitRegion(s->getArea());
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()),
