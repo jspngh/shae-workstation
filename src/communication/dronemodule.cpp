@@ -6,27 +6,33 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    : DroneModule(6331, "10.1.1.10", MIN_VISIONWIDTH)
+    : DroneModule(6331, 5502, "10.1.1.10", MIN_VISIONWIDTH)
 {
 
 }
 
-DroneModule::DroneModule(int portNr, QString serverIp, double visionWidth)
+DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, double visionWidth)
 {
-    drone = Drone(portNr, serverIp, visionWidth);
-    droneConnection = new DroneConnection(serverIp, (quint16) portNr);
+    drone = Drone(dataPort, streamPort, serverIp, visionWidth);
+    droneConnection = new DroneConnection(serverIp, (quint16) dataPort);
+    streamConnection = new StreamConnection(serverIp, (quint16) streamPort);
     connectionThread = new QThread();
+    streamThread = new QThread();
     droneConnection->moveToThread(connectionThread);
+    streamConnection->moveToThread(streamThread);
     connectionThread->start();
+    streamThread->start();
 
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
+    connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
 
     connect(droneConnection, SIGNAL(droneResponse(const QString &)),
                        this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
-            this, SLOT(onDroneResponseError(int, const QString &)));
-
-
+                       this, SLOT(onDroneResponseError(int, const QString &)));
+    // TODO: create a seperate onStreamError slot
+    connect(streamConnection, SIGNAL(streamError(int, const QString &)),
+                        this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -65,6 +71,17 @@ void DroneModule::setController(Controller *c)
             this, SLOT(onDroneResponseError(int,QString)));
 
     setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
+}
+
+void DroneModule::getStream()
+{
+    qDebug() << "DroneModulle:: getting stream";
+    emit streamRequest();
+}
+
+void DroneModule::stopStream()
+{
+    streamConnection->stopConnection();
 }
 
 Drone DroneModule::getDrone() const
@@ -368,11 +385,11 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int por
 {
     // Create json message
     QJsonObject json = QJsonObject();
-    json["MessageType"] = QString("setting");
+    json["MessageType"] = QString("settings");
     json["Message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
     config["IpAddress"] = ipAdress;
-    config["Port"] = port;
+    config["Port"] = QString::number(port);
     json["Configuration"] = config;
     QJsonDocument jsondoc(json);
 
