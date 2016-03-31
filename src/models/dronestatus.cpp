@@ -7,6 +7,35 @@ DroneStatus::DroneStatus()
 
 }
 
+DroneStatus::~DroneStatus()
+{
+    // nothing needs to be deleted
+}
+
+DroneStatus::DroneStatus(const DroneStatus &droneStatus)
+{
+    drone = droneStatus.drone;
+    orientation = droneStatus.orientation;
+    cameraAngle = droneStatus.cameraAngle;
+    speed = droneStatus.speed;
+    selectedSpeed = droneStatus.selectedSpeed;
+    height = droneStatus.height;
+    selectedHeight = droneStatus.selectedHeight;
+    batteryLevel = droneStatus.batteryLevel;
+    droneState = droneStatus.droneState;
+    fps = droneStatus.fps;
+    resolution = droneStatus.resolution;
+    heartbeat = droneStatus.heartbeat;
+    manufacturer = droneStatus.manufacturer;
+    type = droneStatus.type;
+    timestampDrone = droneStatus.timestampDrone;
+    currentLocation = droneStatus.currentLocation;
+    nextWaypoint = droneStatus.nextWaypoint;
+    previousWaypoint = droneStatus.previousWaypoint;
+    nextWaypoints = droneStatus.nextWaypoints;
+    timestampReceivedWorkstation = droneStatus.timestampReceivedWorkstation;
+}
+
 DroneStatus DroneStatus::fromJsonString(QString string)
 {
     //create status object to return and set current time
@@ -95,6 +124,7 @@ DroneStatus DroneStatus::fromJsonString(QString string)
         QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }
+
     return status;
 
 }
@@ -282,6 +312,16 @@ int DroneStatus::getFps() const
 void DroneStatus::setFps(int value)
 {
     fps = value;
+}
+
+DroneModule *DroneStatus::getDrone() const
+{
+    return drone;
+}
+
+void DroneStatus::setDrone(DroneModule *value)
+{
+    drone = value;
 }
 
 

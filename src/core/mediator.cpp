@@ -3,7 +3,7 @@
 Mediator::Mediator(QObject *parent)
     : QObject(parent)
 {
-
+    qRegisterMetaType<DroneStatus>("DroneStatus");
 }
 
 int Mediator::addSignal(QObject *sender, const char *signal, QString signalName)

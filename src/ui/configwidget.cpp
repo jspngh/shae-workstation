@@ -216,7 +216,16 @@ void ConfigWidget::fillDroneTable()
 
 void ConfigWidget::updateDroneTable(DroneStatus s)
 {
-    qDebug() << "ConfigWidget::updateDroneTable";
+    // for now we only need to update the battery levels in the drone table
+    // if the battery level is not set in the status we don't update anything
+    if(s.getBatteryLevel() == -1) return;
+
+    for(int i = 0; i < dronesInTable.size(); i++){
+        if(dronesInTable[i].second->getGuid() == s.getDrone()->getGuid()){
+            QString batteryLevel = QString::number(s.getBatteryLevel()) + " %";
+            ui->droneTable->setItem(i, BATTERY, new QTableWidgetItem(batteryLevel));
+        }
+    }
 }
 
 

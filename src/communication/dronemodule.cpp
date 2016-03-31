@@ -141,7 +141,6 @@ Slots
 ************************/
 void DroneModule::onPathCalculated(Search *s)
 {
-    qDebug() << "DroneModule::onPathCalculated";
     bool droneInList = false;
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen
@@ -163,6 +162,7 @@ void DroneModule::onDroneResponse(const QString &response)
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
+        status.setDrone(this);
         if (status.getHeartbeat()){
             qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);
