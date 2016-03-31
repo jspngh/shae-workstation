@@ -4,7 +4,6 @@ QT += core gui widgets positioning testlib network
 
 TEMPLATE = app
 TARGET = integration_tests
-
 include(../../common.pri)
 
 INCLUDEPATH += .
@@ -19,12 +18,13 @@ UI_DIR = $$PWD/build/.ui
 
 # Input
 HEADERS += \
-    qtmapkit_test.h \
-    videostreamdetection.h
+    core/qtmapkit_test.h \
+    core/videostreamdetection.h
 
 SOURCES += \
-    qtmapkit_test.cpp \
-    videostreamdetection.cpp
+    core/qtmapkit_test.cpp \
+    core/videostreamdetection.cpp \
+    main.cpp
 
 # c++11
 CONFIG += c++11
@@ -35,6 +35,6 @@ LIBS += -lgcov
 QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
-include(../../src/core/core.pri)
 include(../../src/ui/ui.pri)
+include(../../src/core/core.pri)
 
