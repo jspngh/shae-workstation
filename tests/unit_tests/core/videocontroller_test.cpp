@@ -47,7 +47,7 @@ void VideoController_Test::testCreateFile()
         std::remove("dependencies/drone_stream.mpg"); // delete file
     }
 
-    QVERIFY(fileExists&&this->started &&this->stopped);
+    QVERIFY(fileExists&&this->started && this->stopped);
 }
 
 void VideoController_Test::onStreamStarted()

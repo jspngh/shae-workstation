@@ -34,6 +34,8 @@ private Q_SLOTS:
      */
     void testSimplePathAlgorithm2();
     void testSimplePathAlgorithm3();
+
+    void testSimplePathAlgorithmPolygon();
     void testSimplePathAlgorithmWithMultipleDrones();
     void testSimplePathAlgorithmWithMultipleDrones2();
 };

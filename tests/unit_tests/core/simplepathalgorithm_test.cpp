@@ -150,6 +150,28 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
     }
 }
 
+void SimplePathAlgorithm_Test::testSimplePathAlgorithmPolygon()
+{
+    GeoPolygon polygonArea = GeoPolygon();
+    QGeoRectangle rectangleArea = polygonArea.getBoundingQGeoRectangle();
+    QGeoCoordinate start =  QGeoCoordinate(-20.0, 20.0);
+    SimplePathAlgorithm algorithm(start);
+    auto polygonList = algorithm.calculateWaypoints(polygonArea, 0.2);
+    auto rectangleList = algorithm.calculateWaypoints(rectangleArea, 0.2);
+
+    double epsilon = 0.000001;
+    int size = polygonList->size();
+    QVERIFY(size  = rectangleList->size());
+    for (int i = 0; i < size; i++) {
+
+        //Compare
+        QVERIFY(fabs((*polygonList)[i].latitude() - (*rectangleList)[i].latitude()) < epsilon);
+        QVERIFY(fabs((*polygonList)[i].longitude() - (*rectangleList)[i].longitude()) < epsilon);
+
+    }
+}
+
+
 
 // TODO: this should become an integration test (since it involves 2 components)
 void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones()
