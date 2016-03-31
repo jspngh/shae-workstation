@@ -19,10 +19,12 @@ UI_DIR = $$PWD/build/.ui
 
 # Input
 HEADERS += \
-    qtmapkit_test.h
+    qtmapkit_test.h \
+    videostreamdetection.h
 
 SOURCES += \
-    qtmapkit_test.cpp
+    qtmapkit_test.cpp \
+    videostreamdetection.cpp
 
 # c++11
 CONFIG += c++11
