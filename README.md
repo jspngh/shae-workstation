@@ -35,6 +35,10 @@ In order to capture the drone streams, VLC and the corresponding library LibVLC 
 ```
 sudo apt-get install vlc libvlc-dev
 ```
+To enable Qt to run with vlc, the following command needs to be run.
+```
+  vlc --reset-plugins-cache
+```
 To allow for testing, gstreamer-1.0 needs to be installed:
 ```
 sudo apt-get install python-gi python3-gi \
