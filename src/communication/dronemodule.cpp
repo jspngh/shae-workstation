@@ -52,7 +52,7 @@ void DroneModule::setController(Controller *c)
     controller = c;
     controller->getMediator()->addSlot(this, (char*) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneHeartbeatReceived(DroneStatus)"));
+    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
 
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
@@ -146,10 +146,15 @@ void DroneModule::onDroneResponse(const QString &response)
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
-        if (status.getHeartbeat())
+        if (status.getHeartbeat()){
+            qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);
-        else
+        }
+        else{
+            qDebug() << "emit DroneModule::droneStatusReceived(status)";
             emit droneStatusReceived(status);
+        }
+
     } else
         qDebug() << response;
 }
@@ -177,7 +182,6 @@ QJsonDocument DroneModule::startFlight()
     QString message = jsondoc.toJson(QJsonDocument::Indented);
 
     emit droneRequest(message);
-    qDebug() << "emit droneRequest(message)";
     return jsondoc;
 }
 
@@ -255,6 +259,7 @@ Status messages method
 **************************/
 QJsonDocument DroneModule::requestStatus()
 {
+    qDebug() << "DroneModule::requestStatus";
     // Create json message to request all statuses
     QJsonObject json = QJsonObject();
 

@@ -45,7 +45,7 @@ private slots:
     void locateButtonPush();
     void sliderChanged(int);
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
-    void updateDroneTable();
+    void updateDroneTable(DroneStatus s);
 
 private:
     Ui::ConfigWidget *ui;

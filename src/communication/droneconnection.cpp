@@ -17,8 +17,6 @@ DroneConnection::~DroneConnection()
 
 void DroneConnection::onDroneRequest(QString m)
 {
-    qDebug() << "DroneConnection::onDroneRequest";
-
     QString message = m;
     QString serverName = droneIpAddress;
     quint16 serverPort = port;

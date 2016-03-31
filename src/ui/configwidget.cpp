@@ -189,7 +189,7 @@ void ConfigWidget::locateButtonPush()
 void ConfigWidget::setSignalSlots()
 {
     controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
-    controller->getMediator()->addSlot(this, SLOT(updateDroneTable), QString("droneStatusReceived(DroneStatus)"));
+    controller->getMediator()->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
 void ConfigWidget::fillDroneTable()
@@ -214,9 +214,9 @@ void ConfigWidget::fillDroneTable()
     }
 }
 
-void ConfigWidget::updateDroneTable()
+void ConfigWidget::updateDroneTable(DroneStatus s)
 {
-    qDebug() << "updateDroneTable";
+    qDebug() << "ConfigWidget::updateDroneTable";
 }
 
 
