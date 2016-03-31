@@ -8,6 +8,14 @@
 
 DroneSearchDAO_Test::DroneSearchDAO_Test()
 {
+}
+
+DroneSearchDAO_Test::~DroneSearchDAO_Test()
+{
+}
+
+void DroneSearchDAO_Test::initTestCase()
+{
     projectShaeDatabase = QSqlDatabase::addDatabase("QSQLITE");
 
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
@@ -17,21 +25,15 @@ DroneSearchDAO_Test::DroneSearchDAO_Test()
 
     QString name = "database.sqlite";
 
-    projectShaeDatabase.setDatabaseName(folder.append(name));
+    QString base = folder.append(name);
+    projectShaeDatabase.setDatabaseName(base);
+
     if(projectShaeDatabase.open())
     {
         qDebug() << "database connection succes" ;
     } else {
         qDebug() << "database connection error";
     }
-}
-
-DroneSearchDAO_Test::~DroneSearchDAO_Test()
-{
-}
-
-void DroneSearchDAO_Test::initTestCase()
-{
 }
 
 void DroneSearchDAO_Test::cleanupTestCase()

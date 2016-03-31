@@ -11,6 +11,7 @@ public:
     //constructors
     VideoSequence();
     VideoSequence(QUuid videoId);
+    VideoSequence(QString path, QUuid videoId);
     VideoSequence(QUuid videoId, QTime start, QTime end, int frameCount, QString path);
 
     //getters

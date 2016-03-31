@@ -79,7 +79,7 @@ QList<QGeoCoordinate> *SimplePathAlgorithm::calculateWaypoints(QGeoRectangle are
 }
 
 
-void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones)
+void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> *drones)
 {
     int numDrones = drones->size();
 

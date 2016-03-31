@@ -1,5 +1,9 @@
 #include "searchdao.h"
 #include <QDebug>
+#include <sstream>
+#include <string>
+#include <iostream>
+
 
 SearchDAO::SearchDAO()
 {
@@ -10,12 +14,22 @@ SearchDAO::SearchDAO(QSqlDatabase* projectShaeDatabase){
 }
 
 Search SearchDAO::dbSaveSearch(Search search){
-    // todo check if args are ok
     QSqlQuery query;
-    query.prepare("INSERT INTO searches (searchID, start) "
-                  "VALUES (:searchID, :start)");
+    query.prepare("INSERT INTO searches (searchID, startTime, area, height, gimballAngle) "
+                  "VALUES (:searchID, :startTime, :area, :height, :gimballAngle)");
     query.bindValue(":searchID", search.getSearchID());
-    query.bindValue(":start", search.getStartTime());
+    query.bindValue(":startTime", search.getStartTime());
+
+    std::ostringstream os;
+
+    os << search.getArea().topLeft().latitude() << "-" << search.getArea().topLeft().longitude() << ":";
+    os << search.getArea().bottomRight().latitude() << "-" << search.getArea().bottomRight().longitude() << ":";
+
+    QString pathString = QString(os.str().c_str());
+
+    query.bindValue(":area", pathString);
+    query.bindValue(":height", search.getHeight());
+    query.bindValue(":gimballAngle", search.getGimbalAngle());
     if(query.exec())
     {
        qDebug() << "insert succes";
@@ -37,36 +51,10 @@ Search SearchDAO::dbRetrieveSearch(QUuid searchId){
     {
         if (query.next())
         {
-            search = Search(QUuid(query.value(0).toString()), query.value(1).toTime());
-            /*QList <Drone> drones = QList<Drone>;
-            QSqlQuery queryDrones;
-            queryDrones.prepare("SELECT droneID FROM dronessearches WHERE searchID = (:searchID)");
-            queryDrones.bindValue(":searchID", searchId);
-            if(queryDrones.exec())
-            {
-                while(queryDrones.next())
-                {
-                    QSqlQuery queryDrone;
-                    queryDrone.prepare("SELECT * FROM drones WHERE droneID = (:droneID)");
-                    queryDrone.bindValue(":droneID", queryDrones.value(0));
-                    if(queryDrone.exec())
-                    {
-                            if(queryDrone.next())
-                                drones.append(Drone(QUuid(queryDrone.value(0).,queryDrone.value(1))));
-                    }
-                    else
-                    {
-                        qDebug() << "getdrone from getDroneSearches from getsearch error: "
-                                 << queryDrones.lastError();
-                    }
-                }
-            }
-            else
-            {
-                qDebug() << "getDroneSearches from getsearch error: "
-                         << queryDrones.lastError();
-            }*/
-            //cant do due current state of model
+            QList<QGeoCoordinate> coordinates = uncypherPathString(query.value(2).toString());
+            QGeoRectangle area = QGeoRectangle(coordinates.at(0), coordinates.at(1));
+            search = Search(searchId, query.value(1).toTime(), area,
+                            query.value(3).toInt(), query.value(4).toInt());
         }
 
     }

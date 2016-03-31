@@ -17,6 +17,12 @@ public:
     DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate location,
                 double orientation, double cameraAngle, double speed, double batteryLevel, int droneState);
 
+    DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate currentlocation,
+                double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
+                double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
+                int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
+                QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints);
+
     //! Creates a droneStatus object from a Json status messages that can be received from the drone.
     static DroneStatus fromJsonString(QString string);
 
@@ -76,6 +82,9 @@ public:
 
     int getFps() const;
     void setFps(int value);
+
+    int getResolution() const;
+    void setResolution(int value);
 
 private:
     /**************

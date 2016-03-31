@@ -11,11 +11,15 @@ DroneDAO::DroneDAO(QSqlDatabase* projectShaeDatabase){
 
 Drone DroneDAO::dbSaveDrone(Drone drone)
 {
-    /*QSqlQuery query;
-    query.prepare("INSERT INTO detectionresults (droneID, visionWidth) "
-                  "VALUES (:droneID, :visionWidth)");
+    QSqlQuery query;
+    query.prepare("INSERT INTO drones (droneID, visionWidth, dataPort, streamPort, serverIp, streamPath) "
+                  "VALUES (:droneID, :visionWidth, :dataPort, :streamPort, :serverIp, :streamPath)");
     query.bindValue(":droneID", drone.getGuid());
     query.bindValue(":visionWidth", drone.getVisionWidth());
+    query.bindValue(":dataPort", drone.getPortNr());
+    query.bindValue(":streamPort", drone.getStreamPortNr());
+    query.bindValue(":serverIp", drone.getServerIp());
+    query.bindValue(":streamPath",drone.getStreamPath());
     if(query.exec())
     {
        qDebug() << "insert succes";
@@ -25,19 +29,20 @@ Drone DroneDAO::dbSaveDrone(Drone drone)
        qDebug() << "addDrone error:  "
                 << query.lastError();
     }
-    return drone;*/
-    //TODO werkt nog niet aangezien men van het drone model een Q_Object hebben gemaakt
+    return drone;
 }
 
 Drone DroneDAO::dbRetrieveDrone(QUuid droneId){
-    /*QSqlQuery query;
+    QSqlQuery query;
     Drone returnDrone;
-    query.prepare("SELECT visionWidth FROM drones WHERE droneID = (:droneID)");
+    query.prepare("SELECT dataPort, streamPort, serverIp, streamPath, visionWidth FROM drones WHERE droneID == (:droneID)");
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         if (query.next()) {
-            returnDrone = Drone(droneId,0,QString(" ") ,query.value(0).toDouble());
+            returnDrone = Drone(droneId, query.value(0).toInt(), query.value(1).toInt(),
+                                query.value(2).toString(), query.value(3).toString(),
+                                query.value(4).toDouble());
         }
     }
     else
@@ -45,6 +50,5 @@ Drone DroneDAO::dbRetrieveDrone(QUuid droneId){
        qDebug() << "getDrone error:  "
                 << query.lastError();
     }
-    return returnDrone;*/
-    //TODO werkt nog niet aangezien men van het drone model een Q_Object hebben gemaakt
+    return returnDrone;
 }

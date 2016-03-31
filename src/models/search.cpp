@@ -12,22 +12,19 @@ Search::Search()
     delete droneList;
 }*/
 
-Search::Search(QUuid searchID, QTime start){
-    this->searchID = searchID;
-    this->startTime = start;
-    //droneList = new QList<Drone*>;
+Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle):
+    searchID(searchID),
+    startTime(start),
+    area(area),
+    height(height),
+    gimbalAngle(gimbalAngle)
+{
 }
 
-QUuid Search::getSearchID()
+QUuid Search::getSearchID() const
 {
     return searchID;
 }
-
-//QList<Drone> Search::getDroneList()
-//{
-    //return droneList;
-//}
-
 
 QTime Search::getStartTime() const
 {
@@ -44,12 +41,32 @@ void Search::setArea(const QGeoRectangle &value)
     area = value;
 }
 
-QList<Drone *> *Search::getDroneList() const
+QList<DroneModule *> *Search::getDroneList() const
 {
     return droneList;
 }
 
-void Search::setDroneList(QList<Drone *> *value)
+void Search::setDroneList(QList<DroneModule *> *value)
 {
     droneList = value;
+}
+
+int Search::getGimbalAngle() const
+{
+    return gimbalAngle;
+}
+
+void Search::setGimbalAngle(int value)
+{
+    gimbalAngle = value;
+}
+
+int Search::getHeight() const
+{
+    return height;
+}
+
+void Search::setHeight(int value)
+{
+    height = value;
 }

@@ -47,13 +47,19 @@ void SearchDAO_Test::testSimpleSearchDAO()
 
     SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
-    Search s = Search(QUuid::createUuid(),QTime(7,6));
+    Search s = Search(QUuid::createUuid(),QTime(7,6), QGeoRectangle(QGeoCoordinate(5,6),QGeoCoordinate(4,3)), 5, 6);
 
     sd.dbSaveSearch(s);
 
     Search sback = sd.dbRetrieveSearch(s.getSearchID());
 
-    QVERIFY(sback.getSearchID() == s.getSearchID() && s.getStartTime() == sback.getStartTime());
+    QVERIFY(sback.getSearchID() == s.getSearchID());
+    QVERIFY(s.getStartTime() == sback.getStartTime());
+    QVERIFY(s.getArea().topLeft() == sback.getArea().topLeft());
+    QVERIFY(s.getArea().bottomRight() == sback.getArea().bottomRight());
+    QVERIFY(s.getHeight() == sback.getHeight());
+    QVERIFY(s.getGimbalAngle() == sback.getGimbalAngle());
+
 
     QSqlQuery query;
     query.prepare("DELETE from searches "

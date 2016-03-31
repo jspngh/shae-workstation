@@ -45,7 +45,7 @@ VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid sea
     {
         if(query.next())
         {
-            sequence = VideoSequence(QUuid(videoId), query.value(0).toTime(),
+            sequence = VideoSequence(videoId, query.value(0).toTime(),
                                                     query.value(1).toTime(),
                                                     query.value(2).toInt(),
                                                     query.value(3).toString());

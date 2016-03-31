@@ -13,9 +13,8 @@ DetectionResult DetectionResultDAO::dbSaveDetectionResult(QUuid droneId, QUuid s
 {
     // todo check if args are ok
     QSqlQuery query;
-    query.prepare("INSERT INTO detectionresults (videoID, searchID, droneID, latitude, longitude, score) "
-                  "VALUES (:videoID, :searchID, :droneID, :latitude, :longitude, :score)");
-    query.bindValue(":videoID", result.getVideoSequence().getVideoID());
+    query.prepare("INSERT INTO detectionresults (searchID, droneID, latitude, longitude, score) "
+                  "VALUES (:searchID, :droneID, :latitude, :longitude, :score)");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     QGeoCoordinate location = result.getLocation();
@@ -38,34 +37,14 @@ QList<DetectionResult> DetectionResultDAO::dbRetrieveDetectionResults(QUuid dron
 {
     QSqlQuery query;
     QList<DetectionResult> returnList = QList<DetectionResult>();
-    query.prepare("SELECT videoID, latitude, longitude, score FROM detectionresults WHERE searchID = (:searchID) and droneID = (:droneID)");
+    query.prepare("SELECT latitude, longitude, score FROM detectionresults WHERE searchID = (:searchID) and droneID = (:droneID)");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     if(query.exec())
     {
         while (query.next()) {
-            DetectionResult output = DetectionResult(QGeoCoordinate(query.value(1).toDouble(),query.value(2).toDouble()), query.value(3).toDouble(), VideoSequence(QUuid(query.value(0).toString())));
+            DetectionResult output = DetectionResult(QGeoCoordinate(query.value(0).toDouble(),query.value(1).toDouble()), query.value(2).toDouble());
             returnList.append(output);
-        }
-        for(DetectionResult dr : returnList){
-            QSqlQuery queryVideoSequence;
-            queryVideoSequence.prepare("SELECT start, end, frameCount, path FROM videosequences WHERE videoID = (:videoID)");
-            queryVideoSequence.bindValue(":videoID", dr.getVideoSequence().getVideoID().toString());
-            if(queryVideoSequence.exec())
-            {
-                if(queryVideoSequence.next())
-                {
-                    dr.getVideoSequence().setVariables(queryVideoSequence.value(0).toTime(),
-                                                       queryVideoSequence.value(1).toTime(),
-                                                       queryVideoSequence.value(2).toInt(),
-                                                       queryVideoSequence.value(3).toString());
-                }
-            }
-            else
-            {
-                qDebug() << "getVideoSequence in getdetectionresult error:  "
-                         << query.lastError();
-            }
         }
     }
     else

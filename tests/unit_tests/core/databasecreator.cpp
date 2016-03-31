@@ -72,3 +72,8 @@ void DatabaseCreator::createDatabase()
     }
 }
 
+void DatabaseCreator::removeDatabase()
+{
+    QFile::remove(databaseLocation());
+}
+

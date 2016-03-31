@@ -17,6 +17,8 @@ public:
     QString databaseLocation();
     //!  \brief Create the database.
     void createDatabase();
+    //! \brief Remove the database.
+    void removeDatabase();
 private:
     QSqlDatabase projectShaeDatabase;
 };

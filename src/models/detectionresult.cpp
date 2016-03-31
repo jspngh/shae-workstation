@@ -1,20 +1,5 @@
 #include "detectionresult.h"
 
-DetectionResult::DetectionResult(){
-
-}
-
-DetectionResult::DetectionResult(QGeoCoordinate coordinate, double score, VideoSequence video){
-    this->location = coordinate;
-    this->score = score;
-    this->sequence = video;
-}
-
-VideoSequence DetectionResult::getVideoSequence()
-{
-    return sequence;
-}
-
 double DetectionResult::getScore()
 {
     return score;
@@ -23,4 +8,17 @@ double DetectionResult::getScore()
 QGeoCoordinate DetectionResult::getLocation()
 {
     return location;
+}
+
+DetectionResult::DetectionResult()
+{
+    this->location=QGeoCoordinate(0,0);
+    this->score=0;
+}
+
+
+DetectionResult::DetectionResult(QGeoCoordinate location, double score)
+{
+    this->location=location;
+    this->score=score;
 }

@@ -9,6 +9,11 @@ VideoSequence::VideoSequence(QUuid videoId)
     this->videoId = videoId;
 }
 
+VideoSequence::VideoSequence(QString path, QUuid videoId){
+    this->path = path;
+    this->videoId = videoId;
+}
+
 VideoSequence::VideoSequence(QUuid videoId, QTime start, QTime end, int frameCount, QString path)
 {
     this->videoId = videoId;
@@ -42,14 +47,4 @@ int VideoSequence::getFrameCount()
 QString VideoSequence::getPath()
 {
     return path;
-}
-
-
-//hulpfuncties
-void VideoSequence::setVariables(QTime start, QTime end, int frameCount, QString path)
-{
-    this->start = start;
-    this->end = end;
-    this->frameCount = frameCount;
-    this->path = path;
 }

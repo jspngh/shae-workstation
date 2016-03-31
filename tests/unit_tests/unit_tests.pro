@@ -4,6 +4,7 @@ TEMPLATE = app
 TARGET = unit_tests
 
 include(../../common.pri)
+include(../../src/ui/ui.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += ../../src
@@ -26,8 +27,9 @@ HEADERS += \
     core/dronesearchdao_test.h \
     core/dronestatusdao_test.h \
     core/videosequencedao_test.h \
-    core/mediator_test.h \
-    core/databasecreator.h
+    core/databasecreator.h\
+    core/videocontroller_test.h \
+    core/mediator_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
@@ -40,9 +42,9 @@ SOURCES += \
     core/dronesearchdao_test.cpp \
     core/dronestatusdao_test.cpp \
     core/videosequencedao_test.cpp \
-    core/mediator_test.cpp \
-    core/databasecreator.cpp
-
+    core/databasecreator.cpp \
+    core/videocontroller_test.cpp \
+    core/mediator_test.cpp
 
 # c++11
 CONFIG += c++11
@@ -53,8 +55,6 @@ LIBS += -lgcov
 QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
-include(../../src/ui/ui.pri)
-include(../../src/core/core.pri)
 
 QMAKE
 

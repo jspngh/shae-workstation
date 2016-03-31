@@ -32,7 +32,7 @@ QList<QGeoCoordinate> DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searc
     query.bindValue(":path", pathString);
     if(query.exec())
     {
-       qDebug() << "insert succes";
+       qDebug() << "insert path succes";
     }
     else
     {
@@ -62,16 +62,3 @@ QList<QGeoCoordinate> DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid s
     return returnList;
 }
 
-QList<QGeoCoordinate> DroneSearchDAO::uncypherPathString(QString pathString)
-{
-    QList<QGeoCoordinate> returnList = QList<QGeoCoordinate>();
-    QList<QString> coordinates = pathString.split(":");
-    for(QString coordinate : coordinates){
-        if(!coordinate.isEmpty())
-        {
-            QList<QString> coordinateValues = coordinate.split("-");
-            returnList.append(QGeoCoordinate(coordinateValues.at(0).toDouble(),coordinateValues.at(1).toDouble()));
-        }
-    }
-    return returnList;
-}
