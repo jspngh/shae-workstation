@@ -97,7 +97,7 @@ void SimplePathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<DroneM
     }
 }
 
-void SimplePathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones)
+void SimplePathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones)
 {
     setWaypointsForDrones(area.getBoundingQGeoRectangle(), drones);
 }

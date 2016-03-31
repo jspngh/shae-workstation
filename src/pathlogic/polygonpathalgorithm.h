@@ -33,10 +33,10 @@ public:
      * Converts the rectangle to a polygon and then uses that method. Should not be used in real applications,
      *  since simplepathalgorithm is way better (more efficient + more accurate) for rectangular areas.
      */
-    void setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones);
+    void setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> *drones);
 
     //! setWaypointsForDrones sets the waypoints attribute of each drone.
-    void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones);
+    void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones);
 
 
 protected:

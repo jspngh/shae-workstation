@@ -52,7 +52,7 @@ public:
     virtual void setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> *drones) = 0;
 
     //! The function to set the waypoints for all drones for a polygonial area.
-    virtual void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones) = 0;
+    virtual void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones) = 0;
 
     // Setter
 

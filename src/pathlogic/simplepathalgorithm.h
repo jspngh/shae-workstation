@@ -44,7 +44,7 @@ public:
      * based on their area, using the \ref calculateWaypoints() method.
      * Thus this method also uses the bounding rectangle for the GeoPolygon area. Use with caution!
     */
-    void setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones);
+    void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones);
 
 };
 

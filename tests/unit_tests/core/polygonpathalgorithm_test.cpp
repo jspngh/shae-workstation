@@ -83,10 +83,10 @@ void PolygonPathAlgorithm_Test::testSetWaypointsForDrones()
     coordinates.push_back(QGeoCoordinate(0.0,2.0));
 
     GeoPolygon area = GeoPolygon(coordinates);
-    QList<Drone*>* drones = new QList<Drone*>();
-    Drone* drone1 = new Drone();
+    QList<DroneModule*>* drones = new QList<DroneModule*>();
+    DroneModule* drone1 = new DroneModule();
     drone1->setVisionWidth(0.4);
-    Drone* drone2 = new Drone();
+    DroneModule* drone2 = new DroneModule();
     drone2->setVisionWidth(0.4);
 
     drones->push_back(drone1);
@@ -113,7 +113,7 @@ void PolygonPathAlgorithm_Test::testSetWaypointsForDrones()
     //check if drones->front().waypoints == testList1
     double epsilon = 0.000001;
     int listSize = testList1.size();
-    Drone *frontDrone = drones->front();
+    DroneModule *frontDrone = drones->front();
     QList<QGeoCoordinate> *frontDroneList = frontDrone->getWaypoints();
 
 
@@ -130,7 +130,7 @@ void PolygonPathAlgorithm_Test::testSetWaypointsForDrones()
 
     //check if drones->back().waypoints == testList2
     listSize = testList2.size();
-    Drone *backDrone = drones->back();
+    DroneModule *backDrone = drones->back();
     QList<QGeoCoordinate> *backDroneList = backDrone->getWaypoints();
 
     for (int i = 0; i < listSize; i++) {

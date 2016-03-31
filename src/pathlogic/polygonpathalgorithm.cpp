@@ -128,7 +128,7 @@ QPair<QGeoCoordinate,QGeoCoordinate> PolygonPathAlgorithm::getNeighbouringEdges(
     return QPair<QGeoCoordinate,QGeoCoordinate>(toTheWest,toTheEast);
 }
 
-void PolygonPathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone *> *drones)
+void PolygonPathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> *drones)
 {
     QList<QGeoCoordinate> coordinates = QList<QGeoCoordinate>();
     coordinates.push_back(area.bottomLeft());
@@ -138,7 +138,7 @@ void PolygonPathAlgorithm::setWaypointsForDrones(QGeoRectangle area, QList<Drone
     setWaypointsForDrones(GeoPolygon(coordinates),drones);
 }
 
-void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *> *drones)
+void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones)
 {
     int numDrones = drones->size();
 
@@ -149,7 +149,7 @@ void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<Drone *>
     QGeoCoordinate upperBorder = area.getMostWestCoordinate();
     QGeoCoordinate lowerBorder = area.getMostWestCoordinate();
 
-    for( Drone* drone : *drones){
+    for( DroneModule* drone : *drones){
         QList<QGeoCoordinate> coordListPerDrone;
 
         if(!coordListPerDrone.contains(upperBorder)){

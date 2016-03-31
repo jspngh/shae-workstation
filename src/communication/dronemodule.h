@@ -28,7 +28,7 @@ enum RequestedDroneSetting {
 
 /*! \brief DroneModule class contains a drone model and all the logic belonging to a drone.
  * The model (a instance of the class Drone) contains the data of a drone (ip, port, id, ...)
- * This class (DroneModule) is a add the logic to this drone model.
+ * This class (DroneModule) adds the logic to this drone model.
 */
 class DroneModule : public QObject
 {
