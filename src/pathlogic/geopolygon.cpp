@@ -103,7 +103,7 @@ double GeoPolygon::crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordina
 bool GeoPolygon::isValid() const
 {
     //check if mostEast en mostWest are correct
-    foreach (QGeoCoordinate coordinate, coordinates) {
+    foreach(QGeoCoordinate coordinate, coordinates) {
         if (coordinate.longitude() < mostWestCoordinate.longitude())
             return false;
         if (coordinate.longitude() > mostEastCoordinate.longitude())
@@ -138,7 +138,7 @@ bool GeoPolygon::isValid() const
     if (!lower.isEmpty()) {
         std::sort(lower.begin(), lower.end(), compareLatitude);
         QGeoCoordinate highestOfLower = lower.back();
-        foreach (QGeoCoordinate coordinate, upperHull) {
+        foreach(QGeoCoordinate coordinate, upperHull) {
             if (coordinate.latitude() < highestOfLower.latitude())
                 return false;
         }
@@ -150,7 +150,7 @@ bool GeoPolygon::isValid() const
 QString GeoPolygon::toString()
 {
     QString string = QString();
-    foreach (QGeoCoordinate coordinate, coordinates) {
+    foreach(QGeoCoordinate coordinate, coordinates) {
         string += (coordinate.toString(QGeoCoordinate::DegreesMinutesSeconds)) + (QString("   ||   "));
     }
     return string;

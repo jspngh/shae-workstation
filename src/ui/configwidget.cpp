@@ -137,7 +137,7 @@ void ConfigWidget::setController(Controller *value)
 {
     controller = value;
 
-   controller->getMediator()->addSignal(this, (char *)  SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, (char *)  SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 
     // now that the controller is set, some extra initialization is necessary
     setSignalSlots();
