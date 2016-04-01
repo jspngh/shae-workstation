@@ -20,7 +20,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     //set workstationIP
     foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
-             workstationIP = address.toString();
+            workstationIP = address.toString();
     }
     //TODO: delete override
     workstationIP = "127.0.0.1";
@@ -57,7 +57,7 @@ Controller::~Controller()
 
     delete mediator;
 
-   //TODO:what if no waypoints were assigned?
+    //TODO:what if no waypoints were assigned?
     //delete search;
 
     // special Qt function to delete QList of pointers
@@ -74,7 +74,7 @@ Controller::~Controller()
 void Controller::init()
 {
     // init the controller for single drone use.
-    DroneModule* d = drones->first();
+    DroneModule *d = drones->first();
 
     // configure every component with the controller
     mainWindow->getConfigWidget()->setController(this);
@@ -97,7 +97,7 @@ void Controller::init()
     detectionController->setSequence(capture);
     // start all the threads
     detectionController->start();
-   // persistenceThread.start();
+    // persistenceThread.start();
 }
 
 

@@ -32,8 +32,7 @@ void StreamConnection::onStreamRequest()
         return;
     }
 
-    while(getStream)
-    {
+    while (getStream) {
         usleep(1000);
     }
 }

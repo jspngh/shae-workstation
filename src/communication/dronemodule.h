@@ -78,9 +78,9 @@ public:
 
     void setVisionWidth(double visionWidth);
 
-    Drone* getDrone();
+    Drone *getDrone();
 
-    void setDrone(Drone* value);
+    void setDrone(Drone *value);
 
     QList<QGeoCoordinate> *getWaypoints();
 
@@ -175,11 +175,11 @@ private slots:
 
 
 private:
-    Drone* drone; //!< model containing the data of a drone that will be stored in the database
+    Drone *drone; //!< model containing the data of a drone that will be stored in the database
 
     Controller *controller;
 
-    DroneHeartBeatReceiver* heartbeatReceiver;
+    DroneHeartBeatReceiver *heartbeatReceiver;
 
     QThread *connectionThread;
 

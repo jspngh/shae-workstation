@@ -16,7 +16,7 @@ void DetectionController::run()
     // process a sequence
     cv::Mat frame;
 
-    if(this->sequence.isOpened()){
+    if (this->sequence.isOpened()) {
 
         int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         int iteratorFrames = 0;
@@ -24,32 +24,30 @@ void DetectionController::run()
         // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
         this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
 
-        do
-        {
+        do {
             //allow for frames to buffer
             QThread::sleep(1);       //check if new frames have arrived
             numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
-            while(iteratorFrames < numFrames)
-            {
+            while (iteratorFrames < numFrames) {
                 numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
                 this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
                 this->sequence >> frame;
 
                 iteratorFrames += this->frameHop;
                 DetectionList detectionList = this->manager.applyDetector(frame);
-                double timeFrame = iteratorFrames*this->search->getFpsProcessing();
+                double timeFrame = iteratorFrames * this->search->getFpsProcessing();
                 //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
-                QGeoCoordinate frameLocation(10,10);
+                QGeoCoordinate frameLocation(10, 10);
                 //TODO the xLUT and yLUT should be derived from the config file present in the Search object.
-                vector<pair<double,double>> locations = this->manager.calculatePositions(detectionList, pair<double,double>(frameLocation.longitude(),frameLocation.latitude()),this->xLUT, this->yLUT);
-                for(int i = 0; i < detectionList.getSize(); i++){
-                    emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first,locations[i].second),1));
+                vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT);
+                for (int i = 0; i < detectionList.getSize(); i++) {
+                    emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
                     nrDetections++;
                 }
 
             }
 
-        }while(this->streaming);
+        } while (this->streaming);
         emit this->detectionFinished();
 
     }
@@ -58,16 +56,18 @@ void DetectionController::run()
 void DetectionController::setController(Controller *value)
 {
     controller = value;
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
-    controller->getMediator()->addSlot(this, (char*) SIGNAL(detectionFinished()), QString("detectionFinished()"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
+    controller->getMediator()->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
-void DetectionController::streamFinished(){
+void DetectionController::streamFinished()
+{
     this->streaming = false;
 }
 
 
-int DetectionController::getNrDetections(){
+int DetectionController::getNrDetections()
+{
     return this->nrDetections;
 }
 
@@ -81,7 +81,8 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
     sequence = value;
 }
 
-void DetectionController::parseConfiguration(){
+void DetectionController::parseConfiguration()
+{
     string line;
     int height = this->search->getHeight();
     int gimbalAngle = this->search->getGimbalAngle();
@@ -101,8 +102,8 @@ void DetectionController::parseConfiguration(){
         getline(file, line);
         //next lines are used for the xLUT and yLUT
         location = line.find_last_of("=");
-        int xLUTsize = atoi(line.substr(location+1).c_str());
-        for(int i = 0; i<xLUTsize;i++){
+        int xLUTsize = atoi(line.substr(location + 1).c_str());
+        for (int i = 0; i < xLUTsize; i++) {
             getline(file, line);
             char firstComma, secondComma, leftBrace, rightBrace;
             int pixelWidth, realWidth, pixelY;
@@ -116,8 +117,8 @@ void DetectionController::parseConfiguration(){
         }
         getline(file, line);
         location = line.find_last_of("=");
-        int yLUTsize = atoi(line.substr(location+1).c_str());
-        for(int i = 0; i<yLUTsize;i++){
+        int yLUTsize = atoi(line.substr(location + 1).c_str());
+        for (int i = 0; i < yLUTsize; i++) {
             getline(file, line);
             char comma, leftBrace, rightBrace;
             int pixelY, realY;

@@ -142,7 +142,7 @@ void ConfigWidget::setController(Controller *value)
 }
 
 void ConfigWidget::startButtonPush()
-{    
+{
     if (controller) {
         Search *s = controller->getSearch();
 
@@ -150,10 +150,10 @@ void ConfigWidget::startButtonPush()
         QGeoRectangle area(QGeoCoordinate(51.022960, 3.709623), QGeoCoordinate(51.022761, 3.709877));
         s->setArea(area);
 
-        QList<DroneModule*> *dronesInSearch = new QList<DroneModule*>();
-        for(int i = 0; i < dronesInTable.size(); i++){
+        QList<DroneModule *> *dronesInSearch = new QList<DroneModule *>();
+        for (int i = 0; i < dronesInTable.size(); i++) {
             QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
-            if(cb->isChecked())
+            if (cb->isChecked())
                 dronesInSearch->append(dronesInTable[i].second);
         }
         s->setDroneList(dronesInSearch);
@@ -195,7 +195,7 @@ void ConfigWidget::setSignalSlots()
 void ConfigWidget::fillDroneTable()
 {
     ui->droneTable->clearContents();
-    for(int row = 0; row < controller->getDrones()->size(); row++){
+    for (int row = 0; row < controller->getDrones()->size(); row++) {
         DroneModule *d = (*(controller->getDrones()))[row];
         QString ip_port = d->getServerIp() + QString(':') + QString::number(d->getPortNr());
         ui->droneTable->insertRow(ui->droneTable->rowCount());
@@ -208,7 +208,7 @@ void ConfigWidget::fillDroneTable()
         ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("33 %")));
         ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
 
-        dronesInTable.append(QPair<int, DroneModule*>(row, d));
+        dronesInTable.append(QPair<int, DroneModule *>(row, d));
 
         d->requestStatus();
     }

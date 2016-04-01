@@ -7,9 +7,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QList<QObject*> tests;
+    QList<QObject *> tests;
     tests.append(new VideostreamDetection_Test());
-    foreach(QObject* test, tests) {
+    foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
 
