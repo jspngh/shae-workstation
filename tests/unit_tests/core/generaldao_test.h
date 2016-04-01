@@ -5,12 +5,6 @@
 #include <QString>
 #include "persistence/generaldao.h"
 
-class GeneralDAO_Test
-{
-public:
-    GeneralDAO_Test();
-};
-
 class GeneralDAO_Test : public QObject
 {
     Q_OBJECT

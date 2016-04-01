@@ -25,7 +25,7 @@ void GeneralDAO_Test::testUncypherGeneralDAO()
     QString testString = QString("5-5:6-6:7-7:8-8");
     GeneralDAO generaldao = GeneralDAO();
     QList<QGeoCoordinate> returnList = generaldao.uncypherPathString(testString);
-    QVERIFY(retrunList.size() == 4);
+    QVERIFY(returnList.size() == 4);
     double i = 5;
     for(QGeoCoordinate coordinate: returnList)
     {
