@@ -25,7 +25,7 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
     qDebug() << "receiveHeartbeat";
 
     //get socket that is connected
-    QTcpSocket* clientConnection = server->nextPendingConnection();
+    QTcpSocket *clientConnection = server->nextPendingConnection();
     //make sure socket gets deleted if disconnected
     connect(clientConnection, &QAbstractSocket::disconnected, clientConnection, &QObject::deleteLater);
 

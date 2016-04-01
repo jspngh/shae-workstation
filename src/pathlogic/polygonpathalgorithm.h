@@ -12,7 +12,7 @@ public:
 
     PolygonPathAlgorithm(QGeoCoordinate start);
 
-    PolygonPathAlgorithm(const PolygonPathAlgorithm&);
+    PolygonPathAlgorithm(const PolygonPathAlgorithm &);
 
     ~PolygonPathAlgorithm();
     /*!
@@ -40,7 +40,7 @@ public:
 
 
 protected:
-    QPair<QGeoCoordinate,QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
+    QPair<QGeoCoordinate, QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
 
 };
 

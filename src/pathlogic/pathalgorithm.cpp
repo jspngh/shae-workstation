@@ -14,7 +14,7 @@ PathAlgorithm::PathAlgorithm(QGeoCoordinate start, QObject *p)
 
 }
 
-PathAlgorithm::PathAlgorithm(const PathAlgorithm& algo)
+PathAlgorithm::PathAlgorithm(const PathAlgorithm &algo)
 {
     start = algo.start;
     controller = algo.controller;
@@ -28,8 +28,8 @@ PathAlgorithm::~PathAlgorithm()
 void PathAlgorithm::setController(Controller *value)
 {
     controller = value;
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSlot(this, (char*) SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSlot(this, (char *) SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 
@@ -50,8 +50,8 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
 }
 QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoordinate coordinate1, QGeoCoordinate coordinate2, double distance, Direction direction)
 {
-    double rico = (coordinate2.latitude() - coordinate1.latitude())/(coordinate2.longitude() - coordinate1.longitude());
-    QGeoCoordinate newpoint = QGeoCoordinate(start.latitude() + direction*rico*distance, start.longitude() + direction*distance);
+    double rico = (coordinate2.latitude() - coordinate1.latitude()) / (coordinate2.longitude() - coordinate1.longitude());
+    QGeoCoordinate newpoint = QGeoCoordinate(start.latitude() + direction * rico * distance, start.longitude() + direction * distance);
     return newpoint;
 }
 

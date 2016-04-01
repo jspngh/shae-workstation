@@ -27,12 +27,12 @@ DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString
     connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
 
     connect(droneConnection, SIGNAL(droneResponse(const QString &)),
-                       this, SLOT(onDroneResponse(const QString &)));
+            this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
-                       this, SLOT(onDroneResponseError(int, const QString &)));
+            this, SLOT(onDroneResponseError(int, const QString &)));
     // TODO: create a seperate onStreamError slot
     connect(streamConnection, SIGNAL(streamError(int, const QString &)),
-                        this, SLOT(onDroneResponseError(int, const QString &)));
+            this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -56,9 +56,9 @@ Getters/Setters
 void DroneModule::setController(Controller *c)
 {
     controller = c;
-    controller->getMediator()->addSlot(this, (char*) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneHeartbeatReceived(DroneStatus)"));
+    controller->getMediator()->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneHeartbeatReceived(DroneStatus)"));
 
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
@@ -67,8 +67,8 @@ void DroneModule::setController(Controller *c)
 
     connect(heartbeatReceiver, SIGNAL(droneHeartBeat(QString)),
             this, SLOT(onDroneResponse(QString)));
-    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int,QString)),
-            this, SLOT(onDroneResponseError(int,QString)));
+    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int, QString)),
+            this, SLOT(onDroneResponseError(int, QString)));
 
     setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
 }

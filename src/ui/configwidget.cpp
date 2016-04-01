@@ -131,7 +131,7 @@ void ConfigWidget::sliderChanged(int value)
 void ConfigWidget::setController(Controller *value)
 {
     controller = value;
-    controller->getMediator()->addSignal(this, (char*)  SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, (char *)  SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 void ConfigWidget::startButtonPush()
