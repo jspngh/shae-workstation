@@ -18,8 +18,15 @@
 #include "models/detectionresult.h"
 #include "models/search.h"
 #include "core/mediator.h"
+#include "communication/dronemodule.h"
+
 #include <QDebug>
 #include <QFileInfo>
+
+
+
+class Controller;
+
 
 class DetectionController : public QThread
 {
@@ -27,8 +34,11 @@ class DetectionController : public QThread
 
 public:
     //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
-    explicit DetectionController(Mediator *mediator, Search *search, double fps, cv::VideoCapture sequence, QObject *parent = 0);
+    explicit DetectionController(Search *search, QObject *parent = 0);
     ~DetectionController() {}
+    // Setter
+
+    void setController(Controller *value);
 
     /*!
      * \brief streamFinished() can be called when the stream is finished (and no videocontent will thus be provided anymore).
@@ -49,6 +59,9 @@ public:
      */
     int getNrDetections();
 
+    cv::VideoCapture getSequence() const;
+    void setSequence(const cv::VideoCapture &value);
+
 signals:
     /*!
      * \brief the signal that is emitted when a new detection result has been found in the footage.
@@ -62,9 +75,11 @@ signals:
 
 
 
+
 private:
     DetectorManager manager;
     cv::VideoCapture sequence;
+    Controller *controller;
     double fps;
     double frameHop;
     int nrDetections;

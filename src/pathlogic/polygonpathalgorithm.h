@@ -4,7 +4,10 @@
 #include <QGeoRectangle>
 #include <QPair>
 
-
+/*!
+ * \brief The PolygonPathAlgorithm class can compute a path for drones inside a polygon.
+ * Around edges it can be a little bit innacurate due to differentation of hulls.
+ */
 class PolygonPathAlgorithm : public PathAlgorithm
 {
 public:
@@ -38,8 +41,9 @@ public:
     //! setWaypointsForDrones sets the waypoints attribute of each drone.
     void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones);
 
-    //! Gies back the coordinates east and west of "from" coordinate, inside the given hull.
+    //! Gives back the coordinates east and west of "from" coordinate, inside the given hull.
     static QPair<QGeoCoordinate, QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
+
 
 };
 

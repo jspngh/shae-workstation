@@ -20,5 +20,3 @@ void QtMapKit_Test::testMapViewInitialized()
 {
 }
 
-QTEST_MAIN(QtMapKit_Test)
-
