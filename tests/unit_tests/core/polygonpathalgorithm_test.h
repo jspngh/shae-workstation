@@ -19,7 +19,7 @@ private Q_SLOTS:
 
     void testCalculateWaypoints();
     void testSetWaypointsForDrones();
-
+    void testGetNeighbouringEdges();
 };
 
 #endif // POLYGONPATHALGORITHM_TEST_H

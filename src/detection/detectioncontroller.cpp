@@ -23,9 +23,8 @@ void DetectionController::run()
         double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
         // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
 
+
         this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
-
-
         do {
             //allow for frames to buffer
             QThread::sleep(1);       //check if new frames have arrived
@@ -37,6 +36,7 @@ void DetectionController::run()
 
                 iteratorFrames += this->frameHop;
                 DetectionList detectionList = this->manager.applyDetector(frame);
+
 
                 double timeFrame = iteratorFrames * this->search->getFpsProcessing();
 
@@ -58,6 +58,7 @@ void DetectionController::run()
 }
 
 
+
 void DetectionController::setController(Controller *value)
 {
     controller = value;
@@ -77,6 +78,7 @@ int DetectionController::getNrDetections()
 }
 
 
+
 cv::VideoCapture DetectionController::getSequence() const
 {
     return sequence;
@@ -86,7 +88,6 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
 {
     sequence = value;
 }
-
 
 void DetectionController::parseConfiguration()
 {

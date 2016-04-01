@@ -41,9 +41,9 @@ public:
     //! setWaypointsForDrones sets the waypoints attribute of each drone.
     void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones);
 
+    //! Gives back the coordinates east and west of "from" coordinate, inside the given hull.
+    static QPair<QGeoCoordinate, QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
 
-protected:
-    QPair<QGeoCoordinate, QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
 
 };
 
