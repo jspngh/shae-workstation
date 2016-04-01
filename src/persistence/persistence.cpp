@@ -57,17 +57,15 @@ void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime t
       emit onRetrieveClosestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId,searchId,time));
 }
 
-/*void Persistence::saveDrone(Drone drone)
+void Persistence::saveDrone(Drone drone)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
+    emit onSaveDrone(dronedao.dbSaveDrone(drone));
 }
 
 void Persistence::retrieveDrone(QUuid droneId)
 {
-    //TODO
-    throw "Error: method not implemented yet.";
-}*/
+    emit onRetrieveDrone(dronedao.dbRetrieveDrone(droneId));
+}
 
 void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
 {

@@ -42,8 +42,8 @@ signals:
     void onSaveDronePath(QList<QGeoCoordinate> path);
     void onRetrieveDronePath(QList<QGeoCoordinate> path);
 
-    //void onSaveDrone(Drone drone);
-    //void onRetrieveDrone(Drone drone);
+    void onSaveDrone(Drone drone);
+    void onRetrieveDrone(Drone drone);
 
     //will register a videosequence in the database (already saved in location)
     void onSaveVideoSequence(VideoSequence sequence);
@@ -68,8 +68,8 @@ public slots:
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
     void retrieveDronePath(QUuid droneId, QUuid searchId);
 
-    //void saveDrone(Drone drone);
-    //void retrieveDrone(QUuid droneId);
+    void saveDrone(Drone drone);
+    void retrieveDrone(QUuid droneId);
 
     //will register a videosequence in the database (already saved in location)
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence);
