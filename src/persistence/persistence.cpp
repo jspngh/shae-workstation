@@ -21,6 +21,15 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     dronesearchdao = DroneSearchDAO(&projectShaeDatabase);
     searchdao = SearchDAO(&projectShaeDatabase);
     videosequencedao = VideoSequenceDAO(&projectShaeDatabase);
+
+    //register slots at mediator
+    mediator->addSlot(this, SLOT(saveSearch(Search)), QString("saveSearch(Search)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus,QUuid,QUuid)), QString("saveDroneStatus(DroneStatus,QUuid,QUuid)"));
+    mediator->addSlot(this,SLOT(saveDronePath(QUuid,QUuid,QList<QGeoCoordinate>)),QString("saveDronePath(QUuid,QUuid,QList<QGeoCoordinate>)"));
+    mediator->addSlot(this,SLOT(saveDrone(Drone)),QString("saveDrone(Drone)"));
+    mediator->addSlot(this,SLOT(saveVideoSequence(QUuid,QUuid,VideoSequence)),QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
+    mediator->addSlot(this,SLOT(saveDetectionResult(QUuid,QUuid,DetectionResult)),QString("saveDetectionResult(QUuid,QUuid,DetectionResult)"));
+
 }
 
 Persistence::~Persistence()
@@ -28,74 +37,74 @@ Persistence::~Persistence()
     projectShaeDatabase.close();
 }
 
-void Persistence::saveSearch(Search &search)
+void Persistence::saveSearch(Search search)
 {
-    emit onSaveSearch(searchdao.dbSaveSearch(search));
+    searchdao.dbSaveSearch(search);
 }
 
-void Persistence::retrieveSearch(QUuid searchId)
+Search Persistence::retrieveSearch(QUuid searchId)
 {
-    emit onRetrieveSearch(searchdao.dbRetrieveSearch(searchId));
+    return searchdao.dbRetrieveSearch(searchId);
 }
 
-void Persistence::saveDroneStatus(DroneStatus &droneStatus, QUuid droneId, QUuid searchId)
+void Persistence::saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId)
 {
-    emit onSaveDroneStatus(dronestatusdao.dbSaveDroneStatus(droneStatus, droneId, searchId));
+    dronestatusdao.dbSaveDroneStatus(droneStatus, droneId, searchId);
 }
 
-void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
+QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
 {
-    emit onRetrieveDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, begin, end));
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, begin, end);
 }
 
-void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
+DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
 {
-    emit onRetrieveLatestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId, searchId));
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId);
 }
 
-void Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
+DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
 {
-    emit onRetrieveClosestDroneStatus(dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, time));
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, time);
 }
 
 void Persistence::saveDrone(Drone drone)
 {
-    emit onSaveDrone(dronedao.dbSaveDrone(drone));
+    dronedao.dbSaveDrone(drone);
 }
 
-void Persistence::retrieveDrone(QUuid droneId)
+Drone Persistence::retrieveDrone(QUuid droneId)
 {
-    emit onRetrieveDrone(dronedao.dbRetrieveDrone(droneId));
+    return dronedao.dbRetrieveDrone(droneId);
 }
 
 void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
 {
-    emit onSaveDronePath(dronesearchdao.dbSaveDronePath(droneId, searchId, path));
+    dronesearchdao.dbSaveDronePath(droneId, searchId, path);
 }
 
-void Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
+QList<QGeoCoordinate> Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
 {
-    emit onRetrieveDronePath(dronesearchdao.dbRetrieveDronePath(droneId, searchId));
+    return dronesearchdao.dbRetrieveDronePath(droneId, searchId);
 }
 
-void Persistence::saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence)
+void Persistence::saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence)
 {
-    emit onSaveVideoSequence(videosequencedao.dbSaveVideoSequence(droneId, searchId, sequence));
+    videosequencedao.dbSaveVideoSequence(droneId, searchId, sequence);
 }
 
-void Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
+VideoSequence Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
 {
-    emit onRetrieveVideoSequence(videosequencedao.dbRetrieveVideoSequence(droneId, searchId, videoId));
+    return videosequencedao.dbRetrieveVideoSequence(droneId, searchId, videoId);
 }
 
-void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult &result)
+void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result)
 {
-    emit onSaveDetectionResult(detectionresultdao.dbSaveDetectionResult(droneId, searchId, result));
+    detectionresultdao.dbSaveDetectionResult(droneId, searchId, result);
 }
 
-void Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
+QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 {
-    emit onRetrieveDetectionResults(detectionresultdao.dbRetrieveDetectionResults(droneId, searchId));
+    return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
 }
 
 void Persistence::initDatabase()
