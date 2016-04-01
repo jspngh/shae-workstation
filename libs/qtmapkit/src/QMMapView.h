@@ -22,10 +22,19 @@
 #include <QWidget>
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
+#include "EmptyAreaException.h"
+#include "QMMapIcon.h"
 #include "QtMapKit.h"
 
 class QMMapViewPrivate;
 
+/*!
+ * \brief QMMapView provides a Google Maps-widget. It also providess extra
+ *        features, such as area selection.
+ * \warning Do not use the protected slots prefixed with "js" for your C++
+ *          code, as these are used internally and would result in an infinite
+ *          loop.
+ */
 class QMMapView : public QWidget
 {
     Q_OBJECT
@@ -40,38 +49,116 @@ public:
     };
 
     QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
-              QWidget *parent = 0);
+              bool selectable, QWidget *parent = 0);
+
+    /*!
+     * \brief Returns the display type of the map (e.g. satellite/road, ...)
+     */
     MapType mapType() const;
 
+    /*!
+     * \brief Returns the region of the map (i.e. the region that is visible on the map)
+     *
+     * Due to the limitation in the Google Map JavaScript API, this method
+     * works only after the first `regionChanged()` signal is sent. The result
+     * of any invocation of this method before that is undefined.
+     */
     QGeoRectangle region() const;
+
+    /*!
+     * \brief Returns the center at the coordinate of the map.
+     */
     QGeoCoordinate center() const;
 
+    /*!
+     * \brief Returns the zoom level of the map
+     */
     uint zoomLevel() const;
+
+    /*!
+     * \brief Returns the heading of the map (i.e. the angle of the direction you're taking)
+     */
     qreal heading() const;
+
+    /*!
+     * \brief Returns the tilt of the map (in degrees). Will be a value in [0,45]
+     */
     qreal tilt() const;
 
-    void setMapType(MapType type);
+    /*!
+     * \brief Returns the selected area on the map.
+     * \throws EmptyAreaException if there was no area selected.
+     * \returns The selected area on the map, or null if there is none.
+     */
+    QGeoRectangle selectedArea() const;
 
-    void setCenter(QGeoCoordinate center, bool animated = true);
-    void setCenter(QString address, bool animated = true);
-    void setZoomLevel(uint zoom);
+    /*!
+     * \brief Returns whether an area can be selected on the map.
+     */
+    bool isSelectable() const;
 
-    void makeRegionVisible(QGeoRectangle &region);
-    void fitRegion(QGeoRectangle &region);
-
+    /*!
+     * \brief Call this when the shift key is pressed
+     */
     void shiftKeyPressed(bool down);
+
+private:
+    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject);
+
+public slots:
+    /*!
+     * \brief Sets the display type of the map (e.g. satellite imagery, roads, ...)
+     */
+    void setMapType(const MapType type);
+
+    /*!
+     * \brief Set the center of the map to the given coordinate.
+     */
+    void setCenter(const QGeoCoordinate center, const bool animated = true);
+
+    /*!
+     * \brief Set the center of the map to the given address.
+     * Note: the map will use a best guess for the address' location.
+     */
+    void setCenter(const QString address, const bool animated = true);
+
+    /*!
+     * \brief Sets the zoom level of the map.
+     */
+    void setZoomLevel(const uint zoom);
+
+    /*!
+     * \brief Translates and zooms the map to make the given region visible.
+     */
+    void makeRegionVisible(const QGeoRectangle &region);
+
+    /*!
+     * \brief Fits the map area to the given region.
+     */
+    void fitRegion(const QGeoRectangle &region);
+
+    /*!
+     * \brief Selects an area from topLeft to bottomRight on the map.
+     */
+    void selectArea(const QGeoRectangle &area);
+
+    /*!
+     * \brief Adds a marker on the given coordinate.
+     * \param name     The name of marker type
+     * \param markerId The id of the maerker
+     * \param point    The coordinate of the marker
+     */
+    void addMarker(QString listName, uint markerId, QGeoCoordinate point, QMMapIcon &icon);
+
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
 //    void setTilt(qreal tile);
 
-//    ??? projection() const; get
-//    ??? streetView() const; get set
-//    QUrl draggableCursor(); get set
-//    QUrl draggingCursor(); get set
-//    bool useMapMarker() const; get set
-
 protected:
     void resizeEvent(QResizeEvent *);
+
+private:
+    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject) const;
 
 signals:
     void mapLoaded();
@@ -81,7 +168,6 @@ signals:
     void centerChanged(QGeoCoordinate center);
     void headingChanged();
     void mapTypeChanged(MapType type);
-//    void projectionChanged();
     void tilesLoaded();
     void tilesChanged();
     void zoomLevelChanged(uint level);
@@ -103,24 +189,23 @@ signals:
 protected slots:
     void initializeMap();
     void insertNativeObject();
-    void regionDidChangeTo(qreal north, qreal south, qreal east, qreal west);
-    void centerDidChangeTo(qreal latitude, qreal longitude);
-    void mapTypeDidChangeTo(QString typeString);
-    // Mouse slots
-    void mouseDidClickAt(qreal latitude, qreal longitude);
-    void mouseDidDoubleClickAt(qreal latitude, qreal longitude);
-    void mouseDidRightClickAt(qreal latitude, qreal longitude);
-    void cursorDidMoveTo(qreal latitude, qreal longitude);
-    void cursorDidEnterTo(qreal latitude, qreal longitude);
-    void cursorDidLeaveFrom(qreal latitude, qreal longitude);
-    // Selected area slots
-    void selectedAreaWasCreated(qreal topLeftLat, qreal topLeftLong,
-                                qreal bottomRightLat, qreal bottomRightLong);
-    void selectedAreaDidChangeTo(qreal topLeftLat, qreal topLeftLong,
-                                 qreal bottomRightLat, qreal bottomRightLong);
-    void selectedAreaWasDeleted();
+    void jsRegionChangedTo(qreal north, qreal south, qreal east, qreal west);
+    void jsCenterChangedTo(qreal latitude, qreal longitude);
+    void jsMapTypeChangedTo(QString typeString);
+    void jsMouseClickedAt(qreal latitude, qreal longitude);
+    void jsMouseDoubleClickedAt(qreal latitude, qreal longitude);
+    void jsMouseRightClickedAt(qreal latitude, qreal longitude);
+    void jsMouseMovedTo(qreal latitude, qreal longitude);
+    void jsMouseEnteredAt(qreal latitude, qreal longitude);
+    void jsMouseLeftAt(qreal latitude, qreal longitude);
+    void jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
+                               qreal bottomRightLat, qreal bottomRightLong);
+    void jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
+                               qreal bottomRightLat, qreal bottomRightLong);
+    void jsSelectedAreaDeleted();
 
 private:
+    bool selectable;
     QMMapViewPrivate *d_ptr;
 };
 

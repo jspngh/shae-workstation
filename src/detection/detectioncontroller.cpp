@@ -1,5 +1,4 @@
 #include "detectioncontroller.h"
-#include "core/controller.h"
 
 using namespace std;
 
@@ -23,7 +22,6 @@ void DetectionController::run()
         double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
         // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
 
-
         this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
         do {
             //allow for frames to buffer
@@ -36,10 +34,7 @@ void DetectionController::run()
 
                 iteratorFrames += this->frameHop;
                 DetectionList detectionList = this->manager.applyDetector(frame);
-
-
                 double timeFrame = iteratorFrames * this->search->getFpsProcessing();
-
                 //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
                 QGeoCoordinate frameLocation(10, 10);
                 //TODO the xLUT and yLUT should be derived from the config file present in the Search object.
@@ -57,13 +52,11 @@ void DetectionController::run()
     }
 }
 
-
-
-void DetectionController::setController(Controller *value)
+void DetectionController::setMediator(Mediator *mediator)
 {
-    controller = value;
-    controller->getMediator()->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
-    controller->getMediator()->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
+    this->mediator = mediator;;
+    mediator->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
+    mediator->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
 void DetectionController::streamFinished()
@@ -71,13 +64,10 @@ void DetectionController::streamFinished()
     this->streaming = false;
 }
 
-
 int DetectionController::getNrDetections()
 {
     return this->nrDetections;
 }
-
-
 
 cv::VideoCapture DetectionController::getSequence() const
 {
@@ -140,3 +130,4 @@ void DetectionController::parseConfiguration()
 
     }
 }
+

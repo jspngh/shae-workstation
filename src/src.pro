@@ -18,8 +18,7 @@ RCC_DIR = $$PWD/build/.qrc
 UI_DIR = $$PWD/build/.ui
 
 SOURCES += \
-    main.cpp \
-
+    main.cpp
 
 # c++11
 CONFIG += c++11

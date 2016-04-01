@@ -1,6 +1,5 @@
 #include "drone.h"
 
-
 Drone::Drone()
     : Drone(6331, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
 {

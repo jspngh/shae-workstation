@@ -14,12 +14,16 @@ RCC_DIR = $$PWD/build/
 UI_DIR = $$PWD/build/
 
 SOURCES += \
-    $$PWD/src/QMMapView.cpp
+    $$PWD/src/QMMapView.cpp \
+    $$PWD/src/QMMapIcon.cpp \
+    $$PWD/src/EmptyAreaException.cpp
 
 HEADERS += \
     $$PWD/src/QtMapKit.h \
     $$PWD/src/qtmapkit_global.h \
     $$PWD/src/QMMapView.h \
+    $$PWD/src/QMMapIcon.h \
+    $$PWD/src/EmptyAreaException.h
 
 RESOURCES += \
     $$PWD/src/qtmapkit_resources.qrc

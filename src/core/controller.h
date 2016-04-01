@@ -1,25 +1,21 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <QThread>
 #include <QList>
-
-#include "mediator.h"
+#include <QThread>
 #include "communication/droneconnection.h"
 #include "communication/droneheartbeatreceiver.h"
-
-#include "persistence/persistence.h"
 #include "communication/dronemodule.h"
 #include "detection/detectioncontroller.h"
+#include "mediator.h"
 #include "pathlogic/simplepathalgorithm.h"
+#include "persistence/persistence.h"
+#include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"
 
-#include "ui/mainwindow.h"
-
-
-
-//namespace Core {
-//class Controller;
+namespace Core {
+class Controller;
+}
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
  */
@@ -33,25 +29,15 @@ public:
     ~Controller();
     void init();
     Mediator *getMediator() const;
-    QList<DroneModule *> *getDrones() const;
-    Search *getSearch() const;
-
+    QList<DroneModule *> getDrones() const;
     QString getWorkstationIP() const;
     //void setWorkstationIP(const QString &value);
 
-
-
 private:
-
-
     QString workstationIP;
-
-
-
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<DroneModule *> *drones;
-    Search *search;
+    QList<DroneModule *> drones;
 
     Persistence *persistenceController;
     VideoController *videoController;

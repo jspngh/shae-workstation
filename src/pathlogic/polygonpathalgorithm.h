@@ -36,10 +36,10 @@ public:
      * Converts the rectangle to a polygon and then uses that method. Should not be used in real applications,
      *  since simplepathalgorithm is way better (more efficient + more accurate) for rectangular areas.
      */
-    void setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> *drones);
+    void setWaypointsForDrones(QGeoRectangle area, QList<DroneModule *> drones);
 
     //! setWaypointsForDrones sets the waypoints attribute of each drone.
-    void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> *drones);
+    void setWaypointsForDrones(GeoPolygon area, QList<DroneModule *> drones);
 
     //! Gives back the coordinates east and west of "from" coordinate, inside the given hull.
     static QPair<QGeoCoordinate, QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);

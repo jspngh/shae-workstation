@@ -7,6 +7,35 @@ DroneStatus::DroneStatus()
 
 }
 
+DroneStatus::~DroneStatus()
+{
+    // nothing needs to be deleted
+}
+
+DroneStatus::DroneStatus(const DroneStatus &droneStatus)
+{
+    drone = droneStatus.drone;
+    orientation = droneStatus.orientation;
+    cameraAngle = droneStatus.cameraAngle;
+    speed = droneStatus.speed;
+    selectedSpeed = droneStatus.selectedSpeed;
+    height = droneStatus.height;
+    selectedHeight = droneStatus.selectedHeight;
+    batteryLevel = droneStatus.batteryLevel;
+    droneState = droneStatus.droneState;
+    fps = droneStatus.fps;
+    resolution = droneStatus.resolution;
+    heartbeat = droneStatus.heartbeat;
+    manufacturer = droneStatus.manufacturer;
+    type = droneStatus.type;
+    timestampDrone = droneStatus.timestampDrone;
+    currentLocation = droneStatus.currentLocation;
+    nextWaypoint = droneStatus.nextWaypoint;
+    previousWaypoint = droneStatus.previousWaypoint;
+    nextWaypoints = droneStatus.nextWaypoints;
+    timestampReceivedWorkstation = droneStatus.timestampReceivedWorkstation;
+}
+
 DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate location,
                          double orientation, double cameraAngle, double speed, double batteryLevel, int droneState):
     timestampDrone(timestampDrone),
@@ -46,7 +75,6 @@ DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWo
     nextWaypoints(nextWaypoints),
     droneState(droneState)
 {
-
 }
 
 DroneStatus DroneStatus::fromJsonString(QString string)
@@ -137,6 +165,7 @@ DroneStatus DroneStatus::fromJsonString(QString string)
         QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }
+
     return status;
 
 }
@@ -326,6 +355,16 @@ void DroneStatus::setFps(int value)
     fps = value;
 }
 
+DroneModule *DroneStatus::getDrone() const
+{
+    return drone;
+}
+
+void DroneStatus::setDrone(DroneModule *value)
+{
+    drone = value;
+}
+
 int DroneStatus::getResolution() const
 {
     return resolution;
@@ -335,8 +374,4 @@ void DroneStatus::setResolution(int value)
 {
     resolution = value;
 }
-
-
-
-
 

@@ -1,32 +1,24 @@
 #ifndef DETECTIONCONTROLLER_H
 #define DETECTIONCONTROLLER_H
 
-#include <QString>
 #include <QDebug>
+#include <QFileInfo>
 #include <QObject>
-#include <thread>
-#include <iostream>
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/objdetect/objdetect.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include <stdio.h>
+#include <QString>
+#include <QThread>
 #include <cstdlib>
-#include <iostream>
-#include <string.h>
 #include <fstream>
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include "communication/dronemodule.h"
+#include "core/mediator.h"
 #include "detection/DetectorManager.h"
 #include "models/detectionresult.h"
 #include "models/search.h"
-#include "core/mediator.h"
-#include "communication/dronemodule.h"
-
-#include <QDebug>
-#include <QFileInfo>
-
-
-
-class Controller;
-
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
 
 class DetectionController : public QThread
 {
@@ -36,9 +28,8 @@ public:
     //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
     explicit DetectionController(Search *search, QObject *parent = 0);
     ~DetectionController() {}
-    // Setter
 
-    void setController(Controller *value);
+    void setMediator(Mediator *mediator);
 
     /*!
      * \brief streamFinished() can be called when the stream is finished (and no videocontent will thus be provided anymore).
@@ -74,12 +65,10 @@ signals:
     void detectionFinished();
 
 
-
-
 private:
     DetectorManager manager;
     cv::VideoCapture sequence;
-    Controller *controller;
+    Mediator *mediator;
     double fps;
     double frameHop;
     int nrDetections;

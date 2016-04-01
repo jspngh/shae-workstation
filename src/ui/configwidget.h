@@ -1,20 +1,18 @@
 #ifndef CONFIGWIDGET_H
 #define CONFIGWIDGET_H
 
-#include <QWidget>
-#include <QStackedWidget>
+#include <QFile>
 #include <QKeyEvent>
 #include <QLabel>
-#include <QMainWindow>
-#include <QMMapView.h>
-#include <QFile>
-#include <QPair>
 #include <QList>
+#include <QMMapView.h>
+#include <QMainWindow>
+#include <QPair>
+#include <QStackedWidget>
 #include <QUuid>
-
+#include <QWidget>
 #include "models/search.h"
-
-class Controller;
+#include "core/mediator.h"
 
 namespace Ui {
 class ConfigWidget;
@@ -29,10 +27,11 @@ public:
     ~ConfigWidget();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void setController(Controller *value);
+    void setMediator(Mediator *mediator);
 
 signals:
     void startSearch(Search *s);
+    void requestDronesStatus();
 
 public slots:
     void onMapLoaded();
@@ -50,8 +49,9 @@ private slots:
 private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView;
-    Controller *controller;
+    Mediator *mediator;
 
+    void writeConfigToFile();
     void initializeMap();
 
     // connects all the slots and signals with the mediator
@@ -59,6 +59,7 @@ private:
     // fill the table with the available drones
     // Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
+    int getDroneInTableIndex(DroneModule *d);
 
     QList<QPair<int, DroneModule *>> dronesInTable;
 
