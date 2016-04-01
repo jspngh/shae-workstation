@@ -160,7 +160,23 @@ QGeoRectangle GeoPolygon::getBoundingQGeoRectangle()
 {
     //Constructs a new geo rectangle,
     //of minimum size, containing all of the coordinates.
-    return QGeoRectangle(coordinates);
+    //apparently not supported on jenkins, wtf.
+    //return QGeoRectangle(coordinates);
+
+
+    double west = getMostWestCoordinate().longitude();
+    double east = getMostEastCoordinate().longitude();
+
+    double north = -90.0;
+    double south = 90.0;
+    for (QGeoCoordinate coord : coordinates){
+        if(coord.latitude() > north)
+            north = coord.latitude();
+        if(coord.latitude() < south)
+            south = coord.latitude();
+    }
+    return (QGeoRectangle(QGeoCoordinate(north, west),QGeoCoordinate(south, east)));
+
 }
 
 QList<QGeoCoordinate> GeoPolygon::getCoordinates() const
