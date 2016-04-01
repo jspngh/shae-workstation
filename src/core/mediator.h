@@ -7,6 +7,8 @@
 #include <QString>
 #include <QList>
 
+#include "models/dronestatus.h"
+
 /*! \brief The mediator connects all components to each other.
  * Add signals and slots using the methods \ref Mediator::addSignal() and \ref Mediator::addSlot() respectivily.
  */
@@ -68,7 +70,7 @@ private:
     {
     public:
         Element(QObject *obj, const char *method, QString s)
-            : signalName(s), object(obj), method(const_cast<char*>(method))
+            : signalName(s), object(obj), method(const_cast<char *>(method))
         {
 
         }

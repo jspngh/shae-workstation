@@ -17,8 +17,6 @@ DroneConnection::~DroneConnection()
 
 void DroneConnection::onDroneRequest(QString m)
 {
-    qDebug() << "DroneConnection::onDroneRequest";
-
     QString message = m;
     QString serverName = droneIpAddress;
     quint16 serverPort = port;
@@ -52,7 +50,7 @@ void DroneConnection::onDroneRequest(QString m)
     in.setVersion(QDataStream::Qt_4_0);
     in >> statusCode;
 
-    if(statusCode == 300) {
+    if (statusCode == 300) {
         quint16 blockSize;
         in >> blockSize;
 

@@ -1,3 +1,4 @@
+
 #include "controller.h"
 #include <QUuid>
 
@@ -12,16 +13,20 @@ Controller::Controller(MainWindow *window, QObject *p)
     //set workstationIP
     foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
-             workstationIP = address.toString();
+            workstationIP = address.toString();
     }
     //TODO: delete override
     workstationIP = "127.0.0.1";
 
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-    drones.append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
+    drones.append(new DroneModule(6330, 5502, "", "10.1.1.10", 0.0001));
+    drones.append(new DroneModule(6330, 5502, "", "127.0.0.1", 0.0001));
+    drones.append(new DroneModule(3333, 5502, "", "192.158.32.2", 0.0001));
+    drones.append(new DroneModule(5555, 5502, "", "120.23.23.12", 0.0001));
+
     // real drone: 10.1.1.10:6330
-    // simulator: 127.0.0.1:6331
+    // simulator: 127.0.0.1:6330
 
     // create controllers
     //detectionController = new DetectionController(mediator);
@@ -40,6 +45,10 @@ Controller::~Controller()
     // persistenceThread.wait();
 
     delete mediator;
+
+    // special Qt function to delete QList of pointers
+    qDeleteAll(drones.begin(), drones.end());
+    drones.clear();
 
     // delete detectionController;
     // delete persistenceController;

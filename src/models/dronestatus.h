@@ -9,10 +9,14 @@
 #include <QString>
 #include "communication/parseexception.h"
 
+class DroneModule;
+
 class DroneStatus
 {
 public:
     DroneStatus();
+    DroneStatus(const DroneStatus &d);
+    ~DroneStatus();
 
     //! Creates a droneStatus object from a Json status messages that can be received from the drone.
     static DroneStatus fromJsonString(QString string);
@@ -74,6 +78,9 @@ public:
     int getFps() const;
     void setFps(int value);
 
+    DroneModule *getDrone() const;
+    void setDrone(DroneModule *value);
+
 private:
     /**************
     * Attributes
@@ -82,6 +89,7 @@ private:
 
     /*! Orientation (0-360 degrees)
      * Default as -1 */
+    DroneModule *drone;
     double orientation = -1;
     double cameraAngle = -1;
     double speed = -1;
@@ -105,5 +113,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE(DroneStatus)
 
 #endif // DRONESTATUS_H

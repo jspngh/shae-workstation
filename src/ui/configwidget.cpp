@@ -8,6 +8,7 @@
 #include <sstream>
 #include <QGeoRectangle>
 #include <QDebug>
+#include <QCheckBox>
 
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
@@ -15,11 +16,15 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
 {
     //setup UI
     ui->setupUi(this);
-    ui->droneTable->setColumnWidth(0, 35);
-    ui->droneTable->setColumnWidth(1, 110);
-    ui->droneTable->setColumnWidth(2, 110);
-    ui->droneTable->setColumnWidth(3, 50);
-    ui->droneTable->setColumnWidth(4, 40);
+
+    ui->droneTable->setColumnWidth(CHECK, 30);
+    ui->droneTable->setColumnWidth(TYPE, 100);
+    ui->droneTable->setColumnWidth(BATTERY, 100);
+    ui->droneTable->setColumnWidth(IP_PORT, 150);
+    ui->droneTable->verticalHeader()->hide();
+
+    ui->droneTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->droneTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->precisionSlider->setMaximum(100);
 
     //setup connections
@@ -130,7 +135,9 @@ void ConfigWidget::sliderChanged(int value)
 void ConfigWidget::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
-    mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+
+    setSignalSlots();
+    emit requestDronesStatus();
 }
 
 void ConfigWidget::startButtonPush()
@@ -139,7 +146,16 @@ void ConfigWidget::startButtonPush()
         Search *s = new Search();
         s->setArea(mapView->selectedArea());
 
+        QList<DroneModule *> dronesInSearch;
+        for (int i = 0; i < dronesInTable.size(); i++) {
+            QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
+            if (cb->isChecked())
+                dronesInSearch.append(dronesInTable[i].second);
+        }
+        s->setDroneList(dronesInSearch);
+
         emit startSearch(s);
+        qDebug() << "emit ConfigWidget::startSearch(Search *s)";
     }
 
     ((QStackedWidget *) this->parent())->setCurrentIndex(2);
@@ -165,58 +181,42 @@ void ConfigWidget::locateButtonPush()
     }
 }
 
-void ConfigWidget::writeConfigToFile()
+void ConfigWidget::setSignalSlots()
 {
-    time_t t = time(0);
-    struct tm *now = localtime(&t);
-    int sec = now ->tm_sec;
-    int min = now->tm_min;
-    int hour = now->tm_hour;
-    int day = now->tm_mday;
-    int month = now->tm_mon + 1;
-    int year = now->tm_year + 1900;
+    mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
+    mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+}
 
-    std::ostringstream ss;
-    ss << "search-" << sec << "-" << min << "-" << hour << "-" << day << "-" << month << "-" << year << ".conf";
-
-
-    std::ofstream outfile(ss.str().c_str());
-
-    if (ui->searchStrategyComboBox->currentText() != NULL) {
-        outfile << "Search strategy: " << ui->searchStrategyComboBox->currentText().toStdString() << std::endl;
+void ConfigWidget::updateDroneTable(DroneStatus s)
+{
+    DroneModule *d = s.getDrone();
+    int currentRow = getDroneInTableIndex(d);
+    QString ip_port = d->getServerIp() + QString(':') + QString::number(d->getPortNr());
+    if(currentRow == -1) {
+        ui->droneTable->insertRow(ui->droneTable->rowCount());
+        currentRow = ui->droneTable->rowCount() - 1;
     }
 
-    outfile << "Precision: " << ui->PrecisionValueLabel->text().toStdString() << std::endl;
+    // fill newly created row
+    QCheckBox *checkbox = new QCheckBox();
+    ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
+    ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Solo 3DR")));
+    if (s.getBatteryLevel() == -1)
+        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
+    else
+        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
+    ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
 
+    dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));
+}
 
-    outfile << "TODO drone list to string" << std::endl;
-    //for(QTableWidgetItem i : ui->droneTable->items()){
-    //    if(false)
-    //    {
-    //todo implement items
-    //    }
-    //}
+int ConfigWidget::getDroneInTableIndex(DroneModule *d)
+{
+    for(int i = 0; i < dronesInTable.size(); i++)
+        if(dronesInTable[i].second->getGuid() == d->getGuid())
+            return i;
 
-    if (ui->locateField->text().size() != 0) {
-        outfile << "Location search field: " << ui->locateField->text().toStdString() << std::endl;
-    }
-
-    if (ui->latitudeField->text().size() != 0) {
-        outfile << "Latitude search field: " << ui->latitudeField->text().toStdString() << std::endl;
-    }
-
-    if (ui->longitudeField->text().size() != 0) {
-        outfile << "Longitude search field: " << ui->longitudeField->text().toStdString() << std::endl;
-    }
-
-    outfile << "Center of the map: " << mapView->center().longitude() << " " << mapView->center().latitude() << " " << mapView->center().altitude() << std::endl;
-
-    if (mapView->region().bottomLeft().longitude() != NULL) {
-        outfile << "Selected region coorindates in longitude and latitude: " << std::endl;
-        outfile << "Bottom right: " << mapView->region().bottomRight().longitude() << " "  << mapView->region().bottomRight().latitude() << std::endl;
-        outfile << "Top left: " << mapView->region().topLeft().longitude() << " "  << mapView->region().topLeft().latitude() << std::endl;
-    }
-
-    outfile.close();
+    return -1;
 }
 

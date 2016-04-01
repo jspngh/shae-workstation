@@ -9,8 +9,8 @@
  * The logic of a drone is implemented in the DroneModule class.
  * A DroneModule instance has a drone instance as member.
  */
-class Drone {
-
+class Drone
+{
 public:
     Drone();
 

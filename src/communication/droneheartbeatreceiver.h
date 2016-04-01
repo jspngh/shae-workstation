@@ -16,7 +16,7 @@ class DroneHeartBeatReceiver: public QObject
 
 public:
     DroneHeartBeatReceiver();
-    DroneHeartBeatReceiver(const QString ip, QObject*p =0);
+    DroneHeartBeatReceiver(const QString ip, QObject *p = 0);
     ~DroneHeartBeatReceiver();
 
 
@@ -39,7 +39,7 @@ signals:
 private:
 
     quint16 workstationHeartbeatPort;
-    QTcpServer* server;
+    QTcpServer *server;
 };
 
 #endif // DRONEHEARTBEATRECEIVER_H
