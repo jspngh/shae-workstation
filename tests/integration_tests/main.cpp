@@ -12,9 +12,8 @@ int main(int argc, char *argv[])
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
-
+    qDebug() << "tests finished";
     qDeleteAll(tests.begin(), tests.end());
-
     return 0;
 }
 

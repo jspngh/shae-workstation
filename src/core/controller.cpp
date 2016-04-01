@@ -2,6 +2,7 @@
 #include "controller.h"
 #include <QUuid>
 
+
 Controller::Controller(MainWindow *window, QObject *p)
     : QObject(p)
 {
@@ -31,7 +32,8 @@ Controller::Controller(MainWindow *window, QObject *p)
     // TODO: drone info (IP, port, etc) should be set elsewhere
 
     drones = new QList<DroneModule *>();
-    drones->append(new DroneModule(6330, 5502, "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
+    //drones->append(new DroneModule(6330, 5502, "10.1.1.1", QString("dependencies/sololink.sdp"),  0.0001));
+    //drones->append(new DroneModule(6330, 5502, "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6331
 
@@ -41,7 +43,6 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create controllers
     detectionController = new DetectionController(search);
-    videoController = new VideoController();
     pathLogicController = new SimplePathAlgorithm();
 }
 
@@ -86,20 +87,41 @@ void Controller::init()
     // persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
     d->moveToThread(&droneThread);
-    //TODO: wait until the first waypoint has been reached
-    // for now, this is a simple sleep construction
     d->setController(this);
-    d->getStream();
-    QString streamPath = d->getDrone().getStreamPath();
-    VideoSequence sequence  = videoController->onStartStream(streamPath);
-    cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
-    // allow the stream to buffer
-    detectionController->setSequence(capture);
-    // start all the threads
-    detectionController->start();
-    // persistenceThread.start();
 }
 
+
+void Controller::initStream(DroneModule* d)
+{
+
+    d->getStream();
+    QString streamPath = d->getDrone()->getStreamPath();
+    qDebug() << "Controller: stream started at drone";
+    VideoSequence sequence  = d->getVideoController()->onStartStream(streamPath);
+    qDebug() << "Controller: starting to save stream";
+    // allow the stream to buffer
+
+    QThread::sleep(1);
+    //WARNING VideoCapture needs to be performed on the main thread!
+    cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
+
+    if(true){
+        qDebug() << "Controller: stream file has been succesfully opened";
+        // allow the stream to buffer
+        detectionController->setSequence(capture);
+        // start all the threads
+        // allow the stream to bufer for a second
+        QThread::sleep(1);
+        detectionController->start();
+    }
+
+}
+
+void Controller::stopStream(DroneModule* d)
+{
+    d->getVideoController()->onStopStream();
+    detectionController->streamFinished();
+}
 
 
 /*****************
@@ -111,9 +133,15 @@ Mediator *Controller::getMediator() const
     return mediator;
 }
 
-QList<DroneModule *> *Controller::getDrones() const
+QList<DroneModule *> *Controller::getDrones()
 {
     return drones;
+}
+
+
+void Controller::setDrones(QList<DroneModule *>* list)
+{
+    drones = list;
 }
 
 Search *Controller::getSearch() const
@@ -124,5 +152,10 @@ Search *Controller::getSearch() const
 QString Controller::getWorkstationIP() const
 {
     return workstationIP;
+}
+
+DetectionController *Controller::getDetectionController() const
+{
+    return detectionController;
 }
 

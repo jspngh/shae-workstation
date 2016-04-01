@@ -3,6 +3,11 @@
 #include <mutex>
 #include <QObject>
 #include <QUuid>
+#include <QFile>
+#include <QDebug>
+#include <QThread>
+
+
 #include <unistd.h>
 #include <stdio.h>
 #include <iostream>
@@ -22,6 +27,7 @@ public:
     //! DetectionController is a class, that retrieves a video stream and saves it to a file
     VideoController(QObject *parent = 0);
     ~VideoController() {}
+
 
 public slots:
     /*!

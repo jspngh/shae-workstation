@@ -22,7 +22,7 @@ DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString
     streamConnection->moveToThread(streamThread);
     connectionThread->start();
     streamThread->start();
-
+    videoController = new VideoController();
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
 
@@ -46,6 +46,7 @@ DroneModule::~DroneModule()
     delete droneConnection;
     delete drone;
     delete connectionThread;
+    delete videoController;
     //TODO: delete heartbeatReceiver;
     delete waypoints;
 
@@ -179,6 +180,16 @@ void DroneModule::onDroneResponse(const QString &response)
 void DroneModule::onDroneResponseError(int socketError, const QString &message)
 {
     qDebug() << message;
+}
+
+VideoController *DroneModule::getVideoController() const
+{
+    return videoController;
+}
+
+void DroneModule::setVideoController(VideoController *value)
+{
+    videoController = value;
 }
 
 

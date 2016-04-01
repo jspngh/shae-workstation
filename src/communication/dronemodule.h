@@ -143,6 +143,9 @@ public:
     Signals
     *******************/
 
+    VideoController *getVideoController() const;
+    void setVideoController(VideoController *value);
+
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
     //! is connected to droneconnection directly in the constructor of drone.
@@ -178,6 +181,8 @@ private:
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
 
     Controller *controller;
+
+    VideoController * videoController;
 
     DroneHeartBeatReceiver *heartbeatReceiver;
 

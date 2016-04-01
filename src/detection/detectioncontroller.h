@@ -20,6 +20,8 @@
 #include "core/mediator.h"
 #include "communication/dronemodule.h"
 
+#include "utils/DrawUtils.h"
+
 #include <QDebug>
 #include <QFileInfo>
 
