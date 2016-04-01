@@ -68,7 +68,7 @@ signals:
 private:
     DetectorManager manager;
     cv::VideoCapture sequence;
-    Controller *controller;
+    Mediator *mediator;
     double fps;
     double frameHop;
     int nrDetections;

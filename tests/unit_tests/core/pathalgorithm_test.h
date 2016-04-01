@@ -1,7 +1,6 @@
 #ifndef PATHALGORITHM_TEST_H
 #define PATHALGORITHM_TEST_H
 #include <QString>
-#include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
 #include "pathlogic/pathalgorithm.h"
 
@@ -18,11 +17,10 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testConstructor1();
     void testConstructor2();
-    void testSetController();
+    void testSetMediator();
     void testGoDirectionWest();
     void testGoDirectionEast();
     void testGoDirectionBetween();
-
 };
 
 #endif // PATHALGORITHM_TEST_H

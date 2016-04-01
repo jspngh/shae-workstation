@@ -1,4 +1,3 @@
-
 #include "controller.h"
 #include <QUuid>
 
