@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 {
     qRegisterMetaType<DetectionResult>("DetectionResult");
     QApplication a(argc, argv);
-    QList<QObject*> tests;
+    QList<QObject *> tests;
     tests.append(new SimplePathAlgorithm_Test());
     tests.append(new Json_Messages_Test());
     tests.append(new DetectionController_Test());
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     tests.append(new GeoPolygon_test());
     tests.append(new PolygonPathAlgorithm_Test());
 
-    foreach(QObject* test, tests) {
+    foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
 

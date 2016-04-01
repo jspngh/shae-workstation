@@ -21,7 +21,8 @@
 #include <QDebug>
 #include <QFileInfo>
 
-class DetectionController : public QThread{
+class DetectionController : public QThread
+{
     Q_OBJECT
 
 public:

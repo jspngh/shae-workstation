@@ -28,7 +28,7 @@ public:
 
     PathAlgorithm(QObject *p = 0);
     PathAlgorithm(QGeoCoordinate start, QObject *p = 0);
-    PathAlgorithm(const PathAlgorithm& algo);
+    PathAlgorithm(const PathAlgorithm &algo);
     ~PathAlgorithm();
 
     /*!
