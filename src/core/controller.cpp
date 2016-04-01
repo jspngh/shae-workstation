@@ -26,7 +26,7 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     drones = new QList<DroneModule *>();
     drones->append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
-    drones->append(new DroneModule(6330, 5502, "10.1.1.10", QString("rtp://10.1.1.10:5000"),0.0001));
+    drones->append(new DroneModule(6330, 5502, "10.1.1.10", QString("rtp://10.1.1.10:5000"), 0.0001));
 
     // create controllers
     //detectionController = new DetectionController(mediator);
@@ -67,7 +67,7 @@ void Controller::init()
     pathLogicController->setController(this);
     for (int i = 0; i < drones->size(); i++) {
         (*drones)[i]->setController(this);
-        (*drones)[i]->getStream();
+        // (*drones)[i]->getStream();
     }
 
     // set every component in a different thread
