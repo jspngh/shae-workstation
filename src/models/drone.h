@@ -16,7 +16,7 @@ public:
 
     Drone(int dataPort, int streamPort, QString serverIp, QString streamPath , double visionWidth);
 
-    Drone(const Drone &d);
+    Drone(QUuid droneID, int dataPort, int streamPort, QString serverIp, QString streamPath , double visionWidth);
 
     ~Drone();
 
@@ -30,7 +30,10 @@ public:
 
     void setVisionWidth(double visionWidth);
 
+    int getStreamPortNr();
+
     QString getStreamPath() const;
+
     void setStreamPath(const QString &value);
 
 private:
@@ -40,7 +43,9 @@ private:
     QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
     QString streamPath;
     double visionWidth;
-    static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
+
+public:
+    static constexpr double MIN_VISIONWIDTH = 0.00000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 
 };
 

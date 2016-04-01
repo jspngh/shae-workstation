@@ -1,18 +1,17 @@
 #ifndef VIDEOCONTROLLER_H
 #define VIDEOCONTROLLER_H
-#include <mutex>
+
 #include <QObject>
 #include <QUuid>
-#include <unistd.h>
-#include <stdio.h>
 #include <iostream>
-
-#include <vlc/vlc.h>
-
-#include <opencv2/opencv.hpp>
+#include <mutex>
 #include <opencv2/highgui/highgui.hpp>
-#include "models/videosequence.h"
+#include <opencv2/opencv.hpp>
+#include <stdio.h>
+#include <unistd.h>
+#include <vlc/vlc.h>
 #include "models/drone.h"
+#include "models/videosequence.h"
 
 
 class VideoController : public QObject
@@ -34,6 +33,7 @@ public slots:
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
      */
     void onStopStream(Drone *drone);
+
 signals:
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been started.

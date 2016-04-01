@@ -46,7 +46,7 @@ DroneModule::~DroneModule()
     delete droneConnection;
     delete connectionThread;
     //TODO: delete heartbeatReceiver;
-    delete waypoints;
+    //TODO: delete waypoints fails if no waypoints assigned
 
 }
 
@@ -83,7 +83,7 @@ void DroneModule::setController(Controller *c)
 
 void DroneModule::getStream()
 {
-    qDebug() << "DroneModulle:: getting stream";
+    qDebug() << "DroneModule:: getting stream";
     emit streamRequest();
 }
 
@@ -254,7 +254,7 @@ QJsonDocument DroneModule::sendWaypoints()
 
     QJsonArray coordinates = QJsonArray();
     int i = 0;
-    foreach (const QGeoCoordinate waypoint, *waypoints) {
+    foreach(const QGeoCoordinate waypoint, *waypoints) {
         i++;
         QJsonObject coordinate = QJsonObject();
 
@@ -312,7 +312,7 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
     QJsonObject json = QJsonObject();
     json["MessageType"] = QString("status");
     QJsonArray requestedStatuses = QJsonArray();
-    foreach (const RequestedDroneStatus status, statuses) {
+    foreach(const RequestedDroneStatus status, statuses) {
         QJsonObject requestedStatus = QJsonObject();
         QString key;
         switch (status) {

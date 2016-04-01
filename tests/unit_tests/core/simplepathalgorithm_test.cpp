@@ -3,6 +3,7 @@
 #include <QtTest/QtTest>
 #include "pathlogic/pathalgorithm.h"
 #include "pathlogic/simplepathalgorithm.h"
+#include "pathlogic/geopolygon.h"
 #include "models/drone.h"
 #include "simplepathalgorithm_test.h"
 
@@ -142,6 +143,26 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithm3()
         //Compare
         QVERIFY(fabs(calculated.latitude() - test.latitude()) < epsilon);
         QVERIFY(fabs(calculated.longitude() - test.longitude()) < epsilon);
+    }
+}
+
+void SimplePathAlgorithm_Test::testSimplePathAlgorithmPolygon()
+{
+    GeoPolygon polygonArea = GeoPolygon();
+    QGeoRectangle rectangleArea = polygonArea.getBoundingQGeoRectangle();
+    QGeoCoordinate start =  QGeoCoordinate(-20.0, 20.0);
+    SimplePathAlgorithm algorithm(start);
+    auto polygonList = algorithm.calculateWaypoints(polygonArea, 0.2);
+    auto rectangleList = algorithm.calculateWaypoints(rectangleArea, 0.2);
+
+    double epsilon = 0.000001;
+    int size = polygonList->size();
+    QVERIFY(size  = rectangleList->size());
+    for (int i = 0; i < size; i++) {
+
+        //Compare
+        QVERIFY(fabs((*polygonList)[i].latitude() - (*rectangleList)[i].latitude()) < epsilon);
+        QVERIFY(fabs((*polygonList)[i].longitude() - (*rectangleList)[i].longitude()) < epsilon);
     }
 }
 
@@ -286,5 +307,48 @@ void SimplePathAlgorithm_Test::testSimplePathAlgorithmWithMultipleDrones2()
 
     delete droneA;
     delete droneB;
+}
+
+void SimplePathAlgorithm_Test::testSimplePathAlgorithmPolygonMultipleDrones()
+{
+    GeoPolygon polygonArea;
+    QGeoRectangle rectangleArea = polygonArea.getBoundingQGeoRectangle();
+    QGeoCoordinate start =  QGeoCoordinate(-20.0, 20.0);
+    SimplePathAlgorithm algorithm(start);
+    QList<DroneModule *> drones;
+    DroneModule *droneA = new DroneModule();
+    droneA->setVisionWidth(0.3);
+    DroneModule *droneB = new DroneModule();
+    droneB->setVisionWidth(0.2);
+    drones.push_back(droneA);
+    drones.push_back(droneB);
+
+    algorithm.setWaypointsForDrones(polygonArea, drones);
+    auto droneListAPoly = *(droneA->getWaypoints());
+    auto droneListBPoly = *(droneB->getWaypoints());
+
+    algorithm.setWaypointsForDrones(rectangleArea, drones);
+    auto droneListARect = *(droneA->getWaypoints());
+    auto droneListBRect = *(droneB->getWaypoints());
+
+    double epsilon = 0.000001;
+    int size = droneListAPoly.size();
+    QVERIFY(size  = droneListARect.size());
+    for (int i = 0; i < size; i++) {
+
+        //Compare
+        QVERIFY(fabs((droneListAPoly)[i].latitude() - (droneListARect)[i].latitude()) < epsilon);
+        QVERIFY(fabs((droneListAPoly)[i].longitude() - (droneListARect)[i].longitude()) < epsilon);
+
+    }
+
+    size = droneListBPoly.size();
+    QVERIFY(size  = droneListARect.size());
+    for (int i = 0; i < size; i++) {
+        //Compare
+        QVERIFY(fabs((droneListBPoly)[i].latitude() - (droneListBRect)[i].latitude()) < epsilon);
+        QVERIFY(fabs((droneListBPoly)[i].longitude() - (droneListBRect)[i].longitude()) < epsilon);
+    }
+
 }
 

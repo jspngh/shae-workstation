@@ -14,6 +14,12 @@ PathAlgorithm::PathAlgorithm(QGeoCoordinate start, QObject *p)
 
 }
 
+PathAlgorithm::PathAlgorithm(const PathAlgorithm &algo)
+{
+    start = algo.start;
+    controller = algo.controller;
+}
+
 PathAlgorithm::~PathAlgorithm()
 {
 
@@ -29,12 +35,6 @@ void PathAlgorithm::setMediator(Mediator *mediator)
 QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direction, double distance)
 {
     switch (direction) {
-    case NORTH:
-        return QGeoCoordinate(start.latitude() + distance, start.longitude());
-        break;
-    case SOUTH:
-        return QGeoCoordinate(start.latitude() - distance, start.longitude());
-        break;
     case WEST:
         return QGeoCoordinate(start.latitude(), start.longitude() - distance);
         break;
@@ -46,6 +46,12 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
         break;
     }
 
+}
+QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoordinate coordinate1, QGeoCoordinate coordinate2, double distance, Direction direction)
+{
+    double rico = (coordinate2.latitude() - coordinate1.latitude()) / (coordinate2.longitude() - coordinate1.longitude());
+    QGeoCoordinate newpoint = QGeoCoordinate(start.latitude() + direction * rico * distance, start.longitude() + direction * distance);
+    return newpoint;
 }
 
 void PathAlgorithm::onStartSearch(Search *s)

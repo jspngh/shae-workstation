@@ -14,6 +14,7 @@
 #include "communication/droneconnection.h"
 #include "communication/streamconnection.h"
 #include "models/drone.h"
+#include "videocontroller/videocontroller.h"
 
 
 class Controller;
@@ -28,7 +29,7 @@ enum RequestedDroneSetting {
 
 /*! \brief DroneModule class contains a drone model and all the logic belonging to a drone.
  * The model (a instance of the class Drone) contains the data of a drone (ip, port, id, ...)
- * This class (DroneModule) is a add the logic to this drone model.
+ * This class (DroneModule) adds the logic to this drone model.
 */
 class DroneModule : public QObject
 {
@@ -48,7 +49,9 @@ public:
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
+    //! DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
     explicit DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
+
 
     //! Copy constructor
     explicit DroneModule(const DroneModule &d);

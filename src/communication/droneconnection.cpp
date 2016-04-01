@@ -50,8 +50,6 @@ void DroneConnection::onDroneRequest(QString m)
     in.setVersion(QDataStream::Qt_4_0);
     in >> statusCode;
 
-    qDebug() << statusCode;
-
     if (statusCode == 300) {
         quint16 blockSize;
 

@@ -8,8 +8,25 @@
 class VideoSequence
 {
 public:
+    //constructors
+    VideoSequence();
+    VideoSequence(QUuid videoId);
     VideoSequence(QString path, QUuid videoId);
+    VideoSequence(QUuid videoId, QTime start, QTime end, int frameCount, QString path);
+
+    //getters
+    QUuid getVideoID();
+    QTime getStart();
+    QTime getEnd();
+    int getFrameCount();
+
+    QString getPath() const;
+    void setPath(const QString &value);
+
 private:
+    QTime start;
+    QTime end;
+    int frameCount;
     QString path;
     QUuid videoId;
 };

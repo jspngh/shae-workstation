@@ -11,10 +11,12 @@ VideoSequence VideoController::onStartStream(Drone *drone)
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
     /* Create a new item */
+
     if (drone->getStreamPath().contains(QString("rtp://"))) {
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
     } else {
         m = libvlc_media_new_path(inst, drone->getStreamPath().toStdString().c_str());
+
     }
 
     /* Create a media player playing environement */
@@ -26,7 +28,6 @@ VideoSequence VideoController::onStartStream(Drone *drone)
     emit this->streamStarted(sequence);
     return sequence;
 }
-
 
 void VideoController::onStopStream(Drone *drone)
 {

@@ -11,6 +11,7 @@
 #include "pathlogic/simplepathalgorithm.h"
 #include "persistence/persistence.h"
 #include "ui/mainwindow.h"
+#include "videocontroller/videocontroller.h"
 
 namespace Core {
 class Controller;
@@ -18,6 +19,7 @@ class Controller;
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
  */
+
 class Controller: public QObject
 {
     Q_OBJECT
@@ -38,12 +40,14 @@ private:
     QList<DroneModule *> drones;
 
     Persistence *persistenceController;
+    VideoController *videoController;
     DetectionController *detectionController;
     PathAlgorithm *pathLogicController;
 
     QThread pathLogicThread;
     QThread droneThread;
     QThread detectorThread;
+    QThread videoThread;
     QThread persistenceThread;
 };
 

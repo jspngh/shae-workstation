@@ -3,6 +3,9 @@
 
 #include "core/controller.h"
 #include "mainwindow.h"
+#include "pathlogic/geopolygon.h"
+#include "pathlogic/polygonpathalgorithm.h"
+
 
 
 #include <opencv2/opencv.hpp>
@@ -20,5 +23,7 @@ int main(int argc, char *argv[])
     Controller controller(&w);
     controller.init();
 
+
     return a.exec();
 }
+

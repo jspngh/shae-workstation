@@ -36,6 +36,47 @@ DroneStatus::DroneStatus(const DroneStatus &droneStatus)
     timestampReceivedWorkstation = droneStatus.timestampReceivedWorkstation;
 }
 
+DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate location,
+                         double orientation, double cameraAngle, double speed, double batteryLevel, int droneState):
+    timestampDrone(timestampDrone),
+    timestampReceivedWorkstation(timestampReceivedWorkstation),
+    currentLocation(location),
+    orientation(orientation),
+    cameraAngle(cameraAngle),
+    speed(speed),
+    batteryLevel(batteryLevel),
+    droneState(droneState)
+{
+
+}
+
+DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate currentlocation,
+                         double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
+                         double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
+                         int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
+                         QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints):
+    timestampDrone(timestampDrone),
+    timestampReceivedWorkstation(timestampReceivedWorkstation),
+    currentLocation(currentlocation),
+    orientation(orientation),
+    cameraAngle(cameraAngle),
+    speed(speed),
+    selectedSpeed(selectedSpeed),
+    height(height),
+    selectedHeight(selectedHeight),
+    batteryLevel(batteryLevel),
+    fps(fps),
+    resolution(resolution),
+    heartbeat(heartbeat),
+    manufacturer(manufacturer),
+    type(type),
+    nextWaypoint(nextWaypoint),
+    previousWaypoint(previousWaypoint),
+    nextWaypoints(nextWaypoints),
+    droneState(droneState)
+{
+}
+
 DroneStatus DroneStatus::fromJsonString(QString string)
 {
     //create status object to return and set current time
@@ -324,6 +365,13 @@ void DroneStatus::setDrone(DroneModule *value)
     drone = value;
 }
 
+int DroneStatus::getResolution() const
+{
+    return resolution;
+}
 
-
+void DroneStatus::setResolution(int value)
+{
+    resolution = value;
+}
 

@@ -14,4 +14,9 @@
     <qresource prefix="/ui/img/map/">
         <file alias="drone-icon">ui/img/drone-map-icon.png</file>
     </qresource>
+
+    <qresource prefix="/db">
+        <file alias="createTables.sql">../scripts/createDB.sql</file>
+    </qresource>
 </RCC>
+

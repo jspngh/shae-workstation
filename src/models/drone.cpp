@@ -17,7 +17,13 @@ Drone::Drone(int dataPort, int streamPort, QString serverIp, QString streamPath,
 
 }
 
-Drone::Drone(const Drone &d)
+Drone::Drone(QUuid droneID, int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth):
+    guid(droneID),
+    dataPort(dataPort),
+    streamPort(streamPort),
+    serverIp(serverIp),
+    streamPath(streamPath),
+    visionWidth(visionWidth)
 {
 
 }
@@ -39,6 +45,11 @@ QUuid Drone::getGuid() const
 int Drone::getPortNr()
 {
     return this->dataPort;
+}
+
+int Drone::getStreamPortNr()
+{
+    return this->streamPort;
 }
 
 QString Drone::getServerIp()
@@ -65,4 +76,5 @@ void Drone::setStreamPath(const QString &value)
 {
     streamPath = value;
 }
+
 

@@ -11,7 +11,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     mediator = new Mediator();
 
     //set workstationIP
-    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+    foreach(const QHostAddress & address, QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
             workstationIP = address.toString();
     }
@@ -23,9 +23,10 @@ Controller::Controller(MainWindow *window, QObject *p)
     drones.append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
     drones.append(new DroneModule(6330, 5502, "10.1.1.10", QString("rtp://10.1.1.10:5000"), 0.0001));
 
+    // real drone: 10.1.1.10:6330
+    // simulator: 127.0.0.1:6330
+
     // create controllers
-    //detectionController = new DetectionController(mediator);
-    //persistenceController = new Persistence(mediator);
     pathLogicController = new SimplePathAlgorithm();
 }
 
@@ -71,11 +72,11 @@ void Controller::init()
         drones[i]->moveToThread(&droneThread);
 
     // start all the threads
-    // detectorThread.start();
+    //detectionController->start();
     // persistenceThread.start();
-    droneThread.start();
-    pathLogicThread.start();
 }
+
+
 
 /*****************
  *    Getters
