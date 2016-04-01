@@ -25,7 +25,8 @@ HEADERS += \
     core/polygonpathalgorithm_test.h \
     core/geopolygon_test.h \
     core/videocontroller_test.h \
-    core/mediator_test.h
+    core/mediator_test.h \
+    core/pathalgorithm_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
@@ -35,7 +36,8 @@ SOURCES += \
     core/geopolygon_test.cpp \
     core/videocontroller_test.cpp \
     core/mediator_test.cpp \
-    main.cpp
+    main.cpp \
+    core/pathalgorithm_test.cpp
 
 # c++11
 CONFIG += c++11

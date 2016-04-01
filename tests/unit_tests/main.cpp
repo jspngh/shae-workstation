@@ -6,6 +6,7 @@
 
 #include "core/geopolygon_test.h"
 #include "core/polygonpathalgorithm_test.h"
+#include "core/pathalgorithm_test.h"
 
 
 #include "models/detectionresult.h"
@@ -19,13 +20,16 @@ int main(int argc, char *argv[])
     qRegisterMetaType<DetectionResult>("DetectionResult");
     QApplication a(argc, argv);
     QList<QObject *> tests;
+    tests.append(new Pathalgorithm_Test());
     tests.append(new SimplePathAlgorithm_Test());
+    tests.append(new GeoPolygon_test());
+    tests.append(new PolygonPathAlgorithm_Test());
     tests.append(new Json_Messages_Test());
     tests.append(new DetectionController_Test());
     tests.append(new VideoController_Test());
     tests.append(new Mediator_Test());
-    tests.append(new GeoPolygon_test());
-    tests.append(new PolygonPathAlgorithm_Test());
+
+
 
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());

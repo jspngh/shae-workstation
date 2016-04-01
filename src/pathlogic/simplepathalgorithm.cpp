@@ -2,7 +2,7 @@
 #include <QDebug>
 
 SimplePathAlgorithm::SimplePathAlgorithm()
-    : SimplePathAlgorithm(QGeoCoordinate(0.0, 0.0))
+
 {
 
 }
