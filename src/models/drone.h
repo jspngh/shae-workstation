@@ -10,14 +10,15 @@
  * A DroneModule instance has a drone instance as member.
  */
 
-class Drone {
+class Drone
+{
 
 public:
     Drone();
 
     Drone(int dataPort, int streamPort, QString serverIp, QString streamPath , double visionWidth);
 
-    Drone(const Drone &d);
+    Drone(QUuid droneID, int dataPort, int streamPort, QString serverIp, QString streamPath , double visionWidth);
 
     ~Drone();
 
@@ -31,9 +32,11 @@ public:
 
     void setVisionWidth(double visionWidth);
 
-    QString getStreamPath();
-    void setStreamPath(QString value);
+    int getStreamPortNr();
 
+    QString getStreamPath() const;
+
+    void setStreamPath(const QString &value);
 
 private:
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.

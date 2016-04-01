@@ -7,8 +7,13 @@
 class DetectionResult
 {
 public:
+    //constructors
     DetectionResult();
     DetectionResult(QGeoCoordinate location, double score);
+    //getters
+    double getScore();
+    QGeoCoordinate getLocation();
+
 private:
     QGeoCoordinate location;
     double score;

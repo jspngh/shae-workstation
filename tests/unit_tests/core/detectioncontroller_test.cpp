@@ -8,11 +8,11 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase()
 {
-    Search* s = new Search();
+    Search *s = new Search();
     s->setHeight(3);
     s->setGimbalAngle(65);
     s->setFpsProcessing(2);
-    Mediator* m;
+    Mediator *m;
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
     cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());
@@ -46,6 +46,7 @@ void DetectionController_Test::cleanupTestCase()
 
 // This function is NOT a Unit Test.
 // It is used to count the number of times the newDetection signal is emitted in the controller.
-void DetectionController_Test::onNewDetection(DetectionResult result){
+void DetectionController_Test::onNewDetection(DetectionResult result)
+{
     ++(this->numDetections);
 }

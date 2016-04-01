@@ -11,11 +11,16 @@
 class Search
 {
 public:
+    //constructors
     Search();
-
-    ~Search();
+    //~Search();
 
     QTime getStartTime() const;
+
+    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle);
+
+    //getters
+    QUuid getSearchID() const;
 
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
