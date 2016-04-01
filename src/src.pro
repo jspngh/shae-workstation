@@ -1,7 +1,8 @@
+QT += sql
+
 # QT constraints
 # QT  += core gui network webkit positioning
 # greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
-
 
 # Project properties
 TARGET = frontend
@@ -18,7 +19,6 @@ UI_DIR = $$PWD/build/.ui
 
 SOURCES += \
     main.cpp
-
 
 # c++11
 CONFIG += c++11

@@ -42,6 +42,8 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
     in.setVersion(QDataStream::Qt_4_0);
     in >> blockSize;
 
+    qDebug() << blockSize;
+
     while (clientConnection->bytesAvailable() < blockSize) {
         if (!clientConnection->waitForReadyRead(Timeout)) {
             emit droneHeartBeatError(clientConnection->error(), clientConnection->errorString());

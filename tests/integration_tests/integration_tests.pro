@@ -1,5 +1,4 @@
-
-QT += core gui widgets positioning testlib network
+QT += core gui widgets positioning testlib network sql
 
 
 TEMPLATE = app

@@ -4,24 +4,26 @@
 #include <QTime>
 #include <QList>
 #include <QGeoRectangle>
-
 #include "communication/dronemodule.h"
-
 
 class Search
 {
 public:
+    //constructors
     Search();
-
     ~Search();
 
     QTime getStartTime() const;
 
+    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle);
+
+    QUuid getSearchID() const;
+
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
 
-    QList<DroneModule *> *getDroneList() const;
-    void setDroneList(QList<DroneModule *> *value);
+    QList<DroneModule *> getDroneList() const;
+    void setDroneList(QList<DroneModule *> value);
 
     int getGimbalAngle() const;
     void setGimbalAngle(int value);
@@ -38,8 +40,12 @@ private:
     QGeoRectangle area;
     int height;
     int gimbalAngle;
+    QList<DroneModule *> droneList;
     int fpsProcessing;
-    QList<DroneModule *> *droneList;
+
+    static constexpr int DEFAULT_HEIGHT = 3;
+    static constexpr int DEFAULT_FPS = 3;
+    static constexpr int DEFAULT_GIMBAL_ANGLE = 65;
 };
 
 #endif // SEARCH_H

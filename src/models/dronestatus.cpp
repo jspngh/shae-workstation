@@ -7,6 +7,76 @@ DroneStatus::DroneStatus()
 
 }
 
+DroneStatus::~DroneStatus()
+{
+    // nothing needs to be deleted
+}
+
+DroneStatus::DroneStatus(const DroneStatus &droneStatus)
+{
+    drone = droneStatus.drone;
+    orientation = droneStatus.orientation;
+    cameraAngle = droneStatus.cameraAngle;
+    speed = droneStatus.speed;
+    selectedSpeed = droneStatus.selectedSpeed;
+    height = droneStatus.height;
+    selectedHeight = droneStatus.selectedHeight;
+    batteryLevel = droneStatus.batteryLevel;
+    droneState = droneStatus.droneState;
+    fps = droneStatus.fps;
+    resolution = droneStatus.resolution;
+    heartbeat = droneStatus.heartbeat;
+    manufacturer = droneStatus.manufacturer;
+    type = droneStatus.type;
+    timestampDrone = droneStatus.timestampDrone;
+    currentLocation = droneStatus.currentLocation;
+    nextWaypoint = droneStatus.nextWaypoint;
+    previousWaypoint = droneStatus.previousWaypoint;
+    nextWaypoints = droneStatus.nextWaypoints;
+    timestampReceivedWorkstation = droneStatus.timestampReceivedWorkstation;
+}
+
+DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate location,
+                         double orientation, double cameraAngle, double speed, double batteryLevel, int droneState):
+    timestampDrone(timestampDrone),
+    timestampReceivedWorkstation(timestampReceivedWorkstation),
+    currentLocation(location),
+    orientation(orientation),
+    cameraAngle(cameraAngle),
+    speed(speed),
+    batteryLevel(batteryLevel),
+    droneState(droneState)
+{
+
+}
+
+DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate currentlocation,
+                         double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
+                         double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
+                         int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
+                         QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints):
+    timestampDrone(timestampDrone),
+    timestampReceivedWorkstation(timestampReceivedWorkstation),
+    currentLocation(currentlocation),
+    orientation(orientation),
+    cameraAngle(cameraAngle),
+    speed(speed),
+    selectedSpeed(selectedSpeed),
+    height(height),
+    selectedHeight(selectedHeight),
+    batteryLevel(batteryLevel),
+    fps(fps),
+    resolution(resolution),
+    heartbeat(heartbeat),
+    manufacturer(manufacturer),
+    type(type),
+    nextWaypoint(nextWaypoint),
+    previousWaypoint(previousWaypoint),
+    nextWaypoints(nextWaypoints),
+    droneState(droneState)
+{
+}
+
 DroneStatus DroneStatus::fromJsonString(QString string)
 {
     //create status object to return and set current time
@@ -30,71 +100,72 @@ DroneStatus DroneStatus::fromJsonString(QString string)
         qDebug() << "Not a status message";
         throw ParseException("Not a status message", string);
     }
-    QJsonValue value = json["Orientation"];
+    QJsonValue value = json["orientation"];
     if (! value.isUndefined()) {
         status.setOrientation(value.toDouble());
     }
-    value = json["Camera_angle"];
+    value = json["camera_angle"];
     if (! value.isUndefined()) {
         status.setCameraAngle(value.toDouble());
     }
-    value = json["Speed"];
+    value = json["speed"];
     if (! value.isUndefined()) {
         status.setSpeed(value.toDouble());
     }
-    value = json["Selected_speed"];
+    value = json["selected_speed"];
     if (! value.isUndefined()) {
         status.setSelectedSpeed(value.toDouble());
     }
-    value = json["Battery_level"];
+    value = json["battery_level"];
     if (! value.isUndefined()) {
         status.setBatteryLevel(value.toDouble());
     }
-    value = json["Drone_state"];
+    value = json["drone_state"];
     if (! value.isUndefined()) {
         status.setDroneState(value.toInt());
     }
-    value = json["Fps"];
+    value = json["fps"];
     if (! value.isUndefined()) {
         status.setFps(value.toInt());
     }
-    value = json["Heartbeat"];
+    value = json["heartbeat"];
     if (! value.isUndefined()) {
         status.setHeartbeat(value.toBool());
     }
-    value = json["Manufacturer"];
+    value = json["manufacturer"];
     if (! value.isUndefined()) {
         status.setManufacturer(value.toString());
     }
-    value = json["Type"];
+    value = json["type"];
     if (! value.isUndefined()) {
         status.setType(value.toString());
     }
-    value = json["Current_location"];
+    value = json["current_location"];
     if (! value.isUndefined() && value.isObject()) {
         QJsonObject position = value.toObject();
-        status.setCurrentLocation(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
+        status.setCurrentLocation(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
     }
-    value = json["Next_waypoint"];
+    value = json["next_waypoint"];
     if (! value.isUndefined() && value.isObject()) {
         QJsonObject position = value.toObject();
-        status.setNextWaypoint(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
+        status.setNextWaypoint(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
     }
-    value = json["Next_waypoints"];
+    value = json["next_waypoints"];
     if (! value.isUndefined() && value.isArray()) {
         QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
         QJsonArray positions = value.toArray();
         for (auto v : positions) {
             QJsonObject position = v.toObject();
-            list.push_back(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
+            list.push_back(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
         }
         status.setNextWaypoints(list);
     }
-    value = json["Timestamp"];
+    value = json["timestamp"];
     if (! value.isUndefined()) {
         QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }
+
     return status;
 
 }
@@ -284,6 +355,23 @@ void DroneStatus::setFps(int value)
     fps = value;
 }
 
+DroneModule *DroneStatus::getDrone() const
+{
+    return drone;
+}
 
+void DroneStatus::setDrone(DroneModule *value)
+{
+    drone = value;
+}
 
+int DroneStatus::getResolution() const
+{
+    return resolution;
+}
+
+void DroneStatus::setResolution(int value)
+{
+    resolution = value;
+}
 

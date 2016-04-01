@@ -1,5 +1,4 @@
 #include "detectioncontroller.h"
-#include "core/controller.h"
 
 using namespace std;
 
@@ -72,11 +71,11 @@ void DetectionController::run()
 
 }
 
-void DetectionController::setController(Controller *value)
+void DetectionController::setMediator(Mediator *mediator)
 {
-    controller = value;
-    controller->getMediator()->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
-    controller->getMediator()->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
+    this->mediator = mediator;;
+    mediator->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
+    mediator->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
 void DetectionController::streamFinished()
@@ -152,3 +151,4 @@ void DetectionController::parseConfiguration()
 
     }
 }
+

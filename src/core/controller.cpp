@@ -1,4 +1,3 @@
-
 #include "controller.h"
 #include <QUuid>
 
@@ -8,35 +7,24 @@ Controller::Controller(MainWindow *window, QObject *p)
 {
     mainWindow = window;
 
+    // create the mediator. Note: the same mediator object must be shared among all the components!
+    mediator = new Mediator();
     //configure the search (should be done through the interface)
     search = new Search();
     search->setHeight(3);
     search->setGimbalAngle(65);
     search->setFpsProcessing(2);
 
-    // create the mediator. Note: the same mediator object must be shared among all the components!
-    mediator = new Mediator();
-
-
     //set workstationIP
-    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+    foreach(const QHostAddress & address, QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
             workstationIP = address.toString();
     }
     //TODO: delete override
     workstationIP = "127.0.0.1";
 
-
-
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-
-    drones = new QList<DroneModule *>();
-    //drones->append(new DroneModule(6330, 5502, "10.1.1.1", QString("dependencies/sololink.sdp"),  0.0001));
-    //drones->append(new DroneModule(6330, 5502, "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
-    // real drone: 10.1.1.10:6330
-    // simulator: 127.0.0.1:6331
-
 
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6330
@@ -57,15 +45,10 @@ Controller::~Controller()
     // persistenceThread.wait();
 
     delete mediator;
-
-    //TODO:what if no waypoints were assigned?
-    //delete search;
-
+    delete search;
     // special Qt function to delete QList of pointers
     qDeleteAll(drones->begin(), drones->end());
     drones->clear();
-
-    delete drones;
 
     // delete detectionController;
     // delete persistenceController;
@@ -75,17 +58,23 @@ Controller::~Controller()
 void Controller::init()
 {
     // init the controller for single drone use.
-    DroneModule *d = drones->first();
-
     // configure every component with the controller
-    mainWindow->getConfigWidget()->setController(this);
-    pathLogicController->setController(this);
+    mainWindow->getConfigWidget()->setMediator(mediator);
+    mainWindow->getOverviewWidget()->setMediator(mediator);
+    pathLogicController->setMediator(mediator);
+    for (int i = 0; i < drones->size(); i++) {
+        drones->at(i)->setController(this);
+        /* drones[i]->getStream(); */
+    }
+
     // set every component in a different thread
     // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
 
     // detectionController->moveToThread(&detectorThread);
     // persistenceController->moveToThread(&persistenceThread);
+
     pathLogicController->moveToThread(&pathLogicThread);
+    DroneModule *d = drones->first();
     d->moveToThread(&droneThread);
     d->setController(this);
 }
@@ -97,7 +86,7 @@ void Controller::initStream(DroneModule* d)
     d->getStream();
     QString streamPath = d->getDrone()->getStreamPath();
     qDebug() << "Controller: stream started at drone";
-    VideoSequence sequence  = d->getVideoController()->onStartStream(streamPath);
+    VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
     qDebug() << "Controller: starting to save stream";
     // allow the stream to buffer
 
@@ -119,7 +108,7 @@ void Controller::initStream(DroneModule* d)
 
 void Controller::stopStream(DroneModule* d)
 {
-    d->getVideoController()->onStopStream();
+    d->getVideoController()->onStopStream(d->getDrone());
     detectionController->streamFinished();
 }
 

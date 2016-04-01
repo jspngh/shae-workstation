@@ -1,15 +1,30 @@
 #include "search.h"
 
-
 Search::Search()
-    : searchID(QUuid::createUuid())
+    : searchID(QUuid::createUuid()),
+      height(DEFAULT_HEIGHT),
+      gimbalAngle(DEFAULT_GIMBAL_ANGLE),
+      fpsProcessing(DEFAULT_FPS)
 {
     // TODO set time
 }
 
 Search::~Search()
 {
-    delete droneList;
+}
+
+Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle):
+    searchID(searchID),
+    startTime(start),
+    area(area),
+    height(height),
+    gimbalAngle(gimbalAngle)
+{
+}
+
+QUuid Search::getSearchID() const
+{
+    return searchID;
 }
 
 QTime Search::getStartTime() const
@@ -27,19 +42,15 @@ void Search::setArea(const QGeoRectangle &value)
     area = value;
 }
 
-QList<DroneModule *> *Search::getDroneList() const
+QList<DroneModule *> Search::getDroneList() const
 {
     return droneList;
 }
 
-void Search::setDroneList(QList<DroneModule *> *value)
+void Search::setDroneList(QList<DroneModule *> value)
 {
     droneList = value;
 }
-
-
-
-
 
 int Search::getGimbalAngle() const
 {
@@ -70,3 +81,4 @@ void Search::setFpsProcessing(int value)
 {
     fpsProcessing = value;
 }
+

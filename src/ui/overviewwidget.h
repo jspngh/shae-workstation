@@ -3,6 +3,11 @@
 
 #include <QWidget>
 #include <QStackedWidget>
+#include <QMMapView.h>
+#include <QMMapIcon.h>
+#include "core/mediator.h"
+#include "models/search.h"
+#include "communication/dronemodule.h"
 
 namespace Ui {
 class OverviewWidget;
@@ -15,15 +20,19 @@ class OverviewWidget : public QWidget
 public:
     explicit OverviewWidget(QWidget *parent = 0);
     ~OverviewWidget();
+    void setMediator(Mediator *mediator);
 
 private:
+    QMMapView *mapView;
     Ui::OverviewWidget *ui;
-    int count;
+    Mediator *mediator;
 
 private slots:
     void clickButtonPush();
     void backButtonPush();
-
+    void onSearchStarted(Search *s);
+    void onMapLoaded();
+    void onMapFailedToLoad();
 };
 
 #endif // OVERVIEWWIDGET_H

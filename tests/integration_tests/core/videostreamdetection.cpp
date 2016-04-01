@@ -59,5 +59,3 @@ void VideostreamDetection_Test::VideostreamDetectionTest()
 }
 
 
-
-

@@ -10,8 +10,6 @@
 #include <QDebug>
 #include <QCheckBox>
 
-#include "core/controller.h"
-
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConfigWidget)
@@ -51,10 +49,11 @@ void ConfigWidget::initializeMap()
 {
     mapView = new QMMapView(QMMapView::Satellite,
                             QGeoCoordinate(51.02, 3.73),
-                            11);
+                            11,
+                            true);
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
-    connect(mapView, SIGNAL(tilesLoaded()),
+    connect(mapView, SIGNAL(mapLoaded()),
             this, SLOT(onMapLoaded()));
 }
 
@@ -67,8 +66,8 @@ void ConfigWidget::onMapLoaded()
 void ConfigWidget::onMapFailedToLoad()
 {
     ui->searchAreaLoadingLabel->setText(QString(
-                                            "Error loading map.\nPlease check your internet connection."
-                                        ));
+        "Error loading map.\nPlease check your internet connection."
+    ));
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)
@@ -133,35 +132,31 @@ void ConfigWidget::sliderChanged(int value)
     ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
 }
 
-void ConfigWidget::setController(Controller *value)
+void ConfigWidget::setMediator(Mediator *mediator)
 {
-    controller = value;
-    // now that the controller is set, some extra initialization is necessary
+    this->mediator = mediator;
+
     setSignalSlots();
-    fillDroneTable();
+    emit requestDronesStatus();
 }
 
 void ConfigWidget::startButtonPush()
 {
-    if (controller) {
-        Search *s = controller->getSearch();
+    if (mediator) {
+        Search *s = new Search();
+        s->setArea(mapView->selectedArea());
 
-        // TODO: read the search area from the gui
-        QGeoRectangle area(QGeoCoordinate(51.022960, 3.709623), QGeoCoordinate(51.022761, 3.709877));
-        s->setArea(area);
-
-        QList<DroneModule *> *dronesInSearch = new QList<DroneModule *>();
+        QList<DroneModule *> dronesInSearch;
         for (int i = 0; i < dronesInTable.size(); i++) {
             QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
             if (cb->isChecked())
-                dronesInSearch->append(dronesInTable[i].second);
+                dronesInSearch.append(dronesInTable[i].second);
         }
         s->setDroneList(dronesInSearch);
 
         emit startSearch(s);
         qDebug() << "emit ConfigWidget::startSearch(Search *s)";
     }
-
 
     ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
@@ -178,45 +173,50 @@ void ConfigWidget::locateButtonPush()
         mapView->setCenter(ui->locateField->text());
     } else if (choice == "Coordinates") {
         mapView->setCenter(QGeoCoordinate(
-                               ui->latitudeField->text().toDouble(),
-                               ui->longitudeField->text().toDouble()
-                           ));
+            ui->latitudeField->text().toDouble(),
+            ui->longitudeField->text().toDouble()
+        ));
     } else {
-        //herpaderp, this shouldn't happen
+        qWarning() << "User chose something else than \"Location\" or \"Coordinates\"";
     }
 }
 
 void ConfigWidget::setSignalSlots()
 {
-    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
-    controller->getMediator()->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-}
-
-void ConfigWidget::fillDroneTable()
-{
-    ui->droneTable->clearContents();
-    for (int row = 0; row < controller->getDrones()->size(); row++) {
-        DroneModule *d = (*(controller->getDrones()))[row];
-        QString ip_port = d->getServerIp() + QString(':') + QString::number(d->getPortNr());
-        ui->droneTable->insertRow(ui->droneTable->rowCount());
-        int currentRow = ui->droneTable->rowCount() - 1;
-
-        // fill newly created row
-        QCheckBox *checkbox = new QCheckBox();
-        ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
-        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Solo 3DR")));
-        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("33 %")));
-        ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
-
-        dronesInTable.append(QPair<int, DroneModule *>(row, d));
-
-        d->requestStatus();
-    }
+    mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
+    mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
 void ConfigWidget::updateDroneTable(DroneStatus s)
 {
-    qDebug() << "ConfigWidget::updateDroneTable";
+    DroneModule *d = s.getDrone();
+    int currentRow = getDroneInTableIndex(d);
+    QString ip_port = d->getServerIp() + QString(':') + QString::number(d->getPortNr());
+    if(currentRow == -1) {
+        ui->droneTable->insertRow(ui->droneTable->rowCount());
+        currentRow = ui->droneTable->rowCount() - 1;
+    }
+
+    // fill newly created row
+    QCheckBox *checkbox = new QCheckBox();
+    ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
+    ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Solo 3DR")));
+    if (s.getBatteryLevel() == -1)
+        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
+    else
+        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
+    ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
+
+    dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));
 }
 
+int ConfigWidget::getDroneInTableIndex(DroneModule *d)
+{
+    for(int i = 0; i < dronesInTable.size(); i++)
+        if(dronesInTable[i].second->getGuid() == d->getGuid())
+            return i;
+
+    return -1;
+}
 

@@ -10,8 +10,6 @@
 #include <QUuid>
 #include <fstream>
 
-
-
 #include "videocontroller/videocontroller.h"
 
 class VideoController_Test : public QObject
@@ -21,9 +19,8 @@ public:
     explicit VideoController_Test(QObject *parent = 0);
 
 signals:
-    void startStream(QString streamPath);
-    void stopStream();
-
+    void startStream(Drone *drone);
+    void stopStream(Drone *drone);
 
 private Q_SLOTS:
     void testCreateFile();

@@ -12,6 +12,7 @@ void DetectionController_Test::initTestCase()
     s->setHeight(3);
     s->setGimbalAngle(65);
     s->setFpsProcessing(2);
+    Mediator *m;
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
     cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());

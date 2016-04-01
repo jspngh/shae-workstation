@@ -1,6 +1,4 @@
-
-QT += core gui positioning testlib network
-
+QT += core gui positioning testlib network sql
 
 TEMPLATE = app
 TARGET = unit_tests
@@ -20,18 +18,40 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/simplepathalgorithm_test.h \
+    core/detectioncontroller_test.h \
+    core/searchdao_test.h \
     core/json_messages_test.h \
     core/detectioncontroller_test.h \
+    core/polygonpathalgorithm_test.h \
+    core/geopolygon_test.h \
+    core/detectionresultdao_test.h \
+    core/dronedao_test.h \
+    core/dronesearchdao_test.h \
+    core/dronestatusdao_test.h \
+    core/videosequencedao_test.h \
+    core/databasecreator.h\
     core/videocontroller_test.h \
-    core/mediator_test.h
+    core/mediator_test.h \
+    core/pathalgorithm_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
+    core/polygonpathalgorithm_test.cpp \
+    core/geopolygon_test.cpp \
+    main.cpp \
+    core/searchdao_test.cpp \
+    core/detectionresultdao_test.cpp \
+    core/dronedao_test.cpp \
+    core/dronesearchdao_test.cpp \
+    core/dronestatusdao_test.cpp \
+    core/videosequencedao_test.cpp \
+    core/databasecreator.cpp \
     core/videocontroller_test.cpp \
     core/mediator_test.cpp \
-    main.cpp
+    core/pathalgorithm_test.cpp
+
 
 # c++11
 CONFIG += c++11
@@ -44,3 +64,7 @@ QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
 
+QMAKE
+
+RESOURCES += \
+    testApplication.qrc
