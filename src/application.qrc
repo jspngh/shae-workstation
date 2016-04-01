@@ -10,4 +10,8 @@
         <file>ui/img/handle.png</file>
         <file>ui/img/down_arrow.png</file>
     </qresource>
+
+    <qresource prefix="/db">
+        <file alias="createTables.sql">../scripts/createDB.sql</file>
+    </qresource>
 </RCC>

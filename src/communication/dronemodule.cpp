@@ -46,7 +46,7 @@ DroneModule::~DroneModule()
     delete droneConnection;
     delete connectionThread;
     //TODO: delete heartbeatReceiver;
-    delete waypoints;
+    //TODO: delete waypoints fails if no waypoints assigned
 
 }
 
@@ -58,7 +58,7 @@ void DroneModule::setController(Controller *c)
     controller = c;
     controller->getMediator()->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneHeartbeatReceived(DroneStatus)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
 
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
@@ -75,7 +75,7 @@ void DroneModule::setController(Controller *c)
 
 void DroneModule::getStream()
 {
-    qDebug() << "DroneModulle:: getting stream";
+    qDebug() << "DroneModule:: getting stream";
     emit streamRequest();
 }
 
@@ -163,10 +163,14 @@ void DroneModule::onDroneResponse(const QString &response)
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
-        if (status.getHeartbeat())
+        if (status.getHeartbeat()) {
+            qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);
-        else
+        } else {
+            qDebug() << "emit DroneModule::droneStatusReceived(status)";
             emit droneStatusReceived(status);
+        }
+
     } else
         qDebug() << response;
 }
@@ -194,7 +198,6 @@ QJsonDocument DroneModule::startFlight()
     QString message = jsondoc.toJson(QJsonDocument::Indented);
 
     emit droneRequest(message);
-    qDebug() << "emit droneRequest(message)";
     return jsondoc;
 }
 
@@ -243,7 +246,7 @@ QJsonDocument DroneModule::sendWaypoints()
 
     QJsonArray coordinates = QJsonArray();
     int i = 0;
-    foreach (const QGeoCoordinate waypoint, *waypoints) {
+    foreach(const QGeoCoordinate waypoint, *waypoints) {
         i++;
         QJsonObject coordinate = QJsonObject();
 
@@ -272,6 +275,7 @@ Status messages method
 **************************/
 QJsonDocument DroneModule::requestStatus()
 {
+    qDebug() << "DroneModule::requestStatus";
     // Create json message to request all statuses
     QJsonObject json = QJsonObject();
 
@@ -300,7 +304,7 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
     QJsonObject json = QJsonObject();
     json["MessageType"] = QString("status");
     QJsonArray requestedStatuses = QJsonArray();
-    foreach (const RequestedDroneStatus status, statuses) {
+    foreach(const RequestedDroneStatus status, statuses) {
         QJsonObject requestedStatus = QJsonObject();
         QString key;
         switch (status) {

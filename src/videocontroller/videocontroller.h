@@ -34,6 +34,7 @@ public slots:
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
      */
     void onStopStream(Drone *drone);
+
 signals:
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been started.

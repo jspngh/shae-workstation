@@ -8,6 +8,9 @@
 #include <QMainWindow>
 #include <QMMapView.h>
 #include <QFile>
+#include <QPair>
+#include <QList>
+#include <QUuid>
 
 #include "models/search.h"
 
@@ -41,15 +44,27 @@ private slots:
     void backButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
+    //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
+    void updateDroneTable(DroneStatus s);
 
 private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView;
     Controller *controller;
 
-
-    void writeConfigToFile();
     void initializeMap();
+
+    // connects all the slots and signals with the mediator
+    void setSignalSlots();
+    // fill the table with the available drones
+    // Note: can only be called once a controller is set because only the controller know the drones
+    void fillDroneTable();
+
+    QList<QPair<int, DroneModule *>> dronesInTable;
+
+    enum DroneTableCol {
+        CHECK, TYPE, BATTERY, IP_PORT
+    };
 };
 
 #endif // CONFIGWIDGET_H

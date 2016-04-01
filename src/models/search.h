@@ -11,11 +11,16 @@
 class Search
 {
 public:
+    //constructors
     Search();
-
-    ~Search();
+    //~Search();
 
     QTime getStartTime() const;
+
+    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle);
+
+    //getters
+    QUuid getSearchID() const;
 
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
@@ -29,12 +34,16 @@ public:
     int getHeight() const;
     void setHeight(int value);
 
+    int getFpsProcessing() const;
+    void setFpsProcessing(int value);
+
 private:
     QUuid searchID;
     QTime startTime;
     QGeoRectangle area;
     int height;
     int gimbalAngle;
+    int fpsProcessing;
     QList<DroneModule *> *droneList;
 };
 

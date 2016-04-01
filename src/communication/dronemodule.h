@@ -14,6 +14,7 @@
 #include "communication/droneconnection.h"
 #include "communication/streamconnection.h"
 #include "models/drone.h"
+#include "videocontroller/videocontroller.h"
 
 
 class Controller;
@@ -48,7 +49,9 @@ public:
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
+    //! DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
     explicit DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
+
 
     //! Copy constructor
     explicit DroneModule(const DroneModule &d);
