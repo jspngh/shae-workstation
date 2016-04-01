@@ -37,8 +37,8 @@ void OverviewWidget::onSearchStarted(Search *s)
     mapView = new QMMapView(QMMapView::Satellite,
                             s->getArea().center(),
                             11,
-                            true);
-    mapView->fitRegion(s->getArea());
+                            false);
+
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()),
@@ -47,6 +47,12 @@ void OverviewWidget::onSearchStarted(Search *s)
 
 void OverviewWidget::onMapLoaded()
 {
+    QMMapIcon droneIcon("qrc:///ui/img/map/drone-icon");
+    /* mapView->fitRegion(s->getArea()); */
+    /* Q_FOREACH(DroneModule *drone, s->getDroneList()) { */
+        mapView->addMarker("drones", 1, mapView->center(), droneIcon);
+    /* } */
+
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);
     ui->mapLoadingLabel->hide();
 }

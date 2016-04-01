@@ -16,10 +16,11 @@
         return this.markers[id];
     };
 
-    MarkerList.prototype.add = function(id, latitude, longitude) {
+    MarkerList.prototype.add = function(id, latitude, longitude, icon) {
         var marker = new google.maps.Marker({
             map: this.map,
-            position: new google.maps.LatLng(latitude, longitude)
+            position: new google.maps.LatLng(latitude, longitude),
+            icon: icon
         });
         this.markers[id] = marker;
     };

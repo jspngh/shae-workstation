@@ -4,8 +4,10 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QMMapView.h>
+#include <QMMapIcon.h>
 #include "core/mediator.h"
 #include "models/search.h"
+#include "communication/dronemodule.h"
 
 namespace Ui {
 class OverviewWidget;

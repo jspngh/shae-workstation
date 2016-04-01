@@ -23,6 +23,7 @@
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
 #include "EmptyAreaException.h"
+#include "QMMapIcon.h"
 #include "QtMapKit.h"
 
 class QMMapViewPrivate;
@@ -108,38 +109,38 @@ public slots:
     /*!
      * \brief Sets the display type of the map (e.g. satellite imagery, roads, ...)
      */
-    void setMapType(MapType type);
+    void setMapType(const MapType type);
 
     /*!
      * \brief Set the center of the map to the given coordinate.
      */
-    void setCenter(QGeoCoordinate center, bool animated = true);
+    void setCenter(const QGeoCoordinate center, const bool animated = true);
 
     /*!
      * \brief Set the center of the map to the given address.
      * Note: the map will use a best guess for the address' location.
      */
-    void setCenter(QString address, bool animated = true);
+    void setCenter(const QString address, const bool animated = true);
 
     /*!
      * \brief Sets the zoom level of the map.
      */
-    void setZoomLevel(uint zoom);
+    void setZoomLevel(const uint zoom);
 
     /*!
      * \brief Translates and zooms the map to make the given region visible.
      */
-    void makeRegionVisible(QGeoRectangle &region);
+    void makeRegionVisible(const QGeoRectangle &region);
 
     /*!
      * \brief Fits the map area to the given region.
      */
-    void fitRegion(QGeoRectangle &region);
+    void fitRegion(const QGeoRectangle &region);
 
     /*!
      * \brief Selects an area from topLeft to bottomRight on the map.
      */
-    void selectArea(QGeoRectangle &area);
+    void selectArea(const QGeoRectangle &area);
 
     /*!
      * \brief Adds a marker on the given coordinate.
@@ -147,7 +148,7 @@ public slots:
      * \param markerId The id of the maerker
      * \param point    The coordinate of the marker
      */
-    void addMarker(QString listName, uint markerId, QGeoCoordinate point);
+    void addMarker(QString listName, uint markerId, QGeoCoordinate point, QMMapIcon &icon);
 
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
