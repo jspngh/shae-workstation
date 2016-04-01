@@ -22,6 +22,8 @@ HEADERS += \
     core/searchdao_test.h \
     core/json_messages_test.h \
     core/detectioncontroller_test.h \
+    core/polygonpathalgorithm_test.h \
+    core/geopolygon_test.h \
     core/detectionresultdao_test.h \
     core/dronedao_test.h \
     core/dronesearchdao_test.h \
@@ -35,6 +37,8 @@ SOURCES += \
     core/simplepathalgorithm_test.cpp \
     core/json_messages_test.cpp \
     core/detectioncontroller_test.cpp \
+    core/polygonpathalgorithm_test.cpp \
+    core/geopolygon_test.cpp \
     main.cpp \
     core/searchdao_test.cpp \
     core/detectionresultdao_test.cpp \

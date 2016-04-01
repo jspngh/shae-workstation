@@ -136,9 +136,13 @@ void ConfigWidget::sliderChanged(int value)
 void ConfigWidget::setController(Controller *value)
 {
     controller = value;
+//<<<<<<< HEAD
+//    controller->getMediator()->addSignal(this, (char *)  SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+//=======
     // now that the controller is set, some extra initialization is necessary
     setSignalSlots();
     fillDroneTable();
+//>>>>>>> develop
 }
 
 void ConfigWidget::startButtonPush()

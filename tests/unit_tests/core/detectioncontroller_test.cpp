@@ -11,7 +11,9 @@ void DetectionController_Test::initTestCase()
     Search *s = new Search();
     s->setHeight(3);
     s->setGimbalAngle(65);
+
     s->setFpsProcessing(2);
+
     Mediator *m;
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";

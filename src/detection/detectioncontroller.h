@@ -23,7 +23,9 @@
 #include <QDebug>
 #include <QFileInfo>
 
+
 class Controller;
+
 class DetectionController : public QThread
 {
     Q_OBJECT

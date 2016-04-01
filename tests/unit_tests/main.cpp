@@ -12,7 +12,13 @@
 #include "core/videocontroller_test.h"
 #include "core/json_messages_test.h"
 #include "core/mediator_test.h"
+
+#include "core/geopolygon_test.h"
+#include "core/polygonpathalgorithm_test.h"
+
+
 #include "models/detectionresult.h"
+
 #include <QList>
 #include <QTest>
 #include <QApplication>
@@ -31,6 +37,10 @@ int main(int argc, char *argv[])
     tests.append(new DetectionController_Test());
     //tests.append(new VideoController_Test());
     tests.append(new Mediator_Test());
+
+    tests.append(new GeoPolygon_test());
+    tests.append(new PolygonPathAlgorithm_Test());
+
     tests.append(new SearchDAO_Test());
     tests.append(new DetectionResultDAO_Test());
     tests.append(new DroneDAO_Test());

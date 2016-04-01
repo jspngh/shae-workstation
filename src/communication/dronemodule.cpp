@@ -46,7 +46,7 @@ DroneModule::~DroneModule()
     delete droneConnection;
     delete connectionThread;
     //TODO: delete heartbeatReceiver;
-    delete waypoints;
+    //TODO: delete waypoints fails if no waypoints assigned
 
 }
 

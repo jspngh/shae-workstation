@@ -93,12 +93,14 @@ void Controller::init()
     //TODO remove explicit linking of streampath
     QString streamPath = QString("rtp://127.0.0.1:5000");
     //QString streamPath = d->getDrone().getStreamPath();
-    VideoSequence sequence  = videoController->onStartStream(streamPath);
-    cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
+
+    //TODO: this is commented because of Lars's stupid habit of pushing on develop, dickhead.
+    //VideoSequence sequence  = videoController->onStartStream(d->getDrone());
+    //cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
     // allow the stream to buffer
-    detectionController->setSequence(capture);
+    //detectionController->setSequence(capture);
     // start all the threads
-    detectionController->start();
+    //detectionController->start();
     // persistenceThread.start();
 }
 

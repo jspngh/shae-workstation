@@ -5,19 +5,20 @@ VideoController::VideoController(QObject *parent): QObject(parent)
 
 }
 
-VideoSequence VideoController::onStartStream(QString streamPath)
+
+VideoSequence VideoController::onStartStream(Drone *drone)
+
 {
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
     /* Create a new item */
-    qDebug(streamPath.toStdString().c_str());
-    if (streamPath.contains(QString("rtp://"))) {
-        qDebug("started stream from rtp address");
-        m = libvlc_media_new_location(inst, streamPath.toStdString().c_str());
+
+    if (drone->getStreamPath().contains(QString("rtp://"))) {
+        m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
     } else {
-        qDebug("started stream from sdp file");
-        m = libvlc_media_new_path(inst, streamPath.toStdString().c_str());
+        m = libvlc_media_new_path(inst, drone->getStreamPath().toStdString().c_str());
+
     }
 
     /* Create a media player playing environement */
@@ -31,7 +32,8 @@ VideoSequence VideoController::onStartStream(QString streamPath)
 }
 
 
-void VideoController::onStopStream()
+
+void VideoController::onStopStream(Drone *drone)
 {
     /* Stop playing */
     libvlc_media_player_stop(mp);
