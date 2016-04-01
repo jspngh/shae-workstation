@@ -1,10 +1,8 @@
 #include "pathalgorithm_test.h"
-#include "pathlogic/simplepathalgorithm.h"
-#include <QApplication>
-#include <QDebug>
-#include "core/controller.h"
-#include "ui/mainwindow.h"
 
+#include <QDebug>
+#include "core/mediator.h"
+#include "pathlogic/simplepathalgorithm.h"
 
 Pathalgorithm_Test::Pathalgorithm_Test()
 {
@@ -38,14 +36,11 @@ void Pathalgorithm_Test::testConstructor2()
     QVERIFY(algo.start == QGeoCoordinate(1.0, 1.0));
 }
 
-void Pathalgorithm_Test::testSetController()
+void Pathalgorithm_Test::testSetMediator()
 {
     SimplePathAlgorithm algo = SimplePathAlgorithm();
-    MainWindow w;
-    Controller *controller = new Controller(&w);
-    algo.setController(controller);
-
-
+    Mediator *mediator = new Mediator();
+    algo.setMediator(mediator);
 }
 
 void Pathalgorithm_Test::testGoDirectionWest()

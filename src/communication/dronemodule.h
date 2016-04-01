@@ -104,23 +104,6 @@ public:
     QJsonDocument emergencyLanding();
 
     /**************************
-    Status messages method
-    **************************/
-    //! Sends a Json messages to the drone that requests all statusses, possibly more than specified in the RequestedDroneStatus enum.
-    QJsonDocument requestStatus();
-
-
-    /*! \brief Sends a Json message to the drone to request a certain status.
-     *  See RequestedDroneStatus enum to see which statuses can be requested.
-     * This method actually uses the method to request multiple statuses, namely requestStatuses(). */
-    QJsonDocument requestStatus(RequestedDroneStatus status);
-    /*! \brief Sends a Json message to the drone to request certain multiple statuses.
-     *  See RequestedDroneStatus enum to see which statuses can be requested. */
-    QJsonDocument requestStatuses(QList<RequestedDroneStatus> statuses);
-    //! Sends a Json message that asks for the heartbeat.
-    QJsonDocument requestHeartbeat();
-
-    /**************************
     Setting messages methods
     **************************/
     /*! \brief This method sends a message to let the drone know the workstation ip and port.
@@ -162,6 +145,20 @@ signals:
     /*********************
      Slots
      *********************/
+public slots:
+    //! Sends a Json messages to the drone that requests all statusses,
+    //  possibly more than specified in the RequestedDroneStatus enum.
+    QJsonDocument requestStatus();
+
+    /*! \brief Sends a Json message to the drone to request a certain status.
+     *  See RequestedDroneStatus enum to see which statuses can be requested.
+     * This method actually uses the method to request multiple statuses, namely requestStatuses(). */
+    QJsonDocument requestStatus(RequestedDroneStatus status);
+    /*! \brief Sends a Json message to the drone to request certain multiple statuses.
+     *  See RequestedDroneStatus enum to see which statuses can be requested. */
+    QJsonDocument requestStatuses(QList<RequestedDroneStatus> statuses);
+    //! Sends a Json message that asks for the heartbeat.
+    QJsonDocument requestHeartbeat();
 
 private slots:
     //! Connected via mediator

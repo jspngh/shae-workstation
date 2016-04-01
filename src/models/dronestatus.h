@@ -9,10 +9,14 @@
 #include <QString>
 #include "communication/parseexception.h"
 
+class DroneModule;
+
 class DroneStatus
 {
 public:
     DroneStatus();
+    DroneStatus(const DroneStatus &d);
+    ~DroneStatus();
 
     DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate location,
                 double orientation, double cameraAngle, double speed, double batteryLevel, int droneState);
@@ -86,6 +90,9 @@ public:
     int getResolution() const;
     void setResolution(int value);
 
+    DroneModule *getDrone() const;
+    void setDrone(DroneModule *value);
+
 private:
     /**************
     * Attributes
@@ -94,6 +101,7 @@ private:
 
     /*! Orientation (0-360 degrees)
      * Default as -1 */
+    DroneModule *drone;
     double orientation = -1;
     double cameraAngle = -1;
     double speed = -1;
@@ -117,5 +125,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE(DroneStatus)
 
 #endif // DRONESTATUS_H

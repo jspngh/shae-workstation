@@ -5,7 +5,6 @@ VideoController::VideoController(QObject *parent): QObject(parent)
 
 }
 
-
 VideoSequence VideoController::onStartStream(Drone *drone)
 {
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
@@ -29,7 +28,6 @@ VideoSequence VideoController::onStartStream(Drone *drone)
     emit this->streamStarted(sequence);
     return sequence;
 }
-
 
 void VideoController::onStopStream(Drone *drone)
 {

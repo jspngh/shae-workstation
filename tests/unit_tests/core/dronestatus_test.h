@@ -17,6 +17,14 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void testDefaultConstructor();
+    void testConstructor();
+    void testLongConstructor();
+    void testCopyConstructor();
+    void testFromJsonStringAllSet();
+    void testFromJsonStringNoneSet();
+    void testParseExceptionNotJson();
+    void testParseExceptionNotStatus();
 
 };
 

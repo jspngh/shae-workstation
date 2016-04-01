@@ -60,6 +60,10 @@ void DroneModule::setController(Controller *c)
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
 
+    controller->getMediator()->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
+    controller->getMediator()->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
+    controller->getMediator()->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
+    controller->getMediator()->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
 
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
@@ -72,6 +76,9 @@ void DroneModule::setController(Controller *c)
             this, SLOT(onDroneResponseError(int, QString)));
 
     setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
+    DroneStatus droneStatus;
+    droneStatus.setDrone(this);
+    emit droneStatusReceived(droneStatus);
 }
 
 void DroneModule::getStream()
@@ -142,13 +149,12 @@ Slots
 ************************/
 void DroneModule::onPathCalculated(Search *s)
 {
-    qDebug() << "DroneModule::onPathCalculated";
     bool droneInList = false;
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
-    for (int i = 0; i < s->getDroneList()->size() && !droneInList; i++)    {
-        if (s->getDroneList()->at(i)->getGuid() == drone.getGuid())
+    for (int i = 0; i < s->getDroneList().size() && !droneInList; i++)    {
+        if (s->getDroneList().at(i)->getGuid() == drone.getGuid())
             droneInList = true;
     }
     if (droneInList) {
@@ -164,6 +170,7 @@ void DroneModule::onDroneResponse(const QString &response)
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
+        status.setDrone(this);
         if (status.getHeartbeat()) {
             qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);

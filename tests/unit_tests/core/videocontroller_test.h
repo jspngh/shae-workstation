@@ -10,8 +10,6 @@
 #include <QUuid>
 #include <fstream>
 
-
-
 #include "videocontroller/videocontroller.h"
 
 class VideoController_Test : public QObject
