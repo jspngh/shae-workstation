@@ -26,57 +26,28 @@ public:
     Persistence(Mediator *mediator, QObject *parent = 0);
     ~Persistence();
 
-signals:
-    void onSaveSearch(Search search);
-    void onRetrieveSearch(Search search);
-
-    void onSaveDroneStatus(DroneStatus status);
+    Search retrieveSearch(QUuid searchId);
     //compare with timestamp of workstation
-    void onRetrieveDroneStatus(QList<DroneStatus> dronestatuses);
+    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
-    void onRetrieveLatestDroneStatus(DroneStatus status);
+    DroneStatus retrieveDroneStatus(QUuid droneId, QUuid searchId);
     //retrieve dronestatus closest to time parameter
-    void onRetrieveClosestDroneStatus(DroneStatus status);
-
-
-    void onSaveDronePath(QList<QGeoCoordinate> path);
-    void onRetrieveDronePath(QList<QGeoCoordinate> path);
-
-    void onSaveDrone(Drone drone);
-    void onRetrieveDrone(Drone drone);
-
-    //will register a videosequence in the database (already saved in location)
-    void onSaveVideoSequence(VideoSequence sequence);
-    void onRetrieveVideoSequence(VideoSequence sequence);
-
-    void onSaveDetectionResult(DetectionResult result);
-    void onRetrieveDetectionResults(QList<DetectionResult> results);
+    DroneStatus retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
+    QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
+    Drone retrieveDrone(QUuid droneId);
+    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
+    QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
 public slots:
-    void saveSearch(Search &search);
-    void retrieveSearch(QUuid searchId);
 
-    void saveDroneStatus(DroneStatus &droneStatus, QUuid droneId, QUuid searchId);
-    //compare with timestamp of workstation
-    void retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
-    //retrieve latest dronestatus
-    void retrieveDroneStatus(QUuid droneId, QUuid searchId);
-    //retrieve dronestatus closest to time parameter
-    void retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
-
-
+    void saveSearch(Search search);
+    void saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId);
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
-    void retrieveDronePath(QUuid droneId, QUuid searchId);
-
     void saveDrone(Drone drone);
-    void retrieveDrone(QUuid droneId);
-
     //will register a videosequence in the database (already saved in location)
-    void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence &sequence);
-    void retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
+    void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
+    void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
 
-    void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult &result);
-    void retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
 private:
     QSqlDatabase projectShaeDatabase;
