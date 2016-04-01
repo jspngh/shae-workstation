@@ -16,6 +16,7 @@
 #include "core/geopolygon_test.h"
 #include "core/polygonpathalgorithm_test.h"
 #include "core/pathalgorithm_test.h"
+#include "core/dronestatus_test.h"
 
 
 #include "models/detectionresult.h"
@@ -40,9 +41,8 @@ int main(int argc, char *argv[])
     tests.append(new GeoPolygon_test());
     tests.append(new PolygonPathAlgorithm_Test());
     tests.append(new Json_Messages_Test());
-    tests.append(new DetectionController_Test());
-    //tests.append(new VideoController_Test());
-    tests.append(new Mediator_Test());
+    tests.append(new DroneStatus_Test());
+
 
 
     tests.append(new GeoPolygon_test());
@@ -53,7 +53,10 @@ int main(int argc, char *argv[])
     tests.append(new DroneDAO_Test());
     tests.append(new DroneSearchDAO_Test());
     tests.append(new DroneStatusDAO_Test());
+    tests.append(new Mediator_Test());
     tests.append(new VideoSequenceDAO_Test());
+    tests.append(new DetectionController_Test());
+    //tests.append(new VideoController_Test());
 
     foreach(QObject * test, tests) {
 
