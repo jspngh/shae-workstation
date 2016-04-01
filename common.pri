@@ -27,8 +27,7 @@ HEADERS += \
     $$PWD/src/pathlogic/*.h \
     $$PWD/src/persistence/*.h \
     $$PWD/src/utils/*.h \
-    $$PWD/src/videocontroller/*.h \
-    $$PWD/src/pathlogic/geopolygon.h
+    $$PWD/src/videocontroller/*.h
 
 SOURCES += \
     $$PWD/src/communication/*.cpp \

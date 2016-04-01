@@ -12,7 +12,9 @@ void DetectionController_Test::initTestCase()
     s->setHeight(3);
     s->setGimbalAngle(65);
 
+
     s->setFpsProcessing(2);
+
 
     Mediator *m;
     // "dependencies/drone_stream.mpg"

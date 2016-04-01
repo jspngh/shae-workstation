@@ -60,6 +60,7 @@ void DroneModule::setController(Controller *c)
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
 
+
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
     //heartbeatReceiver->moveToThread(heartbeatThread);

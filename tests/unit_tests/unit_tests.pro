@@ -31,7 +31,8 @@ HEADERS += \
     core/videosequencedao_test.h \
     core/databasecreator.h\
     core/videocontroller_test.h \
-    core/mediator_test.h
+    core/mediator_test.h \
+    core/pathalgorithm_test.h
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
@@ -48,7 +49,9 @@ SOURCES += \
     core/videosequencedao_test.cpp \
     core/databasecreator.cpp \
     core/videocontroller_test.cpp \
-    core/mediator_test.cpp
+    core/mediator_test.cpp \
+    core/pathalgorithm_test.cpp
+
 
 # c++11
 CONFIG += c++11

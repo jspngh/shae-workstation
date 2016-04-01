@@ -24,8 +24,6 @@ signals:
     void startStream(Drone *drone);
     void stopStream(Drone *drone);
 
-
-
 private Q_SLOTS:
     void testCreateFile();
     void initTestCase();
