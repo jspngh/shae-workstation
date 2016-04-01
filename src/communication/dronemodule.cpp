@@ -27,12 +27,12 @@ DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString
     connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
 
     connect(droneConnection, SIGNAL(droneResponse(const QString &)),
-                       this, SLOT(onDroneResponse(const QString &)));
+            this, SLOT(onDroneResponse(const QString &)));
     connect(droneConnection, SIGNAL(droneResponseError(int, const QString &)),
-                       this, SLOT(onDroneResponseError(int, const QString &)));
+            this, SLOT(onDroneResponseError(int, const QString &)));
     // TODO: create a seperate onStreamError slot
     connect(streamConnection, SIGNAL(streamError(int, const QString &)),
-                        this, SLOT(onDroneResponseError(int, const QString &)));
+            this, SLOT(onDroneResponseError(int, const QString &)));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -56,9 +56,9 @@ Getters/Setters
 void DroneModule::setController(Controller *c)
 {
     controller = c;
-    controller->getMediator()->addSlot(this, (char*) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    controller->getMediator()->addSignal(this, (char*) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    controller->getMediator()->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
 
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
@@ -67,8 +67,8 @@ void DroneModule::setController(Controller *c)
 
     connect(heartbeatReceiver, SIGNAL(droneHeartBeat(QString)),
             this, SLOT(onDroneResponse(QString)));
-    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int,QString)),
-            this, SLOT(onDroneResponseError(int,QString)));
+    connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int, QString)),
+            this, SLOT(onDroneResponseError(int, QString)));
 
     setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
 }
@@ -163,11 +163,10 @@ void DroneModule::onDroneResponse(const QString &response)
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
-        if (status.getHeartbeat()){
+        if (status.getHeartbeat()) {
             qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);
-        }
-        else{
+        } else {
             qDebug() << "emit DroneModule::droneStatusReceived(status)";
             emit droneStatusReceived(status);
         }
@@ -247,7 +246,7 @@ QJsonDocument DroneModule::sendWaypoints()
 
     QJsonArray coordinates = QJsonArray();
     int i = 0;
-    foreach (const QGeoCoordinate waypoint, *waypoints) {
+    foreach(const QGeoCoordinate waypoint, *waypoints) {
         i++;
         QJsonObject coordinate = QJsonObject();
 
@@ -305,7 +304,7 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
     QJsonObject json = QJsonObject();
     json["MessageType"] = QString("status");
     QJsonArray requestedStatuses = QJsonArray();
-    foreach (const RequestedDroneStatus status, statuses) {
+    foreach(const RequestedDroneStatus status, statuses) {
         QJsonObject requestedStatus = QJsonObject();
         QString key;
         switch (status) {

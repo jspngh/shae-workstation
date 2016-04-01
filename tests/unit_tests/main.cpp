@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     DatabaseCreator db = DatabaseCreator();
     db.initDatabase();
 
-    QList<QObject*> tests;
+    QList<QObject *> tests;
     tests.append(new SimplePathAlgorithm_Test());
     tests.append(new Json_Messages_Test());
     tests.append(new DetectionController_Test());
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     tests.append(new DroneStatusDAO_Test());
     tests.append(new VideoSequenceDAO_Test());
 
-    foreach(QObject* test, tests) {
+    foreach(QObject * test, tests) {
         QTest::qExec(test, a.arguments());
     }
 

@@ -21,7 +21,7 @@ void VideoSequenceDAO_Test::initTestCase()
 
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
-    if(!folder.endsWith(QDir::separator()))
+    if (!folder.endsWith(QDir::separator()))
         folder.append(QDir::separator());
 
     QString name = "database.sqlite";
@@ -29,8 +29,7 @@ void VideoSequenceDAO_Test::initTestCase()
     QString base = folder.append(name);
     projectShaeDatabase.setDatabaseName(base);
 
-    if(projectShaeDatabase.open())
-    {
+    if (projectShaeDatabase.open()) {
         qDebug() << "database connection succes" ;
     } else {
         qDebug() << "database connection error";
@@ -45,32 +44,29 @@ void VideoSequenceDAO_Test::testSimpleVideoSequenceDAO()
 {
     VideoSequenceDAO sd = VideoSequenceDAO(&projectShaeDatabase);
 
-    VideoSequence s = VideoSequence(QUuid::createUuid(), QTime(8,8,8), QTime(9,9,9), 10 , "pathtofile");
+    VideoSequence s = VideoSequence(QUuid::createUuid(), QTime(8, 8, 8), QTime(9, 9, 9), 10 , "pathtofile");
     QUuid searchID = QUuid::createUuid();
     QUuid droneID = QUuid::createUuid();
 
-    sd.dbSaveVideoSequence(droneID,searchID,s);
+    sd.dbSaveVideoSequence(droneID, searchID, s);
 
-   VideoSequence sback = sd.dbRetrieveVideoSequence(droneID,searchID,s.getVideoID());
+    VideoSequence sback = sd.dbRetrieveVideoSequence(droneID, searchID, s.getVideoID());
 
-   QVERIFY(sback.getVideoID() == s.getVideoID());
-   QVERIFY(s.getFrameCount() == sback.getFrameCount());
-   QVERIFY(s.getStart() == sback.getStart());
-   QVERIFY(s.getEnd() == sback.getEnd());
-   QVERIFY(s.getPath() == sback.getPath());
+    QVERIFY(sback.getVideoID() == s.getVideoID());
+    QVERIFY(s.getFrameCount() == sback.getFrameCount());
+    QVERIFY(s.getStart() == sback.getStart());
+    QVERIFY(s.getEnd() == sback.getEnd());
+    QVERIFY(s.getPath() == sback.getPath());
 
     QSqlQuery query;
     query.prepare("DELETE from videosequences "
                   "WHERE videoID == (:videoID)");
     query.bindValue(":videoID", s.getVideoID());
-    if(query.exec())
-    {
-       qDebug() << "delete succes";
-    }
-    else
-    {
-       qDebug() << "remove videosequence error:  "
-                << query.lastError();
+    if (query.exec()) {
+        qDebug() << "delete succes";
+    } else {
+        qDebug() << "remove videosequence error:  "
+                 << query.lastError();
     };
 
 }

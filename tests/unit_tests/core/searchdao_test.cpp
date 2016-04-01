@@ -22,7 +22,7 @@ void SearchDAO_Test::initTestCase()
 
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
-    if(!folder.endsWith(QDir::separator()))
+    if (!folder.endsWith(QDir::separator()))
         folder.append(QDir::separator());
 
     QString name = "database.sqlite";
@@ -30,8 +30,7 @@ void SearchDAO_Test::initTestCase()
     QString base = folder.append(name);
     projectShaeDatabase.setDatabaseName(base);
 
-    if(projectShaeDatabase.open())
-    {
+    if (projectShaeDatabase.open()) {
         qDebug() << "database connection succes" ;
     } else {
         qDebug() << "database connection error";
@@ -47,7 +46,7 @@ void SearchDAO_Test::testSimpleSearchDAO()
 
     SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
-    Search s = Search(QUuid::createUuid(),QTime(7,6), QGeoRectangle(QGeoCoordinate(5,6),QGeoCoordinate(4,3)), 5, 6);
+    Search s = Search(QUuid::createUuid(), QTime(7, 6), QGeoRectangle(QGeoCoordinate(5, 6), QGeoCoordinate(4, 3)), 5, 6);
 
     sd.dbSaveSearch(s);
 
@@ -65,13 +64,10 @@ void SearchDAO_Test::testSimpleSearchDAO()
     query.prepare("DELETE from searches "
                   "WHERE searchID == (:searchID)");
     query.bindValue(":searchID", s.getSearchID());
-    if(query.exec())
-    {
-       qDebug() << "delete succes";
-    }
-    else
-    {
-       qDebug() << "addDroe error:  "
-                << query.lastError();
+    if (query.exec()) {
+        qDebug() << "delete succes";
+    } else {
+        qDebug() << "addDroe error:  "
+                 << query.lastError();
     };
 }

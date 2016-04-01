@@ -18,7 +18,7 @@ public:
      * \brief The basic constructor for a DroneStatusDAO needs a database as input.
      */
     DroneStatusDAO();
-    DroneStatusDAO(QSqlDatabase* projectShaeDatabase);
+    DroneStatusDAO(QSqlDatabase *projectShaeDatabase);
 
     /**
      * \brief dbSaveDroneStatus saves a detection result into the database.
@@ -47,7 +47,7 @@ public:
     DroneStatus dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
 private:
     //database
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase *projectShaeDatabase;
 };
 
 #endif // DRONESTATUSDAO_H

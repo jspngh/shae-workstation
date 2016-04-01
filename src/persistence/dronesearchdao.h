@@ -16,7 +16,7 @@ public:
      * \brief The basic constructor for a DronesearchDAO needs a database as input.
      */
     DroneSearchDAO();
-    DroneSearchDAO(QSqlDatabase* projectShaeDatabase);
+    DroneSearchDAO(QSqlDatabase *projectShaeDatabase);
     /**
      * \brief dbSaveDroneSearch saves a detection result into the database.
      * Its inputs are a droneid, searchid and coordinater list.
@@ -30,7 +30,7 @@ public:
      */
     QList<QGeoCoordinate> dbRetrieveDronePath(QUuid droneId, QUuid searchId);
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase *projectShaeDatabase;
 };
 
 #endif // DRONESEARCHDAO_H

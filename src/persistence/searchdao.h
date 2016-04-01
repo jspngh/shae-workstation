@@ -17,7 +17,7 @@ public:
      * \brief The basic constructor for a SearchDAO needs a database as input.
      */
     SearchDAO();
-    SearchDAO(QSqlDatabase* projectShaeDatabase);
+    SearchDAO(QSqlDatabase *projectShaeDatabase);
     /**
      * \brief dbSaveSearch saves a detection result into the database.
      * Its inputs are a search object.
@@ -30,7 +30,7 @@ public:
      */
     Search dbRetrieveSearch(QUuid searchId);
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase *projectShaeDatabase;
 };
 
 #endif // SEARCHDAO_H

@@ -17,7 +17,7 @@ public:
      * \brief The basic constructor for a DetectionResultDAO needs a database as input.
      */
     DetectionResultDAO();
-    DetectionResultDAO(QSqlDatabase* projectShaeDatabase);
+    DetectionResultDAO(QSqlDatabase *projectShaeDatabase);
     //
     /**
      * \brief dbSaveDetectionResult saves a detection result into the database.
@@ -32,7 +32,7 @@ public:
      */
     QList<DetectionResult> dbRetrieveDetectionResults(QUuid droneId, QUuid searchId);
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase *projectShaeDatabase;
 };
 
 #endif // DETECTIONRESULTDAO_H

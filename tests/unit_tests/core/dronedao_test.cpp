@@ -21,7 +21,7 @@ void DroneDAO_Test::initTestCase()
 
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
-    if(!folder.endsWith(QDir::separator()))
+    if (!folder.endsWith(QDir::separator()))
         folder.append(QDir::separator());
 
     QString name = "database.sqlite";
@@ -29,8 +29,7 @@ void DroneDAO_Test::initTestCase()
     QString base = folder.append(name);
     projectShaeDatabase.setDatabaseName(base);
 
-    if(projectShaeDatabase.open())
-    {
+    if (projectShaeDatabase.open()) {
         qDebug() << "database connection succes" ;
     } else {
         qDebug() << "database connection error";
@@ -45,7 +44,7 @@ void DroneDAO_Test::testSimpleDroneDAO()
 {
     DroneDAO sd = DroneDAO(&projectShaeDatabase);
 
-    Drone s = Drone(1,2,"3","4", 5.6);
+    Drone s = Drone(1, 2, "3", "4", 5.6);
 
     sd.dbSaveDrone(s);
 
@@ -62,14 +61,11 @@ void DroneDAO_Test::testSimpleDroneDAO()
     query.prepare("DELETE from drones "
                   "WHERE droneID == (:droneID)");
     query.bindValue(":droneID", s.getGuid());
-    if(query.exec())
-    {
-       qDebug() << "delete succes";
-    }
-    else
-    {
-       qDebug() << "remove drone error:  "
-                << query.lastError();
+    if (query.exec()) {
+        qDebug() << "delete succes";
+    } else {
+        qDebug() << "remove drone error:  "
+                 << query.lastError();
     };
 }
 

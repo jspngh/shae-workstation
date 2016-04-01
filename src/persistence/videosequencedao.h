@@ -17,7 +17,7 @@ public:
      * \brief The basic constructor for a VideoSequenceDAO needs a database as input.
      */
     VideoSequenceDAO();
-    VideoSequenceDAO(QSqlDatabase* projectShaeDatabase);
+    VideoSequenceDAO(QSqlDatabase *projectShaeDatabase);
     //
     /**
      * \brief dbSaveVideoSequence saves a detection result into the database.
@@ -32,7 +32,7 @@ public:
      */
     VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
 private:
-    QSqlDatabase* projectShaeDatabase;
+    QSqlDatabase *projectShaeDatabase;
 };
 
 #endif // VIDEOSEQUENCEDAO_H

@@ -5,7 +5,8 @@ DroneDAO::DroneDAO()
 
 }
 
-DroneDAO::DroneDAO(QSqlDatabase* projectShaeDatabase){
+DroneDAO::DroneDAO(QSqlDatabase *projectShaeDatabase)
+{
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
@@ -19,36 +20,31 @@ Drone DroneDAO::dbSaveDrone(Drone drone)
     query.bindValue(":dataPort", drone.getPortNr());
     query.bindValue(":streamPort", drone.getStreamPortNr());
     query.bindValue(":serverIp", drone.getServerIp());
-    query.bindValue(":streamPath",drone.getStreamPath());
-    if(query.exec())
-    {
-       qDebug() << "insert succes";
-    }
-    else
-    {
-       qDebug() << "addDrone error:  "
-                << query.lastError();
+    query.bindValue(":streamPath", drone.getStreamPath());
+    if (query.exec()) {
+        qDebug() << "insert succes";
+    } else {
+        qDebug() << "addDrone error:  "
+                 << query.lastError();
     }
     return drone;
 }
 
-Drone DroneDAO::dbRetrieveDrone(QUuid droneId){
+Drone DroneDAO::dbRetrieveDrone(QUuid droneId)
+{
     QSqlQuery query;
     Drone returnDrone;
     query.prepare("SELECT dataPort, streamPort, serverIp, streamPath, visionWidth FROM drones WHERE droneID == (:droneID)");
     query.bindValue(":droneID", droneId);
-    if(query.exec())
-    {
+    if (query.exec()) {
         if (query.next()) {
             returnDrone = Drone(droneId, query.value(0).toInt(), query.value(1).toInt(),
                                 query.value(2).toString(), query.value(3).toString(),
                                 query.value(4).toDouble());
         }
-    }
-    else
-    {
-       qDebug() << "getDrone error:  "
-                << query.lastError();
+    } else {
+        qDebug() << "getDrone error:  "
+                 << query.lastError();
     }
     return returnDrone;
 }

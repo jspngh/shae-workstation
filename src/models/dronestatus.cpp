@@ -8,7 +8,7 @@ DroneStatus::DroneStatus()
 }
 
 DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate location,
-            double orientation, double cameraAngle, double speed, double batteryLevel, int droneState):
+                         double orientation, double cameraAngle, double speed, double batteryLevel, int droneState):
     timestampDrone(timestampDrone),
     timestampReceivedWorkstation(timestampReceivedWorkstation),
     currentLocation(location),
@@ -22,10 +22,10 @@ DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWo
 }
 
 DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWorkstation, QGeoCoordinate currentlocation,
-            double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
-            double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
-            int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
-            QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints):
+                         double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
+                         double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
+                         int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
+                         QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints):
     timestampDrone(timestampDrone),
     timestampReceivedWorkstation(timestampReceivedWorkstation),
     currentLocation(currentlocation),

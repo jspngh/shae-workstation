@@ -6,7 +6,8 @@ VideoSequenceDAO::VideoSequenceDAO()
 
 }
 
-VideoSequenceDAO::VideoSequenceDAO(QSqlDatabase* projectShaeDatabase){
+VideoSequenceDAO::VideoSequenceDAO(QSqlDatabase *projectShaeDatabase)
+{
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
@@ -23,14 +24,11 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchI
     query.bindValue(":end", sequence.getEnd());
     query.bindValue(":frameCount", sequence.getFrameCount());
     query.bindValue(":path", sequence.getPath());
-    if(query.exec())
-    {
-       qDebug() << "insert succes";
-    }
-    else
-    {
-       qDebug() << "addDetectionResult error:  "
-                << query.lastError();
+    if (query.exec()) {
+        qDebug() << "insert succes";
+    } else {
+        qDebug() << "addDetectionResult error:  "
+                 << query.lastError();
     }
     return sequence;
 }
@@ -41,20 +39,16 @@ VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid sea
     QSqlQuery query;
     query.prepare("SELECT start, end, frameCount, path FROM videosequences WHERE videoID = (:videoID)");
     query.bindValue(":videoID", videoId);
-    if(query.exec())
-    {
-        if(query.next())
-        {
+    if (query.exec()) {
+        if (query.next()) {
             sequence = VideoSequence(videoId, query.value(0).toTime(),
-                                                    query.value(1).toTime(),
-                                                    query.value(2).toInt(),
-                                                    query.value(3).toString());
+                                     query.value(1).toTime(),
+                                     query.value(2).toInt(),
+                                     query.value(3).toString());
         }
-    }
-    else
-    {
+    } else {
         qDebug() << "setVideoSequence error:  "
-                         << query.lastError();
+                 << query.lastError();
     }
     return sequence;
 }

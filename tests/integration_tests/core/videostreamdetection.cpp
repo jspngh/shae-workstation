@@ -15,7 +15,7 @@ void VideostreamDetection_Test::initTestCase()
 {
 
     int argc = 0;
-    char *argv[] ={};
+    char *argv[] = {};
     QApplication a(argc, argv);
     MainWindow w;
     Controller controller(&w);
@@ -34,10 +34,11 @@ void VideostreamDetection_Test::VideostreamDetectionTest()
 }
 
 
-bool VideostreamDetection_Test::KillAppAfterTimeout(int secs) {
+bool VideostreamDetection_Test::KillAppAfterTimeout(int secs)
+{
     QScopedPointer<QTimer> timer(new QTimer);
     timer->setSingleShot(true);
-    bool ok = timer->connect(timer.data(),SIGNAL(timeout()),qApp,SLOT(quit()),Qt::QueuedConnection);
+    bool ok = timer->connect(timer.data(), SIGNAL(timeout()), qApp, SLOT(quit()), Qt::QueuedConnection);
     timer->start(secs * 1000); // N seconds timeout
     timer.take()->setParent(qApp);
     return ok;
