@@ -51,7 +51,7 @@ void Pathalgorithm_Test::testSetController()
 void Pathalgorithm_Test::testGoDirectionWest()
 {
     SimplePathAlgorithm algo = SimplePathAlgorithm();
-    QGeoCoordinate to = algo.goDirection(QGeoCoordinate(0.0,0.0),WEST, 1.0 );
+    QGeoCoordinate to = PathAlgorithm::goDirection(QGeoCoordinate(0.0,0.0),WEST, 1.0 );
     QVERIFY(to == QGeoCoordinate(0.0,-1.0));
 
 }
@@ -59,11 +59,14 @@ void Pathalgorithm_Test::testGoDirectionWest()
 void Pathalgorithm_Test::testGoDirectionEast()
 {
     SimplePathAlgorithm algo = SimplePathAlgorithm();
-    QGeoCoordinate to = algo.goDirection(QGeoCoordinate(0.0,0.0),EAST, 1.0 );
+    QGeoCoordinate to = PathAlgorithm::goDirection(QGeoCoordinate(0.0,0.0),EAST, 1.0 );
     QVERIFY(to == QGeoCoordinate(0.0,1.0));
 }
 
 void Pathalgorithm_Test::testGoDirectionBetween()
 {
+    SimplePathAlgorithm algo = SimplePathAlgorithm();
+    QGeoCoordinate to = PathAlgorithm::goDirectionBetween(QGeoCoordinate(0.0,0.0),QGeoCoordinate(2.0,2.0),QGeoCoordinate(3.0,3.0),1.0, EAST);
+    QVERIFY(to == QGeoCoordinate(1.0,1.0));
 
 }

@@ -151,4 +151,16 @@ void PolygonPathAlgorithm_Test::testSetWaypointsForDrones()
 
 }
 
+void PolygonPathAlgorithm_Test::testGetNeighbouringEdges()
+{
+    QGeoCoordinate from = QGeoCoordinate(0.5,0.5);
+    QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
+    list.push_back(QGeoCoordinate(0.0,0.0));
+    list.push_back(QGeoCoordinate(1.0,1.0));
+    auto pair = PolygonPathAlgorithm::getNeighbouringEdges(from, list);
+    QVERIFY(pair.first == QGeoCoordinate(0.0,0.0));
+    QVERIFY(pair.second == QGeoCoordinate(1.0,1.0));
+
+}
+
 

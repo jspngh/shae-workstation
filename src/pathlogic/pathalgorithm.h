@@ -58,7 +58,6 @@ public:
 
     void setController(Controller *value);
 
-protected:
     //! returns a new coordinate based on a certain distance and direction from a previous coordinate.
     static QGeoCoordinate goDirection(QGeoCoordinate start, Direction direction, double distance);
 
