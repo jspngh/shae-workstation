@@ -100,67 +100,67 @@ DroneStatus DroneStatus::fromJsonString(QString string)
         qDebug() << "Not a status message";
         throw ParseException("Not a status message", string);
     }
-    QJsonValue value = json["Orientation"];
+    QJsonValue value = json["orientation"];
     if (! value.isUndefined()) {
         status.setOrientation(value.toDouble());
     }
-    value = json["Camera_angle"];
+    value = json["camera_angle"];
     if (! value.isUndefined()) {
         status.setCameraAngle(value.toDouble());
     }
-    value = json["Speed"];
+    value = json["speed"];
     if (! value.isUndefined()) {
         status.setSpeed(value.toDouble());
     }
-    value = json["Selected_speed"];
+    value = json["selected_speed"];
     if (! value.isUndefined()) {
         status.setSelectedSpeed(value.toDouble());
     }
-    value = json["Battery_level"];
+    value = json["battery_level"];
     if (! value.isUndefined()) {
         status.setBatteryLevel(value.toDouble());
     }
-    value = json["Drone_state"];
+    value = json["drone_state"];
     if (! value.isUndefined()) {
         status.setDroneState(value.toInt());
     }
-    value = json["Fps"];
+    value = json["fps"];
     if (! value.isUndefined()) {
         status.setFps(value.toInt());
     }
-    value = json["Heartbeat"];
+    value = json["heartbeat"];
     if (! value.isUndefined()) {
         status.setHeartbeat(value.toBool());
     }
-    value = json["Manufacturer"];
+    value = json["manufacturer"];
     if (! value.isUndefined()) {
         status.setManufacturer(value.toString());
     }
-    value = json["Type"];
+    value = json["type"];
     if (! value.isUndefined()) {
         status.setType(value.toString());
     }
-    value = json["Current_location"];
+    value = json["current_location"];
     if (! value.isUndefined() && value.isObject()) {
         QJsonObject position = value.toObject();
-        status.setCurrentLocation(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
+        status.setCurrentLocation(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
     }
-    value = json["Next_waypoint"];
+    value = json["next_waypoint"];
     if (! value.isUndefined() && value.isObject()) {
         QJsonObject position = value.toObject();
-        status.setNextWaypoint(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
+        status.setNextWaypoint(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
     }
-    value = json["Next_waypoints"];
+    value = json["next_waypoints"];
     if (! value.isUndefined() && value.isArray()) {
         QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
         QJsonArray positions = value.toArray();
         for (auto v : positions) {
             QJsonObject position = v.toObject();
-            list.push_back(QGeoCoordinate(position["Latitude"].toDouble(), position["Longitude"].toDouble()));
+            list.push_back(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
         }
         status.setNextWaypoints(list);
     }
-    value = json["Timestamp"];
+    value = json["timestamp"];
     if (! value.isUndefined()) {
         QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));

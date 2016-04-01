@@ -198,8 +198,8 @@ QJsonDocument DroneModule::startFlight()
     // Create json message to start the flight conform the interface of the wiki
     QJsonObject json = QJsonObject();
 
-    json["Message"] = QString("start");
-    json["MessageType"] = QString("navigation");
+    json["message"] = QString("start");
+    json["message_type"] = QString("navigation");
     QJsonDocument jsondoc(json);
 
     // Send the json message
@@ -214,8 +214,8 @@ QJsonDocument DroneModule::stopFlight()
     // Create json message to stop the flight conform the interface of the wiki
     QJsonObject json = QJsonObject();
 
-    json["Message"] = QString("stop");
-    json["MessageType"] = QString("navigation");
+    json["message"] = QString("stop");
+    json["message_type"] = QString("navigation");
     QJsonDocument jsondoc(json);
 
     // Send the json message
@@ -231,8 +231,8 @@ QJsonDocument DroneModule::emergencyLanding()
     // Create json message to make an emergency landing conform the interface of the wiki
     QJsonObject json = QJsonObject();
 
-    json["Message"] = QString("emergency");
-    json["MessageType"] = QString("navigation");
+    json["message"] = QString("emergency");
+    json["message_type"] = QString("navigation");
     QJsonDocument jsondoc(json);
 
 
@@ -249,8 +249,8 @@ QJsonDocument DroneModule::sendWaypoints()
     // Create json message
     QJsonObject json = QJsonObject();
 
-    json["Message"] = QString("path");
-    json["MessageType"] = QString("navigation");
+    json["message"] = QString("path");
+    json["message_type"] = QString("navigation");
 
     QJsonArray coordinates = QJsonArray();
     int i = 0;
@@ -259,20 +259,20 @@ QJsonDocument DroneModule::sendWaypoints()
         QJsonObject coordinate = QJsonObject();
 
         QJsonObject location = QJsonObject();
-        location["Latitude"] = waypoint.latitude();
-        location["Longitude"] = waypoint.longitude();
+        location["latitude"] = waypoint.latitude();
+        location["longitude"] = waypoint.longitude();
 
-        coordinate["Location"] = location;
-        coordinate["Order"] = i;
+        coordinate["location"] = location;
+        coordinate["order"] = i;
 
         coordinates.append(coordinate);
 
     }
-    json["Waypoints"] = coordinates;
+    json["waypoints"] = coordinates;
     QJsonDocument jsondoc(json);
 
     // Send the json message
-    QString message = jsondoc.toJson(QJsonDocument::Compact);
+    QString message = jsondoc.toJson(QJsonDocument::Indented);
 
     emit droneRequest(message);
     return jsondoc;
@@ -287,8 +287,8 @@ QJsonDocument DroneModule::requestStatus()
     // Create json message to request all statuses
     QJsonObject json = QJsonObject();
 
-    json["Message"] = QString("all_statuses");
-    json["MessageType"] = QString("status");
+    json["message"] = QString("all_statuses");
+    json["message_type"] = QString("status");
     QJsonDocument jsondoc(json);
 
     // Send the json message
@@ -310,7 +310,7 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
 {
     // Create json message
     QJsonObject json = QJsonObject();
-    json["MessageType"] = QString("status");
+    json["message_type"] = QString("status");
     QJsonArray requestedStatuses = QJsonArray();
     foreach(const RequestedDroneStatus status, statuses) {
         QJsonObject requestedStatus = QJsonObject();
@@ -360,10 +360,10 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
             key = "current_location";
             break;
         }
-        requestedStatus["Key"] = key;
+        requestedStatus["key"] = key;
         requestedStatuses.append(requestedStatus);
     }
-    json["Message"] = requestedStatuses;
+    json["message"] = requestedStatuses;
     QJsonDocument jsondoc(json);
 
     // Send the json message
@@ -377,8 +377,8 @@ QJsonDocument DroneModule::requestHeartbeat()
 {
     // Create json message
     QJsonObject json = QJsonObject();
-    json["MessageType"] = QString("status");
-    json["Message"] = QString("heartbeat");
+    json["message_type"] = QString("status");
+    json["message"] = QString("heartbeat");
     QJsonDocument jsondoc(json);
 
     // Send the json message
@@ -397,12 +397,12 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int por
 {
     // Create json message
     QJsonObject json = QJsonObject();
-    json["MessageType"] = QString("settings");
-    json["Message"] = QString("workstation_config");
+    json["message_type"] = QString("settings");
+    json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
-    config["IpAddress"] = ipAdress;
-    config["Port"] = QString::number(port);
-    json["Configuration"] = config;
+    config["ip_address"] = ipAdress;
+    config["port"] = QString::number(port);
+    json["configuration"] = config;
     QJsonDocument jsondoc(json);
 
     // Send the json message
@@ -426,7 +426,7 @@ QJsonDocument DroneModule::setSettings(QList<RequestedDroneSetting> settings, QL
 {
     // Create json message
     QJsonObject json = QJsonObject();
-    json["MessageType"] = QString("settings");
+    json["message_type"] = QString("settings");
     QJsonArray settingsToSet = QJsonArray();
     int size = settings.size();
     for (int i = 0; i < size ; i++) {
@@ -454,12 +454,12 @@ QJsonDocument DroneModule::setSettings(QList<RequestedDroneSetting> settings, QL
             key = "fps";
             break;
         }
-        settingToSet["Key"] = key;
-        settingToSet["Value"] = values.front();
+        settingToSet["key"] = key;
+        settingToSet["value"] = values.front();
         values.pop_front();
         settingsToSet.append(settingToSet);
     }
-    json["Message"] = settingsToSet;
+    json["message"] = settingsToSet;
     QJsonDocument jsondoc(json);
 
     // Send the json message
