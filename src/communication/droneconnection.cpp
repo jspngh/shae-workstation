@@ -1,5 +1,5 @@
 #include <QtNetwork>
-
+#include <QDebug>
 #include "droneconnection.h"
 
 DroneConnection::DroneConnection(const QString hostName, quint16 port, QObject *parent)
@@ -50,8 +50,18 @@ void DroneConnection::onDroneRequest(QString m)
     in.setVersion(QDataStream::Qt_4_0);
     in >> statusCode;
 
+    qDebug() << statusCode;
+
     if (statusCode == 300) {
         quint16 blockSize;
+
+        while (socket.bytesAvailable() < (int)sizeof(quint16)) {
+            if (!socket.waitForReadyRead(Timeout)) {
+                emit droneResponseError(socket.error(), socket.errorString());
+                return;
+            }
+        }
+
         in >> blockSize;
 
         while (socket.bytesAvailable() < blockSize) {
@@ -63,6 +73,7 @@ void DroneConnection::onDroneRequest(QString m)
 
         QByteArray raw;
         in >> raw;
+        qDebug() << raw;
         QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
 
         emit droneResponse(response);

@@ -6,7 +6,7 @@
 #include <iostream>
 
 using namespace std;
-std::pair<double,double> changeLatitude(std::pair<double,double> coordinate, double distance);
-std::pair<double,double> changeLongitude(std::pair<double,double> coordinate, double distance);
+std::pair<double, double> changeLatitude(std::pair<double, double> coordinate, double distance);
+std::pair<double, double> changeLongitude(std::pair<double, double> coordinate, double distance);
 
 #endif // GEOUTILS_H

@@ -20,13 +20,8 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
-    drones.append(new DroneModule(6330, 5502, "", "10.1.1.10", 0.0001));
-    drones.append(new DroneModule(6330, 5502, "", "127.0.0.1", 0.0001));
-    drones.append(new DroneModule(3333, 5502, "", "192.158.32.2", 0.0001));
-    drones.append(new DroneModule(5555, 5502, "", "120.23.23.12", 0.0001));
-
-    // real drone: 10.1.1.10:6330
-    // simulator: 127.0.0.1:6330
+    drones.append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
+    drones.append(new DroneModule(6330, 5502, "10.1.1.10", QString("rtp://10.1.1.10:5000"), 0.0001));
 
     // create controllers
     //detectionController = new DetectionController(mediator);
@@ -63,7 +58,7 @@ void Controller::init()
     pathLogicController->setMediator(mediator);
     for (int i = 0; i < drones.size(); i++) {
         drones[i]->setController(this);
-        drones[i]->getStream();
+        /* drones[i]->getStream(); */
     }
 
     // set every component in a different thread

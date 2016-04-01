@@ -110,17 +110,17 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
 //location contains the geocoordinate of the frame
 //dl contains the detections associated with the frame
 //xLUT and yLUT contain lookuptables required to map the pixel locations in the frame on a geocoordinate
-std::vector<std::pair<double,double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double,double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT){
-    vector<std::pair<double,double>> result;
-    for(int i = 0; i< dl.getSize();i++)
-    {
+std::vector<std::pair<double, double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double, double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT)
+{
+    vector<std::pair<double, double>> result;
+    for (int i = 0; i < dl.getSize(); i++) {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
         //distance contains an x,y distance pair, that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
         std::pair<double, double> temp2 = changeLongitude(location, distance.second);
         //save the location of the detection
-        result.push_back(std::pair<double,double>(temp1.first,temp2.second));
+        result.push_back(std::pair<double, double>(temp1.first, temp2.second));
     }
     return result;
 }
@@ -136,35 +136,36 @@ positions are derivde from the LUT based on linear interpolation
     3. use the y pixelvalue of the detection to determine the xLUT vector.
     4. interpolate the horizontal distance based on the xLUT vector.
 */
-std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT){
+std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT)
+{
     double xPixel = (double)(d.getX());
     double yPixel = (double)(d.getY() + d.getHeight());
     double xLoc = 0.0;
     double yLoc = 0.0;
 
-    for(int i = 0; i<yLUT.size();i++){
-            if(yPixel<=yLUT[i][0]){
-                if(i==0){
-                    yLoc = yLUT[i][1];
-                }else{
-                    //use linear interpolation
-                    yLoc = (yLUT[i-1][1])*((yLUT[i][0]-yPixel)/(yLUT[i][0]-yLUT[i-1][0]))+yLUT[i][1]*((yPixel-yLUT[i-1][0])/(yLUT[i][0]-yLUT[i-1][0]));
-                }
-                break;
+    for (int i = 0; i < yLUT.size(); i++) {
+        if (yPixel <= yLUT[i][0]) {
+            if (i == 0) {
+                yLoc = yLUT[i][1];
+            } else {
+                //use linear interpolation
+                yLoc = (yLUT[i - 1][1]) * ((yLUT[i][0] - yPixel) / (yLUT[i][0] - yLUT[i - 1][0])) + yLUT[i][1] * ((yPixel - yLUT[i - 1][0]) / (yLUT[i][0] - yLUT[i - 1][0]));
             }
+            break;
+        }
     }
-    for(int i = 0; i<xLUT.size();i++){
-            if(yPixel<=xLUT[i][0]){
-                if(i==0){
-                    //TODO: remove hardcoding of values
-                    xLoc = ((xPixel-1280/2)/xLUT[0][1])*xLUT[0][2]/2;
-                }else{
-                    //TODO: remove hardcoding of values
-                    xLoc = (((xPixel-1280/2)/xLUT[i][1])*xLUT[i][2]/2)*((xLUT[i][0]-yPixel)/(xLUT[i][0]-xLUT[i-1][0]))+(((xPixel-1280/2)/xLUT[i-1][1])*xLUT[i-1][2]/2)*((yPixel-xLUT[i-1][0])/(xLUT[i][0]-xLUT[i-1][0]));
-                }
-                break;
+    for (int i = 0; i < xLUT.size(); i++) {
+        if (yPixel <= xLUT[i][0]) {
+            if (i == 0) {
+                //TODO: remove hardcoding of values
+                xLoc = ((xPixel - 1280 / 2) / xLUT[0][1]) * xLUT[0][2] / 2;
+            } else {
+                //TODO: remove hardcoding of values
+                xLoc = (((xPixel - 1280 / 2) / xLUT[i][1]) * xLUT[i][2] / 2) * ((xLUT[i][0] - yPixel) / (xLUT[i][0] - xLUT[i - 1][0])) + (((xPixel - 1280 / 2) / xLUT[i - 1][1]) * xLUT[i - 1][2] / 2) * ((yPixel - xLUT[i - 1][0]) / (xLUT[i][0] - xLUT[i - 1][0]));
             }
+            break;
+        }
     }
-    return std::pair<double,double>(xLoc,yLoc);
+    return std::pair<double, double>(xLoc, yLoc);
 }
 
