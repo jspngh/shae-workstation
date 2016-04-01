@@ -318,8 +318,8 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
         case Drone_Type:
             key = "drone_type";
             break;
-        case Waypoint_Reached:
-            key = "waypoint_reached";
+        case Waypoint_Order:
+            key = "waypoint_order";
             break;
         case Speed:
             key = "speed";

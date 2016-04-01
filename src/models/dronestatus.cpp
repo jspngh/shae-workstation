@@ -25,7 +25,7 @@ DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWo
                          double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
                          double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
                          int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
-                         QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints):
+                         int previousWaypointOrder, QList<QGeoCoordinate> nextWaypoints):
     timestampDrone(timestampDrone),
     timestampReceivedWorkstation(timestampReceivedWorkstation),
     currentLocation(currentlocation),
@@ -42,7 +42,7 @@ DroneStatus::DroneStatus(QDateTime timestampDrone, QDateTime timestampReceivedWo
     manufacturer(manufacturer),
     type(type),
     nextWaypoint(nextWaypoint),
-    previousWaypoint(previousWaypoint),
+    previousWaypointOrder(previousWaypointOrder),
     nextWaypoints(nextWaypoints),
     droneState(droneState)
 {
@@ -65,7 +65,7 @@ DroneStatus DroneStatus::fromJsonString(QString string)
         throw ParseException("Not a Json object", string);
     }
     QJsonObject json = jsondoc.object();
-    QString messageType = json["MessageType"].toString();
+    QString messageType = json["messageType"].toString();
 
     //not a status message
     if (messageType != "status") {
@@ -131,6 +131,10 @@ DroneStatus DroneStatus::fromJsonString(QString string)
             list.push_back(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
         }
         status.setNextWaypoints(list);
+    }
+    value = json["waypoint_order"];
+    if (! value.isUndefined()) {
+        status.setPreviousWaypointOrder(value.toInt());
     }
     value = json["timestamp"];
     if (! value.isUndefined()) {
@@ -296,14 +300,14 @@ void DroneStatus::setNextWaypoint(const QGeoCoordinate &value)
     nextWaypoint = value;
 }
 
-QGeoCoordinate DroneStatus::getPreviousWaypoint() const
+int DroneStatus::getPreviousWaypointOrder() const
 {
-    return previousWaypoint;
+    return previousWaypointOrder;
 }
 
-void DroneStatus::setPreviousWaypoint(const QGeoCoordinate &value)
+void DroneStatus::setPreviousWaypointOrder(int value)
 {
-    previousWaypoint = value;
+    previousWaypointOrder = value;
 }
 
 QList<QGeoCoordinate> DroneStatus::getNextWaypoints() const

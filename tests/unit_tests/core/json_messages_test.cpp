@@ -68,7 +68,7 @@ void Json_Messages_Test::testStatusMessages()
     list.push_back(Battery_Level);
     list.push_back(Location);
     list.push_back(Drone_Type);
-    list.push_back(Waypoint_Reached);
+    list.push_back(Waypoint_Order);
 
     QJsonDocument jsondoc = drone->requestStatuses(list);
     usleep(1000);
@@ -79,7 +79,7 @@ void Json_Messages_Test::testStatusMessages()
     QVERIFY(message.at(0).toObject()["key"] == QString("battery_level"));
     QVERIFY(message.at(1).toObject()["key"] == QString("current_location"));
     QVERIFY(message.at(2).toObject()["key"] == QString("drone_type"));
-    QVERIFY(message.at(3).toObject()["key"] == QString("waypoint_reached"));
+    QVERIFY(message.at(3).toObject()["key"] == QString("waypoint_order"));
 
     //Also test if just 1 status is sent
     jsondoc = drone->requestStatus(Location);
