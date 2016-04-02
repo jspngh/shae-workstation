@@ -20,18 +20,11 @@ Controller::Controller(MainWindow *window, QObject *p)
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
             workstationIP = address.toString();
     }
-    //TODO: delete override
-    workstationIP = "127.0.0.1";
-
-    // create drones
-    // TODO: drone info (IP, port, etc) should be set elsewhere
-
-    // real drone: 10.1.1.10:6330
-    // simulator: 127.0.0.1:6330
 
     // create controllers
     detectionController = new DetectionController(search);
     pathLogicController = new SimplePathAlgorithm();
+
 }
 
 Controller::~Controller()
@@ -44,15 +37,16 @@ Controller::~Controller()
     // persistenceThread.quit();
     // persistenceThread.wait();
 
+    // delete the mediator and the search object
     delete mediator;
     delete search;
     // special Qt function to delete QList of pointers
     qDeleteAll(drones->begin(), drones->end());
     drones->clear();
 
-    // delete detectionController;
     // delete persistenceController;
     delete pathLogicController;
+    delete detectionController;
 }
 
 void Controller::init()
@@ -64,13 +58,10 @@ void Controller::init()
     pathLogicController->setMediator(mediator);
     for (int i = 0; i < drones->size(); i++) {
         drones->at(i)->setController(this);
-        /* drones[i]->getStream(); */
     }
 
     // set every component in a different thread
     // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
-
-    // detectionController->moveToThread(&detectorThread);
     // persistenceController->moveToThread(&persistenceThread);
 
     pathLogicController->moveToThread(&pathLogicThread);
@@ -84,7 +75,6 @@ void Controller::initStream(DroneModule* d)
 {
 
     d->getStream();
-    QString streamPath = d->getDrone()->getStreamPath();
     qDebug() << "Controller: stream started at drone";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
     qDebug() << "Controller: starting to save stream";
@@ -109,6 +99,7 @@ void Controller::initStream(DroneModule* d)
 void Controller::stopStream(DroneModule* d)
 {
     d->getVideoController()->onStopStream(d->getDrone());
+    d->stopStream();
     detectionController->streamFinished();
 }
 

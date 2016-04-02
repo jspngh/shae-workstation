@@ -13,17 +13,16 @@ void VideostreamDetection_Test::initTestCase()
     QString program = "python";
     QStringList arguments;
     qDebug() << "opening simulator";
-    arguments << "../../../drone/simulator/simulator.py";
+    arguments << "../../../drone/simulator/src/simulator.py";
     simulatorProcess = new QProcess(this);
     qDebug() << "simulator opened";
     simulatorProcess->start(program, arguments);
+
     QThread::sleep(5);
-    int argc = 0;
-    char *argv[] = {};
-    QApplication a(argc, argv);
     MainWindow w;
     controller =  new Controller(&w);
     qDebug() << "initialisation of controller";
+
     QList<DroneModule *>* list  = new QList<DroneModule *>();
     list->append(new DroneModule(6330, 5502, "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
     controller->setDrones(list);
@@ -36,6 +35,7 @@ void VideostreamDetection_Test::initTestCase()
 
 void VideostreamDetection_Test::cleanupTestCase()
 {
+
     QFile droneFile("dependencies/drone_stream.mpg");
     droneFile.remove();
     qDebug() << "closing of simulator";
@@ -47,6 +47,7 @@ void VideostreamDetection_Test::cleanupTestCase()
 
 void VideostreamDetection_Test::VideostreamDetectionTest()
 {
+
     controller->getDrones()->first()->getStream();
     //assume that after 5 seconds, the drone is at the correct waypoint.
     QThread::sleep(5);
@@ -56,6 +57,8 @@ void VideostreamDetection_Test::VideostreamDetectionTest()
     QThread::sleep(5);
     controller->stopStream(controller->getDrones()->first());
     controller->getDetectionController()->wait();
+
+
 }
 
 
