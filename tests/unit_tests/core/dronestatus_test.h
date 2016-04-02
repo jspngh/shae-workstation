@@ -25,6 +25,7 @@ private Q_SLOTS:
     void testFromJsonStringNoneSet();
     void testParseExceptionNotJson();
     void testParseExceptionNotStatus();
+    void testSetters();
 
 };
 

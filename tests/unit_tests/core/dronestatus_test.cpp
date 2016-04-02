@@ -36,9 +36,9 @@ void DroneStatus_Test::testDefaultConstructor()
 
 void DroneStatus_Test::testConstructor()
 {
-    QDateTime timestampDrone = QDateTime.currentDateTime();
-    QDateTime timestampReceiveWorkstation = QDateTime.currentDateTime();
-    QGeoCoordinate location = QGeoCoordinate(1.0);
+    QDateTime timestampDrone = QDateTime::currentDateTime();
+    QDateTime timestampReceiveWorkstation = QDateTime::currentDateTime();
+    QGeoCoordinate location = QGeoCoordinate(1.0, 1.0);
     double orientation = 20.0;
     double cameraAngle = 15.0;
     double speed = 2.0;
@@ -56,21 +56,123 @@ void DroneStatus_Test::testConstructor()
     QVERIFY( status.getHeight() == -1);
     QVERIFY( status.getManufacturer() == "");
     QVERIFY( status.getType() == "");
-    QVERIFY( status.getOrientation() == -1);
+    QVERIFY( status.getOrientation() == orientation);
     QVERIFY( status.getResolution() == -1);
     QVERIFY( status.getSelectedHeight() == -1);
     QVERIFY( status.getSelectedSpeed() == -1);
-    QVERIFY( status.getSpeed() == -1);
+    QVERIFY( status.getSpeed() == speed);
+    QVERIFY( status.getCurrentLocation() == location);
+    QVERIFY( status.getTimestampDrone() == timestampDrone);
+    QVERIFY( status.getTimestampRecievedWorkstation() == timestampReceiveWorkstation);
 }
 
 
 void DroneStatus_Test::testLongConstructor()
 {
 
+    QDateTime timestampDrone = QDateTime::currentDateTime();
+    QDateTime timestampReceiveWorkstation = QDateTime::currentDateTime();
+    QGeoCoordinate location = QGeoCoordinate(1.0,1.0);
+    double orientation = 20.0;
+    double cameraAngle = 15.0;
+    double speed = 2.0;
+    double selectedSpeed = 3.0;
+    double height = 4.0;
+    double selectedHeight = 4.2;
+    double batteryLevel = 50.4;
+    int fps = 30;
+    int resolution = 720;
+    bool heartbeat = false;
+    QString manufacturer = "3dr";
+    QString type = "solo";
+    QGeoCoordinate nextWaypoint = QGeoCoordinate(0.0,2.0);
+    int previousWaypointOrder = 3;
+    QList<QGeoCoordinate> nextWaypoints = QList<QGeoCoordinate>();
+    nextWaypoints.push_back(QGeoCoordinate(0.0,4.0));
+    int droneState = 1;
+
+    DroneStatus status = DroneStatus(timestampDrone, timestampReceiveWorkstation,
+                                     location, orientation, cameraAngle, speed, selectedSpeed,
+                                     height, selectedHeight,
+                                     batteryLevel, fps, resolution, heartbeat, droneState,
+                                     manufacturer, type, nextWaypoint, previousWaypointOrder, nextWaypoints);
+
+    QVERIFY( status.getBatteryLevel() == batteryLevel);
+    QVERIFY( status.getCameraAngle() == cameraAngle);
+    QVERIFY( status.getDroneState() == droneState);
+    QVERIFY( status.getHeartbeat() == heartbeat);
+    QVERIFY( status.getHeight() == height);
+    QVERIFY( status.getManufacturer() == manufacturer);
+    QVERIFY( status.getType() == type);
+    QVERIFY( status.getOrientation() == orientation);
+    QVERIFY( status.getResolution() == resolution);
+    QVERIFY( status.getSelectedHeight() == selectedHeight);
+    QVERIFY( status.getSelectedSpeed() == selectedSpeed);
+    QVERIFY( status.getTimestampDrone() == timestampDrone);
+    QVERIFY( status.getTimestampRecievedWorkstation() == timestampReceiveWorkstation);
+    QVERIFY( status.getCurrentLocation() == location);
+    QVERIFY( status.getFps() == fps);
+    QVERIFY( status.getManufacturer() == manufacturer);
+    QVERIFY( status.getType() == type);
+    QVERIFY( status.getNextWaypoint() == nextWaypoint);
+    QVERIFY( status.getPreviousWaypointOrder() == previousWaypointOrder);
+    QVERIFY( status.getNextWaypoints() == nextWaypoints);
+    QVERIFY( status.getSpeed() == speed);
+
+
 }
 
 void DroneStatus_Test::testCopyConstructor()
 {
+
+    QDateTime timestampDrone = QDateTime::currentDateTime();
+    QDateTime timestampReceiveWorkstation = QDateTime::currentDateTime();
+    QGeoCoordinate location = QGeoCoordinate(1.0,1.0);
+    double orientation = 20.0;
+    double cameraAngle = 15.0;
+    double speed = 2.0;
+    double selectedSpeed = 3.0;
+    double height = 4.0;
+    double selectedHeight = 4.2;
+    double batteryLevel = 50.4;
+    int fps = 30;
+    int resolution = 720;
+    bool heartbeat = false;
+    QString manufacturer = "3dr";
+    QString type = "solo";
+    QGeoCoordinate nextWaypoint = QGeoCoordinate(0.0,2.0);
+    int previousWaypointOrder = 3;
+    QList<QGeoCoordinate> nextWaypoints = QList<QGeoCoordinate>();
+    nextWaypoints.push_back(QGeoCoordinate(0.0,4.0));
+    int droneState = 1;
+
+    DroneStatus status = DroneStatus(timestampDrone, timestampReceiveWorkstation,
+                                     location, orientation, cameraAngle, speed, selectedSpeed,
+                                     height, selectedHeight,
+                                     batteryLevel, fps, resolution, heartbeat, droneState,
+                                     manufacturer, type, nextWaypoint, previousWaypointOrder, nextWaypoints);
+    DroneStatus statusCopy = DroneStatus(status);
+
+    QVERIFY( status.getBatteryLevel() == statusCopy.getBatteryLevel());
+    QVERIFY( status.getCameraAngle() == statusCopy.getCameraAngle() );
+    QVERIFY( status.getDroneState() == statusCopy.getDroneState() );
+    QVERIFY( status.getHeartbeat() == statusCopy.getHeartbeat() );
+    QVERIFY( status.getHeight() == statusCopy.getHeight() );
+    QVERIFY( status.getManufacturer() == statusCopy.getManufacturer());
+    QVERIFY( status.getType() == statusCopy.getType());
+    QVERIFY( status.getOrientation() == statusCopy.getOrientation());
+    QVERIFY( status.getResolution() == statusCopy.getResolution());
+    QVERIFY( status.getSelectedHeight() == statusCopy.getSelectedHeight());
+    QVERIFY( status.getSelectedSpeed() == statusCopy.getSelectedSpeed());
+    QVERIFY( status.getTimestampDrone() == statusCopy.getTimestampDrone());
+    QVERIFY( status.getTimestampRecievedWorkstation() == statusCopy.getTimestampRecievedWorkstation());
+    QVERIFY( status.getCurrentLocation() == statusCopy.getCurrentLocation());
+    QVERIFY( status.getFps() == statusCopy.getFps());
+    QVERIFY( status.getType() == statusCopy.getType());
+    QVERIFY( status.getNextWaypoint() == statusCopy.getNextWaypoint());
+    QVERIFY( status.getPreviousWaypointOrder() == statusCopy.getPreviousWaypointOrder());
+    QVERIFY( status.getNextWaypoints() == statusCopy.getNextWaypoints());
+    QVERIFY( status.getSpeed() == statusCopy.getSpeed());
 
 }
 
@@ -96,4 +198,73 @@ void DroneStatus_Test::testParseExceptionNotStatus()
 }
 
 
-//Test getters and setters
+void DroneStatus_Test::testSetters()
+{
+    DroneStatus status = DroneStatus();
+    QDateTime timestampDrone = QDateTime::currentDateTime();
+    QDateTime timestampReceiveWorkstation = QDateTime::currentDateTime();
+    QGeoCoordinate location = QGeoCoordinate(1.0,1.0);
+    double orientation = 20.0;
+    double cameraAngle = 15.0;
+    double speed = 2.0;
+    double selectedSpeed = 3.0;
+    double height = 4.0;
+    double selectedHeight = 4.2;
+    double batteryLevel = 50.4;
+    int fps = 30;
+    int resolution = 720;
+    bool heartbeat = false;
+    QString manufacturer = "3dr";
+    QString type = "solo";
+    QGeoCoordinate nextWaypoint = QGeoCoordinate(0.0,2.0);
+    int previousWaypointOrder = 3;
+    QList<QGeoCoordinate> nextWaypoints = QList<QGeoCoordinate>();
+    nextWaypoints.push_back(QGeoCoordinate(0.0,4.0));
+    int droneState = 1;
+
+    status.setBatteryLevel(   batteryLevel);
+    status.setCameraAngle(   cameraAngle);
+    status.setDroneState(   droneState);
+    status.setHeartbeat(   heartbeat);
+    status.setHeight(   height);
+    status.setManufacturer(   manufacturer);
+    status.setType(   type);
+    status.setOrientation(   orientation);
+    status.setResolution(   resolution);
+    status.setSelectedHeight(   selectedHeight);
+    status.setSelectedSpeed(   selectedSpeed);
+    status.setTimestampDrone(   timestampDrone);
+    status.setTimestampRecievedWorkstation(   timestampReceiveWorkstation);
+    status.setCurrentLocation(   location);
+    status.setFps(   fps);
+    status.setManufacturer(   manufacturer);
+    status.setType(   type);
+    status.setNextWaypoint(   nextWaypoint);
+    status.setPreviousWaypointOrder(   previousWaypointOrder);
+    status.setNextWaypoints(   nextWaypoints);
+    status.setSpeed( speed);
+
+
+    QVERIFY( status.getSpeed() == speed);
+    QVERIFY( status.getBatteryLevel() == batteryLevel);
+    QVERIFY( status.getCameraAngle() == cameraAngle);
+    QVERIFY( status.getDroneState() == droneState);
+    QVERIFY( status.getHeartbeat() == heartbeat);
+    QVERIFY( status.getHeight() == height);
+    QVERIFY( status.getManufacturer() == manufacturer);
+    QVERIFY( status.getType() == type);
+    QVERIFY( status.getOrientation() == orientation);
+    QVERIFY( status.getResolution() == resolution);
+    QVERIFY( status.getSelectedHeight() == selectedHeight);
+    QVERIFY( status.getSelectedSpeed() == selectedSpeed);
+    QVERIFY( status.getTimestampDrone() == timestampDrone);
+    QVERIFY( status.getTimestampRecievedWorkstation() == timestampReceiveWorkstation);
+    QVERIFY( status.getCurrentLocation() == location);
+    QVERIFY( status.getFps() == fps);
+    QVERIFY( status.getManufacturer() == manufacturer);
+    QVERIFY( status.getType() == type);
+    QVERIFY( status.getNextWaypoint() == nextWaypoint);
+    QVERIFY( status.getPreviousWaypointOrder() == previousWaypointOrder);
+    QVERIFY( status.getNextWaypoints() == nextWaypoints);
+
+}
