@@ -205,7 +205,6 @@ protected slots:
     void jsSelectedAreaDeleted();
 
 private:
-    bool selectable;
     QMMapViewPrivate *d_ptr;
 };
 

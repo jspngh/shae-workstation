@@ -44,15 +44,20 @@ void OverviewWidget::onSearchStarted(Search *s)
             this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()),
             this, SLOT(onMapLoaded()));
+
+    fillDroneList();
 }
 
 void OverviewWidget::fillDroneList()
 {
+    uint i = 1;
     Q_FOREACH(DroneModule *drone, search->getDroneList()) {
-        OverviewDroneItem *droneItem = new OverviewDroneItem(drone);;
+        OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
         QListWidgetItem *item = new QListWidgetItem();
+        item->setSizeHint(QSize(0, 150));
         ui->droneList->addItem(item);
         ui->droneList->setItemWidget(item, droneItem);
+        i++;
     }
 }
 

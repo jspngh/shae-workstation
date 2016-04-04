@@ -13,8 +13,11 @@ class OverviewDroneItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit OverviewDroneItem(DroneModule *drone, QWidget *parent = 0);
+    explicit OverviewDroneItem(DroneModule *drone, uint number, QWidget *parent = 0);
     ~OverviewDroneItem();
+
+public slots:
+    void setDroneNr(uint number);
 
 private:
     Ui::OverviewDroneItem *ui;

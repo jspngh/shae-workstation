@@ -12,22 +12,11 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="header">
-     <item>
-      <widget class="QLabel" name="droneTitle">
-       <property name="text">
-        <string>Drone #</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="droneNr">
-       <property name="text">
-        <string>1</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QLabel" name="header">
+     <property name="text">
+      <string>Drone #??</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QFormLayout" name="droneDetails">
