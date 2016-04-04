@@ -1,6 +1,7 @@
 #include <unistd.h>
 
 #include <QtNetwork>
+#include <QtDebug>
 
 #include "streamconnection.h"
 
