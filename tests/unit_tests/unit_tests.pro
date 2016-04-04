@@ -34,7 +34,10 @@ HEADERS += \
     core/mediator_test.h \
     core/pathalgorithm_test.h \
     core/dronestatus_test.h \
-    core/generaldao_test.h
+    core/generaldao_test.h \
+    core/parseexception_test.h \
+    core/streamconnection_test.h \
+    core/droneheartbeatreceiver_test.h
 
 
 SOURCES += \
@@ -55,7 +58,10 @@ SOURCES += \
     core/mediator_test.cpp \
     core/pathalgorithm_test.cpp \
     core/dronestatus_test.cpp \
-    core/generaldao_test.cpp
+    core/generaldao_test.cpp \
+    core/parseexception_test.cpp \
+    core/streamconnection_test.cpp \
+    core/droneheartbeatreceiver_test.cpp
 
 
 # c++11

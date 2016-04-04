@@ -23,6 +23,12 @@ public:
 
     void stopConnection();
 
+    QString getDroneIpAddress() const;
+
+    quint16 getStreamPort() const;
+
+    bool getGetStream() const;
+
 public slots:
     void onStreamRequest();
 
