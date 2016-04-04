@@ -23,8 +23,9 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     videosequencedao = VideoSequenceDAO(&projectShaeDatabase);
 
     //register slots at mediator
-    mediator->addSlot(this, SLOT(saveSearch(Search)), QString("saveSearch(Search)"));
-    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus, QUuid, QUuid)), QString("saveDroneStatus(DroneStatus,QUuid,QUuid)"));
+    mediator->addSlot(this, SLOT(saveSearch(Search)), QString("startSearch(Search)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("receivedDroneStatus(DroneStatus)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("receivedHeartBeat(DroneStatus)"));
     mediator->addSlot(this, SLOT(saveDronePath(QUuid, QUuid, QList<QGeoCoordinate>)), QString("saveDronePath(QUuid,QUuid,QList<QGeoCoordinate>)"));
     mediator->addSlot(this, SLOT(saveDrone(Drone)), QString("saveDrone(Drone)"));
     mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, QUuid, VideoSequence)), QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
@@ -39,6 +40,7 @@ Persistence::~Persistence()
 
 void Persistence::saveSearch(Search search)
 {
+    currentSearchID = search.getSearchID();
     searchdao.dbSaveSearch(search);
 }
 
@@ -47,9 +49,9 @@ Search Persistence::retrieveSearch(QUuid searchId)
     return searchdao.dbRetrieveSearch(searchId);
 }
 
-void Persistence::saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId)
+void Persistence::saveDroneStatus(DroneStatus droneStatus)
 {
-    dronestatusdao.dbSaveDroneStatus(droneStatus, droneId, searchId);
+    dronestatusdao.dbSaveDroneStatus(droneStatus, droneStatus.getDrone()->getGuid(), currentSearchID);
 }
 
 QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)

@@ -33,7 +33,9 @@ HEADERS += \
     core/videocontroller_test.h \
     core/mediator_test.h \
     core/pathalgorithm_test.h \
-    core/dronestatus_test.h
+    core/dronestatus_test.h \
+    core/generaldao_test.h
+
 
 SOURCES += \
     core/simplepathalgorithm_test.cpp \
@@ -52,7 +54,8 @@ SOURCES += \
     core/videocontroller_test.cpp \
     core/mediator_test.cpp \
     core/pathalgorithm_test.cpp \
-    core/dronestatus_test.cpp
+    core/dronestatus_test.cpp \
+    core/generaldao_test.cpp
 
 
 # c++11

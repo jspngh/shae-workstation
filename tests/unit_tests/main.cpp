@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 {
     qRegisterMetaType<DetectionResult>("DetectionResult");
     QApplication a(argc, argv);
-
     DatabaseCreator db = DatabaseCreator();
     db.initDatabase();
 
@@ -61,9 +60,7 @@ int main(int argc, char *argv[])
 
     tests.append(new VideoSequenceDAO_Test());
 
-    //tests.append(new VideoController_Test());
-
-    foreach(QObject * test, tests) {
+    foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
 
