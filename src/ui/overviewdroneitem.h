@@ -18,6 +18,7 @@ public:
 
 public slots:
     void setDroneNr(uint number);
+    void updateStatus(DroneStatus status);
 
 private:
     Ui::OverviewDroneItem *ui;

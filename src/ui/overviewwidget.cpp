@@ -21,10 +21,18 @@ void OverviewWidget::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
+    mediator->addSlot(this, SLOT(updateDroneList(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
 void OverviewWidget::clickButtonPush()
 {
+}
+
+void OverviewWidget::updateDroneList(DroneStatus s)
+{
+    const QUuid droneId = s.getDrone()->getGuid();
+    if(mapIdListItem.contains(droneId))
+        mapIdListItem.value(droneId)->updateStatus(s);
 }
 
 void OverviewWidget::backButtonPush()
@@ -52,10 +60,12 @@ void OverviewWidget::fillDroneList()
 {
     uint i = 1;
     Q_FOREACH(DroneModule *drone, search->getDroneList()) {
-        OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
         QListWidgetItem *item = new QListWidgetItem();
         item->setSizeHint(QSize(0, 150));
         ui->droneList->addItem(item);
+
+        OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
+        mapIdListItem[drone->getGuid()] = droneItem;
         ui->droneList->setItemWidget(item, droneItem);
         i++;
     }

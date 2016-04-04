@@ -1,10 +1,13 @@
 #ifndef OVERVIEWWIDGET_H
 #define OVERVIEWWIDGET_H
 
-#include <QWidget>
-#include <QStackedWidget>
-#include <QMMapView.h>
+#include <QListWidgetItem>
+#include <QMap>
 #include <QMMapIcon.h>
+#include <QMMapView.h>
+#include <QStackedWidget>
+#include <QUuid>
+#include <QWidget>
 #include "overviewdroneitem.h"
 #include "communication/dronemodule.h"
 #include "core/mediator.h"
@@ -28,12 +31,14 @@ private:
     Ui::OverviewWidget *ui;
     Search *search;
     Mediator *mediator;
+    QMap<QUuid, OverviewDroneItem*> mapIdListItem;
 
 private slots:
     void clickButtonPush();
     void backButtonPush();
     void onSearchStarted(Search *s);
     void fillDroneList();
+    void updateDroneList(DroneStatus s);
     void onMapLoaded();
     void onMapFailedToLoad();
 };
