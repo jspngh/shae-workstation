@@ -38,8 +38,6 @@ public:
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
-public slots:
-
     void saveSearch(Search search);
     void saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId);
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
@@ -48,6 +46,7 @@ public slots:
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
     void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
 
+public slots:
 
 private:
     QSqlDatabase projectShaeDatabase;

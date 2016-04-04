@@ -27,6 +27,7 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create controllers
     pathLogicController = new SimplePathAlgorithm();
+    persistenceController = new PersistenceController(mediator);
 }
 
 Controller::~Controller()
@@ -36,8 +37,8 @@ Controller::~Controller()
     droneThread.wait();
     pathLogicThread.quit();
     pathLogicThread.wait();
-    // persistenceThread.quit();
-    // persistenceThread.wait();
+    persistenceThread.quit();
+    persistenceThread.wait();
 
     delete mediator;
 
@@ -65,14 +66,14 @@ void Controller::init()
     // NOTE: all the drones are placed in the same thread (TODO: make thread for every drone)
 
     // detectionController->moveToThread(&detectorThread);
-    // persistenceController->moveToThread(&persistenceThread);
+    persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
     for (int i = 0; i < drones.size(); i++)
         drones[i]->moveToThread(&droneThread);
 
     // start all the threads
     //detectionController->start();
-    // persistenceThread.start();
+    persistenceThread.start();
 }
 
 

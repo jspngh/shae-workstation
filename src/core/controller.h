@@ -9,7 +9,7 @@
 #include "detection/detectioncontroller.h"
 #include "mediator.h"
 #include "pathlogic/simplepathalgorithm.h"
-#include "persistence/persistence.h"
+#include "persistence/persistencecontroller.h"
 #include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"
 
@@ -39,7 +39,7 @@ private:
     Mediator *mediator;
     QList<DroneModule *> drones;
 
-    Persistence *persistenceController;
+    PersistenceController *persistenceController;
     VideoController *videoController;
     DetectionController *detectionController;
     PathAlgorithm *pathLogicController;
