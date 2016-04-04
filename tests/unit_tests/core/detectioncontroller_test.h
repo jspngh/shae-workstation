@@ -8,6 +8,7 @@
 #include <string>
 #include <QThread>
 #include <QWaitCondition>
+#include <QProcess>
 #include "detection/detectioncontroller.h"
 
 class DetectionController_Test : public QObject
@@ -25,6 +26,8 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
+    QProcess *simulatorProcess;
+
     DetectionController *controller;
     int numDetections = 0; // will count the number of times the onNewDetection slot is emitted
 };

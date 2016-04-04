@@ -78,9 +78,9 @@ public:
 
     void setVisionWidth(double visionWidth);
 
-    Drone getDrone() const;
+    Drone *getDrone();
 
-    void setDrone(const Drone &value);
+    void setDrone(Drone *value);
 
     QList<QGeoCoordinate> *getWaypoints();
 
@@ -125,6 +125,9 @@ public:
     /*******************
     Signals
     *******************/
+
+    VideoController *getVideoController() const;
+    void setVideoController(VideoController *value);
 
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
@@ -172,9 +175,11 @@ private slots:
 
 
 private:
-    Drone drone; //!< model containing the data of a drone that will be stored in the database
+    Drone *drone; //!< model containing the data of a drone that will be stored in the database
 
     Controller *controller;
+
+    VideoController * videoController;
 
     DroneHeartBeatReceiver *heartbeatReceiver;
 

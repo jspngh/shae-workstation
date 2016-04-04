@@ -8,11 +8,11 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase()
 {
+
     Search *s = new Search();
     s->setHeight(3);
     s->setGimbalAngle(65);
     s->setFpsProcessing(2);
-
     Mediator *m;
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
@@ -33,14 +33,15 @@ void DetectionController_Test::testProcessSequence()
     //indicate that the stream has stopped (the controller should finish analyzing all the frames)
     this->controller->streamFinished();
     //check if the controller has signalled detections in the past 10s
-    QThread::sleep(10);
+    this->controller->wait();
     int count = this->controller->getNrDetections();
+
     QVERIFY(count > 1);
 }
 
 void DetectionController_Test::cleanupTestCase()
 {
-    this->controller->wait();
+
     delete this->controller;
 
 }

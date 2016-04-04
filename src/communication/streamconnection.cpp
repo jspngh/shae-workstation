@@ -29,6 +29,7 @@ void StreamConnection::onStreamRequest()
 
     if (!socket.waitForConnected(Timeout)) {
         emit streamError(socket.error(), socket.errorString());
+        qDebug() << "StreamConnection failed at " << droneIpAddress << ":" << streamPort;
         return;
     }
 

@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QDebug>
+
 #include <QWaitCondition>
 #include "core/mediator.h"
 

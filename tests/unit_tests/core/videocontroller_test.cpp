@@ -8,6 +8,18 @@ VideoController_Test::VideoController_Test(QObject *parent) : QObject(parent)
 
 void VideoController_Test::initTestCase()
 {
+    QString program = "python";
+    QStringList arguments;
+    qDebug() << "opening simulator";
+    arguments << "../../../drone/simulator/src/simulator.py";
+    simulatorProcess = new QProcess(this);
+    qDebug() << "simulator opened";
+    simulatorProcess->start(program, arguments);
+    QThread::sleep(5);
+    streamConnection = new StreamConnection("127.0.0.1", 5502);
+    streamConnection->onStreamRequest();
+    QThread::sleep(1);
+
     this->started = false;
     this->stopped = false;
 
@@ -31,22 +43,19 @@ void VideoController_Test::testCreateFile()
 {
     bool fileExists = false;
     Drone *drone = new Drone();
-    drone->setStreamPath("rtp://127.0.0.1:5000");
-
+    drone->setStreamPath(QString("rtp://127.0.0.1:5000"));
     qDebug("opening the stream");
     emit this->startStream(drone);
     QThread::sleep(10);
     qDebug("testing if stream was successfully captured");
-
     emit this->stopStream(drone);
-
-    if (FILE *file = fopen("dependencies/drone_stream.mpg", "r")) {
-        std::ifstream in("dependencies/drone_stream.mpg", std::ifstream::ate | std::ifstream::binary);
-        std::ifstream::pos_type size = in.tellg();
-        if (size > 10) { //header file should not be taken into account
+    QFile droneFile("dependencies/drone_stream.mpg");
+    if (droneFile.open(QIODevice::ReadOnly)){
+        int size = droneFile.size();  //when file does open.
+        if(size>10){
             fileExists = true;
         }
-        std::remove("dependencies/drone_stream.mpg"); // delete file
+        droneFile.close();
     }
 
     QVERIFY(fileExists && this->started && this->stopped);
@@ -62,7 +71,10 @@ void VideoController_Test::onStreamStopped()
 }
 void VideoController_Test::cleanupTestCase()
 {
-
+    streamConnection->stopConnection();
+    simulatorProcess->close();
+    delete simulatorProcess;
+    delete streamConnection;
 }
 
 

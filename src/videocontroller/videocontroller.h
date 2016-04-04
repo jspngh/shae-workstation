@@ -3,6 +3,11 @@
 
 #include <QObject>
 #include <QUuid>
+#include <QFile>
+#include <QDebug>
+#include <QThread>
+#include <unistd.h>
+#include <stdio.h>
 #include <iostream>
 #include <mutex>
 #include <opencv2/highgui/highgui.hpp>
@@ -22,13 +27,14 @@ public:
     VideoController(QObject *parent = 0);
     ~VideoController() {}
 
+
 public slots:
     /*!
      * \brief onStartStream() is a slot that listens to a signal to start the stream. The inputfile is used to start the stream.
      * This string can either contain an rtp address (formatted as rtp://XXX.XXX.XXX.XXX) or as an sdp file (formatted as xxx.sdp)
      * As this slot is non-blocking, the VideoSequence is both emitted and returned
      */
-    VideoSequence onStartStream(Drone *drone);
+    VideoSequence onStartStream(Drone * drone);
     /*!
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
      */
