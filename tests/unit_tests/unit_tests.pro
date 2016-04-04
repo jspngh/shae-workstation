@@ -32,6 +32,7 @@ HEADERS += \
     core/databasecreator.h\
     core/videocontroller_test.h \
     core/mediator_test.h \
+    core/generaldao_test.h \
     core/pathalgorithm_test.h
 
 SOURCES += \
@@ -50,6 +51,7 @@ SOURCES += \
     core/databasecreator.cpp \
     core/videocontroller_test.cpp \
     core/mediator_test.cpp \
+    core/generaldao_test.cpp \
     core/pathalgorithm_test.cpp
 
 
