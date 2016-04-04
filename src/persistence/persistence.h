@@ -41,7 +41,7 @@ public:
 public slots:
 
     void saveSearch(Search search);
-    void saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId);
+    void saveDroneStatus(DroneStatus droneStatus);
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
     void saveDrone(Drone drone);
     //will register a videosequence in the database (already saved in location)
@@ -57,6 +57,8 @@ private:
     DroneStatusDAO dronestatusdao;
     SearchDAO searchdao;
     VideoSequenceDAO videosequencedao;
+
+    QUuid currentSearchID;
 
     //! \brief Initializes the database (sets the projectShaeDatabase-property).
     void initDatabase();

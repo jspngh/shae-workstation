@@ -2,6 +2,9 @@
 #define CONTROLLER_H
 
 #include <QList>
+#include <QDebug>
+
+#include "mediator.h"
 #include <QThread>
 #include "communication/droneconnection.h"
 #include "communication/droneheartbeatreceiver.h"
@@ -28,8 +31,18 @@ public:
     Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
+    void initStream(DroneModule* d);
+    void stopStream(DroneModule* d);
+
     Mediator *getMediator() const;
-    QList<DroneModule *> getDrones() const;
+    QList<DroneModule *> *getDrones();
+    void setDrones(QList<DroneModule *>* list);
+
+    Search *getSearch() const;
+    DetectionController *getDetectionController() const;
+
+
+
     QString getWorkstationIP() const;
     //void setWorkstationIP(const QString &value);
 
@@ -37,12 +50,12 @@ private:
     QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<DroneModule *> drones;
+    QList<DroneModule *>* drones;
 
     Persistence *persistenceController;
-    VideoController *videoController;
     DetectionController *detectionController;
     PathAlgorithm *pathLogicController;
+    Search* search;
 
     QThread pathLogicThread;
     QThread droneThread;

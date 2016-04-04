@@ -22,15 +22,15 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
                   "orientation, cameraAngle, speed, selectedSpeed, height, "
                   "selectedHeight, batteryLevel, fps, resolution,"
                   "heartbeat, droneState, manufacturer, droneType, "
-                  "nextWaypointLongitude, nextWaypointLatitude, previousWaypointLongitude,"
-                  " previousWaypointLatitude, nextWaypoints) "
+                  "nextWaypointLongitude, nextWaypointLatitude, previousWaypointOrder,"
+                  "nextWaypoints) "
                   "VALUES (:searchID, :droneID, :timestampDrone,"
                   ":timestampReceivedWorkstation, :latitude, :longitude,"
                   ":orientation, :cameraAngle, :speed, :selectedSpeed, :height, "
                   ":selectedHeight, :batteryLevel, :fps, :resolution,"
                   ":heartbeat, :droneState, :manufacturer, :droneType, "
-                  ":nextWaypointLongitude, :nextWaypointLatitude, :previousWaypointLongitude,"
-                  " :previousWaypointLatitude, :nextWaypoints) ");
+                  ":nextWaypointLongitude, :nextWaypointLatitude, :previousWaypointOrder,"
+                  ":nextWaypoints) ");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     query.bindValue(":timestampDrone", droneStatus.getTimestampDrone());
@@ -53,8 +53,7 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
     query.bindValue(":droneType", droneStatus.getType());
     query.bindValue(":nextWaypointLongitude", droneStatus.getNextWaypoint().longitude());
     query.bindValue(":nextWaypointLatitude", droneStatus.getNextWaypoint().latitude());
-    query.bindValue(":previousWaypointLongitude", droneStatus.getPreviousWaypoint().longitude());
-    query.bindValue(":previousWaypointLatitude", droneStatus.getPreviousWaypoint().latitude());
+    query.bindValue(":previousWaypointOrder", droneStatus.getPreviousWaypointOrder());
 
     std::ostringstream os;
 
@@ -86,7 +85,7 @@ QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid se
     if (query.exec()) {
         while (query.next()) {
             if (begin <= query.value(2).toDateTime() && query.value(2).toDateTime() <= end) {
-                QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(23).toString());
+                QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(22).toString());
                 DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
                                                  QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble()),
                                                  query.value(6).toDouble(), query.value(7).toDouble(), query.value(8).toDouble() ,
@@ -95,7 +94,7 @@ QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid se
                                                  query.value(15).toBool(), query.value(16).toInt(), query.value(17).toString(),
                                                  query.value(18).toString(),
                                                  QGeoCoordinate(query.value(20).toDouble(), query.value(19).toDouble()),
-                                                 QGeoCoordinate(query.value(22).toDouble(), query.value(21).toDouble()),
+                                                 query.value(21).toInt(),
                                                  nextWaypoints);
                 returnList.append(output);
             }
@@ -117,7 +116,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
     query.bindValue(":droneID", droneId);
     if (query.exec()) {
         while (query.next()) {
-            QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(23).toString());
+            QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(22).toString());
             DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
                                              QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble()),
                                              query.value(6).toDouble(), query.value(7).toDouble(), query.value(8).toDouble() ,
@@ -126,7 +125,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
                                              query.value(15).toBool(), query.value(16).toInt(), query.value(17).toString(),
                                              query.value(18).toString(),
                                              QGeoCoordinate(query.value(20).toDouble(), query.value(19).toDouble()),
-                                             QGeoCoordinate(query.value(22).toDouble(), query.value(21).toDouble()),
+                                             query.value(21).toInt(),
                                              nextWaypoints);
             returnList.append(output);
         }
@@ -148,7 +147,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId,
     if (query.exec()) {
         while (query.next()) {
             if (query.value(2).toDateTime() < time) {
-                QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(23).toString());
+                QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(22).toString());
                 DroneStatus output = DroneStatus(query.value(2).toDateTime(), query.value(3).toDateTime(),
                                                  QGeoCoordinate(query.value(4).toDouble(), query.value(5).toDouble()),
                                                  query.value(6).toDouble(), query.value(7).toDouble(), query.value(8).toDouble() ,
@@ -157,7 +156,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId,
                                                  query.value(15).toBool(), query.value(16).toInt(), query.value(17).toString(),
                                                  query.value(18).toString(),
                                                  QGeoCoordinate(query.value(20).toDouble(), query.value(19).toDouble()),
-                                                 QGeoCoordinate(query.value(22).toDouble(), query.value(21).toDouble()),
+                                                 query.value(21).toInt(),
                                                  nextWaypoints);
                 returnList.append(output);
             }

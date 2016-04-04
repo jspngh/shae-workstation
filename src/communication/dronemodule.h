@@ -21,7 +21,7 @@ class Controller;
 class Search;
 
 enum RequestedDroneStatus {
-    Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
+    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
 };
 enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
@@ -78,9 +78,9 @@ public:
 
     void setVisionWidth(double visionWidth);
 
-    Drone getDrone() const;
+    Drone *getDrone();
 
-    void setDrone(const Drone &value);
+    void setDrone(Drone *value);
 
     QList<QGeoCoordinate> *getWaypoints();
 
@@ -125,6 +125,9 @@ public:
     /*******************
     Signals
     *******************/
+
+    VideoController *getVideoController() const;
+    void setVideoController(VideoController *value);
 
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
@@ -172,9 +175,11 @@ private slots:
 
 
 private:
-    Drone drone; //!< model containing the data of a drone that will be stored in the database
+    Drone *drone; //!< model containing the data of a drone that will be stored in the database
 
     Controller *controller;
+
+    VideoController * videoController;
 
     DroneHeartBeatReceiver *heartbeatReceiver;
 
