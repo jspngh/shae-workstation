@@ -5,9 +5,10 @@
 #include <QStackedWidget>
 #include <QMMapView.h>
 #include <QMMapIcon.h>
+#include "overviewdroneitem.h"
+#include "communication/dronemodule.h"
 #include "core/mediator.h"
 #include "models/search.h"
-#include "communication/dronemodule.h"
 
 namespace Ui {
 class OverviewWidget;
@@ -25,12 +26,14 @@ public:
 private:
     QMMapView *mapView;
     Ui::OverviewWidget *ui;
+    Search *search;
     Mediator *mediator;
 
 private slots:
     void clickButtonPush();
     void backButtonPush();
     void onSearchStarted(Search *s);
+    void fillDroneList();
     void onMapLoaded();
     void onMapFailedToLoad();
 };

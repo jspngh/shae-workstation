@@ -34,6 +34,7 @@ void OverviewWidget::backButtonPush()
 
 void OverviewWidget::onSearchStarted(Search *s)
 {
+    this->search = s;
     mapView = new QMMapView(QMMapView::Satellite,
                             s->getArea().center(),
                             11,
@@ -45,13 +46,24 @@ void OverviewWidget::onSearchStarted(Search *s)
             this, SLOT(onMapLoaded()));
 }
 
+void OverviewWidget::fillDroneList()
+{
+    Q_FOREACH(DroneModule *drone, search->getDroneList()) {
+        OverviewDroneItem *droneItem = new OverviewDroneItem(drone);;
+        QListWidgetItem *item = new QListWidgetItem();
+        ui->droneList->addItem(item);
+        ui->droneList->setItemWidget(item, droneItem);
+    }
+}
+
 void OverviewWidget::onMapLoaded()
 {
+    mapView->fitRegion(search->getArea());
+
     QMMapIcon droneIcon("qrc:///ui/img/map/drone-icon");
-    /* mapView->fitRegion(s->getArea()); */
-    /* Q_FOREACH(DroneModule *drone, s->getDroneList()) { */
+    Q_FOREACH(DroneModule *drone, search->getDroneList()) {
         mapView->addMarker("drones", 1, mapView->center(), droneIcon);
-    /* } */
+    }
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);
     ui->mapLoadingLabel->hide();

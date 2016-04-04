@@ -5,12 +5,10 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QStackedWidget>
-
 #include "ui_mainwindow.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
-
 
 class MainWindow : public QMainWindow
 {
@@ -31,3 +29,4 @@ private:
 };
 
 #endif // MAINWINDOW_H
+
