@@ -1,6 +1,6 @@
 #include "QMMapIcon.h"
 
-QMMapIcon::QMMapIcon(QString resource, QObject *parent)
+QMMapIcon::QMMapIcon(const QString resource, QObject *parent)
     : QObject(parent)
 {
     this->resource = resource;
@@ -14,25 +14,22 @@ QMMapIcon::~QMMapIcon()
 {
 }
 
-void QMMapIcon::setSize(int width, int height)
+void QMMapIcon::setSize(const int width, const int height)
 {
-    size.first = width;
-    size.second = height;
+    size = QSize(width, height);
 }
 
-void QMMapIcon::setOrigin(int x, int y)
+void QMMapIcon::setOrigin(const int x, const int y)
 {
-    origin.first = x;
-    origin.second = y;
+    origin = QPoint(x, y);
 }
 
-void QMMapIcon::setAnchor(int x, int y)
+void QMMapIcon::setAnchor(const int x, const int y)
 {
-    anchor.first = x;
-    anchor.second = y;
+    anchor = QPoint(x, y);
 }
 
-QString QMMapIcon::toJsObject()
+QString QMMapIcon::toJsObject() const
 {
     QString format = QString("{ \
         url: \"%1\", \
@@ -43,8 +40,8 @@ QString QMMapIcon::toJsObject()
 
     return format
         .arg(resource)
-        .arg(size.first).arg(size.second)
-        .arg(origin.first).arg(origin.second)
-        .arg(anchor.first).arg(anchor.second);
+        .arg(size.width()).arg(size.height())
+        .arg(origin.x()).arg(origin.y())
+        .arg(anchor.x()).arg(anchor.y());
 }
 

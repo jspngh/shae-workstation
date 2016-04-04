@@ -2,8 +2,9 @@
 #define QMMAPICON_H
 
 #include <QObject>
+#include <QPoint>
+#include <QSize>
 #include <QString>
-#include <QPair>
 
 /*!
  * \note (0,0) is topleft of the icon.
@@ -14,19 +15,19 @@ class QMMapIcon : public QObject
 
 private:
     QString resource;
-    QPair<int, int> size;
-    QPair<int, int> origin;
-    QPair<int, int> anchor;
+    QSize size;
+    QPoint origin;
+    QPoint anchor;
 
 public:
-    QMMapIcon(QString resource, QObject *parent = 0);
+    QMMapIcon(const QString resource, QObject *parent = 0);
     ~QMMapIcon();
 
-    void setSize(int width, int height);
-    void setOrigin(int x, int y);
-    void setAnchor(int x, int y);
+    void setSize(const int width, const int height);
+    void setOrigin(const int x, const int y);
+    void setAnchor(const int x, const int y);
 
-    QString toJsObject();
+    QString toJsObject() const;
 };
 
 #endif // QMMAPICON_H
