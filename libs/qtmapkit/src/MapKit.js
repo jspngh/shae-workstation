@@ -165,11 +165,15 @@
     };
 
     MapKit.prototype.panToBounds = function(north, south, east, west) {
-        this.map.panToBounds(boundsFromCoordinates(north, south, east, west));
+        this.map.panToBounds(
+          this.boundsFromCoordinates(north, south, east, west)
+        );
     };
 
     MapKit.prototype.fitBounds = function(north, south, east, west) {
-        this.map.fitBounds(boundsFromCoordinates(north, south, east, west));
+        this.map.fitBounds(
+          this.boundsFromCoordinates(north, south, east, west)
+        );
     };
 
     // Helper method
