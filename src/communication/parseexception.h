@@ -11,6 +11,11 @@ class ParseException: public std::exception
 public:
     ParseException(QString error, QString message);
     virtual const char *what() const throw();
+
+    QString getError() const;
+
+    QString getMessageThatFailedToParse() const;
+
 private:
     QString messageThatFailedToParse = "Something went wrong during parsing of a message";
     QString error;

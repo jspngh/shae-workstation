@@ -294,7 +294,7 @@ Status messages method
 **************************/
 QJsonDocument DroneModule::requestStatus()
 {
-    qDebug() << "DroneModule::requestStatus";
+    //qDebug() << "DroneModule::requestStatus";
     // Create json message to request all statuses
     QJsonObject json = QJsonObject();
 
@@ -336,8 +336,8 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
         case Drone_Type:
             key = "drone_type";
             break;
-        case Waypoint_Reached:
-            key = "waypoint_reached";
+        case Waypoint_Order:
+            key = "waypoint_order";
             break;
         case Speed:
             key = "speed";
@@ -412,7 +412,7 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int por
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
     config["ip_address"] = ipAdress;
-    config["port"] = QString::number(port);
+    config["port"] = port;
     json["configuration"] = config;
     QJsonDocument jsondoc(json);
 

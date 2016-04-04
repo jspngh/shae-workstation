@@ -1,7 +1,7 @@
 #include "persistence.h"
 #include <QDir>
 #include <QFileInfo>
-#include <QDebug>
+#include <QtDebug>
 #include <QStandardPaths>
 #include <QSqlQuery>
 

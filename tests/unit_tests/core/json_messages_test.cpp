@@ -68,7 +68,16 @@ void Json_Messages_Test::testStatusMessages()
     list.push_back(Battery_Level);
     list.push_back(Location);
     list.push_back(Drone_Type);
-    list.push_back(Waypoint_Reached);
+    list.push_back(Waypoint_Order);
+    list.push_back(Next_Waypoint);
+    list.push_back(Next_Waypoints);
+    list.push_back(Speed);
+    list.push_back(Selected_Speed);
+    list.push_back(Height);
+    list.push_back(Selected_Height);
+    list.push_back(Camera_Angle);
+    list.push_back(FPS);
+    list.push_back(Resolution);
 
     QJsonDocument jsondoc = drone->requestStatuses(list);
     usleep(1000);
@@ -79,7 +88,18 @@ void Json_Messages_Test::testStatusMessages()
     QVERIFY(message.at(0).toObject()["key"] == QString("battery_level"));
     QVERIFY(message.at(1).toObject()["key"] == QString("current_location"));
     QVERIFY(message.at(2).toObject()["key"] == QString("drone_type"));
-    QVERIFY(message.at(3).toObject()["key"] == QString("waypoint_reached"));
+    QVERIFY(message.at(3).toObject()["key"] == QString("waypoint_order"));
+    QVERIFY(message.at(4).toObject()["key"] == QString("next_waypoint"));
+    QVERIFY(message.at(5).toObject()["key"] == QString("next_waypoints"));
+    QVERIFY(message.at(6).toObject()["key"] == QString("speed"));
+    QVERIFY(message.at(7).toObject()["key"] == QString("selected_speed"));
+    QVERIFY(message.at(8).toObject()["key"] == QString("height"));
+    QVERIFY(message.at(9).toObject()["key"] == QString("selected_height"));
+    QVERIFY(message.at(10).toObject()["key"] == QString("camera_angle"));
+    QVERIFY(message.at(11).toObject()["key"] == QString("fps"));
+    QVERIFY(message.at(12).toObject()["key"] == QString("resolution"));
+
+
 
     //Also test if just 1 status is sent
     jsondoc = drone->requestStatus(Location);
@@ -88,6 +108,20 @@ void Json_Messages_Test::testStatusMessages()
     QVERIFY(json["message_type"] == QString("status"));
     message = json["message"].toArray();
     QVERIFY(message.at(0).toObject()["key"] == QString("current_location"));
+
+    //Also test if all statusses are asked
+    jsondoc = drone->requestStatus();
+    usleep(1000);
+    json = jsondoc.object();
+    QVERIFY(json["message_type"] == QString("status"));
+    QVERIFY(json["message"] == QString("all_statuses"));
+
+    //Also test reqeustHeartbeat message
+    jsondoc = drone->requestHeartbeat();
+    usleep(1000);
+    json = jsondoc.object();
+    QVERIFY(json["message_type"] == QString("status"));
+    QVERIFY(json["message"] == QString("heartbeat"));
 }
 
 void Json_Messages_Test::testSettingsMessages()
@@ -131,5 +165,15 @@ void Json_Messages_Test::testSettingsMessages()
     message = json["message"].toArray();
     QVERIFY(message.at(0).toObject()["key"] == QString("fps"));
     QVERIFY(message.at(0).toObject()["value"].toInt() == 60);
+
+    //test setWorkstationConfiguration
+    jsondoc = drone->setWorkstationConfiguration("127.0.0.1", 5555);
+    usleep(1000);
+    json = jsondoc.object();
+    QVERIFY(json["message_type"] == QString("settings"));
+    QVERIFY(json["message"] == QString("workstation_config"));
+    QJsonObject config = json["configuration"].toObject();
+    QVERIFY(config["ip_address"] == QString("127.0.0.1"));
+    QVERIFY(config["port"] == 5555);
 
 }
