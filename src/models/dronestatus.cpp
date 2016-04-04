@@ -89,7 +89,7 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     //not a Json message
 
     if (!jsondoc.isObject()) {
-        qDebug() << "Not a Json object";
+        //qDebug() << "Not a Json object";
         throw ParseException("Not a Json object", string);
     }
     QJsonObject json = jsondoc.object();
@@ -97,61 +97,75 @@ DroneStatus DroneStatus::fromJsonString(QString string)
 
     //not a status message
     if (messageType != "status") {
-        qDebug() << "Not a status message";
+        //qDebug() << "Not a status message";
         throw ParseException("Not a status message", string);
     }
     QJsonValue value = json["orientation"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setOrientation(value.toDouble());
     }
     value = json["camera_angle"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setCameraAngle(value.toDouble());
     }
     value = json["speed"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setSpeed(value.toDouble());
     }
     value = json["selected_speed"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setSelectedSpeed(value.toDouble());
     }
     value = json["battery_level"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setBatteryLevel(value.toDouble());
     }
     value = json["drone_state"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setDroneState(value.toInt());
     }
     value = json["fps"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setFps(value.toInt());
     }
     value = json["heartbeat"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setHeartbeat(value.toBool());
     }
     value = json["manufacturer"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setManufacturer(value.toString());
     }
     value = json["type"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setType(value.toString());
     }
+
+    value = json["height"];
+    if (! value.isNull()) {
+        status.setHeight(value.toDouble());
+    }
+    value = json["selected_height"];
+    if (! value.isNull()) {
+        status.setSelectedHeight(value.toDouble());
+    }
+    value = json["resolution"];
+    if (! value.isNull()) {
+        status.setResolution(value.toInt());
+    }
+
     value = json["current_location"];
-    if (! value.isUndefined() && value.isObject()) {
+    if (! value.isNull() && value.isObject()) {
         QJsonObject position = value.toObject();
         status.setCurrentLocation(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
     }
     value = json["next_waypoint"];
-    if (! value.isUndefined() && value.isObject()) {
+    if (! value.isNull() && value.isObject()) {
         QJsonObject position = value.toObject();
         status.setNextWaypoint(QGeoCoordinate(position["latitude"].toDouble(), position["longitude"].toDouble()));
     }
     value = json["next_waypoints"];
-    if (! value.isUndefined() && value.isArray()) {
+    if (! value.isNull() && value.isArray()) {
         QList<QGeoCoordinate> list = QList<QGeoCoordinate>();
         QJsonArray positions = value.toArray();
         for (auto v : positions) {
@@ -161,11 +175,11 @@ DroneStatus DroneStatus::fromJsonString(QString string)
         status.setNextWaypoints(list);
     }
     value = json["waypoint_order"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         status.setPreviousWaypointOrder(value.toInt());
     }
     value = json["timestamp"];
-    if (! value.isUndefined()) {
+    if (! value.isNull()) {
         QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }

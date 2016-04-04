@@ -178,23 +178,134 @@ void DroneStatus_Test::testCopyConstructor()
 
 void DroneStatus_Test::testFromJsonStringAllSet()
 {
+    DroneStatus status;
+    try{
+        //TODO: create message containing all attributes
+        status = DroneStatus::fromJsonString("{ \"message_type\": \"status\" ,"
+                                             " \"message\": \"olaaa\" ,"
+                                             " \"orientation\": 20.0 ,"
+                                             " \"camera_angle\": 60.4 ,"
+                                             " \"speed\": 3.0 ,"
+                                             " \"selected_speed\": 4.0 ,"
+                                             " \"height\": 2.0 ,"
+                                             " \"selected_height\": 5.0 ,"
+                                             " \"battery_level\": 53.8 ,"
+                                             " \"drone_state\": 1 ,"
+                                             " \"fps\": 20 ,"
+                                             " \"heartbeat\": true ,"
+                                             " \"manufacturer\": \"3dr\" ,"
+                                             " \"type\": \"solo\" ,"
+                                             " \"resolution\": 720 ,"
+                                             " \"current_location\": {"
+                                                "  \"latitude\": 23.3245,"
+                                                "  \"longitude\": 12.358959"
+                                             " } ,"
+                                             " \"next_waypoint\": {"
+                                                "  \"latitude\": 0.0,"
+                                                "  \"longitude\": 1.0"
+                                             " } ,"
+                                             " \"next_waypoints\": [{"
+                                                    " \"latitude\": 0.0,"
+                                                    " \"longitude\": 1.0"
+                                                " },"
+                                                " {"
+                                                    " \"latitude\": 2.1,"
+                                                    " \"longitude\": 1.8"
+                                                " }] ,"
+                                             " \"waypoint_order\": 2 ,"
+                                             " \"timestamp\": \"23032016214348009\" "
+                                             "}");
+    }
+    catch(ParseException e){
+        qDebug() << e.what();
+    }
+    //TODO: verify all attributes
+    QVERIFY( status.getOrientation() == 20.0);
+    QVERIFY( status.getCameraAngle() == 60.4);
+    QVERIFY( status.getSpeed() == 3.0);
+    QVERIFY( status.getSelectedSpeed() == 4.0);
+    QVERIFY( status.getHeight() == 2.0);
+    QVERIFY( status.getSelectedHeight() == 5.0);
+    QVERIFY( status.getBatteryLevel() == 53.8);
+
+    QVERIFY( status.getDroneState() == 1);
+
+    QVERIFY( status.getFps() == 20);
+    QVERIFY( status.getHeartbeat() == true);
+
+    QVERIFY( status.getManufacturer() == "3dr");
+    QVERIFY( status.getType() == "solo");
+
+    QVERIFY( status.getResolution() == 720);
+
+    QVERIFY( status.getCurrentLocation() == QGeoCoordinate(23.3245, 12.358959));
+    QVERIFY( status.getNextWaypoint() == QGeoCoordinate(0.0,1.0));
+    QList<QGeoCoordinate> next = QList<QGeoCoordinate>();
+    next.push_back(QGeoCoordinate(0.0,1.0));
+    next.push_back(QGeoCoordinate(2.1,1.8));
+    for(QGeoCoordinate coor : status.getNextWaypoints()){
+        QVERIFY(coor == next.front());
+        next.pop_front();
+    }
+    QVERIFY( status.getPreviousWaypointOrder() == 2);
+    QVERIFY( status.getTimestampDrone() == QDateTime::fromString("23032016214348009", "ddmmyyyyHHmmsszzz" ));
+    QVERIFY( status.getTimestampRecievedWorkstation() > status.getTimestampDrone());
+
+
+
 
 }
 
 
 void DroneStatus_Test::testFromJsonStringNoneSet()
 {
+    DroneStatus status;
+    try{
+        status = DroneStatus::fromJsonString("{ \"message_type\": \"status\" , \"message\": \"olaaa\" }");
+    }
+    catch(ParseException e){
+
+    }
+    QVERIFY( status.getBatteryLevel() == -1.0);
+    QVERIFY( status.getCameraAngle() == -1);
+    QVERIFY( status.getDroneState() == -1);
+    QVERIFY( status.getFps() == -1);
+    QVERIFY( status.getHeartbeat() == false);
+    QVERIFY( status.getHeight() == -1);
+    QVERIFY( status.getManufacturer() == "");
+    QVERIFY( status.getType() == "");
+    QVERIFY( status.getOrientation() == -1);
+    QVERIFY( status.getResolution() == -1);
+    QVERIFY( status.getSelectedHeight() == -1);
+    QVERIFY( status.getSelectedSpeed() == -1);
+    QVERIFY( status.getSpeed() == -1);
 
 }
 
 void DroneStatus_Test::testParseExceptionNotJson()
 {
-
+    int count = 0;
+    try{
+        DroneStatus status = DroneStatus::fromJsonString("This is not a Json string");
+    }
+    catch(ParseException e){
+        if(e.getError() == "Not a Json object" )
+            count++;
+    }
+    QVERIFY(count == 1);
 }
 
 void DroneStatus_Test::testParseExceptionNotStatus()
 {
-
+    int count = 0;
+    try{
+        DroneStatus status = DroneStatus::fromJsonString("{ \"message_type\": \"setting\" , \"message\": \"olaaa\" }");
+    }
+    catch(ParseException e){
+        if(e.getError() == "Not a status message")
+            count++;
+    }
+    QVERIFY(count == 1);
 }
 
 
