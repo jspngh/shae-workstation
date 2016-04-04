@@ -48,7 +48,6 @@ void VideostreamDetection_Test::cleanupTestCase()
 void VideostreamDetection_Test::VideostreamDetectionTest()
 {
 
-    controller->getDrones()->first()->getStream();
     //assume that after 5 seconds, the drone is at the correct waypoint.
     QThread::sleep(5);
     qDebug() << "initialisation of stream";
