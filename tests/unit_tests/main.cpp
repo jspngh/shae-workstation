@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     tests.append(new SearchDAO_Test());
 
-    //tests.append(new VideoController_Test());
+    tests.append(new VideoController_Test());
     tests.append(new DetectionController_Test());
 
     tests.append(new DetectionResultDAO_Test());

@@ -8,21 +8,26 @@ VideoController_Test::VideoController_Test(QObject *parent) : QObject(parent)
 
 void VideoController_Test::initTestCase()
 {
-    QString program = "python";
+    QString program = "python2";
     QStringList arguments;
     qDebug() << "opening simulator";
     arguments << "../../../drone/simulator/src/simulator.py";
     simulatorProcess = new QProcess(this);
     qDebug() << "simulator opened";
     simulatorProcess->start(program, arguments);
-    QThread::sleep(5);
+    QThread::sleep(10);
+
     streamConnection = new StreamConnection("127.0.0.1", 5502);
-    streamConnection->onStreamRequest();
+    streamThread = new QThread();
+    streamConnection->moveToThread(streamThread);
+    streamThread->start();
     QThread::sleep(1);
 
     this->started = false;
     this->stopped = false;
 
+    QObject::connect(this, &VideoController_Test::streamRequest,
+                     this->streamConnection, &StreamConnection::onStreamRequest);
 
     QObject::connect(this, &VideoController_Test::startStream,
                      &this->vc, &VideoController::onStartStream);
@@ -35,6 +40,8 @@ void VideoController_Test::initTestCase()
 
     QObject::connect(&this->vc, &VideoController::streamStopped,
                      this, &VideoController_Test::onStreamStopped);
+    emit streamRequest();
+    QThread::sleep(1);
 
 
 }
@@ -71,10 +78,12 @@ void VideoController_Test::onStreamStopped()
 }
 void VideoController_Test::cleanupTestCase()
 {
-    streamConnection->stopConnection();
+    streamConnection->getStream=false;
+    streamThread->quit();
     simulatorProcess->close();
     delete simulatorProcess;
     delete streamConnection;
+    delete streamThread;
 }
 
 

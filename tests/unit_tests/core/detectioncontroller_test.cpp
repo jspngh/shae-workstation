@@ -17,7 +17,7 @@ void DetectionController_Test::initTestCase()
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
     cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());
-    this->controller = new DetectionController(s);
+    this->controller = new DetectionController(s, footage);
     this->controller->setSequence(capture);
     QObject::connect(this->controller, &DetectionController::newDetection,
                      this, &DetectionController_Test::onNewDetection);
