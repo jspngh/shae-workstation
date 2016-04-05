@@ -43,14 +43,15 @@ public:
 
     //! This sets:
     //! visionwidth to MIN_VISIONWIDTH
-    //! serverIp to 10.1.1.10
-    //! portNr to 6330
+    //! droneIp to 10.1.1.10
+    //! controllerIp to 10.1.1.1
+    //! dronePort to 6330
+    //! streamPort to 5502
     explicit DroneModule();
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    //! DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
-    explicit DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
+    explicit DroneModule(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
 
 
     //! Copy constructor
@@ -70,9 +71,13 @@ public:
 
     QUuid getGuid() const;
 
-    int getPortNr();
+    int getDronePort();
 
-    QString getServerIp();
+    int getStreamPort();
+
+    QString getDroneIp();
+
+    QString getControllerIp();
 
     double getVisionWidth() const;
 

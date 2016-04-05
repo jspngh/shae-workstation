@@ -6,16 +6,15 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    : DroneModule(6331, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
+    : DroneModule(6331, 5502, "10.1.1.10", "10.1.1.1","sololink.sdp", MIN_VISIONWIDTH)
 {
-
 }
 
-DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
+DroneModule::DroneModule(int dataPort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth)
 {
-    drone = new Drone(dataPort, streamPort, serverIp, streamPath, visionWidth);
-    droneConnection = new DroneConnection(serverIp, (quint16) dataPort);
-    streamConnection = new StreamConnection(serverIp, (quint16) streamPort);
+    drone = new Drone(dataPort, streamPort, droneIp, controllerIp, streamPath, visionWidth);
+    droneConnection = new DroneConnection(droneIp, (quint16) dataPort);
+    streamConnection = new StreamConnection(controllerIp, (quint16) streamPort);
     connectionThread = new QThread();
     streamThread = new QThread();
     droneConnection->moveToThread(connectionThread);
@@ -109,14 +108,24 @@ QUuid DroneModule::getGuid() const
     return drone->getGuid();
 }
 
-int DroneModule::getPortNr()
+int DroneModule::getDronePort()
 {
-    return drone->getPortNr();
+    return drone->getDronePort();
 }
 
-QString DroneModule::getServerIp()
+int DroneModule::getStreamPort()
 {
-    return drone->getServerIp();
+    return drone->getStreamPort();
+}
+
+QString DroneModule::getDroneIp()
+{
+    return drone->getDroneIp();
+}
+
+QString DroneModule::getControllerIp()
+{
+    return drone->getControllerIp();
 }
 
 double DroneModule::getVisionWidth() const
@@ -404,15 +413,15 @@ QJsonDocument DroneModule::requestHeartbeat()
 Setting messages methods
 **************************/
 
-QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int port)
+QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAddress, int port)
 {
     // Create json message
     QJsonObject json = QJsonObject();
     json["message_type"] = QString("settings");
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
-    config["ip_address"] = ipAdress;
-    config["port"] = port;
+    config["ip_address"] = ipAddress;
+    config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);
 
