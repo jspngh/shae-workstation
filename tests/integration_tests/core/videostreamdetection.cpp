@@ -39,6 +39,8 @@ void VideostreamDetection_Test::cleanupTestCase()
     QFile droneFile("dependencies/drone_stream.mpg");
     droneFile.remove();
     qDebug() << "closing of simulator";
+    simulatorProcess->terminate();
+    simulatorProcess->waitForFinished();
     simulatorProcess->close();
     delete simulatorProcess;
     delete controller;

@@ -80,6 +80,8 @@ void VideoController_Test::cleanupTestCase()
 {
     streamConnection->getStream=false;
     streamThread->quit();
+    simulatorProcess->terminate();
+    simulatorProcess->waitForFinished();
     simulatorProcess->close();
     delete simulatorProcess;
     delete streamConnection;
