@@ -10,7 +10,7 @@ VideostreamDetection_Test::~VideostreamDetection_Test()
 
 void VideostreamDetection_Test::initTestCase()
 {
-    QString program = "python";
+    QString program = "python2";
     QStringList arguments;
     qDebug() << "opening simulator";
     arguments << "../../../drone/simulator/src/simulator.py";
@@ -18,7 +18,7 @@ void VideostreamDetection_Test::initTestCase()
     qDebug() << "simulator opened";
     simulatorProcess->start(program, arguments);
 
-    QThread::sleep(5);
+    QThread::sleep(10);
     MainWindow w;
     controller =  new Controller(&w);
     qDebug() << "initialisation of controller";
@@ -39,6 +39,8 @@ void VideostreamDetection_Test::cleanupTestCase()
     QFile droneFile("dependencies/drone_stream.mpg");
     droneFile.remove();
     qDebug() << "closing of simulator";
+    simulatorProcess->terminate();
+    simulatorProcess->waitForFinished();
     simulatorProcess->close();
     delete simulatorProcess;
     delete controller;

@@ -31,7 +31,6 @@ Controller::Controller(MainWindow *window, QObject *p)
     // simulator: 127.0.0.1:6330
 
     // create controllers
-    detectionController = new DetectionController(search);
     pathLogicController = new SimplePathAlgorithm();
 
 }
@@ -55,7 +54,9 @@ Controller::~Controller()
 
     // delete persistenceController;
     delete pathLogicController;
+    if(detectionController){
     delete detectionController;
+    }
 }
 
 void Controller::init()
@@ -87,22 +88,20 @@ void Controller::initStream(DroneModule* d)
     d->getStream();
     qDebug() << "Controller: stream started at drone";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
+    detectionController = new DetectionController(search, sequence.getPath());
     qDebug() << "Controller: starting to save stream";
     // allow the stream to buffer
 
     QThread::sleep(1);
     //WARNING VideoCapture needs to be performed on the main thread!
     cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
-
-    if(true){
-        qDebug() << "Controller: stream file has been succesfully opened";
-        // allow the stream to buffer
-        detectionController->setSequence(capture);
-        // start all the threads
-        // allow the stream to bufer for a second
-        QThread::sleep(1);
-        detectionController->start();
-    }
+    qDebug() << "Controller: stream file has been succesfully opened";
+    // allow the stream to buffer
+    detectionController->setSequence(capture);
+    // start all the threads
+    // allow the stream to bufer for a second
+    QThread::sleep(1);
+    detectionController->start();
 }
 
 void Controller::stopStream(DroneModule* d)
