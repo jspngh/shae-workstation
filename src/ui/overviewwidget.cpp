@@ -76,9 +76,12 @@ void OverviewWidget::onMapLoaded()
     mapView->fitRegion(search->getArea());
 
     QMMapIcon droneIcon("qrc:///ui/img/map/drone-icon");
-    Q_FOREACH(DroneModule *drone, search->getDroneList()) {
-        mapView->addMarker("drones", 1, mapView->center(), droneIcon);
-    }
+    /* Q_FOREACH(DroneModule *drone, search->getDroneList()) { */
+        QMMarker& marker = mapView->addMarker("drone1", mapView->center());
+        marker.setIcon(droneIcon);
+        marker.show();
+        marker.rotate(45);
+    /* } */
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);
     ui->mapLoadingLabel->hide();

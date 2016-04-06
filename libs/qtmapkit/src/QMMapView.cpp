@@ -17,12 +17,15 @@
  *****************************************************************************/
 
 #include "QMMapView.h"
+#include "QMMarker.h"
 #include <QHBoxLayout>
 #include <QHash>
+#include <QMap>
+#include <QString>
+#include <QtDebug>
 #include <QVariantMap>
 #include <QWebFrame>
 #include <QWebView>
-#include <QtDebug>
 
 class CustomWebPage : public QWebPage
 {
@@ -55,13 +58,14 @@ public:
     QMMapView *q_ptr;
 
     bool loaded;
-    bool selectable;
     QWebView *webView;
     struct {
         QGeoCoordinate centerCoordinate;
         QMMapView::MapType mapType;
         uint zoomLevel;
     } initialValues;
+    bool selectable;
+    QMap<QString, QMMarker*> markers;
 
     inline QWebFrame *frame() { return webView->page()->mainFrame(); }
     inline QVariant evaluateJavaScript(const QString &script,
@@ -295,16 +299,32 @@ void QMMapView::selectArea(const QGeoRectangle &area)
     d->evaluateJavaScript(js);
 }
 
-void QMMapView::addMarker(QString listName, uint markerId, QGeoCoordinate point, QMMapIcon &icon)
+QMMarker& QMMapView::addMarker(const QString markerId, const QGeoCoordinate &point)
 {
     Q_D(QMMapView);
-    QString format = QString("mapKit.getMarkerList(\"%1\").add(%2, %3, %4, %5);");
+    QString format = QString("mapKit.addMarker(\"%1\", %2, %3);");
     QString js = format
-        .arg(listName)
         .arg(markerId)
-        .arg(point.latitude()).arg(point.longitude())
-        .arg(icon.toJsObject());
+        .arg(point.latitude()).arg(point.longitude());
     d->evaluateJavaScript(js);
+
+    d->markers[markerId] = new QMMarker(markerId, point, d->frame(), this);
+    return getMarker(markerId);
+}
+
+QMMarker& QMMapView::getMarker(const QString markerId)
+{
+    Q_D(QMMapView);
+    return *(d->markers.value(markerId));
+}
+
+void QMMapView::removeMarker(const QString markerId)
+{
+    Q_D(QMMapView);
+    QString js = QString("mapKit.removeMarker(\"%1\");").arg(markerId);
+    d->evaluateJavaScript(js);
+    QMMarker *removedMarker = d->markers.take(markerId);
+    delete removedMarker;
 }
 
 void QMMapView::jsRegionChangedTo(qreal north, qreal south,
@@ -362,9 +382,9 @@ void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
                                       qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
+        QGeoCoordinate(topLeftLat, topLeftLong),
+        QGeoCoordinate(bottomRightLat, bottomRightLong)
+    );
     emit selectedAreaCreated(selectedArea);
 }
 
