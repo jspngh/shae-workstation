@@ -4,7 +4,6 @@
 #include <QListWidgetItem>
 #include <QMap>
 #include <QMMarker.h>
-#include <QMMapIcon.h>
 #include <QMMapView.h>
 #include <QStackedWidget>
 #include <QUuid>

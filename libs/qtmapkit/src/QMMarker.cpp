@@ -12,7 +12,6 @@ public:
     ~QMMarkerPrivate() {}
     QMMarker *q_ptr;
 
-
     QWebFrame *frame;
     QString id;
     QGeoCoordinate location;
@@ -64,11 +63,20 @@ void QMMarker::rotate(const int degrees)
     );
 }
 
-void QMMarker::setIcon(const QMMapIcon &icon)
+void QMMarker::scale(const int width, const int height)
 {
     Q_D(QMMarker);
-    d->evaluateMethod(QString("setIcon(%1)")
-        .arg(icon.toJsObject())
+    d->evaluateMethod(QString("scale(%1, %2)")
+        .arg(width)
+        .arg(height)
+    );
+}
+
+void QMMarker::setIcon(const QString resource)
+{
+    Q_D(QMMarker);
+    d->evaluateMethod(QString("setIcon(\"%1\")")
+        .arg(resource)
     );
 }
 

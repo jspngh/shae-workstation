@@ -16,7 +16,6 @@ UI_DIR = $$PWD/build/
 SOURCES += \
     $$PWD/src/QMMapView.cpp \
     $$PWD/src/QMMarker.cpp \
-    $$PWD/src/QMMapIcon.cpp \
     $$PWD/src/EmptyAreaException.cpp
 
 HEADERS += \
@@ -24,7 +23,6 @@ HEADERS += \
     $$PWD/src/qtmapkit_global.h \
     $$PWD/src/QMMapView.h \
     $$PWD/src/QMMarker.h \
-    $$PWD/src/QMMapIcon.h \
     $$PWD/src/EmptyAreaException.h
 
 RESOURCES += \

@@ -12,6 +12,8 @@
         this.map = map;
         this.canvas = document.createElement("canvas");
         this.imageData = null;
+        this.image;
+        this.drawCallbacks = [];
 
         var location;
         if(locationLat && locationLng)
@@ -43,32 +45,60 @@
      *                         will lead to a clockwise rotation.
      */
     Marker.prototype.rotate = function(degrees) {
-        var self = this;
         if(!this.imageData) return;
 
-        var img = document.createElement("img");
-        img.src = this.imageData;
-        img.onload = function() {
-            self.canvas.width = img.width;
-            self.canvas.height = img.height;
-
-            var context = self.canvas.getContext("2d");
-            context.translate(self.canvas.width/2, self.canvas.height/2);
+        var self = this;
+        this.drawCallbacks.push(function(context, image) {
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+            context.translate(context.canvas.width/2, context.canvas.height/2);
             context.rotate(degrees * Math.PI / 180);
-            context.drawImage(img, -(img.width)/2, -(img.height)/2);
+            context.drawImage(image, -(image.width)/2, -(image.height)/2);
+        });
+        this.setMarkerIcon();
+    };
 
-            self.setIcon(self.canvas.toDataURL("image/png"));
-        };
+    Marker.prototype.scale = function(width, height) {
+        if(!this.imageData) return;
+
+        var self = this;
+        this.drawCallbacks.push(function(context, image) {
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+            context.translate(context.canvas.width/2, context.canvas.height/2);
+            context.scale(width, height);
+            context.drawImage(image, -(image.width)/2, -(image.height)/2);
+        });
+        this.setMarkerIcon();
     };
 
     /* Set the marker's icon
      * @param {string} image The data-uri representing the image.
-     * @param {object} [size] The preferredsize of the icon (should contain
-     *                        both a width and height-property).
      */
-    Marker.prototype.setIcon = function(image, size) {
-        this.imageData = image.url;
-        this.marker.setIcon(image);
+    Marker.prototype.setIcon = function(image) {
+        var self = this;
+        this.imageData = image;
+        this.drawCallbacks.push(function(context, image) {
+            context.drawImage(image, 0, 0);
+        });
+        this.setMarkerIcon(true);
+    };
+
+    // Private helper method
+    Marker.prototype.setMarkerIcon = function(init) {
+        var self = this;
+        var img = this.image || new Image();
+        img.addEventListener("load", function() {
+            if(init) {
+                self.canvas.width = img.width;
+                self.canvas.height = img.height;
+            }
+
+            var context = self.canvas.getContext("2d");
+            context.save();
+            self.drawCallbacks.shift()(context, img);
+            context.restore();
+            self.marker.setIcon(self.canvas.toDataURL("image/png"));
+        }, true);
+        img.src = this.imageData;
     };
 
     /* Remove the marker from the map.
