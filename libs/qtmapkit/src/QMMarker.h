@@ -52,7 +52,7 @@ public slots:
      * \param width The scale of the new width.
      * \param height The scale of the new height.
      */
-    void scale(const int width, const int height);
+    void scale(const double width, const double height);
 
     /*!
      * Sets the markers icon.

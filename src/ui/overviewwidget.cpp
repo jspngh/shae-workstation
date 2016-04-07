@@ -79,8 +79,8 @@ void OverviewWidget::onMapLoaded()
         QMMarker& marker = mapView->addMarker("drone1", mapView->center());
         marker.setIcon("qrc:///ui/img/map/drone-icon");
         marker.show();
-        marker.rotate(45);
-        /* marker.scale(0.5, 0.5); */
+        marker.scale(0.5, 0.5);
+        marker.rotate(20);
     /* } */
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);

@@ -63,7 +63,7 @@ void QMMarker::rotate(const int degrees)
     );
 }
 
-void QMMarker::scale(const int width, const int height)
+void QMMarker::scale(const double width, const double height)
 {
     Q_D(QMMarker);
     d->evaluateMethod(QString("scale(%1, %2)")

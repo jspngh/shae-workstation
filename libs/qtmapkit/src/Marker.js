@@ -13,7 +13,7 @@
         this.canvas = document.createElement("canvas");
         this.imageData = null;
         this.image;
-        this.drawCallbacks = [];
+        this.imgLoadedPromise;
 
         var location;
         if(locationLat && locationLng)
@@ -37,7 +37,9 @@
      * @param {number} longitude The longitude of the marker's new location.
      */
     Marker.prototype.moveTo = function(latitude, longitude) {
-        this.marker.setPosition(new google.maps.LatLng(latitude, longitude));
+        this.marker.setPosition(
+            new google.maps.LatLng(latitude, longitude)
+        );
     };
 
     /* Rotate the marker by a given amount of degrees.
@@ -45,60 +47,68 @@
      *                         will lead to a clockwise rotation.
      */
     Marker.prototype.rotate = function(degrees) {
-        if(!this.imageData) return;
+        if(!this.image) return;
 
         var self = this;
-        this.drawCallbacks.push(function(context, image) {
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        this.addTransformation(function(context) {
             context.translate(context.canvas.width/2, context.canvas.height/2);
             context.rotate(degrees * Math.PI / 180);
-            context.drawImage(image, -(image.width)/2, -(image.height)/2);
+            context.translate(-(context.canvas.width)/2, -(context.canvas.height)/2);
         });
-        this.setMarkerIcon();
     };
 
     Marker.prototype.scale = function(width, height) {
-        if(!this.imageData) return;
+        if(!this.image) return;
 
         var self = this;
-        this.drawCallbacks.push(function(context, image) {
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-            context.translate(context.canvas.width/2, context.canvas.height/2);
+        this.addTransformation(function(context, image) {
+            self.canvas.width *= width;
+            self.canvas.height *= height;
             context.scale(width, height);
-            context.drawImage(image, -(image.width)/2, -(image.height)/2);
         });
-        this.setMarkerIcon();
     };
 
     /* Set the marker's icon
      * @param {string} image The data-uri representing the image.
      */
-    Marker.prototype.setIcon = function(image) {
+    Marker.prototype.setIcon = function(uri) {
         var self = this;
-        this.imageData = image;
-        this.drawCallbacks.push(function(context, image) {
+        this.image = new Image();
+        this.imgLoadedPromise = $.Deferred();
+
+        this.image.addEventListener("load", function() {
+            self.imgLoadedPromise.resolve();
+        });
+        this.image.src = uri;
+
+        this.addTransformation(function(context, image) {
+            self.canvas.width = image.width;
+            self.canvas.height = image.height;
             context.drawImage(image, 0, 0);
         });
-        this.setMarkerIcon(true);
     };
 
-    // Private helper method
-    Marker.prototype.setMarkerIcon = function(init) {
+    Marker.prototype.addTransformation = function(drawingCallback) {
         var self = this;
-        var img = this.image || new Image();
-        img.addEventListener("load", function() {
-            if(init) {
-                self.canvas.width = img.width;
-                self.canvas.height = img.height;
-            }
-
+        self.imgLoadedPromise = self.imgLoadedPromise.done(function() {
             var context = self.canvas.getContext("2d");
+            // Clear previous
             context.save();
-            self.drawCallbacks.shift()(context, img);
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.clearRect(0, 0, self.canvas.width, self.canvas.height);
             context.restore();
-            self.marker.setIcon(self.canvas.toDataURL("image/png"));
-        }, true);
-        img.src = this.imageData;
+
+            drawingCallback(context, self.image);
+            context.drawImage(self.image, 0, 0);
+
+            self.marker.setIcon({
+                url: self.canvas.toDataURL("image/png"),
+                anchor: new google.maps.Point(
+                            Math.floor(self.canvas.width/2),
+                            Math.floor(self.canvas.height/2)
+                        )
+            });
+        });
     };
 
     /* Remove the marker from the map.
