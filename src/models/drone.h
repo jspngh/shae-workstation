@@ -14,23 +14,25 @@ class Drone
 public:
     Drone();
 
-    Drone(int dataPort, int streamPort, QString serverIp, QString streamPath , double visionWidth);
+    Drone(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
 
-    Drone(QUuid droneID, int dataPort, int streamPort, QString serverIp, QString streamPath , double visionWidth);
+    Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
 
     ~Drone();
 
     QUuid getGuid() const;
 
-    int getPortNr();
+    int getDronePort();
 
-    QString getServerIp();
+    int getStreamPort();
+
+    QString getDroneIp();
+
+    QString getControllerIp();
 
     double getVisionWidth() const;
 
     void setVisionWidth(double visionWidth);
-
-    int getStreamPortNr();
 
     QString getStreamPath() const;
 
@@ -38,9 +40,10 @@ public:
 
 private:
     QUuid guid; //!< The Global Unique Identifier that belongs to the drone.
-    int dataPort; /*!< The port number that will be used to connect to the actual drone and send data */
+    int dronePort; /*!< The port number that will be used to connect to the actual drone and send data */
     int streamPort;  /*!< The port number that will be used to start the stream on the drone */
-    QString serverIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
+    QString droneIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
+    QString controllerIp; /*!< The IP address of the controller, this will be 10.1.1.1 */
     QString streamPath;
     double visionWidth;
 

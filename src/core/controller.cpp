@@ -25,13 +25,12 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create drones
     // TODO: drone info (IP, port, etc) should be set elsewhere
     drones = new QList<DroneModule*>();
-    drones->append(new DroneModule(6330, 5502, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
-    drones->append(new DroneModule(6330, 5502, "10.1.1.10", QString("rtp://10.1.1.10:5000"), 0.0001));
+    drones->append(new DroneModule(6330, 5502, workstationIP, workstationIP, QString("rtp://127.0.0.1:5000"),  0.0001));
+    drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", QString("rtp://10.1.1.10:5000"), 0.0001));
     // real drone: 10.1.1.10:6330
     // simulator: 127.0.0.1:6330
 
     // create controllers
-    detectionController = new DetectionController(search);
     pathLogicController = new SimplePathAlgorithm();
 
 }
@@ -55,7 +54,9 @@ Controller::~Controller()
 
     // delete persistenceController;
     delete pathLogicController;
+    if(detectionController){
     delete detectionController;
+    }
 }
 
 void Controller::init()
@@ -67,6 +68,7 @@ void Controller::init()
     pathLogicController->setMediator(mediator);
     for (int i = 0; i < drones->size(); i++) {
         drones->at(i)->setController(this);
+        drones->at(i)->getStream();
     }
 
     // set every component in a different thread
@@ -86,23 +88,20 @@ void Controller::initStream(DroneModule* d)
     d->getStream();
     qDebug() << "Controller: stream started at drone";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
+    detectionController = new DetectionController(search, sequence.getPath());
     qDebug() << "Controller: starting to save stream";
     // allow the stream to buffer
 
     QThread::sleep(1);
     //WARNING VideoCapture needs to be performed on the main thread!
     cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
-
-    if(true){
-        qDebug() << "Controller: stream file has been succesfully opened";
-        // allow the stream to buffer
-        detectionController->setSequence(capture);
-        // start all the threads
-        // allow the stream to bufer for a second
-        QThread::sleep(1);
-        detectionController->start();
-    }
-
+    qDebug() << "Controller: stream file has been succesfully opened";
+    // allow the stream to buffer
+    detectionController->setSequence(capture);
+    // start all the threads
+    // allow the stream to bufer for a second
+    QThread::sleep(1);
+    detectionController->start();
 }
 
 void Controller::stopStream(DroneModule* d)
@@ -147,4 +146,3 @@ DetectionController *Controller::getDetectionController() const
 {
     return detectionController;
 }
-

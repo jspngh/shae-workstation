@@ -22,6 +22,8 @@ public:
 signals:
     void startStream(Drone *drone);
     void stopStream(Drone *drone);
+    void streamRequest();
+
 
 private Q_SLOTS:
     void testCreateFile();
@@ -33,7 +35,7 @@ private:
     void onStreamStopped();
     QProcess *simulatorProcess;
     StreamConnection* streamConnection;
-
+    QThread* streamThread;
     bool started, stopped;
     VideoController vc;
 };
