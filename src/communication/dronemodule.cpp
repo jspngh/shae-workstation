@@ -6,7 +6,7 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    : DroneModule(6331, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
+    : DroneModule(6330, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
 {
 
 }
@@ -75,9 +75,11 @@ void DroneModule::setController(Controller *c)
     connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int, QString)),
             this, SLOT(onDroneResponseError(int, QString)));
 
+
     setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
     DroneStatus droneStatus;
     droneStatus.setDrone(this);
+
     emit droneStatusReceived(droneStatus);
 }
 

@@ -30,6 +30,7 @@ public:
     void init();
     Mediator *getMediator() const;
     QList<DroneModule *> getDrones() const;
+    QString initWorkstationIP();
     QString getWorkstationIP() const;
     //void setWorkstationIP(const QString &value);
 
