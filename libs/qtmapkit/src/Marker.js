@@ -82,12 +82,19 @@
         this.image.src = uri;
 
         this.addTransformation(function(context, image) {
+            // set canvas big enough so it doesn't crop the image after rotation.
             self.canvas.width = image.width * 2;
             self.canvas.height = image.height * 2;
         });
     };
 
-    Marker.prototype.addTransformation = function(drawingCallback) {
+    /*
+     * Add a transformation before drawing the image.
+     * Private method
+     * @param {function} transformCallback The callback which will perform the
+     *                                     transformation.
+     */
+    Marker.prototype.addTransformation = function(transformCallback) {
         var self = this;
         self.imgLoadedPromise = self.imgLoadedPromise.done(function() {
             var context = self.canvas.getContext("2d");
@@ -97,7 +104,7 @@
             context.clearRect(0, 0, self.canvas.width, self.canvas.height);
             context.restore();
 
-            drawingCallback(context, self.image);
+            transformCallback(context, self.image);
             context.drawImage(self.image, self.canvas.width/2, self.canvas.height/2);
 
             self.marker.setIcon({
