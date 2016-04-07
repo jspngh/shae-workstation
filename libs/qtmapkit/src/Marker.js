@@ -82,9 +82,8 @@
         this.image.src = uri;
 
         this.addTransformation(function(context, image) {
-            self.canvas.width = image.width;
-            self.canvas.height = image.height;
-            context.drawImage(image, 0, 0);
+            self.canvas.width = image.width * 2;
+            self.canvas.height = image.height * 2;
         });
     };
 
@@ -99,7 +98,7 @@
             context.restore();
 
             drawingCallback(context, self.image);
-            context.drawImage(self.image, 0, 0);
+            context.drawImage(self.image, self.canvas.width/2, self.canvas.height/2);
 
             self.marker.setIcon({
                 url: self.canvas.toDataURL("image/png"),
