@@ -2,10 +2,11 @@
 
 using namespace std;
 
-DetectionController::DetectionController(Search *search, QObject *parent)
+DetectionController::DetectionController(Search *search, QString path, QObject *parent)
     : QThread(parent)
 {
     this->search = search;
+    this->path = path;
     parseConfiguration();
 }
 
@@ -55,7 +56,7 @@ void DetectionController::run()
         QThread::sleep(1);
         //check if new frames have arrived
         //TODO use a cleaner way of getting to the drone stream location
-        this->sequence = cv::VideoCapture("dependencies/drone_stream.mpg");
+        this->sequence = cv::VideoCapture(path.toStdString());
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         qDebug() << "new frames have been found, new total " << numFrames;
