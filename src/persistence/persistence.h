@@ -40,8 +40,8 @@ public:
 
     void saveSearch(Search search);
     void saveDroneStatus(DroneStatus droneStatus);
-    void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
-    void saveDrone(Drone drone);
+    void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path);
+    void saveDrone(Drone *drone);
     //will register a videosequence in the database (already saved in location)
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
     void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);

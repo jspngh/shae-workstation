@@ -18,7 +18,7 @@ public:
     DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
     QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
-    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid SearchId, QUuid videoId);
+    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid SearchId);
 
 public slots:
     void saveSearch(Search *s);

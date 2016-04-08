@@ -88,12 +88,13 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, double timeFrame){
     if(frame.rows != 0 && frame.cols != 0){
         //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
+        Drone drone; //TODO
         QGeoCoordinate frameLocation(10, 10);
         double orientation = 1;
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
-            emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
+            emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1), drone);
             nrDetections++;
         }
 
