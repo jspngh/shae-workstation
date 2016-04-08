@@ -75,6 +75,9 @@ void DatabaseCreator::createDatabase()
 
 void DatabaseCreator::removeDatabase()
 {
-    QFile::remove(databaseLocation());
+    QString location = databaseLocation();
+    QFileInfo checkFile(location);
+    if(checkFile.exists())
+        QFile::remove(databaseLocation());
 }
 
