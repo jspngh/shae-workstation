@@ -80,10 +80,12 @@ private:
      * this file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
      * in the frame
      */
-    void parseConfiguration();
+    void parseConfiguration(int height, int gimbalAngle);
     /*!
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
+    void extractDetectionsFromFrame(cv::Mat frame, double timeFrame);
+
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;
 };

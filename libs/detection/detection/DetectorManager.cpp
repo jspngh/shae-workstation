@@ -110,12 +110,13 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
 //location contains the geocoordinate of the frame
 //dl contains the detections associated with the frame
 //xLUT and yLUT contain lookuptables required to map the pixel locations in the frame on a geocoordinate
-std::vector<std::pair<double, double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double, double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT)
+std::vector<std::pair<double, double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double, double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT, double orientation)
 {
     vector<std::pair<double, double>> result;
     for (int i = 0; i < dl.getSize(); i++) {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
+        distance =  std::pair<double, double>(cos(orientation)*distance.first,sin(orientation)*distance.second);
         //distance contains an x,y distance pair, that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
         std::pair<double, double> temp2 = changeLongitude(location, distance.second);

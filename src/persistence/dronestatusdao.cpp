@@ -142,7 +142,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
     query.bindValue(":droneID", droneId);
     if (query.exec()) {
         while (query.next()) {
-            if (query.value(2).toDateTime() < time) {
+            if (query.value(1).toDateTime() < time) {
                 QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(21).toString());
                 DroneStatus output = DroneStatus(query.value(1).toDateTime(), query.value(2).toDateTime(),
                                                  QGeoCoordinate(query.value(3).toDouble(), query.value(4).toDouble()),
