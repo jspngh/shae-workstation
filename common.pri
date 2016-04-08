@@ -26,7 +26,6 @@ HEADERS += \
     $$PWD/src/models/*.h \
     $$PWD/src/pathlogic/*.h \
     $$PWD/src/persistence/*.h \
-    $$PWD/src/utils/*.h \
     $$PWD/src/videocontroller/*.h
 
 SOURCES += \
@@ -36,5 +35,4 @@ SOURCES += \
     $$PWD/src/models/*.cpp \
     $$PWD/src/pathlogic/*.cpp \
     $$PWD/src/persistence/*.cpp \
-    $$PWD/src/utils/*.cpp \
     $$PWD/src/videocontroller/*.cpp
