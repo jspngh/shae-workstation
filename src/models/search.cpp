@@ -13,12 +13,13 @@ Search::~Search()
 {
 }
 
-Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle):
+Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing):
     searchID(searchID),
     startTime(start),
     area(area),
     height(height),
-    gimbalAngle(gimbalAngle)
+    gimbalAngle(gimbalAngle),
+    fpsProcessing(fpsProcessing)
 {
 }
 

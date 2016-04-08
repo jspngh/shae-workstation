@@ -15,7 +15,7 @@ public:
 
     QTime getStartTime() const;
 
-    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle);
+    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing);
 
     QUuid getSearchID() const;
 
