@@ -9,7 +9,7 @@ public:
     DroneHeartbeat_IntegrationTest();
 
 public slots:
-    void onDroneHeartbeatReceived();
+    void onDroneHeartbeatReceived(QString string);
 
 private Q_SLOTS:
     void initTestCase();

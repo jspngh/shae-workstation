@@ -439,6 +439,7 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAddress, int po
     QJsonObject config = QJsonObject();
 
     config["ip_address"] = ipAddress;
+
     config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);

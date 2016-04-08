@@ -10,9 +10,12 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QList<QObject *> tests;
 
+
+
+
     tests.append(new DroneHeartbeat_IntegrationTest());
 
-    tests.append(new VideostreamDetection_Test());
+    //tests.append(new VideostreamDetection_Test());
 
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());

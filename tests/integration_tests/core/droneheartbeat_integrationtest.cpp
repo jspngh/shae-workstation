@@ -30,33 +30,26 @@ void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 //    QThread::sleep(5);
 
 
+    DroneModule* drone = new DroneModule(6330, 5502,QString("127.0.0.1"), QString("127.0.0.1"),QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
+    Mediator* m = new Mediator();
 
-    Controller * c = new Controller(new MainWindow());
-    QList<DroneModule*>* list= new QList<DroneModule*>();
-    DroneModule* drone = new DroneModule(6330, 5502, "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001);
+    drone->setMediator(m);
+    QThread th;
+    drone->moveToThread(&th);
+    th.start();
 
-
-    list->push_back(drone);
-    c->setDrones(list);
-    c->init();
-
-    //Mediator* m = new Mediator();
-
-   //drone->setMediator(m);
-
-    //drone->setController(c);
 
 //    DroneHeartBeatReceiver* receiver = new DroneHeartBeatReceiver("127.0.0.1");
 //    connect(receiver, &DroneHeartBeatReceiver::droneHeartBeat, this, &DroneHeartbeat_IntegrationTest::onDroneHeartbeatReceived);
 
     DroneHeartBeatReceiver* receiver = drone->getHeartbeatReceiver();
-    connect(receiver, SIGNAL(droneHeartBeat(QString)), this, SLOT(onDroneHeartbeatReceived()));
+    connect(receiver, SIGNAL(droneHeartBeat(QString)), this, SLOT(onDroneHeartbeatReceived(QString)));
 
 
 
     //drone->setWorkstationConfiguration("127.0.0.1", receiver->getWorkstationHeartbeatPort());
 
-    usleep(5000000);
+    QTest::qWait(5000);
     QVERIFY(count > 0);
 
 
@@ -67,7 +60,7 @@ void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 
 }
 
-void DroneHeartbeat_IntegrationTest::onDroneHeartbeatReceived()
+void DroneHeartbeat_IntegrationTest::onDroneHeartbeatReceived(QString string)
 {
     count++;
 }

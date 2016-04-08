@@ -47,7 +47,7 @@ Controller::~Controller()
     // delete persistenceController;
     delete pathLogicController;
     if(detectionController){
-    delete detectionController;
+        //delete detectionController;
     }
 }
 
