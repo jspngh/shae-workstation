@@ -20,7 +20,7 @@ void OverviewWidget::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
-    mediator->addSlot(this, SLOT(onHeartBeatReceived(const QString)), QString("droneHeartBeat(const QString)"));
+    mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
