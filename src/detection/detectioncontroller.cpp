@@ -5,7 +5,8 @@ using namespace std;
 DetectionController::DetectionController(Search *search, DroneModule *dm, PersistenceController *pc, QObject *parent)
     : QThread(parent),
     search(search),
-    persistenceController(pc)
+    persistenceController(pc),
+    droneModule(dm)
 {
     this->path = dm->getVideoController()->getSequencePath();
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
@@ -87,19 +88,30 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
 
 
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, double timeFrame){
-    if(frame.rows != 0 && frame.cols != 0){
-        //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
-        Drone drone; //TODO
-        QGeoCoordinate frameLocation(10, 10);
-        double orientation = 1;
+    if(frame.rows != 0 && frame.cols != 0)
+    {
+
+        QUuid droneId = this->droneModule->getGuid();
+        QDateTime time = QDateTime::currentDateTime();
+        QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
+        time.setTime(sequenceStartTime);
+        time.addMSecs((quint64) timeFrame * 1000.0);
+        DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
+
+        QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
+        double orientation = droneStatus.getOrientation();
+        Drone *drone = this->droneModule->getDrone();
+
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
-            emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1), drone);
+            emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1), *drone);
             nrDetections++;
         }
 
-    }else{
+    }
+    else
+    {
         qDebug() << "Frame is empty";
     }
 }
@@ -119,16 +131,15 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
        path = "dependencies/gopro_3m_65deg.cfg";
        file.open(path);
     }
-    if (file.is_open()) {
+    if (file.is_open())
+    {
         //first seven lines are currently not used
         //TODO: parse first seven lines for checks
-        getline(file, line);
-        getline(file, line);
-        getline(file, line);
-        getline(file, line);
-        getline(file, line);
-        getline(file, line);
-        getline(file, line);
+        for (int i = 0; i < 7; i++)
+        {
+            getline(file, line);
+        }
+
         getline(file, line);
         //next lines are used for the xLUT and yLUT
         location = line.find_last_of("=");
