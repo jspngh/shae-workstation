@@ -188,6 +188,15 @@ DroneStatus DroneStatus::fromJsonString(QString string)
 
 }
 
+QString DroneStatus::toString() const
+{
+    QString s;
+    s.append("[Time Send]  " + timestampDrone.toString("hh:mm:ss.zzz"));
+    s.append("\t[Time Received]  " + timestampReceivedWorkstation.toString("hh:mm:ss.zzz"));
+    s.append("\t[Location]  " + currentLocation.toString());
+    return s;
+}
+
 
 /*****************
 * Getters/Setters
