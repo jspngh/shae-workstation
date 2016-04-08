@@ -33,6 +33,7 @@ void StreamConnection::onStreamRequest()
         qDebug() << "StreamConnection failed at " << droneIpAddress << ":" << streamPort;
         return;
     }
+    qDebug() << "connected with the streamsocket";
 
     while (getStream) {
         usleep(1000);

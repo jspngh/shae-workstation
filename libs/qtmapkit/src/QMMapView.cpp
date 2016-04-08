@@ -17,12 +17,15 @@
  *****************************************************************************/
 
 #include "QMMapView.h"
+#include "QMMarker.h"
 #include <QHBoxLayout>
 #include <QHash>
+#include <QMap>
+#include <QString>
+#include <QtDebug>
 #include <QVariantMap>
 #include <QWebFrame>
 #include <QWebView>
-#include <QtDebug>
 
 class CustomWebPage : public QWebPage
 {
@@ -61,6 +64,8 @@ public:
         QMMapView::MapType mapType;
         uint zoomLevel;
     } initialValues;
+    bool selectable;
+    QMap<QString, QMMarker*> markers;
 
     inline QWebFrame *frame() { return webView->page()->mainFrame(); }
     inline QVariant evaluateJavaScript(const QString &script,
@@ -118,7 +123,7 @@ QMMapView::QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
     d->initialValues.centerCoordinate = center;
     d->initialValues.mapType = mapType;
     d->initialValues.zoomLevel = zoomLevel;
-    this->selectable = selectable;
+    d->selectable = selectable;
     connect(d->frame(), SIGNAL(javaScriptWindowObjectCleared()),
             this, SLOT(insertNativeObject()));
     connect(d->webView, SIGNAL(loadFinished(bool)),
@@ -135,11 +140,10 @@ void QMMapView::initializeMap()
 {
     Q_D(QMMapView);
     QGeoCoordinate &center = d->initialValues.centerCoordinate;
-    QString js = QString("initialize(%1, %2, %3, %4);").arg(
-                     QString::number(center.longitude()),
-                     QString::number(center.latitude()),
-                     d->toJsMapType(d->initialValues.mapType),
-                     QString::number(d->initialValues.zoomLevel));
+    QString js = QString("initialize(%1, %2, %3, %4);")
+        .arg(center.longitude()).arg(center.latitude())
+        .arg(d->toJsMapType(d->initialValues.mapType))
+        .arg(QString::number(d->initialValues.zoomLevel));
     bool success = d->evaluateJavaScript(js, true).toBool();
 
     if (success) {
@@ -225,9 +229,9 @@ void QMMapView::setCenter(const QGeoCoordinate center, bool animated)
 {
     Q_D(QMMapView);
     QString format = QString("mapKit.setCenter(%1, %2, %3);");
-    QString js = format.arg(QString::number(center.latitude()),
-                            QString::number(center.longitude()),
-                            animated ? "true" : "false");
+    QString js = format
+        .arg(center.latitude()).arg(center.longitude())
+        .arg(animated ? "true" : "false");
     d->evaluateJavaScript(js);
 }
 
@@ -249,8 +253,9 @@ void QMMapView::makeRegionVisible(const QGeoRectangle &region)
 {
     Q_D(QMMapView);
     QString format = QString("mapKit.panToBounds(%1, %2, %3, %4);");
-    QString js = format.arg(region.topLeft().latitude(), region.bottomLeft().latitude(),
-                            region.topRight().longitude(), region.topLeft().longitude());
+    QString js = format
+        .arg(region.topLeft().latitude()).arg(region.bottomLeft().latitude())
+        .arg(region.topRight().longitude()).arg(region.topLeft().longitude());
     d->evaluateJavaScript(js);
 }
 
@@ -258,22 +263,25 @@ void QMMapView::fitRegion(const QGeoRectangle &region)
 {
     Q_D(QMMapView);
     QString format = QString("mapKit.fitBounds(%1, %2, %3, %4);");
-    QString js = format.arg(region.topLeft().latitude(), region.bottomLeft().latitude(),
-                            region.topRight().longitude(), region.topLeft().longitude());
+    QString js = format
+        .arg(region.topLeft().latitude()).arg(region.bottomLeft().latitude())
+        .arg(region.topRight().longitude()).arg(region.topLeft().longitude());
     d->evaluateJavaScript(js);
 }
 
 bool QMMapView::isSelectable() const
 {
-    return selectable;
+    Q_D(const QMMapView);
+    return d->selectable;
 }
 
 void QMMapView::shiftKeyPressed(bool down)
 {
-    if(!selectable)
+    Q_D(QMMapView);
+
+    if(!d->selectable)
         return;
 
-    Q_D(QMMapView);
     if (down) {
         d->evaluateJavaScript("mapKit.shiftKeyDown();");
     } else {
@@ -285,26 +293,48 @@ void QMMapView::selectArea(const QGeoRectangle &area)
 {
     Q_D(QMMapView);
     QString format = QString("mapKit.selectAreaOnMap(%1, %2, %3, %4);");
-    QString js = format.arg(area.topLeft().latitude(), area.topLeft().latitude(),
-                            area.bottomRight().longitude(), area.bottomRight().longitude());
+    QString js = format
+        .arg(area.topLeft().latitude()).arg(area.topLeft().latitude())
+        .arg(area.bottomRight().longitude()).arg(area.bottomRight().longitude());
     d->evaluateJavaScript(js);
 }
 
-void QMMapView::addMarker(QString listName, uint markerId, QGeoCoordinate point, QMMapIcon &icon)
+QMMarker& QMMapView::addMarker(const QString markerId, const QGeoCoordinate &point)
 {
     Q_D(QMMapView);
-    QString format = QString("mapKit.getMarkerList(\"%1\").add(%2, %3, %4, %5);");
+    QString format = QString("mapKit.addMarker(\"%1\", %2, %3);");
     QString js = format
-        .arg(listName).arg(markerId)
-        .arg(point.latitude()).arg(point.longitude())
-        .arg(icon.toJsObject());
+        .arg(markerId)
+        .arg(point.latitude()).arg(point.longitude());
     d->evaluateJavaScript(js);
+
+    d->markers[markerId] = new QMMarker(markerId, point, d->frame(), this);
+    return getMarker(markerId);
+}
+
+QMMarker& QMMapView::getMarker(const QString markerId)
+{
+    Q_D(QMMapView);
+    return *(d->markers.value(markerId));
+}
+
+void QMMapView::removeMarker(const QString markerId)
+{
+    Q_D(QMMapView);
+    QString js = QString("mapKit.removeMarker(\"%1\");").arg(markerId);
+    d->evaluateJavaScript(js);
+    QMMarker *removedMarker = d->markers.take(markerId);
+    delete removedMarker;
 }
 
 void QMMapView::jsRegionChangedTo(qreal north, qreal south,
                                   qreal east, qreal west)
 {
-    emit regionChanged(QGeoRectangle(QGeoCoordinate(north, west), QGeoCoordinate(south, east)));
+    emit regionChanged(
+        QGeoRectangle(
+            QGeoCoordinate(north, west),
+            QGeoCoordinate(south, east)
+    ));
 }
 
 void QMMapView::jsCenterChangedTo(qreal latitude, qreal longitude)
@@ -352,9 +382,9 @@ void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
                                       qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
+        QGeoCoordinate(topLeftLat, topLeftLong),
+        QGeoCoordinate(bottomRightLat, bottomRightLong)
+    );
     emit selectedAreaCreated(selectedArea);
 }
 
@@ -362,9 +392,9 @@ void QMMapView::jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
                                       qreal bottomRightLat, qreal bottomRightLong)
 {
     QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
+        QGeoCoordinate(topLeftLat, topLeftLong),
+        QGeoCoordinate(bottomRightLat, bottomRightLong)
+    );
     emit selectedAreaChanged(selectedArea);
 }
 

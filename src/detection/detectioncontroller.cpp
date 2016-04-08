@@ -2,11 +2,12 @@
 
 using namespace std;
 
-DetectionController::DetectionController(Search *search, QObject *parent)
+DetectionController::DetectionController(Search *search, QString path, QObject *parent)
     : QThread(parent)
 {
     this->search = search;
-    parseConfiguration();
+    this->path = path;
+    parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
 }
 
 void DetectionController::run()
@@ -22,31 +23,15 @@ void DetectionController::run()
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
     this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
     qDebug() << "original number of frames " << numFrames;
-
     cv::Mat frame;
     do {
 
         while (iteratorFrames < numFrames) {
             this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
             this->sequence >> frame;
-            if(frame.rows != 0 && frame.cols != 0){
-                qDebug() << "Processing frame" << iteratorFrames;
+            double timeFrame = iteratorFrames * this->search->getFpsProcessing();
 
-                double timeFrame = iteratorFrames * this->search->getFpsProcessing();
-                //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
-                QGeoCoordinate frameLocation(10, 10);
-                //TODO the xLUT and yLUT should be derived from the config file present in the Search object.
-                DetectionList detectionList = this->manager.applyDetector(frame);
-                vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT);
-                for (int i = 0; i < detectionList.getSize(); i++) {
-                    emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
-                    qDebug() << "Detection at frame " << iteratorFrames << " at " << timeFrame;
-                    nrDetections++;
-                }
-
-            }else{
-                qDebug() << "Frame is empty" << iteratorFrames;
-            }
+            extractDetectionsFromFrame(frame,timeFrame);
             iteratorFrames += this->frameHop;
         }
 
@@ -54,8 +39,7 @@ void DetectionController::run()
         //allow for frames to buffer
         QThread::sleep(1);
         //check if new frames have arrived
-        //TODO use a cleaner way of getting to the drone stream location
-        this->sequence = cv::VideoCapture("dependencies/drone_stream.mpg");
+        this->sequence = cv::VideoCapture(path.toStdString());
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         qDebug() << "new frames have been found, new total " << numFrames;
@@ -100,14 +84,39 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
     sequence = value;
 }
 
-void DetectionController::parseConfiguration()
+
+void DetectionController::extractDetectionsFromFrame(cv::Mat frame, double timeFrame){
+    if(frame.rows != 0 && frame.cols != 0){
+        //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
+        QGeoCoordinate frameLocation(10, 10);
+        double orientation = 1;
+        DetectionList detectionList = this->manager.applyDetector(frame);
+        vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
+        for (int i = 0; i < detectionList.getSize(); i++) {
+            emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
+            nrDetections++;
+        }
+
+    }else{
+        qDebug() << "Frame is empty";
+    }
+}
+
+
+void DetectionController::parseConfiguration(int height, int gimbalAngle)
 {
     string line;
-    int height = this->search->getHeight();
-    int gimbalAngle = this->search->getGimbalAngle();
     string path = "dependencies/gopro_" + to_string(height) + "m" + "_" + to_string(gimbalAngle) + "deg.cfg";
     std::size_t location;
-    ifstream file(path);
+    ifstream file;
+    file.open(path);
+    //if the file does not exist, fall back to the original configuration
+    //might result in faulty detections
+    if(!file.is_open())
+    {
+       path = "dependencies/gopro_3m_65deg.cfg";
+       file.open(path);
+    }
     if (file.is_open()) {
         //first seven lines are currently not used
         //TODO: parse first seven lines for checks

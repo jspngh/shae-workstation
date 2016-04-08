@@ -17,13 +17,13 @@
    <item>
     <layout class="QHBoxLayout" name="mainLayout">
      <item>
-      <widget class="QListWidget" name="listWidget"/>
+      <widget class="QListWidget" name="droneList"/>
      </item>
      <item>
       <widget class="QLabel" name="mapLoadingLabel">
        <property name="font">
         <font>
-         <pointsize>72</pointsize>
+         <pointsize>52</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>

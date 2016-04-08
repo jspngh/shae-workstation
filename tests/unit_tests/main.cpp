@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<DetectionResult>("DetectionResult");
     QApplication a(argc, argv);
     DatabaseCreator db = DatabaseCreator();
+    db.removeDatabase();
     db.initDatabase();
 
     QList<QObject *> tests;
@@ -61,6 +62,10 @@ int main(int argc, char *argv[])
      * Testing persistence
      * *****************/
     tests.append(new SearchDAO_Test());
+
+
+
+
     tests.append(new DetectionResultDAO_Test());
     tests.append(new DroneDAO_Test());
     tests.append(new DroneSearchDAO_Test());
@@ -71,7 +76,7 @@ int main(int argc, char *argv[])
     /********************
      * Testing videostuff
      * *****************/
-    //tests.append(new VideoController_Test());
+    tests.append(new VideoController_Test());
     tests.append(new DetectionController_Test());
 
 

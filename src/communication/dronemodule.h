@@ -43,14 +43,21 @@ public:
 
     //! This sets:
     //! visionwidth to MIN_VISIONWIDTH
-    //! serverIp to 10.1.1.10
-    //! portNr to 6330
+    //! droneIp to 10.1.1.10
+    //! controllerIp to 10.1.1.1
+    //! dronePort to 6330
+    //! streamPort to 5502
     explicit DroneModule();
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    //! DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
-    explicit DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
+    explicit DroneModule(int dronePort,
+                         int streamPort,
+                         QString droneIp,
+                         QString controllerIp,
+                         QString workstationIp,
+                         QString streamPath,
+                         double visionWidth = MIN_VISIONWIDTH);
 
 
     //! Copy constructor
@@ -62,7 +69,7 @@ public:
     /***********************
     Getters/Setters
     ************************/
-    void setController(Controller *ctrl);
+    void setMediator(Mediator *med);
 
     void getStream();
 
@@ -70,9 +77,13 @@ public:
 
     QUuid getGuid() const;
 
-    int getPortNr();
+    int getDronePort();
 
-    QString getServerIp();
+    int getStreamPort();
+
+    QString getDroneIp();
+
+    QString getControllerIp();
 
     double getVisionWidth() const;
 
@@ -175,26 +186,17 @@ private slots:
     void onDroneResponseError(int socketError, const QString &message);
 
 
-
 private:
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
-
-    Controller *controller;
-
+    Mediator *mediator;
+    QString workstationIp;
     VideoController * videoController;
-
     DroneHeartBeatReceiver *heartbeatReceiver;
-
     QThread *connectionThread;
-
     DroneConnection *droneConnection;
-
     QThread *streamThread;
-
     StreamConnection *streamConnection;
-
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
-
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 

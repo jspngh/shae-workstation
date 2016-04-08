@@ -17,12 +17,27 @@ void DetectionController_Test::initTestCase()
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
     cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());
-    this->controller = new DetectionController(s);
+    this->controller = new DetectionController(s, footage);
     this->controller->setSequence(capture);
     QObject::connect(this->controller, &DetectionController::newDetection,
                      this, &DetectionController_Test::onNewDetection);
     this->numDetections = 0;
 }
+
+void DetectionController_Test::testIncorrectParseConfiguration()
+{
+    Search *s = new Search();
+    s->setHeight(0);
+    s->setGimbalAngle(0);
+    s->setFpsProcessing(0);
+    QString footage = "dependencies/testfootage.mp4";
+    DetectionController* d = new DetectionController(s, footage);
+    //verify that the method has executed correctly
+    delete s;
+    delete d;
+    QVERIFY(true);
+}
+
 
 
 void DetectionController_Test::testProcessSequence()

@@ -22,6 +22,7 @@ public:
     ~StreamConnection();
 
     void stopConnection();
+    bool getStream; /*!< A boolean that indicates if we still need the connection */
 
     QString getDroneIpAddress() const;
 
@@ -38,7 +39,6 @@ signals:
 private:
     QString droneIpAddress; /*!< The IP address of the drone, this will be 10.1.1.10 */
     quint16 streamPort; /*!< The port number we need to setup a connection with, this will be 5502 */
-    bool getStream; /*!< A boolean that indicates if we still need the connection */
 };
 
 #endif // STREAMCONNECTION_H

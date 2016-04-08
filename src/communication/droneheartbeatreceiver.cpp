@@ -22,7 +22,7 @@ DroneHeartBeatReceiver::~DroneHeartBeatReceiver()
 void DroneHeartBeatReceiver::receiveHeartbeat()
 {
     const int Timeout = 20 * 1000;
-    qDebug() << "receiveHeartbeat";
+    //qDebug() << "receiveHeartbeat";
 
     //get socket that is connected
     QTcpSocket *clientConnection = server->nextPendingConnection();
@@ -42,8 +42,6 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
     in.setVersion(QDataStream::Qt_4_0);
     in >> blockSize;
 
-    qDebug() << blockSize;
-
     while (clientConnection->bytesAvailable() < blockSize) {
         if (!clientConnection->waitForReadyRead(Timeout)) {
             emit droneHeartBeatError(clientConnection->error(), clientConnection->errorString());
@@ -53,7 +51,7 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
 
     QByteArray raw;
     in >> raw;
-    qDebug() << raw;
+    // qDebug() << raw;
     QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
 
 

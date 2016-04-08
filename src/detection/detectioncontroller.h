@@ -26,7 +26,7 @@ class DetectionController : public QThread
 
 public:
     //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
-    explicit DetectionController(Search *search, QObject *parent = 0);
+    explicit DetectionController(Search *search, QString path, QObject *parent = 0);
     ~DetectionController() {}
 
     void setMediator(Mediator *mediator);
@@ -74,15 +74,18 @@ private:
     int nrDetections;
     volatile bool streaming;
     Search *search;
+    QString path;
     /*!
      * \brief a private method that allows to parse the configuration file of the detectioncontroller
      * this file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
      * in the frame
      */
-    void parseConfiguration();
+    void parseConfiguration(int height, int gimbalAngle);
     /*!
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
+    void extractDetectionsFromFrame(cv::Mat frame, double timeFrame);
+
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;
 };

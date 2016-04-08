@@ -40,11 +40,9 @@ public:
 
     Search *getSearch() const;
     DetectionController *getDetectionController() const;
-
-
+    QString initWorkstationIP();
 
     QString getWorkstationIP() const;
-    //void setWorkstationIP(const QString &value);
 
 private:
     QString workstationIP;

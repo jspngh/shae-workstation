@@ -6,18 +6,25 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    : DroneModule(6331, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
+    // default configuration for a drone on the solo's network
+    : DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", "10.1.1.179", "sololink.sdp", MIN_VISIONWIDTH)
 {
-
 }
 
-DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
+DroneModule::DroneModule(int dataPort,
+                         int streamPort,
+                         QString droneIp,
+                         QString controllerIp,
+                         QString workstationIp,
+                         QString streamPath,
+                         double visionWidth)
 {
-    drone = new Drone(dataPort, streamPort, serverIp, streamPath, visionWidth);
-    droneConnection = new DroneConnection(serverIp, (quint16) dataPort);
-    streamConnection = new StreamConnection(serverIp, (quint16) streamPort);
+    drone = new Drone(dataPort, streamPort, droneIp, controllerIp, streamPath, visionWidth);
+    droneConnection = new DroneConnection(droneIp, (quint16) dataPort);
+    streamConnection = new StreamConnection(controllerIp, (quint16) streamPort);
     connectionThread = new QThread();
     streamThread = new QThread();
+    this->workstationIp = workstationIp;
     droneConnection->moveToThread(connectionThread);
     streamConnection->moveToThread(streamThread);
     connectionThread->start();
@@ -55,20 +62,20 @@ DroneModule::~DroneModule()
 /***********************
 Getters/Setters
 ************************/
-void DroneModule::setController(Controller *c)
+
+void DroneModule::setMediator(Mediator* med)
 {
-    controller = c;
-    controller->getMediator()->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    controller->getMediator()->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
-    controller->getMediator()->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
-    controller->getMediator()->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
-    controller->getMediator()->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
-    controller->getMediator()->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
+    mediator = med;
 
+    med->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    med->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    med->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    med->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
+    med->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
+    med->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
+    med->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
 
-    //qDebug() << controller->getWorkstationIP();
-    heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
+    heartbeatReceiver = new DroneHeartBeatReceiver(workstationIp);
     //heartbeatThread = new QThread();
     //heartbeatReceiver->moveToThread(heartbeatThread);
     //heartbeatThread->start();
@@ -78,9 +85,11 @@ void DroneModule::setController(Controller *c)
     connect(heartbeatReceiver, SIGNAL(droneHeartBeatError(int, QString)),
             this, SLOT(onDroneResponseError(int, QString)));
 
-    setWorkstationConfiguration(controller->getWorkstationIP(), heartbeatReceiver->getWorkstationHeartbeatPort());
+    setWorkstationConfiguration(workstationIp, heartbeatReceiver->getWorkstationHeartbeatPort());
+
     DroneStatus droneStatus;
     droneStatus.setDrone(this);
+
     emit droneStatusReceived(droneStatus);
 }
 
@@ -111,14 +120,24 @@ QUuid DroneModule::getGuid() const
     return drone->getGuid();
 }
 
-int DroneModule::getPortNr()
+int DroneModule::getDronePort()
 {
-    return drone->getPortNr();
+    return drone->getDronePort();
 }
 
-QString DroneModule::getServerIp()
+int DroneModule::getStreamPort()
 {
-    return drone->getServerIp();
+    return drone->getStreamPort();
+}
+
+QString DroneModule::getDroneIp()
+{
+    return drone->getDroneIp();
+}
+
+QString DroneModule::getControllerIp()
+{
+    return drone->getControllerIp();
 }
 
 double DroneModule::getVisionWidth() const
@@ -411,15 +430,15 @@ QJsonDocument DroneModule::requestHeartbeat()
 Setting messages methods
 **************************/
 
-QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int port)
+QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAddress, int port)
 {
     // Create json message
     QJsonObject json = QJsonObject();
     json["message_type"] = QString("settings");
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
-    config["ip_address"] = ipAdress;
-    //TODO: make back an int instead of string
+
+    config["ip_address"] = ipAddress;
     config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);

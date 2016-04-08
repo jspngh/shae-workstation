@@ -26,25 +26,25 @@ public:
      * Both ids are for referencing to tables in the database while de object is
      * the one that needs to be stored.
      */
-    DroneStatus dbSaveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId);
+    DroneStatus dbSaveDroneStatus(DroneStatus droneStatus, QUuid droneId);
     //compare with timestamp of workstation
     /**
      * \brief dbRetrieveDroneStatus Retrieves all the dronestatusses for a
      * certain drone and search and a certain interval.
      */
-    QList<DroneStatus> dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
+    QList<DroneStatus> dbRetrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
     /**
      * \brief dbRetrieveDroneStatus Retrieves the most recent dronestatus for a
      * certain drone and search.
      */
-    DroneStatus dbRetrieveDroneStatus(QUuid droneId, QUuid searchId);
+    DroneStatus dbRetrieveDroneStatus(QUuid droneId);
     //retrieve dronestatus closest to time parameter
     /**
      * \brief dbRetrieveDroneStatus Retrieves the dronestatus for a
      * certain drone and search closest to a certain timestamp.
      */
-    DroneStatus dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
+    DroneStatus dbRetrieveDroneStatus(QUuid droneId, QDateTime time);
 private:
     //database
     QSqlDatabase *projectShaeDatabase;
