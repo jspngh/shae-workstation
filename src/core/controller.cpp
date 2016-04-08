@@ -18,8 +18,9 @@ Controller::Controller(MainWindow *window, QObject *p)
     workstationIP = initWorkstationIP();
 
     drones = new QList<DroneModule*>();
-    drones->append(new DroneModule(6330, 5502, "127.0.0.1","127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
-    drones->append(new DroneModule(6330, 5502, "10.1.1.10",workstationIP, QString("rtp://10.1.1.10:5000"), 0.0001));
+    // dronePort, streamPort, droneIp, controllerIp, workstationIp
+    drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
+    drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("rtp://10.1.1.10:5000"), 0.0001));
 
     // create controllers
     pathLogicController = new SimplePathAlgorithm();
@@ -56,15 +57,14 @@ void Controller::init()
     // configure every component with the controller
     pathLogicController->setMediator(mediator);
     for (int i = 0; i < drones->size(); i++)
-        (*drones)[i]->setController(this);
+        (*drones)[i]->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
 
     pathLogicController->moveToThread(&pathLogicThread);
     DroneModule *d = drones->first();
     d->moveToThread(&droneThread);
-    d->setController(this);
-
+    //d->setController(this);
 
     pathLogicThread.start();
     droneThread.start();
@@ -102,6 +102,7 @@ QString Controller::initWorkstationIP()
                 && address != QHostAddress(QHostAddress::LocalHost))
             return address.toString();
     }
+    return QString();
 }
 
 void Controller::stopStream(DroneModule* d)
