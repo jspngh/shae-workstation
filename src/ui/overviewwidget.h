@@ -5,7 +5,6 @@
 #include <QMap>
 #include <QMMarker.h>
 #include <QMMapView.h>
-#include <QStackedWidget>
 #include <QUuid>
 #include <QWidget>
 #include "overviewdroneitem.h"
@@ -34,8 +33,7 @@ private:
     QMap<QUuid, OverviewDroneItem*> mapIdListItem;
 
 private slots:
-    void clickButtonPush();
-    void backButtonPush();
+    void exportSearchButtonPush();
     void onSearchStarted(Search *s);
     void onHeartBeatReceived(const QString heartbeat);
     void fillDroneList();

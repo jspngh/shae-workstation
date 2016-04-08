@@ -17,7 +17,18 @@
    <item>
     <layout class="QHBoxLayout" name="mainLayout">
      <item>
-      <widget class="QListWidget" name="droneList"/>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QListWidget" name="droneList"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exportSearchButton">
+         <property name="text">
+          <string>Export search</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QLabel" name="mapLoadingLabel">
@@ -38,32 +49,9 @@
    <item>
     <layout class="QHBoxLayout" name="buttonLayout">
      <item>
-      <widget class="QPushButton" name="backButton">
+      <widget class="QLabel" name="heartBeat">
        <property name="text">
-        <string>Back</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="buttonSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::MinimumExpanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="clickButton">
-       <property name="text">
-        <string>Click</string>
+        <string>Heartbeat: </string>
        </property>
       </widget>
      </item>

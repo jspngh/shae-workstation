@@ -8,8 +8,7 @@ OverviewWidget::OverviewWidget(QWidget *parent) :
     ui->setupUi(this);
 
     //lowerbuttons:
-    connect(ui->clickButton, SIGNAL(clicked()), this, SLOT(clickButtonPush()));
-    connect(ui->backButton, SIGNAL(clicked()), this, SLOT(backButtonPush()));
+    connect(ui->exportSearchButton, SIGNAL(clicked()), this, SLOT(exportSearchButtonPush()));
 }
 
 OverviewWidget::~OverviewWidget()
@@ -27,10 +26,10 @@ void OverviewWidget::setMediator(Mediator *mediator)
 
 void OverviewWidget::onHeartBeatReceived(const QString heartbeat)
 {
-    qDebug() << "Heartbeat: " << heartbeat;
+    ui->heartBeat->setText(QString("Heartbeat: ") + heartbeat);
 }
 
-void OverviewWidget::clickButtonPush()
+void OverviewWidget::exportSearchButtonPush()
 {
 }
 
@@ -39,11 +38,6 @@ void OverviewWidget::updateDroneList(DroneStatus s)
     const QUuid droneId = s.getDrone()->getGuid();
     if(mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(s);
-}
-
-void OverviewWidget::backButtonPush()
-{
-    ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
 void OverviewWidget::onSearchStarted(Search *s)
