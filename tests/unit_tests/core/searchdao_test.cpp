@@ -46,7 +46,7 @@ void SearchDAO_Test::testSimpleSearchDAO()
 
     SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
-    Search s = Search(QUuid::createUuid(), QTime(7, 6), QGeoRectangle(QGeoCoordinate(5, 6), QGeoCoordinate(4, 3)), 5, 6);
+    Search s = Search(QUuid::createUuid(), QTime(7, 6), QGeoRectangle(QGeoCoordinate(5, 6), QGeoCoordinate(4, 3)), 5, 6, 7);
 
     sd.dbSaveSearch(s);
 
@@ -58,6 +58,7 @@ void SearchDAO_Test::testSimpleSearchDAO()
     QVERIFY(s.getArea().bottomRight() == sback.getArea().bottomRight());
     QVERIFY(s.getHeight() == sback.getHeight());
     QVERIFY(s.getGimbalAngle() == sback.getGimbalAngle());
+    QVERIFY(s.getFpsProcessing() == sback.getFpsProcessing());
 
 
     QSqlQuery query;

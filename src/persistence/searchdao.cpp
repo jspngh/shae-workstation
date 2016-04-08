@@ -17,8 +17,8 @@ SearchDAO::SearchDAO(QSqlDatabase *projectShaeDatabase)
 Search SearchDAO::dbSaveSearch(Search search)
 {
     QSqlQuery query;
-    query.prepare("INSERT INTO searches (searchID, startTime, area, height, gimballAngle) "
-                  "VALUES (:searchID, :startTime, :area, :height, :gimballAngle)");
+    query.prepare("INSERT INTO searches (searchID, startTime, area, height, gimballAngle, fpsProcessing) "
+                  "VALUES (:searchID, :startTime, :area, :height, :gimballAngle, :fpsProcessing)");
     query.bindValue(":searchID", search.getSearchID());
     query.bindValue(":startTime", search.getStartTime());
 
@@ -32,6 +32,8 @@ Search SearchDAO::dbSaveSearch(Search search)
     query.bindValue(":area", pathString);
     query.bindValue(":height", search.getHeight());
     query.bindValue(":gimballAngle", search.getGimbalAngle());
+    query.bindValue(":fpsProcessing", search.getFpsProcessing());
+
     if (query.exec()) {
         qDebug() << "insert succes";
     } else {
@@ -52,7 +54,7 @@ Search SearchDAO::dbRetrieveSearch(QUuid searchId)
             QList<QGeoCoordinate> coordinates = uncypherPathString(query.value(2).toString());
             QGeoRectangle area = QGeoRectangle(coordinates.at(0), coordinates.at(1));
             search = Search(searchId, query.value(1).toTime(), area,
-                            query.value(3).toInt(), query.value(4).toInt());
+                            query.value(3).toInt(), query.value(4).toInt(), query.value(5).toInt());
         }
 
     } else {
