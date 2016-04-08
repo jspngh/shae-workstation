@@ -2,11 +2,12 @@
 
 using namespace std;
 
-DetectionController::DetectionController(Search *search, QString path, QObject *parent)
-    : QThread(parent)
+DetectionController::DetectionController(Search *search, DroneModule *dm, PersistenceController *pc, QObject *parent)
+    : QThread(parent),
+    search(search),
+    persistenceController(pc)
 {
-    this->search = search;
-    this->path = path;
+    this->path = dm->getVideoController()->getSequencePath();
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
 }
 

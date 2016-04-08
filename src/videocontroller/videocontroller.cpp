@@ -5,6 +5,16 @@ VideoController::VideoController(QObject *parent): QObject(parent)
 
 }
 
+QString VideoController::getSequencePath()
+{
+    return this->sequence_path;
+}
+
+void VideoController::setSequencePath(QString sp)
+{
+    this->sequence_path = sp;
+}
+
 VideoSequence VideoController::onStartStream(Drone * drone)
 {
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
@@ -45,7 +55,9 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     qDebug() << "Videocontroller: File has a size of " << size;
 
     VideoSequence sequence = VideoSequence(QString("dependencies/drone_stream.mpg"), QUuid::createUuid());
+    this->sequence_path = sequence.getPath();
     emit this->streamStarted(sequence);
+
     return sequence;
 }
 

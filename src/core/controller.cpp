@@ -74,7 +74,7 @@ void Controller::initStream(DroneModule* d)
     d->getStream();
     qDebug() << "Controller: stream started at drone";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
-    detectionController = new DetectionController(search, sequence.getPath());
+    detectionController = new DetectionController(search, d, persistenceController);
     qDebug() << "Controller: starting to save stream";
     // allow the stream to buffer
 

@@ -26,7 +26,8 @@ public:
     //! DetectionController is a class, that retrieves a video stream and saves it to a file
     VideoController(QObject *parent = 0);
     ~VideoController() {}
-
+    QString getSequencePath();
+    void setSequencePath(QString sp);
 
 public slots:
     /*!
@@ -53,6 +54,7 @@ private:
     libvlc_media_player_t *mp;
     libvlc_instance_t *inst;
     libvlc_media_t *m;
+    QString sequence_path;
 
 };
 #endif // VIDEOCONTROLLER_H
