@@ -57,7 +57,7 @@ void DetectionController::run()
 void DetectionController::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;;
-    mediator->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult)), QString("newDetection(DetectionResult))"));
+    mediator->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult, Drone)), QString("newDetection(DetectionResult))"));
     mediator->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
