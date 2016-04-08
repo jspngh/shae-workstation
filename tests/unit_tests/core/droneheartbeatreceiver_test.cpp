@@ -9,7 +9,7 @@ DroneHeartbeatReceiver_Test::DroneHeartbeatReceiver_Test(QObject *parent) : QObj
 
 void DroneHeartbeatReceiver_Test::initTestCase()
 {
-    count = 0;
+
 }
 
 void DroneHeartbeatReceiver_Test::cleanupTestCase()
@@ -33,8 +33,8 @@ void DroneHeartbeatReceiver_Test::testSetandGet()
     delete receiver;
 }
 
-//still TODO:
-void DroneHeartbeatReceiver_Test::testReceiveHeartbeat()
+//Moved to integration test
+/*void DroneHeartbeatReceiver_Test::testReceiveHeartbeat()
 {
 //    QString program = "python";
 //    QStringList arguments;
@@ -68,4 +68,4 @@ void DroneHeartbeatReceiver_Test::testReceiveHeartbeat()
 void DroneHeartbeatReceiver_Test::onDroneHeartbeatReceived()
 {
     count++;
-}
+}*/

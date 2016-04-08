@@ -14,10 +14,10 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testConstructorDestructor();
     void testSetandGet();
-    void testReceiveHeartbeat();
+    //void testReceiveHeartbeat();
 private:
-    void onDroneHeartbeatReceived();
-    int count;
+    //void onDroneHeartbeatReceived();
+    //int count;
 };
 
 #endif // DRONEHEARTBEATRECEIVER_TEST_H

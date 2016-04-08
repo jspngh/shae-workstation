@@ -1,4 +1,5 @@
 #include "core/videostreamdetection.h"
+#include "core/droneheartbeat_integrationtest.h"
 #include <QList>
 #include <QTest>
 #include <QApplication>
@@ -9,6 +10,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QList<QObject *> tests;
     //tests.append(new VideostreamDetection_Test());
+    tests.append(new DroneHeartbeat_IntegrationTest());
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }

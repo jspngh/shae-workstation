@@ -189,6 +189,11 @@ void DroneModule::onDroneResponseError(int socketError, const QString &message)
     qDebug() << message;
 }
 
+DroneHeartBeatReceiver *DroneModule::getHeartbeatReceiver() const
+{
+    return heartbeatReceiver;
+}
+
 VideoController *DroneModule::getVideoController() const
 {
     return videoController;
