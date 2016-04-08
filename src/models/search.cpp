@@ -23,14 +23,15 @@ Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int 
 {
 }
 
-QUuid Search::getSearchID() const
-{
-    return searchID;
-}
 
 QTime Search::getStartTime() const
 {
     return startTime;
+}
+
+void Search::setStartTime(QTime start)
+{
+    startTime = start;
 }
 
 QGeoRectangle Search::getArea() const
@@ -82,4 +83,15 @@ void Search::setFpsProcessing(int value)
 {
     fpsProcessing = value;
 }
+
+void Search::setSearchID(QUuid value)
+{
+    searchID = value;
+}
+
+QUuid Search::getSearchID() const
+{
+    return searchID;
+}
+
 

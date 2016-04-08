@@ -1,18 +1,9 @@
 #include "persistencecontroller.h"
 #include <QDebug>
 
-PersistenceController::PersistenceController(Mediator *mediator, QObject *parent)
-    : QObject(parent),
-      mediator(mediator)
+PersistenceController::PersistenceController(QObject *parent)
+    : QObject(parent)
 {
-    this->persistence = new Persistence(mediator, this);
-    qDebug() << "adding PersistenceController signal/slots";
-    // Add save slots to mediator
-    mediator->addSlot(this, SLOT(saveSearch(Search *)), QString("startSearch(Search*)"));
-    mediator->addSlot(this, SLOT(saveDronePaths(Search *)), QString("pathCalculated(Search*)"));
-    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    mediator->addSlot(this, SLOT(saveDetectionResult(DetectionResult)), QString("newDetection(DetectionResult))"));
-    mediator->addSlot(this, SLOT(saveVideoSequence(VideoSequence)), QString("TODO"));
 }
 
 void PersistenceController::saveSearch(Search *s)
@@ -89,4 +80,16 @@ VideoSequence PersistenceController::retrieveVideoSequence(QUuid droneId, QUuid 
     return persistence->retrieveVideoSequence(droneId, searchId);
 }
 
+
+void PersistenceController::setMediator(Mediator *mediator)
+{
+    this->persistence = new Persistence(mediator, this);
+    qDebug() << "adding PersistenceController signal/slots";
+    // Add save slots to mediator
+    mediator->addSlot(this, SLOT(saveSearch(Search *)), QString("startSearch(Search*)"));
+    mediator->addSlot(this, SLOT(saveDronePaths(Search *)), QString("pathCalculated(Search*)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(saveDetectionResult(DetectionResult)), QString("newDetection(DetectionResult))"));
+    mediator->addSlot(this, SLOT(saveVideoSequence(VideoSequence)), QString("TODO"));
+}
 

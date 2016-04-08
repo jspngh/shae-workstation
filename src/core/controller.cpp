@@ -19,7 +19,7 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create controllers
     pathLogicController = new SimplePathAlgorithm();
-    persistenceController = new PersistenceController(mediator);
+    persistenceController = new PersistenceController();
 }
 
 Controller::~Controller()
@@ -51,10 +51,14 @@ void Controller::init()
     // init the controller for single drone use.
     // configure every component with the controller
     pathLogicController->setMediator(mediator);
+
     for (int i = 0; i < drones->size(); i++)
         (*drones)[i]->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
+
+    //finally define the slots of the persistence
+    persistenceController->setMediator(mediator);
 
     persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);

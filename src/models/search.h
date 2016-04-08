@@ -13,17 +13,16 @@ public:
     Search();
     ~Search();
 
-    QTime getStartTime() const;
-
     Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing);
-
-    QUuid getSearchID() const;
 
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
 
     QList<DroneModule *> getDroneList() const;
     void setDroneList(QList<DroneModule *> value);
+
+    QTime getStartTime() const;
+    void setStartTime(QTime start);
 
     int getGimbalAngle() const;
     void setGimbalAngle(int value);
@@ -33,6 +32,10 @@ public:
 
     int getFpsProcessing() const;
     void setFpsProcessing(int value);
+
+    void setSearchID(QUuid value);
+    QUuid getSearchID() const;
+
 
 private:
     QUuid searchID;

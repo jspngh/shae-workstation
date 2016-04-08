@@ -11,6 +11,7 @@ int Mediator::addSignal(QObject *sender, const char *signal, QString signalName)
 {
     int count = 0;
     this->mutex.lock();
+    qDebug() << "Adding signal: " << signalName;
 
     QList<Element>::iterator i;
     // search for a slot listing to the signal
@@ -20,7 +21,6 @@ int Mediator::addSignal(QObject *sender, const char *signal, QString signalName)
             // connect the signal and the found slot
             QObject::connect(sender, signal, i->object, i->method);
             ++count;
-            qDebug() << "Signal added: " << signalName;
         }
     }
     // store an Element object holding information about the signal.
@@ -40,6 +40,7 @@ int Mediator::addSlot(QObject *receiver, const char *slot, QString signalName)
     int count = 0;
 
     this->mutex.lock();
+    qDebug() << "Adding slot " << slot << " for signal: " << signalName;
 
     QList<Element>::iterator i;
     // search for a signal emitting the desired signal
@@ -49,7 +50,6 @@ int Mediator::addSlot(QObject *receiver, const char *slot, QString signalName)
             // connect the found signal and the slot
             QObject::connect(i->object, i->method, receiver, slot);
             ++count;
-            qDebug() << "Slot added for signal: " << signalName;
         }
     }
     // store an Element object holding information about the signal.

@@ -9,7 +9,7 @@ class PersistenceController : public QObject
 {
     Q_OBJECT
 public:
-    explicit PersistenceController(Mediator *mediator, QObject *parent = 0);
+    explicit PersistenceController(QObject *parent = 0);
     ~PersistenceController(){}
 
     Search retrieveSearch(QUuid searchId);
@@ -19,7 +19,8 @@ public:
     QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid SearchId);
-
+    // Setter
+    void setMediator(Mediator *mediator);
 public slots:
     void saveSearch(Search *s);
     void saveDronePaths(Search *s);

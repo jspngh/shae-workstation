@@ -29,6 +29,8 @@ Search SearchDAO::dbSaveSearch(Search search)
 
     QString pathString = QString(os.str().c_str());
 
+    query.bindValue(":searchID", search.getSearchID());
+    query.bindValue(":startTime", search.getStartTime());
     query.bindValue(":area", pathString);
     query.bindValue(":height", search.getHeight());
     query.bindValue(":gimballAngle", search.getGimbalAngle());
