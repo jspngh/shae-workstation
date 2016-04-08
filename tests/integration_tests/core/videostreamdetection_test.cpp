@@ -1,4 +1,4 @@
-#include "videostreamdetection.h"
+#include "videostreamdetection_test.h"
 
 VideostreamDetection_Test::VideostreamDetection_Test()
 {
@@ -56,6 +56,4 @@ void VideostreamDetection_Test::VideostreamDetectionTest()
     QThread::sleep(5);
     controller->stopStream(controller->getDrones()->first());
     controller->getDetectionController()->wait();
-
-
 }

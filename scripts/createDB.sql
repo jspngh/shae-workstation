@@ -24,7 +24,7 @@ create table IF NOT EXISTS statuses(droneID text, timestampDrone text,
 			selectedSpeed integer, height integer, selectedHeight integer,
 			batteryLevel integer, fps integer, resolution integer,
 			heartbeat integer, droneState integer, manufacturer text,
-			droneType text, nextWaypointLongitude integer, nextWaypointLatitude integer,
+			droneType text, nextWaypointLongitude integer,			 nextWaypointLatitude integer,
 			previousWaypointOrder integer,
 			nextWaypoints text,
                         foreign key(droneID) references drones(droneID));

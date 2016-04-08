@@ -6,7 +6,7 @@ PersistenceController::PersistenceController(Mediator *mediator, QObject *parent
       mediator(mediator)
 {
     this->persistence = new Persistence(mediator, this);
-
+    qDebug() << "adding PersistenceController signal/slots";
     // Add save slots to mediator
     mediator->addSlot(this, SLOT(saveSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(saveDronePaths(Search *)), QString("pathCalculated(Search*)"));

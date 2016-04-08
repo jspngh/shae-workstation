@@ -9,11 +9,6 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
-    //configure the search (should be done through the interface)
-    search = new Search();
-    search->setHeight(3);
-    search->setGimbalAngle(65);
-    search->setFpsProcessing(2);
 
     workstationIP = initWorkstationIP();
 
@@ -61,19 +56,15 @@ void Controller::init()
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
 
-    // detectionController->moveToThread(&detectorThread);
     persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
     DroneModule *d = drones->first();
     d->moveToThread(&droneThread);
-    //d->setController(this);
 
     // start all the threads
-    //detectionController->start();
     persistenceThread.start();
     pathLogicThread.start();
     droneThread.start();
-    // persistenceThread.start();
 }
 
 
