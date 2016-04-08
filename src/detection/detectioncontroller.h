@@ -75,6 +75,7 @@ private:
     int nrDetections;
     volatile bool streaming;
     Search *search;
+    DroneModule * droneModule;
     QString path;
     PersistenceController *persistenceController;
     /*!
