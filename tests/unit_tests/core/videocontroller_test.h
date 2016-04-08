@@ -11,6 +11,7 @@
 #include <fstream>
 
 #include "videocontroller/videocontroller.h"
+#include "communication/streamconnection.h"
 
 class VideoController_Test : public QObject
 {
@@ -21,6 +22,8 @@ public:
 signals:
     void startStream(Drone *drone);
     void stopStream(Drone *drone);
+    void streamRequest();
+
 
 private Q_SLOTS:
     void testCreateFile();
@@ -30,7 +33,9 @@ private Q_SLOTS:
 private:
     void onStreamStarted();
     void onStreamStopped();
-
+    QProcess *simulatorProcess;
+    StreamConnection* streamConnection;
+    QThread* streamThread;
     bool started, stopped;
     VideoController vc;
 };

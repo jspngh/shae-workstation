@@ -30,7 +30,8 @@ public:
      * \brief dbRetrieveVideoSequence Retrieves a videosequence for a
      * certain droneid and searchid.
      */
-    VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid videoId);
+
+    VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid searchId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

@@ -32,18 +32,19 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, VideoSequence
     return sequence;
 }
 
-VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid videoId)
+VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid searchId)
 {
     VideoSequence sequence;
     QSqlQuery query;
-    query.prepare("SELECT start, end, frameCount, path FROM videosequences WHERE videoID = (:videoID)");
-    query.bindValue(":videoID", videoId);
+    query.prepare("SELECT videoID, start, end, frameCount, path FROM videosequences WHERE droneID = (:droneID) and searchID =(:searchID)");
+    query.bindValue(":droneID", droneId);
+    query.bindValue(":searchID", searchId);
     if (query.exec()) {
         if (query.next()) {
-            sequence = VideoSequence(videoId, query.value(0).toTime(),
-                                     query.value(1).toTime(),
-                                     query.value(2).toInt(),
-                                     query.value(3).toString());
+            sequence = VideoSequence(query.value(0).toUuid() , query.value(1).toTime(),
+                                     query.value(2).toTime(),
+                                     query.value(3).toInt(),
+                                     query.value(4).toString());
         }
     } else {
         qDebug() << "setVideoSequence error:  "

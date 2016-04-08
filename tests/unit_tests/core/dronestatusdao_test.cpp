@@ -49,6 +49,7 @@ void DroneStatusDAO_Test::testSimpleDroneStatusDAO()
     DroneStatus three = DroneStatus(QDateTime(QDate(2016 , 5, 6) , QTime(7, 7, 7)), QDateTime(QDate(2016 , 5, 6) , QTime(7, 7, 8)), QGeoCoordinate(7, 7, 7), 5.5, 5.5, 5.5, 5.5, -123456789);
     DroneStatus four = DroneStatus(QDateTime(QDate(2016 , 5, 6) , QTime(8, 8, 8)), QDateTime(QDate(2016 , 5, 6) , QTime(8, 8, 9)), QGeoCoordinate(8, 8, 8), 5.5, 5.5, 5.5, 5.5, -123456789);
 
+<<<<<<< HEAD
     DroneModule dm;
     one.setDrone(&dm);
     two.setDrone(&dm);
@@ -62,6 +63,15 @@ void DroneStatusDAO_Test::testSimpleDroneStatusDAO()
 
     QUuid droneID = dm.getGuid();
 
+=======
+    QUuid droneID = QUuid::createUuid();
+
+    sd.dbSaveDroneStatus(one, droneID);
+    sd.dbSaveDroneStatus(two, droneID);
+    sd.dbSaveDroneStatus(four, droneID);
+    sd.dbSaveDroneStatus(three, droneID);
+
+>>>>>>> develop
     QList<DroneStatus> sbackone = sd.dbRetrieveDroneStatus(droneID, QDateTime(QDate(2016 , 5, 6), QTime(6, 6, 6)), QDateTime(QDate(2016 , 5, 6), QTime(8, 8, 8)));
 
     for (DroneStatus dstatus : sbackone) {

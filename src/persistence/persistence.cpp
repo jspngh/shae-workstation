@@ -1,7 +1,7 @@
 #include "persistence.h"
 #include <QDir>
 #include <QFileInfo>
-#include <QDebug>
+#include <QtDebug>
 #include <QStandardPaths>
 #include <QSqlQuery>
 
@@ -25,6 +25,7 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     //register slots at mediator
     //mediator->addSlot(this, SLOT(saveSearch(Search)), QString("saveSearch(Search)"));
     //mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus, QUuid, QUuid)), QString("saveDroneStatus(DroneStatus,QUuid,QUuid)"));
+    //mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("receivedHeartBeat(DroneStatus)")); TODO
     //mediator->addSlot(this, SLOT(saveDronePath(QUuid, QUuid, QList<QGeoCoordinate>)), QString("saveDronePath(QUuid,QUuid,QList<QGeoCoordinate>)"));
     //mediator->addSlot(this, SLOT(saveDrone(Drone)), QString("saveDrone(Drone)"));
     //mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, QUuid, VideoSequence)), QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
@@ -91,9 +92,9 @@ void Persistence::saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence
     videosequencedao.dbSaveVideoSequence(droneId, searchId, sequence);
 }
 
-VideoSequence Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
+VideoSequence Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId)
 {
-    return videosequencedao.dbRetrieveVideoSequence(droneId, searchId, videoId);
+    return videosequencedao.dbRetrieveVideoSequence(droneId, searchId);
 }
 
 void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result)

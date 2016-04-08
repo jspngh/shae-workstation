@@ -16,6 +16,7 @@ void DatabaseCreator::initDatabase()
 {
     bool dbNotCreatedYet = false;
 
+    qDebug() << databaseLocation();
     // Make sure the file exists
     QFileInfo checkFile(databaseLocation());
     if (!checkFile.exists() || !checkFile.isFile()) {
@@ -74,6 +75,9 @@ void DatabaseCreator::createDatabase()
 
 void DatabaseCreator::removeDatabase()
 {
-    QFile::remove(databaseLocation());
+    QString location = databaseLocation();
+    QFileInfo checkFile(location);
+    if(checkFile.exists())
+        QFile::remove(databaseLocation());
 }
 

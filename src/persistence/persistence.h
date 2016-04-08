@@ -35,7 +35,7 @@ public:
     DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
     QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
     Drone retrieveDrone(QUuid droneId);
-    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
+    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
     void saveSearch(Search search);

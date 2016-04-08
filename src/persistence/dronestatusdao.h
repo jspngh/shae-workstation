@@ -24,7 +24,7 @@ public:
     /**
      * \brief dbSaveDroneStatus saves a detection result into the database.
      * Its input is a dronestatus object.
-     * This object isvthe one that needs to be stored.
+     * This object is the one that needs to be stored.
      */
     DroneStatus dbSaveDroneStatus(DroneStatus droneStatus);
     //compare with timestamp of workstation
