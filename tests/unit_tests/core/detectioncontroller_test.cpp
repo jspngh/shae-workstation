@@ -24,6 +24,21 @@ void DetectionController_Test::initTestCase()
     this->numDetections = 0;
 }
 
+void DetectionController_Test::testIncorrectParseConfiguration()
+{
+    Search *s = new Search();
+    s->setHeight(0);
+    s->setGimbalAngle(0);
+    s->setFpsProcessing(0);
+    QString footage = "dependencies/testfootage.mp4";
+    DetectionController* d = new DetectionController(s, footage);
+    //verify that the method has executed correctly
+    delete s;
+    delete d;
+    QVERIFY(true);
+}
+
+
 
 void DetectionController_Test::testProcessSequence()
 {

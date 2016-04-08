@@ -1,8 +1,8 @@
 create table IF NOT EXISTS searches(searchID text primary key, startTime text, area text, height integer,
 					gimballAngle integer, fpsProcessing integer);
 
-create table IF NOT EXISTS drones(droneID text primary key, dataPort integer, visionWidth integer,
-				streamPort integer, serverIp text, streamPath text);
+create table IF NOT EXISTS drones(droneID text primary key, dronePort integer, visionWidth integer,
+				streamPort integer, controllerIP text, droneIP text,  streamPath text);
 
 create table IF NOT EXISTS dronessearches(searchID text, droneID text, path text,
 		foreign key(searchID) references searches(searchID),

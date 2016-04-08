@@ -173,6 +173,6 @@ void Json_Messages_Test::testSettingsMessages()
     QVERIFY(json["message"] == QString("workstation_config"));
     QJsonObject config = json["configuration"].toObject();
     QVERIFY(config["ip_address"] == QString("127.0.0.1"));
-    QVERIFY(config["port"] == 5555);
+    QVERIFY(config["port"] == QString::number(5555));
 
 }
