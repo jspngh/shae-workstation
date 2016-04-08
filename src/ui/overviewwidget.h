@@ -35,7 +35,7 @@ private:
 private slots:
     void exportSearchButtonPush();
     void onSearchStarted(Search *s);
-    void onHeartBeatReceived(const QString heartbeat);
+    void onHeartBeatReceived(DroneStatus heartbeat);
     void fillDroneList();
     void updateDroneList(DroneStatus s);
     void onMapLoaded();

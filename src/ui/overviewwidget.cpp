@@ -24,9 +24,9 @@ void OverviewWidget::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
 
-void OverviewWidget::onHeartBeatReceived(const QString heartbeat)
+void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
 {
-    ui->heartBeat->setText(QString("Heartbeat: ") + heartbeat);
+    ui->heartBeat->setText(heartbeat.toString());
 }
 
 void OverviewWidget::exportSearchButtonPush()
