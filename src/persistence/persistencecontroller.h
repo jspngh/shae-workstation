@@ -12,13 +12,13 @@ public:
     explicit PersistenceController(Mediator *mediator, QObject *parent = 0);
     ~PersistenceController(){}
 
-signals:
-    void retrievedSearch(Search s);
-    void retrievedDronePaths(QList<QGeoCoordinate> cs);
-    void retrievedDroneStatus(QList<DroneStatus> dss);
-    void retrievedDroneStatus(DroneStatus ds);
-    void retrievedDetectionResults(QList<DetectionResult> drs);
-    void retrievedVideoSequence(VideoSequence vs);
+    Search retrieveSearch(QUuid searchId);
+    QList<QGeoCoordinate> retrieveDronePaths(QUuid droneId, QUuid searchId);
+    DroneStatus retrieveDroneStatus(QUuid droneId);
+    DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
+    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
+    QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
+    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid SearchId, QUuid videoId);
 
 public slots:
     void saveSearch(Search *s);
@@ -26,14 +26,6 @@ public slots:
     void saveDroneStatus(DroneStatus ds);
     void saveDetectionResult(DetectionResult dr);
     void saveVideoSequence(VideoSequence vs);
-
-    void retrieveSearch(QUuid searchId);
-    void retrieveDronePaths(QUuid droneId, QUuid searchId);
-    void retrieveDroneStatus(QUuid droneId);
-    void retrieveDroneStatus(QUuid droneId, QDateTime time);
-    void retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
-    void retrieveDetectionResults(QUuid droneId, QUuid searchId);
-    void retrieveVideoSequence(QUuid droneId, QUuid SearchId, QUuid videoId);
 
 private:
     Mediator *mediator;
