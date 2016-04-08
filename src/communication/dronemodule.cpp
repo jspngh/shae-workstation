@@ -6,23 +6,22 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    : DroneModule(6330, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
+    : DroneModule(6331, 5502, "10.1.1.10", "10.1.1.1","sololink.sdp", MIN_VISIONWIDTH)
 {
-
 }
 
-DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
+DroneModule::DroneModule(int dataPort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth)
 {
-    drone = Drone(dataPort, streamPort, serverIp, streamPath, visionWidth);
-    droneConnection = new DroneConnection(serverIp, (quint16) dataPort);
-    streamConnection = new StreamConnection(serverIp, (quint16) streamPort);
+    drone = new Drone(dataPort, streamPort, droneIp, controllerIp, streamPath, visionWidth);
+    droneConnection = new DroneConnection(droneIp, (quint16) dataPort);
+    streamConnection = new StreamConnection(controllerIp, (quint16) streamPort);
     connectionThread = new QThread();
     streamThread = new QThread();
     droneConnection->moveToThread(connectionThread);
     streamConnection->moveToThread(streamThread);
     connectionThread->start();
     streamThread->start();
-
+    videoController = new VideoController();
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
 
@@ -44,7 +43,9 @@ DroneModule::~DroneModule()
     connectionThread->quit();
     connectionThread->wait();
     delete droneConnection;
+    delete drone;
     delete connectionThread;
+    delete videoController;
     //TODO: delete heartbeatReceiver;
     //TODO: delete waypoints fails if no waypoints assigned
 
@@ -59,7 +60,6 @@ void DroneModule::setController(Controller *c)
     controller->getMediator()->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     controller->getMediator()->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
-
     controller->getMediator()->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
     controller->getMediator()->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     controller->getMediator()->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
@@ -94,12 +94,12 @@ void DroneModule::stopStream()
     streamConnection->stopConnection();
 }
 
-Drone DroneModule::getDrone() const
+Drone *DroneModule::getDrone()
 {
     return drone;
 }
 
-void DroneModule::setDrone(const Drone &value)
+void DroneModule::setDrone(Drone *value)
 {
     drone = value;
 }
@@ -107,27 +107,37 @@ void DroneModule::setDrone(const Drone &value)
 
 QUuid DroneModule::getGuid() const
 {
-    return drone.getGuid();
+    return drone->getGuid();
 }
 
-int DroneModule::getPortNr()
+int DroneModule::getDronePort()
 {
-    return drone.getPortNr();
+    return drone->getDronePort();
 }
 
-QString DroneModule::getServerIp()
+int DroneModule::getStreamPort()
 {
-    return drone.getServerIp();
+    return drone->getStreamPort();
+}
+
+QString DroneModule::getDroneIp()
+{
+    return drone->getDroneIp();
+}
+
+QString DroneModule::getControllerIp()
+{
+    return drone->getControllerIp();
 }
 
 double DroneModule::getVisionWidth() const
 {
-    return drone.getVisionWidth();
+    return drone->getVisionWidth();
 }
 
 void DroneModule::setVisionWidth(double visionWidth)
 {
-    drone.setVisionWidth(visionWidth);
+    drone->setVisionWidth(visionWidth);
 }
 
 QList<QGeoCoordinate> *DroneModule::getWaypoints()
@@ -156,7 +166,7 @@ void DroneModule::onPathCalculated(Search *s)
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
     for (int i = 0; i < s->getDroneList().size() && !droneInList; i++)    {
-        if (s->getDroneList().at(i)->getGuid() == drone.getGuid())
+        if (s->getDroneList().at(i)->getGuid() == drone->getGuid())
             droneInList = true;
     }
     if (droneInList) {
@@ -188,6 +198,16 @@ void DroneModule::onDroneResponse(const QString &response)
 void DroneModule::onDroneResponseError(int socketError, const QString &message)
 {
     qDebug() << message;
+}
+
+VideoController *DroneModule::getVideoController() const
+{
+    return videoController;
+}
+
+void DroneModule::setVideoController(VideoController *value)
+{
+    videoController = value;
 }
 
 
@@ -285,7 +305,7 @@ Status messages method
 **************************/
 QJsonDocument DroneModule::requestStatus()
 {
-    qDebug() << "DroneModule::requestStatus";
+    //qDebug() << "DroneModule::requestStatus";
     // Create json message to request all statuses
     QJsonObject json = QJsonObject();
 
@@ -327,8 +347,8 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
         case Drone_Type:
             key = "drone_type";
             break;
-        case Waypoint_Reached:
-            key = "waypoint_reached";
+        case Waypoint_Order:
+            key = "waypoint_order";
             break;
         case Speed:
             key = "speed";
@@ -395,14 +415,14 @@ QJsonDocument DroneModule::requestHeartbeat()
 Setting messages methods
 **************************/
 
-QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int port)
+QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAddress, int port)
 {
     // Create json message
     QJsonObject json = QJsonObject();
     json["message_type"] = QString("settings");
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
-    config["ip_address"] = ipAdress;
+    config["ip_address"] = ipAddress;
     config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);

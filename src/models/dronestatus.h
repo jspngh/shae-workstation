@@ -25,7 +25,7 @@ public:
                 double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
                 double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
                 int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
-                QGeoCoordinate previousWaypoint, QList<QGeoCoordinate> nextWaypoints);
+                int previousWaypointOrder, QList<QGeoCoordinate> nextWaypoints);
 
     //! Creates a droneStatus object from a Json status messages that can be received from the drone.
     static DroneStatus fromJsonString(QString string);
@@ -78,8 +78,8 @@ public:
     QGeoCoordinate getNextWaypoint() const;
     void setNextWaypoint(const QGeoCoordinate &value);
 
-    QGeoCoordinate getPreviousWaypoint() const;
-    void setPreviousWaypoint(const QGeoCoordinate &value);
+    int getPreviousWaypointOrder() const;
+    void setPreviousWaypointOrder(int value);
 
     QList<QGeoCoordinate> getNextWaypoints() const;
     void setNextWaypoints(const QList<QGeoCoordinate> &value);
@@ -119,7 +119,7 @@ private:
     //! contains long, lat
     QGeoCoordinate currentLocation;
     QGeoCoordinate nextWaypoint;
-    QGeoCoordinate previousWaypoint;
+    int previousWaypointOrder;
     QList<QGeoCoordinate> nextWaypoints;
     QDateTime timestampReceivedWorkstation;
 

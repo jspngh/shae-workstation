@@ -195,6 +195,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
 
     DroneModule *d = s.getDrone();
     int currentRow = getDroneInTableIndex(d);
+
     if(currentRow == -1) {
         ui->droneTable->insertRow(ui->droneTable->rowCount());
         currentRow = ui->droneTable->rowCount() - 1;
@@ -218,7 +219,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
                                 new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
 
     // set ip and port
-    QString ip_port = d->getServerIp() + QString(':') + QString::number(d->getPortNr());
+    QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
     ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
 
     dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));
@@ -232,4 +233,3 @@ int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 
     return -1;
 }
-

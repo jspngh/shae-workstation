@@ -12,7 +12,7 @@
         this.map = this.initializeMap(lng, lat, type, zoom);
         this.geocoder = new google.maps.Geocoder();
         this.mapSelection = new MapSelection(this.map);
-        this.markerLists = {};
+        this.markers = {};
 
         this.addEventListeners();
     };
@@ -129,7 +129,7 @@
     /* Sets the center of the map to the given coordinates.
      * @param {number} lat The latitude of the new center.
      * @param {number} lng The longitude of the new center.
-     * @param {number} animated Whether this should be animated.
+     * @param {boolean} animated Whether this should be animated.
      */
     MapKit.prototype.setCenter = function(lat, lng, animated) {
         var latlng = new google.maps.LatLng(lat, lng);
@@ -144,10 +144,11 @@
      * @param {number} animated Whether this should be animated.
      */
     MapKit.prototype.setCenterByAddress = function(address, animated) {
-        geocode(address, function(geometry) {
+        var self = this;
+        self.geocode(address, function(geometry) {
             if (animated)
-                this.map.panToBounds(geometry.bounds);
-            this.map.fitBounds(geometry.bounds);
+                self.map.panToBounds(geometry.bounds);
+            self.map.fitBounds(geometry.bounds);
         });
     };
 
@@ -165,11 +166,15 @@
     };
 
     MapKit.prototype.panToBounds = function(north, south, east, west) {
-        this.map.panToBounds(boundsFromCoordinates(north, south, east, west));
+        this.map.panToBounds(
+          this.boundsFromCoordinates(north, south, east, west)
+        );
     };
 
     MapKit.prototype.fitBounds = function(north, south, east, west) {
-        this.map.fitBounds(boundsFromCoordinates(north, south, east, west));
+        this.map.fitBounds(
+          this.boundsFromCoordinates(north, south, east, west)
+        );
     };
 
     // Helper method
@@ -212,20 +217,17 @@
         this.mapSelection.shiftPressed = false;
     };
 
-    MapKit.prototype.addMarkerList = function(name, icon) {
-        this.markerLists[name] = new MarkerList(this.map, icon);
+    MapKit.prototype.addMarker = function(id, locationLat, locationLng) {
+        this.markers[id] = new Marker(this.map, locationLat, locationLng);
     }
 
-    MapKit.prototype.getMarkerList = function(name) {
-        if(!this.markerLists[name]) {
-            this.addMarkerList(name);
-        }
-
-        return this.markerLists[name];
+    MapKit.prototype.getMarker = function(id) {
+        return this.markers[id];
     }
 
-    MapKit.prototype.removeMarkerList = function(name) {
-        delete this.markerLists[name];
+    MapKit.prototype.removeMarker = function(id) {
+        this.getMarker(id).removeFromMap();
+        delete this.markers[id];
     }
 
     window.MapKit = MapKit;

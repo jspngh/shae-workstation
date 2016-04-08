@@ -1,5 +1,5 @@
 #include <QtNetwork>
-#include <QDebug>
+#include <QtDebug>
 #include "droneconnection.h"
 
 DroneConnection::DroneConnection(const QString hostName, quint16 port, QObject *parent)

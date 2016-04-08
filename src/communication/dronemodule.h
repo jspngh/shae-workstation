@@ -21,7 +21,7 @@ class Controller;
 class Search;
 
 enum RequestedDroneStatus {
-    Battery_Level, Location, Drone_Type, Waypoint_Reached, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
+    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
 };
 enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
@@ -43,14 +43,15 @@ public:
 
     //! This sets:
     //! visionwidth to MIN_VISIONWIDTH
-    //! serverIp to 10.1.1.10
-    //! portNr to 6330
+    //! droneIp to 10.1.1.10
+    //! controllerIp to 10.1.1.1
+    //! dronePort to 6330
+    //! streamPort to 5502
     explicit DroneModule();
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    //! DroneModule::DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth)
-    explicit DroneModule(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
+    explicit DroneModule(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
 
 
     //! Copy constructor
@@ -70,17 +71,21 @@ public:
 
     QUuid getGuid() const;
 
-    int getPortNr();
+    int getDronePort();
 
-    QString getServerIp();
+    int getStreamPort();
+
+    QString getDroneIp();
+
+    QString getControllerIp();
 
     double getVisionWidth() const;
 
     void setVisionWidth(double visionWidth);
 
-    Drone getDrone() const;
+    Drone *getDrone();
 
-    void setDrone(const Drone &value);
+    void setDrone(Drone *value);
 
     QList<QGeoCoordinate> *getWaypoints();
 
@@ -125,6 +130,9 @@ public:
     /*******************
     Signals
     *******************/
+
+    VideoController *getVideoController() const;
+    void setVideoController(VideoController *value);
 
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
@@ -172,9 +180,11 @@ private slots:
 
 
 private:
-    Drone drone; //!< model containing the data of a drone that will be stored in the database
+    Drone *drone; //!< model containing the data of a drone that will be stored in the database
 
     Controller *controller;
+
+    VideoController * videoController;
 
     DroneHeartBeatReceiver *heartbeatReceiver;
 

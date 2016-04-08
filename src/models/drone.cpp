@@ -1,36 +1,35 @@
 #include "drone.h"
 
 Drone::Drone()
-    : Drone(6330, 5502, "10.1.1.10", "sololink.sdp", MIN_VISIONWIDTH)
+    : Drone(6331, 5502, "10.1.1.10", "10.1.1.1", "sololink.sdp", MIN_VISIONWIDTH)
+
 {
 
 }
 
-Drone::Drone(int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth):
+Drone::Drone(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth):
     guid(QUuid::createUuid()),
-    dataPort(dataPort),
+    dronePort(dronePort),
     streamPort(streamPort),
-    serverIp(serverIp),
+    droneIp(droneIp),
     streamPath(streamPath),
     visionWidth(visionWidth)
 {
-
 }
 
-Drone::Drone(QUuid droneID, int dataPort, int streamPort, QString serverIp, QString streamPath, double visionWidth):
+Drone::Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth):
     guid(droneID),
-    dataPort(dataPort),
+    dronePort(dronePort),
     streamPort(streamPort),
-    serverIp(serverIp),
+    droneIp(droneIp),
+    controllerIp(controllerIp),
     streamPath(streamPath),
     visionWidth(visionWidth)
 {
-
 }
 
 Drone::~Drone()
 {
-
 }
 
 /***********************
@@ -42,19 +41,24 @@ QUuid Drone::getGuid() const
     return this->guid;
 }
 
-int Drone::getPortNr()
+int Drone::getDronePort()
 {
-    return this->dataPort;
+    return this->dronePort;
 }
 
-int Drone::getStreamPortNr()
+int Drone::getStreamPort()
 {
     return this->streamPort;
 }
 
-QString Drone::getServerIp()
+QString Drone::getDroneIp()
 {
-    return this->serverIp;
+    return this->droneIp;
+}
+
+QString Drone::getControllerIp()
+{
+    return this->controllerIp;
 }
 
 double Drone::getVisionWidth() const
@@ -76,5 +80,3 @@ void Drone::setStreamPath(const QString &value)
 {
     streamPath = value;
 }
-
-

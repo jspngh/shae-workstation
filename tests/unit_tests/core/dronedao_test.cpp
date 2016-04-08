@@ -44,17 +44,18 @@ void DroneDAO_Test::testSimpleDroneDAO()
 {
     DroneDAO sd = DroneDAO(&projectShaeDatabase);
 
-    Drone s = Drone(1, 2, "3", "4", 5.6);
+    Drone s = Drone(1, 2, "3", "4", "6",5.6);
 
     sd.dbSaveDrone(s);
 
     Drone sback = sd.dbRetrieveDrone(s.getGuid());
 
     QVERIFY(sback.getGuid() == s.getGuid());
-    QVERIFY(sback.getPortNr() == s.getPortNr());
-    QVERIFY(sback.getServerIp() == s.getServerIp());
+    QVERIFY(sback.getDronePort() == s.getDronePort());
+    QVERIFY(sback.getDroneIp() == s.getDroneIp());
+    QVERIFY(sback.getControllerIp() == s.getControllerIp());
     QVERIFY(sback.getStreamPath() == s.getStreamPath());
-    QVERIFY(sback.getStreamPortNr() == s.getStreamPortNr());
+    QVERIFY(sback.getStreamPort() == s.getStreamPort());
     QVERIFY(sback.getVisionWidth() == s.getVisionWidth());
 
     QSqlQuery query;
@@ -68,5 +69,3 @@ void DroneDAO_Test::testSimpleDroneDAO()
                  << query.lastError();
     };
 }
-
-
