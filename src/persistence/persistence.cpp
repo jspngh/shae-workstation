@@ -40,7 +40,6 @@ Persistence::~Persistence()
 
 void Persistence::saveSearch(Search search)
 {
-    currentSearchID = search.getSearchID();
     searchdao.dbSaveSearch(search);
 }
 
@@ -51,22 +50,22 @@ Search Persistence::retrieveSearch(QUuid searchId)
 
 void Persistence::saveDroneStatus(DroneStatus droneStatus)
 {
-    dronestatusdao.dbSaveDroneStatus(droneStatus, droneStatus.getDrone()->getGuid(), currentSearchID);
+    dronestatusdao.dbSaveDroneStatus(droneStatus, droneStatus.getDrone()->getGuid());
 }
 
-QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
+QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
 {
-    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, begin, end);
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, begin, end);
 }
 
-DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
+DroneStatus Persistence::retrieveDroneStatus(QUuid droneId)
 {
-    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId);
+    return dronestatusdao.dbRetrieveDroneStatus(droneId);
 }
 
-DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
+DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QDateTime time)
 {
-    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, time);
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, time);
 }
 
 void Persistence::saveDrone(Drone drone)
@@ -94,9 +93,9 @@ void Persistence::saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence
     videosequencedao.dbSaveVideoSequence(droneId, searchId, sequence);
 }
 
-VideoSequence Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
+VideoSequence Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId)
 {
-    return videosequencedao.dbRetrieveVideoSequence(droneId, searchId, videoId);
+    return videosequencedao.dbRetrieveVideoSequence(droneId, searchId);
 }
 
 void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result)

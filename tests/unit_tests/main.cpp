@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<DetectionResult>("DetectionResult");
     QApplication a(argc, argv);
     DatabaseCreator db = DatabaseCreator();
+    db.removeDatabase();
     db.initDatabase();
 
     QList<QObject *> tests;

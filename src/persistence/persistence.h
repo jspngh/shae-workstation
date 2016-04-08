@@ -28,14 +28,14 @@ public:
 
     Search retrieveSearch(QUuid searchId);
     //compare with timestamp of workstation
-    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
+    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
-    DroneStatus retrieveDroneStatus(QUuid droneId, QUuid searchId);
+    DroneStatus retrieveDroneStatus(QUuid droneId);
     //retrieve dronestatus closest to time parameter
-    DroneStatus retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
+    DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
     QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
     Drone retrieveDrone(QUuid droneId);
-    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
+    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
 public slots:
@@ -57,8 +57,6 @@ private:
     DroneStatusDAO dronestatusdao;
     SearchDAO searchdao;
     VideoSequenceDAO videosequencedao;
-
-    QUuid currentSearchID;
 
     //! \brief Initializes the database (sets the projectShaeDatabase-property).
     void initDatabase();
