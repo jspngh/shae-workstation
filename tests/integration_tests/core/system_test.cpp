@@ -30,8 +30,11 @@ void System_Test::initTestCase()
     s->setStartTime(QTime::currentTime());
     s->setSearchID(QUuid::createUuid());
     s->setArea(QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022306, 3.710001)));
+    s->setDroneList((*list));
+
     emit startSearch(s);
     qDebug() << "emit ConfigWidget::startSearch(Search *s)";
+    QThread::sleep(1000);
 }
 
 

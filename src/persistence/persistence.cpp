@@ -133,6 +133,7 @@ void Persistence::initDatabase()
     if (dbNotCreatedYet) {
         createDatabase();
     }
+
 }
 
 QString Persistence::databaseLocation()

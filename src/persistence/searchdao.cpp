@@ -19,8 +19,6 @@ Search SearchDAO::dbSaveSearch(Search search)
     QSqlQuery query;
     query.prepare("INSERT INTO searches (searchID, startTime, area, height, gimballAngle, fpsProcessing) "
                   "VALUES (:searchID, :startTime, :area, :height, :gimballAngle, :fpsProcessing)");
-    query.bindValue(":searchID", search.getSearchID());
-    query.bindValue(":startTime", search.getStartTime());
 
     std::ostringstream os;
 
