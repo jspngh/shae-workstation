@@ -7,6 +7,8 @@ class DroneHeartbeat_IntegrationTest : public QObject
     Q_OBJECT
 public:
     DroneHeartbeat_IntegrationTest();
+
+public slots:
     void onDroneHeartbeatReceived();
 
 private Q_SLOTS:

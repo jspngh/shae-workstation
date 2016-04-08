@@ -56,6 +56,8 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
     qDebug() << raw;
     QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
 
+
+
     emit droneHeartBeat(response);
 
     clientConnection->disconnectFromHost();

@@ -66,6 +66,8 @@ void DroneModule::setController(Controller *c)
     controller->getMediator()->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
     controller->getMediator()->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
 
+
+    //qDebug() << controller->getWorkstationIP();
     heartbeatReceiver = new DroneHeartBeatReceiver(controller->getWorkstationIP());
     //heartbeatThread = new QThread();
     //heartbeatReceiver->moveToThread(heartbeatThread);
@@ -417,7 +419,8 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAdress, int por
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
     config["ip_address"] = ipAdress;
-    config["port"] = port;
+    //TODO: make back an int instead of string
+    config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);
 
