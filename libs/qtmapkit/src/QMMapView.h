@@ -23,7 +23,7 @@
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
 #include "EmptyAreaException.h"
-#include "QMMapIcon.h"
+#include "QMMarker.h"
 #include "QtMapKit.h"
 
 class QMMapViewPrivate;
@@ -143,12 +143,23 @@ public slots:
     void selectArea(const QGeoRectangle &area);
 
     /*!
-     * \brief Adds a marker on the given coordinate.
-     * \param name     The name of marker type
+     * \brief Adds a marker on a given location.
      * \param markerId The id of the maerker
-     * \param point    The coordinate of the marker
+     * \param location The coordinate of the marker
      */
-    void addMarker(QString listName, uint markerId, QGeoCoordinate point, QMMapIcon &icon);
+    QMMarker& addMarker(QString markerId, const QGeoCoordinate &location);
+
+    /*!
+     * \brief Get a marker.
+     * \param markerId The id of the maerker
+     */
+    QMMarker& getMarker(const QString markerId);
+
+    /*!
+     * \brief Removes a marker.
+     * \param markerId The id of the maerker
+     */
+    void removeMarker(const QString markerId);
 
 //    void pan(int x, int y);
 //    void setHeading(qreal heading);
@@ -205,7 +216,6 @@ protected slots:
     void jsSelectedAreaDeleted();
 
 private:
-    bool selectable;
     QMMapViewPrivate *d_ptr;
 };
 

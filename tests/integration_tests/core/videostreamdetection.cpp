@@ -24,12 +24,10 @@ void VideostreamDetection_Test::initTestCase()
     qDebug() << "initialisation of controller";
 
     QList<DroneModule *>* list  = new QList<DroneModule *>();
-    list->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
+    list->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
     controller->setDrones(list);
     qDebug() << "added local drone module " << controller->getDrones()->size();
     controller->init();
-
-
 }
 
 

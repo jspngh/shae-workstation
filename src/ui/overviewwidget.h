@@ -1,13 +1,17 @@
 #ifndef OVERVIEWWIDGET_H
 #define OVERVIEWWIDGET_H
 
-#include <QWidget>
-#include <QStackedWidget>
+#include <QListWidgetItem>
+#include <QMap>
+#include <QMMarker.h>
 #include <QMMapView.h>
-#include <QMMapIcon.h>
+#include <QStackedWidget>
+#include <QUuid>
+#include <QWidget>
+#include "overviewdroneitem.h"
+#include "communication/dronemodule.h"
 #include "core/mediator.h"
 #include "models/search.h"
-#include "communication/dronemodule.h"
 
 namespace Ui {
 class OverviewWidget;
@@ -25,12 +29,17 @@ public:
 private:
     QMMapView *mapView;
     Ui::OverviewWidget *ui;
+    Search *search;
     Mediator *mediator;
+    QMap<QUuid, OverviewDroneItem*> mapIdListItem;
 
 private slots:
     void clickButtonPush();
     void backButtonPush();
     void onSearchStarted(Search *s);
+    void onHeartBeatReceived(const QString heartbeat);
+    void fillDroneList();
+    void updateDroneList(DroneStatus s);
     void onMapLoaded();
     void onMapFailedToLoad();
 };

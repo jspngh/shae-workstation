@@ -51,7 +51,13 @@ public:
 
     //! Constructor that sets all important attributes of the drone object
     //! This is the constructor that should be used
-    explicit DroneModule(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth = MIN_VISIONWIDTH);
+    explicit DroneModule(int dronePort,
+                         int streamPort,
+                         QString droneIp,
+                         QString controllerIp,
+                         QString workstationIp,
+                         QString streamPath,
+                         double visionWidth = MIN_VISIONWIDTH);
 
 
     //! Copy constructor
@@ -63,7 +69,7 @@ public:
     /***********************
     Getters/Setters
     ************************/
-    void setController(Controller *ctrl);
+    void setMediator(Mediator *med);
 
     void getStream();
 
@@ -178,26 +184,17 @@ private slots:
     void onDroneResponseError(int socketError, const QString &message);
 
 
-
 private:
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
-
-    Controller *controller;
-
+    Mediator *mediator;
+    QString workstationIp;
     VideoController * videoController;
-
     DroneHeartBeatReceiver *heartbeatReceiver;
-
     QThread *connectionThread;
-
     DroneConnection *droneConnection;
-
     QThread *streamThread;
-
     StreamConnection *streamConnection;
-
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
-
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 

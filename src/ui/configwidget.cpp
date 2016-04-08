@@ -152,6 +152,7 @@ void ConfigWidget::startButtonPush()
             if (cb->isChecked())
                 dronesInSearch.append(dronesInTable[i].second);
         }
+        qDebug() << dronesInSearch.size();
         s->setDroneList(dronesInSearch);
 
         emit startSearch(s);
@@ -190,22 +191,35 @@ void ConfigWidget::setSignalSlots()
 
 void ConfigWidget::updateDroneTable(DroneStatus s)
 {
+    qDebug() << "updateDroneTable";
+
     DroneModule *d = s.getDrone();
     int currentRow = getDroneInTableIndex(d);
-    QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
+
     if(currentRow == -1) {
         ui->droneTable->insertRow(ui->droneTable->rowCount());
         currentRow = ui->droneTable->rowCount() - 1;
     }
 
-    // fill newly created row
+    // fill or update row
     QCheckBox *checkbox = new QCheckBox();
     ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
-    ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Solo 3DR")));
+
+    // set type
+    if(s.getType().isEmpty())
+        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Not available")));
+    else
+        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(s.getType()));
+
+    // set battery
     if (s.getBatteryLevel() == -1)
         ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
     else
-        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
+        ui->droneTable->setItem(currentRow, BATTERY,
+                                new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
+
+    // set ip and port
+    QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
     ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
 
     dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));

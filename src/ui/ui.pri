@@ -5,19 +5,20 @@ SOURCES += \
     $$PWD/mainwindow.cpp \
     $$PWD/welcomewidget.cpp \
     $$PWD/configwidget.cpp \
-    $$PWD/overviewwidget.cpp
+    $$PWD/overviewwidget.cpp \
+    $$PWD/overviewdroneitem.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
     $$PWD/welcomewidget.h \
     $$PWD/configwidget.h \
-    $$PWD/overviewwidget.h
+    $$PWD/overviewwidget.h \
+    $$PWD/overviewdroneitem.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
     $$PWD/welcomewidget.ui \
     $$PWD/configwidget.ui \
-    $$PWD/overviewwidget.ui
-
-RESOURCES +=
+    $$PWD/overviewwidget.ui \
+    $$PWD/overviewdroneitem.ui
 
