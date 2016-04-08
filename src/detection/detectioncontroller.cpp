@@ -2,11 +2,12 @@
 
 using namespace std;
 
-DetectionController::DetectionController(Search *search, QString path, QObject *parent)
+DetectionController::DetectionController(Search *search, QString path, QObject *parent, PersistenceController *pc)
     : QThread(parent)
 {
     this->search = search;
     this->path = path;
+    this->persistenceController = pc;
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
 }
 

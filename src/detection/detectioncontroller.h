@@ -19,6 +19,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
+#include "persistence/persistencecontroller.h"
 
 class DetectionController : public QThread
 {
@@ -26,7 +27,7 @@ class DetectionController : public QThread
 
 public:
     //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
-    explicit DetectionController(Search *search, QString path, QObject *parent = 0);
+    explicit DetectionController(Search *search, QString path, QObject *parent = 0, PersistenceController *pc);
     ~DetectionController() {}
 
     void setMediator(Mediator *mediator);
@@ -75,6 +76,7 @@ private:
     volatile bool streaming;
     Search *search;
     QString path;
+    PersistenceController *persistenceController;
     /*!
      * \brief a private method that allows to parse the configuration file of the detectioncontroller
      * this file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
