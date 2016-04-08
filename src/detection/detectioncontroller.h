@@ -27,7 +27,7 @@ class DetectionController : public QThread
 
 public:
     //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
-    explicit DetectionController(Search *search, QString path, QObject *parent = 0, PersistenceController *pc);
+    explicit DetectionController(Search *search, DroneModule *dm, PersistenceController *pc, QObject *parent = 0);
     ~DetectionController() {}
 
     void setMediator(Mediator *mediator);

@@ -10,6 +10,7 @@
 #include <QWaitCondition>
 #include <QProcess>
 #include "detection/detectioncontroller.h"
+#include "videocontroller/videocontroller.h"
 
 class DetectionController_Test : public QObject
 {
