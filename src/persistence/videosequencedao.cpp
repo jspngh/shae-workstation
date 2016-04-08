@@ -11,14 +11,13 @@ VideoSequenceDAO::VideoSequenceDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence)
+VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, VideoSequence sequence)
 {
     // todo check if args are ok
     QSqlQuery query;
-    query.prepare("INSERT INTO videosequences (videoID, searchID, droneID, start, end, frameCount, path) "
-                  "VALUES (:videoID, :searchID, :droneID, :start, :end, :frameCount, :path)");
+    query.prepare("INSERT INTO videosequences (videoID, droneID, start, end, frameCount, path) "
+                  "VALUES (:videoID, :droneID, :start, :end, :frameCount, :path)");
     query.bindValue(":videoID", sequence.getVideoID());
-    query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
     query.bindValue(":start", sequence.getStart());
     query.bindValue(":end", sequence.getEnd());
@@ -33,7 +32,7 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchI
     return sequence;
 }
 
-VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId)
+VideoSequence VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid videoId)
 {
     VideoSequence sequence;
     QSqlQuery query;

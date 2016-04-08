@@ -73,6 +73,7 @@ void Controller::init()
 
     // start all the threads
     //detectionController->start();
+    pathLogicThread.start();
     persistenceThread.start();
 }
 

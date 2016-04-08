@@ -57,7 +57,7 @@ signals:
     /*!
      * \brief the signal that is emitted when a new detection result has been found in the footage.
      */
-    void newDetection(DetectionResult result);
+    void newDetection(DetectionResult result, Drone drone);
     /*!
      * \brief the signal that is emitted when the detectionController is finished. This requires the function streamFinished() to be
      * called beforehand.

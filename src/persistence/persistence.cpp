@@ -46,24 +46,24 @@ Search Persistence::retrieveSearch(QUuid searchId)
     return searchdao.dbRetrieveSearch(searchId);
 }
 
-void Persistence::saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId)
+void Persistence::saveDroneStatus(DroneStatus droneStatus)
 {
-    dronestatusdao.dbSaveDroneStatus(droneStatus, droneId, searchId);
+    dronestatusdao.dbSaveDroneStatus(droneStatus);
 }
 
-QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
+QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
 {
-    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, begin, end);
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, begin, end);
 }
 
-DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId)
+DroneStatus Persistence::retrieveDroneStatus(QUuid droneId)
 {
-    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId);
+    return dronestatusdao.dbRetrieveDroneStatus(droneId);
 }
 
-DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
+DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QDateTime time)
 {
-    return dronestatusdao.dbRetrieveDroneStatus(droneId, searchId, time);
+    return dronestatusdao.dbRetrieveDroneStatus(droneId, time);
 }
 
 void Persistence::saveDrone(Drone drone)

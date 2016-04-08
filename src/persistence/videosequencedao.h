@@ -21,16 +21,16 @@ public:
     //
     /**
      * \brief dbSaveVideoSequence saves a detection result into the database.
-     * Its inputs are a droneid, searchid and videosequence object.
-     * Both ids are for referencing to tables in the database while de object is
+     * Its inputs are a droneid and videosequence object.
+     * The id is for referencing to the drone table in the database while the object is
      * the one that needs to be stored.
      */
-    VideoSequence dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
+    VideoSequence dbSaveVideoSequence(QUuid droneId, VideoSequence sequence);
     /**
      * \brief dbRetrieveVideoSequence Retrieves a videosequence for a
      * certain droneid and searchid.
      */
-    VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
+    VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid videoId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

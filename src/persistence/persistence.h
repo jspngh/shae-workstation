@@ -28,18 +28,18 @@ public:
 
     Search retrieveSearch(QUuid searchId);
     //compare with timestamp of workstation
-    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end);
+    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
-    DroneStatus retrieveDroneStatus(QUuid droneId, QUuid searchId);
+    DroneStatus retrieveDroneStatus(QUuid droneId);
     //retrieve dronestatus closest to time parameter
-    DroneStatus retrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time);
+    DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
     QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
     Drone retrieveDrone(QUuid droneId);
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId, QUuid videoId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
     void saveSearch(Search search);
-    void saveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId);
+    void saveDroneStatus(DroneStatus droneStatus);
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path);
     void saveDrone(Drone drone);
     //will register a videosequence in the database (already saved in location)

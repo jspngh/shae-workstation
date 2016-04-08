@@ -14,25 +14,24 @@ DroneStatusDAO::DroneStatusDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid droneId, QUuid searchId)
+DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus)
 {
     QSqlQuery query;
-    query.prepare("INSERT INTO statuses (searchID, droneID, timestampDrone,"
+    query.prepare("INSERT INTO statuses (droneID, timestampDrone,"
                   "timestampReceivedWorkstation, latitude, longitude,"
                   "orientation, cameraAngle, speed, selectedSpeed, height, "
                   "selectedHeight, batteryLevel, fps, resolution,"
                   "heartbeat, droneState, manufacturer, droneType, "
                   "nextWaypointLongitude, nextWaypointLatitude, previousWaypointLongitude,"
                   " previousWaypointLatitude, nextWaypoints) "
-                  "VALUES (:searchID, :droneID, :timestampDrone,"
+                  "VALUES (:droneID, :timestampDrone,"
                   ":timestampReceivedWorkstation, :latitude, :longitude,"
                   ":orientation, :cameraAngle, :speed, :selectedSpeed, :height, "
                   ":selectedHeight, :batteryLevel, :fps, :resolution,"
                   ":heartbeat, :droneState, :manufacturer, :droneType, "
                   ":nextWaypointLongitude, :nextWaypointLatitude, :previousWaypointLongitude,"
                   " :previousWaypointLatitude, :nextWaypoints) ");
-    query.bindValue(":searchID", searchId);
-    query.bindValue(":droneID", droneId);
+    query.bindValue(":droneID", droneStatus.getDrone()->getDrone().getGuid());
     query.bindValue(":timestampDrone", droneStatus.getTimestampDrone());
     query.bindValue(":timestampWorkstation", droneStatus.getTimestampRecievedWorkstation());
     QGeoCoordinate location = droneStatus.getCurrentLocation();
@@ -67,7 +66,7 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
 
     query.bindValue(":nextWaypoints", pathString);
     if (query.exec()) {
-        qDebug() << "insert succes";
+        qDebug() << "insert status succes";
     } else {
         qDebug() << "addDetectionResult error:  "
                  << query.lastError();
@@ -76,12 +75,11 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
 }
 
 //compare with timestamp of workstation
-QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime begin, QDateTime end)
+QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
 {
     QSqlQuery query;
     QList<DroneStatus> returnList = QList<DroneStatus>();
-    query.prepare("SELECT * FROM statuses where (searchID = (:searchID) and droneID = (:droneID)) order by timestampDrone");
-    query.bindValue(":searchID", searchId);
+    query.prepare("SELECT * FROM statuses where (droneID = (:droneID)) order by timestampDrone");
     query.bindValue(":droneID", droneId);
     if (query.exec()) {
         while (query.next()) {
@@ -108,12 +106,11 @@ QList<DroneStatus> DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid se
 }
 
 //retrieve latest dronestatus
-DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
+DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId)
 {
     QSqlQuery query;
     QList<DroneStatus> returnList = QList<DroneStatus>();
-    query.prepare("SELECT * FROM statuses where (searchID = (:searchID) and droneID = (:droneID)) order by timestampDrone");
-    query.bindValue(":searchID", searchId);
+    query.prepare("SELECT * FROM statuses where (droneID = (:droneID)) order by timestampDrone");
     query.bindValue(":droneID", droneId);
     if (query.exec()) {
         while (query.next()) {
@@ -138,12 +135,11 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId)
 }
 
 //retrieve dronestatus closest to time parameter
-DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QUuid searchId, QDateTime time)
+DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
 {
     QSqlQuery query;
     QList<DroneStatus> returnList = QList<DroneStatus>();
-    query.prepare("SELECT * FROM statuses where (searchID = (:searchID) and droneID = (:droneID)) order by timestampDrone");
-    query.bindValue(":searchID", searchId);
+    query.prepare("SELECT * FROM statuses where (droneID = (:droneID)) order by timestampDrone");
     query.bindValue(":droneID", droneId);
     if (query.exec()) {
         while (query.next()) {

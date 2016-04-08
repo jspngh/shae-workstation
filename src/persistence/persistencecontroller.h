@@ -15,7 +15,11 @@ public:
 signals:
 
 public slots:
-    void saveSearch(Search s);
+    void saveSearch(Search *s);
+    void saveDronePaths(Search *s);
+    void saveDroneStatus(DroneStatus ds);
+    void saveDetectionResult(DetectionResult dr);
+    void saveVideoSequence(VideoSequence vs);
 
 private:
     Mediator *mediator;

@@ -36,6 +36,8 @@ void DetectionController::run()
                 DetectionList detectionList = this->manager.applyDetector(frame);
                 double timeFrame = iteratorFrames * this->search->getFpsProcessing();
                 //TODO Persistence component should be called to retrieve the statusmessage that is closest in time to the time of the frame (timeFrame)
+                //TODO: get drone_id from statusmessage to pass it the newDetection signal
+                Drone drone;
                 QGeoCoordinate frameLocation(10, 10);
                 //TODO the xLUT and yLUT should be derived from the config file present in the Search object.
                 vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT);
