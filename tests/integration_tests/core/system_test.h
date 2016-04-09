@@ -14,6 +14,7 @@ class System_Test : public QObject
 
 private:
     Controller * controller;
+    Search* s;
 
 public:
     System_Test();

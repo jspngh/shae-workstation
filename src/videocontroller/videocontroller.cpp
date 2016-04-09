@@ -41,13 +41,17 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     //allow vlc some time to create the file
     QThread::sleep(1);
     int size = 0;
+    //buffer maximally 20 seconds
+    int maxBuffertime = 20;
+    int buffertime = 0;
     QFile droneFile("dependencies/drone_stream.mpg");
     if (droneFile.open(QIODevice::ReadOnly)){
         size = droneFile.size();  //when file does open.
-        while(size<bufferSize){
+        while(size<bufferSize && buffertime<maxBuffertime){
+            buffertime++;
             QThread::sleep(1);
             size = droneFile.size();  //when file does open.
-            qDebug() << "Videocontroller: File has not been created by vlc yet, waiting 1 sec.";
+            qDebug() << "Videocontroller: File has not been fully buffered by vlc yet, " << size;
         }
         droneFile.close();
     }

@@ -2,6 +2,7 @@
 #define VIDEOSEQUENCEDAO_H
 
 #include <QtSql>
+#include <QTime>
 #include "models/videosequence.h"
 #include "generaldao.h"
 

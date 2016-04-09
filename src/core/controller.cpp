@@ -34,7 +34,6 @@ Controller::~Controller()
 
     // delete the mediator and the search object
     delete mediator;
-    delete search;
     // special Qt function to delete QList of pointers
     qDeleteAll(drones->begin(), drones->end());
     drones->clear();
@@ -74,7 +73,6 @@ void Controller::init()
 
 void Controller::initStream(DroneModule* d)
 {
-
     d->getStream();
     qDebug() << "Controller: stream started at drone";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());

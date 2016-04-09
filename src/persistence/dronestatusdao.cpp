@@ -33,7 +33,7 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus)
                   ":nextWaypoints) ");
     query.bindValue(":droneID", droneStatus.getDrone()->getGuid());
     query.bindValue(":timestampDrone", droneStatus.getTimestampDrone());
-    query.bindValue(":timestampWorkstation", droneStatus.getTimestampRecievedWorkstation());
+    query.bindValue(":timestampWorkstation", droneStatus.getTimestampReceivedWorkstation());
     QGeoCoordinate location = droneStatus.getCurrentLocation();
     query.bindValue(":latitude", location.latitude());
     query.bindValue(":longitude", location.longitude());
@@ -160,6 +160,8 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
     } else {
         qDebug() << "getDronestatus error:  "
                  << query.lastError();
+        qDebug() << "a bogus VideoSequence was created, which is necessary for unit and integration tests";
+        return DroneStatus();
     }
     return returnList.back();
 }

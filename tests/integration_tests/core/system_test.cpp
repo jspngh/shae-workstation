@@ -21,7 +21,7 @@ void System_Test::initTestCase()
 
     QList<DroneModule *>* list  = new QList<DroneModule *>();
     list->append(controller->getDrones()->first());
-    Search *s = new Search();
+    s = new Search();
     //the following parameters are defined through configwidget
     s->setFpsProcessing(2);
     s->setGimbalAngle(65);
@@ -33,13 +33,22 @@ void System_Test::initTestCase()
 
     emit startSearch(s);
     qDebug() << "emit ConfigWidget::startSearch(Search *s)";
-    QTest::qWait(5000000);
+    //assume that after 5  seconds, the drone is at the correct waypoint.
+    QTest::qWait(5000);
+    controller->initStream(controller->getDrones()->first());
+    QTest::qWait(1000*10);
+    //assume that after 10  seconds, the drone is at the final waypoint.
+    controller->stopStream(controller->getDrones()->first());
+    controller->getDetectionController()->wait();
 }
 
 
 void System_Test::cleanupTestCase()
 {
-
+    QFile droneFile("dependencies/drone_stream.mpg");
+    droneFile.remove();
+    delete controller;
+    delete s;
 }
 
 void System_Test::systemTest()

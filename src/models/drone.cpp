@@ -11,6 +11,7 @@ Drone::Drone(int dronePort, int streamPort, QString droneIp, QString controllerI
     guid(QUuid::createUuid()),
     dronePort(dronePort),
     streamPort(streamPort),
+    controllerIp(controllerIp),
     droneIp(droneIp),
     streamPath(streamPath),
     visionWidth(visionWidth)

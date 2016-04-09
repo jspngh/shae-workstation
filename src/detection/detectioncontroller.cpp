@@ -17,9 +17,12 @@ void DetectionController::run()
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
 
     // setup variables required for processing
+    qDebug() << "starting detectioncontroller";
     this->streaming = true;
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
+    qDebug() << "new frames have been found, new total " << numFrames;
+
     int oldnumFrames = 0;
     int iteratorFrames = 0;
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
@@ -32,7 +35,7 @@ void DetectionController::run()
             this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
             this->sequence >> frame;
             double timeFrame = iteratorFrames * this->search->getFpsProcessing();
-
+            qDebug() << "processing frame  " << iteratorFrames;
             extractDetectionsFromFrame(frame,timeFrame);
             iteratorFrames += this->frameHop;
         }
