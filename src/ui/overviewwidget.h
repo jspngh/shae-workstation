@@ -3,6 +3,7 @@
 
 #include <QListWidgetItem>
 #include <QMap>
+#include <QtMath>
 #include <QMMarker.h>
 #include <QMMapView.h>
 #include <QUuid>

@@ -193,12 +193,14 @@ void DroneStatus_Test::testFromJsonStringAllSet()
                                              " \"drone_state\": 1 ,"
                                              " \"fps\": 20 ,"
                                              " \"heartbeat\": true ,"
-                                             " \"manufacturer\": \"3dr\" ,"
-                                             " \"type\": \"solo\" ,"
                                              " \"resolution\": 720 ,"
                                              " \"current_location\": {"
                                                 "  \"latitude\": 23.3245,"
                                                 "  \"longitude\": 12.358959"
+                                             " } ,"
+                                             " \"drone_type\": {"
+                                                 " \"manufacturer\": \"3dr\","
+                                                 " \"model\": \"solo\""
                                              " } ,"
                                              " \"next_waypoint\": {"
                                                 "  \"latitude\": 0.0,"
@@ -248,7 +250,7 @@ void DroneStatus_Test::testFromJsonStringAllSet()
         next.pop_front();
     }
     QVERIFY( status.getPreviousWaypointOrder() == 2);
-    QVERIFY( status.getTimestampDrone() == QDateTime::fromString("23032016214348009", "ddmmyyyyHHmmsszzz" ));
+    QVERIFY( status.getTimestampDrone() == QDateTime::fromString("23032016214348009", "ddMMyyyyHHmmsszzz" ));
     QVERIFY( status.getTimestampRecievedWorkstation() > status.getTimestampDrone());
 
 

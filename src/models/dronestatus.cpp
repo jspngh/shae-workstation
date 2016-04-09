@@ -132,13 +132,12 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     if (! value.isNull()) {
         status.setHeartbeat(value.toBool());
     }
-    value = json["manufacturer"];
-    if (! value.isNull()) {
-        status.setManufacturer(value.toString());
-    }
-    value = json["type"];
-    if (! value.isNull()) {
-        status.setType(value.toString());
+
+    value = json["drone_type"];
+    if (! value.isNull() && value.isObject()) {
+        QJsonObject drone_type = value.toObject();
+        status.setManufacturer(drone_type["manufacturer"].toString());
+        status.setType(drone_type["model"].toString());
     }
 
     value = json["height"];
