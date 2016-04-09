@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         QTest::qExec(test, a.arguments());
     }
     qDeleteAll(tests.begin(), tests.end());
-    db.removeDatabase();
+    //db.removeDatabase();
     return 0;
 }
 

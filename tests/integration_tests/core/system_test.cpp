@@ -14,14 +14,13 @@ void System_Test::initTestCase()
     MainWindow w;
     controller =  new Controller(&w);
     controller->init();
+
     //setup signals and slots
     qDebug() << "adding ConfigWidget signal/slots";
     controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 
     QList<DroneModule *>* list  = new QList<DroneModule *>();
-    list->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
-    controller->setDrones(list);
-
+    list->append(controller->getDrones()->first());
     Search *s = new Search();
     //the following parameters are defined through configwidget
     s->setFpsProcessing(2);
@@ -34,7 +33,7 @@ void System_Test::initTestCase()
 
     emit startSearch(s);
     qDebug() << "emit ConfigWidget::startSearch(Search *s)";
-    QThread::sleep(1000);
+    QTest::qWait(5000000);
 }
 
 

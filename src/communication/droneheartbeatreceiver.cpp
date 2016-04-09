@@ -22,7 +22,7 @@ DroneHeartBeatReceiver::~DroneHeartBeatReceiver()
 void DroneHeartBeatReceiver::receiveHeartbeat()
 {
     const int Timeout = 20 * 1000;
-    //qDebug() << "receiveHeartbeat";
+    qDebug() << "receiveHeartbeat";
 
     //get socket that is connected
     QTcpSocket *clientConnection = server->nextPendingConnection();

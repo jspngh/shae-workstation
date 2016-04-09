@@ -33,9 +33,8 @@ Search SearchDAO::dbSaveSearch(Search search)
     query.bindValue(":height", search.getHeight());
     query.bindValue(":gimballAngle", search.getGimbalAngle());
     query.bindValue(":fpsProcessing", search.getFpsProcessing());
-
     if (query.exec()) {
-        qDebug() << "insert succes";
+        qDebug() << "insert search succes";
     } else {
         qDebug() << "addsearch error:  "
                  << query.lastError();

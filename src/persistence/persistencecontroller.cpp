@@ -89,7 +89,9 @@ void PersistenceController::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(saveSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(saveDronePaths(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
     mediator->addSlot(this, SLOT(saveDetectionResult(DetectionResult)), QString("newDetection(DetectionResult))"));
     mediator->addSlot(this, SLOT(saveVideoSequence(VideoSequence)), QString("TODO"));
+
 }
 
