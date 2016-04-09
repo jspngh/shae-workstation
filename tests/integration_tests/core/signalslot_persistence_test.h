@@ -11,13 +11,15 @@ class SignalSlotPersistenceTest : public QObject
     Q_OBJECT
 public:
     explicit SignalSlotPersistenceTest(QObject *parent = 0);
-    void initTestCase();
-    void testSaveSearch();
 
 signals:
     void startSearch(Search*);
+    void pathCalculated(Search*);
 
 public slots:
+    void initTestCase();
+    void testSaveSearch();
+    void testSaveDronePaths();
 
 private:
     Mediator *m;
