@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QLabel>
 #include <QWidget>
 #include <QMainWindow>
 #include <QStackedWidget>

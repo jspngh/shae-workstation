@@ -15,9 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="mainLayout">
+    <layout class="QHBoxLayout" name="mainLayout" stretch="0,1">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="sidebar">
        <item>
         <widget class="QListWidget" name="droneList"/>
        </item>
@@ -25,6 +25,10 @@
         <widget class="QPushButton" name="exportSearchButton">
          <property name="text">
           <string>Export search</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../application.qrc">
+           <normaloff>:/ui/icons/export</normaloff>:/ui/icons/export</iconset>
          </property>
         </widget>
        </item>
@@ -70,6 +74,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../application.qrc"/>
+ </resources>
  <connections/>
 </ui>

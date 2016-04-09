@@ -36,7 +36,7 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
         marker.moveTo(heartbeat.getCurrentLocation());
     } else {
         QMMarker& marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
-        marker.setIcon("qrc:///ui/img/map/drone-icon");
+        marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.5, 0.5);
         /* marker.rotate(20); */
         marker.show();
@@ -75,7 +75,7 @@ void OverviewWidget::fillDroneList()
     uint i = 1;
     Q_FOREACH(DroneModule *drone, search->getDroneList()) {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setSizeHint(QSize(0, 150));
+        item->setSizeHint(QSize(0, 170));
         ui->droneList->addItem(item);
 
         OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);

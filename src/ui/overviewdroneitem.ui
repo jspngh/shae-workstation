@@ -12,11 +12,15 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="header">
-     <property name="text">
-      <string>Drone #??</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="headerBar">
+     <item>
+      <widget class="QLabel" name="header">
+       <property name="text">
+        <string>Drone #??</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QFormLayout" name="droneDetails">
@@ -74,22 +78,31 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
+      <widget class="QPushButton" name="emergencyButton">
+       <property name="icon">
+         <iconset resource="../application.qrc">:/ui/icons/emergency</iconset>
+       </property>
+       <property name="toolTip">
         <string>Emergency Landing</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
+      <widget class="QPushButton" name="goHomeButton">
+       <property name="icon">
+         <iconset resource="../application.qrc">:/ui/icons/home</iconset>
+       </property>
+       <property name="toolTip">
         <string>Go Home</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
+      <widget class="QPushButton" name="haltButton">
+       <property name="icon">
+         <iconset resource="../application.qrc">:/ui/icons/halt</iconset>
+       </property>
+       <property name="toolTip">
         <string>Halt</string>
        </property>
       </widget>
