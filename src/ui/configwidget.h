@@ -44,6 +44,7 @@ private slots:
     void areaSelected();
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
     void updateDroneTable(DroneStatus s);
+    void updateMapCenter(DroneStatus s);
 
 private:
     Ui::ConfigWidget *ui;
@@ -61,6 +62,8 @@ private:
     // Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
     int getDroneInTableIndex(DroneModule *d);
+
+    bool mapCentered = false;
 
     QList<QPair<int, DroneModule *>> dronesInTable;
 
