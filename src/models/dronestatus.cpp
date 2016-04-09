@@ -180,10 +180,9 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     }
     value = json["timestamp"];
     if (! value.isNull()) {
-        QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
+        QString format = "ddMMyyyyhhmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }
-
     return status;
 
 }
