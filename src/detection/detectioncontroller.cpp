@@ -63,8 +63,8 @@ void DetectionController::run()
 void DetectionController::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;;
-    mediator->addSignal(this, (char *) SIGNAL(newDetection(DetectionResult, Drone)), QString("newDetection(DetectionResult))"));
-    mediator->addSlot(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
+    mediator->addSignal(this, (char *) SIGNAL(newDetection(QUuid, DetectionResult)), QString("newDetection(DroneId, DetectionResult)"));
+    mediator->addSignal(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
 void DetectionController::streamFinished()
@@ -103,12 +103,11 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, double timeF
 
         QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
         double orientation = droneStatus.getOrientation();
-        Drone *drone = this->droneModule->getDrone();
 
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
-            emit this->newDetection(DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1), *drone);
+            emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1));
             nrDetections++;
         }
 

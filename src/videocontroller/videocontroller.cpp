@@ -15,6 +15,14 @@ void VideoController::setSequencePath(QString sp)
     this->sequence_path = sp;
 }
 
+void VideoController::setMediator(Mediator *m)
+{
+    this->mediator = m;
+
+    mediator->addSignal(this, (char *) SIGNAL(streamStarted(QUuid, VideoSequence)), QString("streamStarted(DroneId, VideoSequence)"));
+    mediator->addSignal(this, (char *) SIGNAL(streamStopped()), QString("streamStopped()"));
+}
+
 VideoSequence VideoController::onStartStream(Drone * drone)
 {
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
@@ -60,7 +68,7 @@ VideoSequence VideoController::onStartStream(Drone * drone)
 
     VideoSequence sequence = VideoSequence(QString("dependencies/drone_stream.mpg"), QUuid::createUuid());
     this->sequence_path = sequence.getPath();
-    emit this->streamStarted(sequence);
+    emit this->streamStarted(drone->getGuid(), sequence);
 
     return sequence;
 }

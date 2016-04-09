@@ -26,8 +26,6 @@ void DetectionController_Test::initTestCase()
     dm->setVideoController(videoController);
     this->controller = new DetectionController(s, dm, pc);
     this->controller->setSequence(capture);
-    QObject::connect(this->controller, &DetectionController::newDetection,
-                     this, &DetectionController_Test::onNewDetection);
     this->numDetections = 0;
 }
 
@@ -75,11 +73,4 @@ void DetectionController_Test::cleanupTestCase()
 
     delete this->controller;
 
-}
-
-// This function is NOT a Unit Test.
-// It is used to count the number of times the newDetection signal is emitted in the controller.
-void DetectionController_Test::onNewDetection(DetectionResult result)
-{
-    ++(this->numDetections);
 }
