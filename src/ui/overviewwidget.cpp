@@ -6,6 +6,7 @@ OverviewWidget::OverviewWidget(QWidget *parent) :
     ui(new Ui::OverviewWidget)
 {
     ui->setupUi(this);
+    mapViewLoaded = false;
 
     //lowerbuttons:
     connect(ui->exportSearchButton, SIGNAL(clicked()), this, SLOT(exportSearchButtonPush()));
@@ -26,7 +27,20 @@ void OverviewWidget::setMediator(Mediator *mediator)
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
 {
+    if(!mapViewLoaded) return;
     ui->heartBeat->setText(heartbeat.toString());
+
+    QString id = heartbeat.getDrone()->getGuid().toString();
+    if(mapView->hasMarker(id)) {
+        QMMarker& marker = mapView->getMarker(id);
+        marker.moveTo(heartbeat.getCurrentLocation());
+    } else {
+        QMMarker& marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
+        marker.setIcon("qrc:///ui/img/map/drone-icon");
+        marker.scale(0.5, 0.5);
+        /* marker.rotate(20); */
+        marker.show();
+    }
 }
 
 void OverviewWidget::exportSearchButtonPush()
@@ -74,14 +88,7 @@ void OverviewWidget::fillDroneList()
 void OverviewWidget::onMapLoaded()
 {
     mapView->fitRegion(search->getArea());
-
-    /* Q_FOREACH(DroneModule *drone, search->getDroneList()) { */
-        QMMarker& marker = mapView->addMarker("drone1", mapView->center());
-        marker.setIcon("qrc:///ui/img/map/drone-icon");
-        marker.show();
-        marker.scale(0.5, 0.5);
-        marker.rotate(20);
-    /* } */
+    mapViewLoaded = true;
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);
     ui->mapLoadingLabel->hide();

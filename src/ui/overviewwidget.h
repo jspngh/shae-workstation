@@ -27,6 +27,7 @@ public:
 
 private:
     QMMapView *mapView;
+    bool mapViewLoaded;
     Ui::OverviewWidget *ui;
     Search *search;
     Mediator *mediator;
