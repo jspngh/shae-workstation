@@ -160,6 +160,12 @@ void QMMapView::resizeEvent(QResizeEvent *)
     d->evaluateJavaScript("google.maps.event.trigger(mapKit.map, 'resize');");
 }
 
+bool QMMapView::hasLoaded() const
+{
+    Q_D(const QMMapView);
+    return d->loaded;
+}
+
 QMMapView::MapType QMMapView::mapType() const
 {
     QString res = d_ptr->evaluateJavaScript("mapKit.map.getMapTypeId();").toString();
@@ -316,6 +322,12 @@ QMMarker& QMMapView::getMarker(const QString markerId)
 {
     Q_D(QMMapView);
     return *(d->markers.value(markerId));
+}
+
+bool QMMapView::hasMarker(const QString markerId) const
+{
+    Q_D(const QMMapView);
+    return d->markers.contains(markerId);
 }
 
 void QMMapView::removeMarker(const QString markerId)
