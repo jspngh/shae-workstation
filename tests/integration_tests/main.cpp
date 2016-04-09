@@ -1,4 +1,5 @@
 #include "core/system_test.h"
+#include "core/signalslot_persistence_test.h"
 #include "core/videostreamdetection_test.h"
 #include "core/databasecreator.h"
 #include <QList>
@@ -17,7 +18,8 @@ int main(int argc, char *argv[])
     db.initDatabase();
 
     //tests.append(new VideostreamDetection_Test());
-    tests.append(new System_Test());
+    //tests.append(new System_Test());
+    tests.append(new SignalSlotPersistenceTest());
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }

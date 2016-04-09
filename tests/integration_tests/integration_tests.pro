@@ -20,14 +20,16 @@ HEADERS += \
     core/qtmapkit_test.h \
     core/system_test.h \
     core/videostreamdetection_test.h \
-    core/databasecreator.h
+    core/databasecreator.h \
+    core/signalslot_persistence_test.h
 
 SOURCES += \
     core/qtmapkit_test.cpp \
     main.cpp \
     core/system_test.cpp \
     core/videostreamdetection_test.cpp \
-    core/databasecreator.cpp
+    core/databasecreator.cpp \
+    core/signalslot_persistence_test.cpp
 
 # c++11
 CONFIG += c++11
