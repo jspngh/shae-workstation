@@ -69,7 +69,6 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     VideoSequence sequence = VideoSequence(QString("dependencies/drone_stream.mpg"), QUuid::createUuid());
     this->sequence_path = sequence.getPath();
     emit this->streamStarted(drone->getGuid(), sequence);
-
     return sequence;
 }
 

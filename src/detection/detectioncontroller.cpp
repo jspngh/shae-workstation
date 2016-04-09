@@ -33,7 +33,7 @@ void DetectionController::run()
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
     // set fps 30
     this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
-    this->frameHop=15;
+    this->frameHop = 15;
     qDebug() << "framehop " << frameHop;
     qDebug() << "original number of frames " << numFrames;
     cv::Mat frame;

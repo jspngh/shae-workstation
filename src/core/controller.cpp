@@ -114,6 +114,7 @@ void Controller::stopStream(DroneModule* d)
 }
 
 void Controller::onSearchEmitted(Search* s){
+    qDebug() << "Controller::saved search";
     search = s;
 }
 

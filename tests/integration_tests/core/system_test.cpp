@@ -10,6 +10,14 @@ System_Test::~System_Test()
 
 void System_Test::initTestCase()
 {
+    QString program = "python2";
+    QStringList arguments;
+    qDebug() << "opening simulator";
+    arguments << "../../../drone/simulator/src/simulator.py";
+    simulatorProcess = new QProcess(this);
+    qDebug() << "simulator opened";
+    simulatorProcess->start(program, arguments);
+    QThread::sleep(10);
 
     MainWindow w;
     controller =  new Controller(&w);
@@ -47,6 +55,11 @@ void System_Test::cleanupTestCase()
 {
     QFile droneFile("dependencies/drone_stream.mpg");
     droneFile.remove();
+    qDebug() << "closing of simulator";
+    simulatorProcess->terminate();
+    simulatorProcess->waitForFinished();
+    simulatorProcess->close();
+    delete simulatorProcess;
     delete controller;
     delete s;
 }
