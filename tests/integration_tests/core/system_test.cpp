@@ -34,7 +34,7 @@ void System_Test::initTestCase()
     emit startSearch(s);
     qDebug() << "emit ConfigWidget::startSearch(Search *s)";
     //assume that after 5  seconds, the drone is at the correct waypoint.
-    QTest::qWait(5000);
+    QTest::qWait(1000*10);
     controller->initStream(controller->getDrones()->first());
     QTest::qWait(1000*10);
     //assume that after 10  seconds, the drone is at the final waypoint.

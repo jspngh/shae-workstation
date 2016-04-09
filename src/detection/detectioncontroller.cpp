@@ -8,6 +8,11 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     persistenceController(pc),
     droneModule(dm)
 {
+    qDebug() << "starting DetectionControler";
+    if(this->search==nullptr){
+        qDebug() << "error: search not transmitted";
+        parseConfiguration(3,65);
+    }
     this->path = dm->getVideoController()->getSequencePath();
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
 }
@@ -26,7 +31,10 @@ void DetectionController::run()
     int oldnumFrames = 0;
     int iteratorFrames = 0;
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
+    // set fps 30
     this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
+    this->frameHop=15;
+    qDebug() << "framehop " << frameHop;
     qDebug() << "original number of frames " << numFrames;
     cv::Mat frame;
     do {
@@ -62,7 +70,7 @@ void DetectionController::run()
 
 void DetectionController::setMediator(Mediator *mediator)
 {
-    this->mediator = mediator;;
+    this->mediator = mediator;
     mediator->addSignal(this, (char *) SIGNAL(newDetection(QUuid, DetectionResult)), QString("newDetection(DroneId, DetectionResult)"));
     mediator->addSignal(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }

@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QList<QObject *> tests;
+    qRegisterMetaType<DetectionResult>("DetectionResult");
+    qRegisterMetaType<VideoSequence>("VideoSequence");
 
     //create db
     DatabaseCreator db = DatabaseCreator();

@@ -68,10 +68,12 @@ void Controller::init()
     persistenceThread.start();
     pathLogicThread.start();
     droneThread.start();
+
+    //add slot for search
+    getMediator()->addSignal(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 }
 
-
-void Controller::initStream(DroneModule* d)
+ void Controller::initStream(DroneModule* d)
 {
     d->getStream();
     qDebug() << "Controller: stream started at drone";
@@ -89,6 +91,7 @@ void Controller::initStream(DroneModule* d)
 
     // allow the stream to bufer for a second
     QThread::sleep(1);
+    qDebug() << "Controller: starting detectioncontroller";
     detectionController->start();
 
 }
@@ -110,6 +113,9 @@ void Controller::stopStream(DroneModule* d)
     detectionController->streamFinished();
 }
 
+void Controller::onSearchEmitted(Search* s){
+    search = s;
+}
 
 /*****************
  *    Getters
