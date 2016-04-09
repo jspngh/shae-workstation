@@ -11,10 +11,15 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     qDebug() << "starting DetectionControler";
     if(this->search==nullptr){
         qDebug() << "error: search not transmitted";
-        parseConfiguration(3,65);
+        this->search = new Search();
+        this->search->setGimbalAngle(65);
+        this->search->setFpsProcessing(2);
+        this->search->setHeight(3);
+
+    }else{
     }
-    this->path = dm->getVideoController()->getSequencePath();
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
+    this->path = dm->getVideoController()->getSequencePath();
 }
 
 void DetectionController::run()
@@ -40,11 +45,18 @@ void DetectionController::run()
     do {
 
         while (iteratorFrames < numFrames) {
-            this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
-            this->sequence >> frame;
-            double timeFrame = iteratorFrames * this->search->getFpsProcessing();
             qDebug() << "processing frame  " << iteratorFrames;
-            extractDetectionsFromFrame(frame,timeFrame);
+                try
+                {
+                    this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
+                    this->sequence >> frame;
+                    double timeFrame = iteratorFrames * this->search->getFpsProcessing();
+                    extractDetectionsFromFrame(frame,timeFrame);
+                }
+                catch (cv::Exception e)
+                {
+                    qDebug()<<"opencv error";
+                }
             iteratorFrames += this->frameHop;
         }
 
