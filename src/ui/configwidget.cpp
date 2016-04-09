@@ -187,7 +187,18 @@ void ConfigWidget::setSignalSlots()
     mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
     mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
 }
+
+
+void ConfigWidget::updateMapCenter(DroneStatus s)
+{
+    if(mapCentered) return;
+
+    mapView->setCenter(s.getCurrentLocation());
+    mapCentered = true;
+}
+
 
 void ConfigWidget::updateDroneTable(DroneStatus s)
 {
