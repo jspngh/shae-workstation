@@ -65,6 +65,7 @@ Getters/Setters
 void DroneModule::setMediator(Mediator* med)
 {
     mediator = med;
+    videoController->setMediator(med);
     qDebug() << "adding DroneModule signal/slots";
     med->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     med->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));

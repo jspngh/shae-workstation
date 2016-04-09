@@ -17,7 +17,7 @@ void System_Test::initTestCase()
 
     //setup signals and slots
     qDebug() << "adding ConfigWidget signal/slots";
-    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, (char *) SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 
     QList<DroneModule *>* list  = new QList<DroneModule *>();
     list->append(controller->getDrones()->first());

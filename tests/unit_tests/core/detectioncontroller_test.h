@@ -18,9 +18,6 @@ class DetectionController_Test : public QObject
 public:
     DetectionController_Test(QObject *parent = 0);
 
-private:
-    void onNewDetection(DetectionResult result);
-
 private Q_SLOTS:
     void testProcessSequence();
     void testIncorrectParseConfiguration();
