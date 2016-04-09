@@ -21,15 +21,6 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     dronesearchdao = DroneSearchDAO(&projectShaeDatabase);
     searchdao = SearchDAO(&projectShaeDatabase);
     videosequencedao = VideoSequenceDAO(&projectShaeDatabase);
-
-    //register slots at mediator
-    //mediator->addSlot(this, SLOT(saveSearch(Search)), QString("saveSearch(Search)"));
-    //mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus, QUuid, QUuid)), QString("saveDroneStatus(DroneStatus,QUuid,QUuid)"));
-    //mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("receivedHeartBeat(DroneStatus)")); TODO
-    //mediator->addSlot(this, SLOT(saveDronePath(QUuid, QUuid, QList<QGeoCoordinate>)), QString("saveDronePath(QUuid,QUuid,QList<QGeoCoordinate>)"));
-    //mediator->addSlot(this, SLOT(saveDrone(Drone)), QString("saveDrone(Drone)"));
-    //mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, QUuid, VideoSequence)), QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
-    //mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, QUuid, DetectionResult)), QString("saveDetectionResult(QUuid,QUuid,DetectionResult)"));
 }
 
 Persistence::~Persistence()
