@@ -15,6 +15,7 @@ public:
     QWebFrame *frame;
     QString id;
     QGeoCoordinate location;
+    double orientation;
 
     inline QVariant evaluateMethod(const QString &eval)
     {
@@ -32,12 +33,19 @@ QMMarker::QMMarker(QString id, const QGeoCoordinate &location, QWebFrame *frame,
     d->frame = frame;
     d->id = id;
     d->location = location;
+    d->orientation = 0;
 }
 
 QGeoCoordinate QMMarker::location() const
 {
     Q_D(const QMMarker);
     return d->location;
+}
+
+double QMMarker::orientation() const
+{
+    Q_D(const QMMarker);
+    return d->orientation;
 }
 
 void QMMarker::show()
@@ -55,12 +63,20 @@ void QMMarker::moveTo(const QGeoCoordinate &to)
     d->location = to;
 }
 
-void QMMarker::rotate(const int degrees)
+void QMMarker::rotate(const double degrees)
 {
     Q_D(QMMarker);
     d->evaluateMethod(QString("rotate(%1)")
         .arg(degrees)
     );
+    d->orientation += degrees;
+}
+
+void QMMarker::setOrientation(const double degrees)
+{
+    Q_D(QMMarker);
+    rotate(-(d->orientation));
+    rotate(degrees);
 }
 
 void QMMarker::scale(const double width, const double height)
@@ -78,5 +94,6 @@ void QMMarker::setIcon(const QString resource)
     d->evaluateMethod(QString("setIcon(\"%1\")")
         .arg(resource)
     );
+    d->orientation = 0;
 }
 

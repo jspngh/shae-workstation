@@ -25,7 +25,7 @@ VideoSequence VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchI
     query.bindValue(":frameCount", sequence.getFrameCount());
     query.bindValue(":path", sequence.getPath());
     if (query.exec()) {
-        qDebug() << "insert succes";
+        qDebug() << "videosequence insert succes";
     } else {
         qDebug() << "addDetectionResult error:  "
                  << query.lastError();

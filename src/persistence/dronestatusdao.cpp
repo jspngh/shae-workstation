@@ -65,7 +65,7 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus)
 
     query.bindValue(":nextWaypoints", pathString);
     if (query.exec()) {
-        qDebug() << "insert status succes";
+        qDebug() << "insert status succes with time " << droneStatus.getTimestampDrone();
     } else {
         qDebug() << "addDroneStatus error:  "
                  << query.lastError();
@@ -163,5 +163,13 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
         qDebug() << "a bogus VideoSequence was created, which is necessary for unit and integration tests";
         return DroneStatus();
     }
-    return returnList.back();
+    if(returnList.size()>0)
+    {
+        return returnList.back();
+    }
+    else
+    {
+        qDebug() << "a bogus VideoSequence was created, because the DroneStatusDAO has failed";
+        return DroneStatus();
+    }
 }

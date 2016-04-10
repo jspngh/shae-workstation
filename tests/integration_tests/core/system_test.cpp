@@ -10,6 +10,7 @@ System_Test::~System_Test()
 
 void System_Test::initTestCase()
 {
+
     QString program = "python2";
     QStringList arguments;
     qDebug() << "opening simulator";
@@ -17,14 +18,16 @@ void System_Test::initTestCase()
     simulatorProcess = new QProcess(this);
     qDebug() << "simulator opened";
     simulatorProcess->start(program, arguments);
-    QThread::sleep(15);
+    QTest::qWait(1000*30);
+
+
     MainWindow w;
     controller =  new Controller(&w);
     controller->init();
 
     //setup signals and slots
     qDebug() << "adding ConfigWidget signal/slots";
-    controller->getMediator()->addSignal(this, (char *) SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 
     QList<DroneModule *>* list  = new QList<DroneModule *>();
     list->append(controller->getDrones()->first());
@@ -46,6 +49,8 @@ void System_Test::initTestCase()
     QTest::qWait(1000*10);
     //assume that after 10  seconds, the drone is at the final waypoint.
     controller->stopStream(controller->getDrones()->first());
+    QTest::qWait(1000*60*2);
+    //after the stream has stopped, no statusses need to be saved anymore
     controller->getDetectionController()->wait();
 }
 
@@ -54,6 +59,7 @@ void System_Test::cleanupTestCase()
 {
     QFile droneFile("dependencies/drone_stream.mpg");
     droneFile.remove();
+
     qDebug() << "closing of simulator";
     simulatorProcess->terminate();
     simulatorProcess->waitForFinished();

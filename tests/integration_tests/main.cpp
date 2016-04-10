@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
     db.removeDatabase();
     db.initDatabase();
 
-    //tests.append(new VideostreamDetection_Test());
     tests.append(new System_Test());
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());

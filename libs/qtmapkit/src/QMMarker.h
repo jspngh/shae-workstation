@@ -29,6 +29,8 @@ public:
 
     QGeoCoordinate location() const;
 
+    double orientation() const;
+
 public slots:
     /*!
      * Shows the icon on the map.
@@ -45,7 +47,14 @@ public slots:
      * Rotates the marker.
      * \param degrees The amount of degrees the the marker should be rotated.
      */
-    void rotate(const int degrees);
+    void rotate(const double degrees);
+
+    /*!
+     * Sets the orientation of the marker. This also means any previous rotations
+     * will be undone.
+     * \param degrees The amount of degrees the the marker should be rotated.
+     */
+    void setOrientation(const double degrees);
 
     /*!
      * Scales the marker by a given amount.
