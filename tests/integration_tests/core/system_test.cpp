@@ -41,10 +41,10 @@ void System_Test::initTestCase()
 
     emit startSearch(s);
     qDebug() << "emit ConfigWidget::startSearch(Search *s)";
-    //assume that after 5  seconds, the drone is at the correct waypoint.
-    QTest::qWait(1000*10);
+    //assume that after 10  seconds, the drone is at the correct waypoint and the system is correctly started
+    QThread::sleep(10);
     controller->initStream(controller->getDrones()->first());
-    QTest::qWait(1000*10);
+    QThread::sleep(10);
     //assume that after 10  seconds, the drone is at the final waypoint.
     controller->stopStream(controller->getDrones()->first());
     controller->getDetectionController()->wait();

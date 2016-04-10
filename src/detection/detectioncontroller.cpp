@@ -15,8 +15,9 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
         this->search->setGimbalAngle(65);
         this->search->setFpsProcessing(2);
         this->search->setHeight(3);
-
     }else{
+        qDebug() << "search transmitted";
+
     }
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
     this->path = dm->getVideoController()->getSequencePath();
@@ -25,7 +26,6 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
 void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
-
     // setup variables required for processing
     qDebug() << "starting detectioncontroller";
     this->streaming = true;
@@ -47,9 +47,11 @@ void DetectionController::run()
                 try
                 {
                     this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
-                    this->sequence >> frame;
+                    bool captured =  this->sequence.read(frame);
                     double timeFrame = iteratorFrames * this->search->getFpsProcessing();
+                    if(captured){
                     extractDetectionsFromFrame(frame,timeFrame);
+                    }
                 }
                 catch (cv::Exception e)
                 {

@@ -70,7 +70,7 @@ void Controller::init()
     droneThread.start();
 
     //add slot for search
-    getMediator()->addSignal(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
+    getMediator()->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 }
 
  void Controller::initStream(DroneModule* d)
