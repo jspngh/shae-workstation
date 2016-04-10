@@ -70,6 +70,7 @@ void DroneStatusDAO_Test::testSimpleDroneStatusDAO()
     DroneStatus closest = sd.dbRetrieveDroneStatus(droneID, QDateTime(QDate(2016 , 5, 6) , QTime(7, 7, 7)));
 
     QVERIFY(closest.getTimestampDrone() == two.getTimestampDrone());
+    QVERIFY(closest.getTimestampRecievedWorkstation() == two.getTimestampRecievedWorkstation());
 
     QSqlQuery query;
     query.prepare("DELETE from statuses "
