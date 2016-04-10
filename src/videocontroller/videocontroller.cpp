@@ -34,11 +34,11 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     if (drone->getStreamPath().contains(QString("rtp://"))) {
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
-        bufferSize = 16*1024*1024;
+        bufferSize = 8*1024*1024;
     } else {
         qDebug("started stream from sdp file");
         m = libvlc_media_new_path(inst, drone->getStreamPath().toStdString().c_str());
-        bufferSize = 4*1024*1024;
+        bufferSize = 2*1024*1024;
     }
 
     /* Create a media player playing environement */
@@ -68,7 +68,7 @@ VideoSequence VideoController::onStartStream(Drone * drone)
 
     VideoSequence sequence = VideoSequence(QString("dependencies/drone_stream.mpg"), QUuid::createUuid());
     this->sequence_path = sequence.getPath();
-    //emit this->streamStarted(drone->getGuid(), sequence);
+    emit this->streamStarted(drone->getGuid(), sequence);
     qDebug() << "Videocontroller: finished";
     return sequence;
 }

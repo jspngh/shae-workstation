@@ -63,6 +63,9 @@ void Controller::init()
     pathLogicController->moveToThread(&pathLogicThread);
     DroneModule *d = drones->first();
     d->moveToThread(&droneThread);
+    //already start the stream on the drone
+    d->getStream();
+
 
     // start all the threads
     persistenceThread.start();
@@ -75,16 +78,18 @@ void Controller::init()
 
  void Controller::initStream(DroneModule* d)
 {
-    d->getStream();
-    qDebug() << "Controller: stream started at drone";
+    qDebug() << "Controller: stream started at workstation";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
+
     detectionController = new DetectionController(search, d, persistenceController);
     qDebug() << "Controller: starting to save stream";
     // allow the stream to buffer
 
     QThread::sleep(1);
     //WARNING VideoCapture needs to be performed on the main thread!
-    cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
+    cv::VideoCapture capture;
+    capture.open(sequence.getPath().toStdString().c_str());
+
     qDebug() << "Controller: stream file has been succesfully opened";
     // allow the stream to buffer
     detectionController->setSequence(capture);
