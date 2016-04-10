@@ -36,13 +36,12 @@ signals:
 public slots:
     void onMapLoaded();
     void onMapFailedToLoad();
-    void initConfScreen(QString);
 
 private slots:
     void startButtonPush();
-    void backButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
+    void areaSelected();
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
     void updateDroneTable(DroneStatus s);
     void updateMapCenter(DroneStatus s);
@@ -51,6 +50,8 @@ private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView;
     Mediator *mediator;
+
+    bool areaWasSelected;
 
     void writeConfigToFile();
     void initializeMap();
