@@ -110,6 +110,11 @@ QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid droneId, QUui
     return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
 }
 
+QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid searchId)
+{
+    return detectionresultdao.dbRetrieveDetectionResults(searchId);
+}
+
 void Persistence::printDetectionResult(QUuid searchId, QString fileName)
 {
     QList<DetectionResult> results = detectionresultdao.dbRetrieveDetectionResults(searchId);

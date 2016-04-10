@@ -18,20 +18,22 @@ void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<D
     {
         QXmlStreamWriter xmlWriter(&file);
         xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("DetectionResults");
         for(DetectionResult detectionResult : results)
         {
             xmlWriter.writeStartElement("DetectionResult");
             xmlWriter.writeStartElement("Score");
             xmlWriter.writeCharacters(QString::number(detectionResult.getScore()));
-            xmlWriter.writeEndDocument();
+            xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Latitude");
             xmlWriter.writeCharacters(QString::number(detectionResult.getLocation().latitude()));
-            xmlWriter.writeEndDocument();
+            xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Longitude");
             xmlWriter.writeCharacters(QString::number(detectionResult.getLocation().longitude()));
-            xmlWriter.writeEndDocument();
+            xmlWriter.writeEndElement();
             xmlWriter.writeEndElement();
         }
+        xmlWriter.writeEndElement();
         xmlWriter.writeEndDocument();
         file.close();
     }

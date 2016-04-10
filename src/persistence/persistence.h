@@ -38,6 +38,7 @@ public:
     Drone retrieveDrone(QUuid droneId);
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
+    QList<DetectionResult> retrieveDetectionResults(QUuid searchId);
 
 public slots:
 
