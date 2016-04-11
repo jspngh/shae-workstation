@@ -65,6 +65,7 @@ Getters/Setters
 void DroneModule::setMediator(Mediator* med)
 {
     mediator = med;
+    videoController->setMediator(med);
     addSignalSlot();
     initHeartbeat();
 
@@ -177,6 +178,7 @@ Slots
 ************************/
 void DroneModule::onPathCalculated(Search *s)
 {
+    qDebug() << "****************************************";
     bool droneInList = false;
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen

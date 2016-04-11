@@ -14,7 +14,7 @@ DroneStatusDAO::DroneStatusDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid droneId)
+DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO statuses (droneID, timestampDrone,"
@@ -31,9 +31,9 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
                   ":heartbeat, :droneState, :manufacturer, :droneType, "
                   ":nextWaypointLongitude, :nextWaypointLatitude, :previousWaypointOrder,"
                   ":nextWaypoints) ");
-    query.bindValue(":droneID", droneId);
+    query.bindValue(":droneID", droneStatus.getDrone()->getGuid());
     query.bindValue(":timestampDrone", droneStatus.getTimestampDrone());
-    query.bindValue(":timestampReceivedWorkstation", droneStatus.getTimestampRecievedWorkstation());
+    query.bindValue(":timestampReceivedWorkstation", droneStatus.getTimestampReceivedWorkstation());
     QGeoCoordinate location = droneStatus.getCurrentLocation();
     query.bindValue(":latitude", location.latitude());
     query.bindValue(":longitude", location.longitude());
@@ -65,7 +65,7 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus, QUuid dro
 
     query.bindValue(":nextWaypoints", pathString);
     if (query.exec()) {
-        qDebug() << "insert succes";
+        qDebug() << "insert status succes with time " << droneStatus.getTimestampDrone();
     } else {
         qDebug() << "addDroneStatus error:  "
                  << query.lastError();
@@ -160,6 +160,16 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
     } else {
         qDebug() << "getDronestatus error:  "
                  << query.lastError();
+        qDebug() << "a bogus DroneStatus was created, which is necessary for unit and integration tests";
+        return DroneStatus();
     }
-    return returnList.back();
+    if(returnList.size()>0)
+    {
+        return returnList.back();
+    }
+    else
+    {
+        qDebug() << "a bogus DroneStatus was created, which is necessary for unit and integration tests";
+        return DroneStatus();
+    }
 }

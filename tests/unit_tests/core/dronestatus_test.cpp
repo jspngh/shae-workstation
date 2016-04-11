@@ -63,7 +63,7 @@ void DroneStatus_Test::testConstructor()
     QVERIFY( status.getSpeed() == speed);
     QVERIFY( status.getCurrentLocation() == location);
     QVERIFY( status.getTimestampDrone() == timestampDrone);
-    QVERIFY( status.getTimestampRecievedWorkstation() == timestampReceiveWorkstation);
+    QVERIFY( status.getTimestampReceivedWorkstation() == timestampReceiveWorkstation);
 }
 
 
@@ -109,7 +109,7 @@ void DroneStatus_Test::testLongConstructor()
     QVERIFY( status.getSelectedHeight() == selectedHeight);
     QVERIFY( status.getSelectedSpeed() == selectedSpeed);
     QVERIFY( status.getTimestampDrone() == timestampDrone);
-    QVERIFY( status.getTimestampRecievedWorkstation() == timestampReceiveWorkstation);
+    QVERIFY( status.getTimestampReceivedWorkstation() == timestampReceiveWorkstation);
     QVERIFY( status.getCurrentLocation() == location);
     QVERIFY( status.getFps() == fps);
     QVERIFY( status.getManufacturer() == manufacturer);
@@ -165,7 +165,7 @@ void DroneStatus_Test::testCopyConstructor()
     QVERIFY( status.getSelectedHeight() == statusCopy.getSelectedHeight());
     QVERIFY( status.getSelectedSpeed() == statusCopy.getSelectedSpeed());
     QVERIFY( status.getTimestampDrone() == statusCopy.getTimestampDrone());
-    QVERIFY( status.getTimestampRecievedWorkstation() == statusCopy.getTimestampRecievedWorkstation());
+    QVERIFY( status.getTimestampReceivedWorkstation() == statusCopy.getTimestampReceivedWorkstation());
     QVERIFY( status.getCurrentLocation() == statusCopy.getCurrentLocation());
     QVERIFY( status.getFps() == statusCopy.getFps());
     QVERIFY( status.getType() == statusCopy.getType());
@@ -251,7 +251,7 @@ void DroneStatus_Test::testFromJsonStringAllSet()
     }
     QVERIFY( status.getPreviousWaypointOrder() == 2);
     QVERIFY( status.getTimestampDrone() == QDateTime::fromString("23032016214348009", "ddMMyyyyHHmmsszzz" ));
-    QVERIFY( status.getTimestampRecievedWorkstation() > status.getTimestampDrone());
+    QVERIFY( status.getTimestampReceivedWorkstation() > status.getTimestampDrone());
 
 
 
@@ -371,7 +371,7 @@ void DroneStatus_Test::testSetters()
     QVERIFY( status.getSelectedHeight() == selectedHeight);
     QVERIFY( status.getSelectedSpeed() == selectedSpeed);
     QVERIFY( status.getTimestampDrone() == timestampDrone);
-    QVERIFY( status.getTimestampRecievedWorkstation() == timestampReceiveWorkstation);
+    QVERIFY( status.getTimestampReceivedWorkstation() == timestampReceiveWorkstation);
     QVERIFY( status.getCurrentLocation() == location);
     QVERIFY( status.getFps() == fps);
     QVERIFY( status.getManufacturer() == manufacturer);

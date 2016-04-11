@@ -68,7 +68,7 @@ void SearchDAO_Test::testSimpleSearchDAO()
     if (query.exec()) {
         qDebug() << "delete succes";
     } else {
-        qDebug() << "addDroe error:  "
+        qDebug() << "addSearch error:  "
                  << query.lastError();
     };
 }

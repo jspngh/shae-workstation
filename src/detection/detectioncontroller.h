@@ -19,6 +19,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
+#include "persistence/persistencecontroller.h"
 
 class DetectionController : public QThread
 {
@@ -26,7 +27,7 @@ class DetectionController : public QThread
 
 public:
     //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
-    explicit DetectionController(Search *search, QString path, QObject *parent = 0);
+    explicit DetectionController(Search *search, DroneModule *dm, PersistenceController *pc, QObject *parent = 0);
     ~DetectionController() {}
 
     void setMediator(Mediator *mediator);
@@ -57,7 +58,7 @@ signals:
     /*!
      * \brief the signal that is emitted when a new detection result has been found in the footage.
      */
-    void newDetection(DetectionResult result);
+    void newDetection(QUuid droneId, DetectionResult result);
     /*!
      * \brief the signal that is emitted when the detectionController is finished. This requires the function streamFinished() to be
      * called beforehand.
@@ -74,7 +75,10 @@ private:
     int nrDetections;
     volatile bool streaming;
     Search *search;
+    DroneModule * droneModule;
+    QUuid droneId;
     QString path;
+    PersistenceController *persistenceController;
     /*!
      * \brief a private method that allows to parse the configuration file of the detectioncontroller
      * this file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
@@ -84,7 +88,7 @@ private:
     /*!
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
-    void extractDetectionsFromFrame(cv::Mat frame, double timeFrame);
+    void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
 
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;

@@ -52,7 +52,7 @@ Search Persistence::retrieveSearch(QUuid searchId)
 
 void Persistence::saveDroneStatus(DroneStatus droneStatus)
 {
-    dronestatusdao.dbSaveDroneStatus(droneStatus, droneStatus.getDrone()->getGuid());
+    dronestatusdao.dbSaveDroneStatus(droneStatus);
 }
 
 QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
@@ -70,9 +70,9 @@ DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QDateTime time)
     return dronestatusdao.dbRetrieveDroneStatus(droneId, time);
 }
 
-void Persistence::saveDrone(Drone drone)
+void Persistence::saveDrone(Drone *drone)
 {
-    dronedao.dbSaveDrone(drone);
+    dronedao.dbSaveDrone(*drone);
 }
 
 Drone Persistence::retrieveDrone(QUuid droneId)
@@ -80,9 +80,9 @@ Drone Persistence::retrieveDrone(QUuid droneId)
     return dronedao.dbRetrieveDrone(droneId);
 }
 
-void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
+void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path)
 {
-    dronesearchdao.dbSaveDronePath(droneId, searchId, path);
+    dronesearchdao.dbSaveDronePath(droneId, searchId, *path);
 }
 
 QList<QGeoCoordinate> Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
@@ -147,6 +147,7 @@ void Persistence::initDatabase()
     if (dbNotCreatedYet) {
         createDatabase();
     }
+
 }
 
 QString Persistence::databaseLocation()

@@ -53,7 +53,7 @@ public:
     QDateTime getTimestampDrone() const;
     void setTimestampDrone(const QDateTime &value);
 
-    QDateTime getTimestampRecievedWorkstation() const;
+    QDateTime getTimestampReceivedWorkstation() const;
     void setTimestampRecievedWorkstation(const QDateTime &value);
 
     double getSelectedSpeed() const;

@@ -18,12 +18,14 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/qtmapkit_test.h \
-    core/videostreamdetection.h
+    core/system_test.h \
+    core/databasecreator.h
 
 SOURCES += \
     core/qtmapkit_test.cpp \
-    core/videostreamdetection.cpp \
-    main.cpp
+    main.cpp \
+    core/system_test.cpp \
+    core/databasecreator.cpp
 
 # c++11
 CONFIG += c++11
@@ -36,4 +38,7 @@ QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
+
+RESOURCES += \
+    integrationtestapplication.qrc
 

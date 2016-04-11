@@ -27,6 +27,7 @@ PathAlgorithm::~PathAlgorithm()
 
 void PathAlgorithm::setMediator(Mediator *mediator)
 {
+    qDebug() << "adding PathAlgorithm signal/slots";
     this->mediator = mediator;
     mediator->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));

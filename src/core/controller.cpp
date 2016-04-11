@@ -9,22 +9,17 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
-    //configure the search (should be done through the interface)
-    search = new Search();
-    search->setHeight(3);
-    search->setGimbalAngle(65);
-    search->setFpsProcessing(2);
 
     workstationIP = initWorkstationIP();
 
     drones = new QList<DroneModule*>();
     // dronePort, streamPort, droneIp, controllerIp, workstationIp
     drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
-    drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("rtp://10.1.1.10:5000"), 0.0001));
+    drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("sololink.sdp"), 0.0001));
 
     // create controllers
     pathLogicController = new SimplePathAlgorithm();
-
+    persistenceController = new PersistenceController();
 }
 
 Controller::~Controller()
@@ -34,63 +29,73 @@ Controller::~Controller()
     droneThread.wait();
     pathLogicThread.quit();
     pathLogicThread.wait();
-    // persistenceThread.quit();
-    // persistenceThread.wait();
+    persistenceThread.quit();
+    persistenceThread.wait();
 
     // delete the mediator and the search object
     delete mediator;
-    delete search;
     // special Qt function to delete QList of pointers
     qDeleteAll(drones->begin(), drones->end());
     drones->clear();
 
     // delete persistenceController;
     delete pathLogicController;
-    if(detectionController){
-    delete detectionController;
-    }
+    if(detectionController)
+        delete detectionController;
 }
 
 void Controller::init()
 {
-    // init the controller for single drone use.
-    // configure every component with the controller
+    // configure every component with the mediator
     pathLogicController->setMediator(mediator);
     for (int i = 0; i < drones->size(); i++)
         (*drones)[i]->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
+    persistenceController->setMediator(mediator);
 
+    // place every component in a different thread
+    persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
-    DroneModule *d = drones->first();
-    d->moveToThread(&droneThread);
-    //d->setController(this);
+    for (int i = 0; i < drones->size(); i++)
+        (*drones)[i]->moveToThread(&droneThread);
 
+    // already start the stream on the drone
+    drones->first()->getStream();
+
+    // start all the threads
+    persistenceThread.start();
     pathLogicThread.start();
     droneThread.start();
-    // persistenceThread.start();
+
+    //add slot for search
+    getMediator()->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 }
 
-
-void Controller::initStream(DroneModule* d)
+ void Controller::initStream(DroneModule* d)
 {
-
-    d->getStream();
-    qDebug() << "Controller: stream started at drone";
+    qDebug() << "Controller: stream started at workstation";
     VideoSequence sequence  = d->getVideoController()->onStartStream(d->getDrone());
-    detectionController = new DetectionController(search, sequence.getPath());
+
+    detectionController = new DetectionController(search, d, persistenceController);
+    detectionController->setMediator(mediator);
+
     qDebug() << "Controller: starting to save stream";
     // allow the stream to buffer
-
-    QThread::sleep(1);
     //WARNING VideoCapture needs to be performed on the main thread!
-    cv::VideoCapture capture = cv::VideoCapture(sequence.getPath().toStdString());
+    cv::VideoCapture capture;
+    capture.open(sequence.getPath().toStdString().c_str());
+    while(!capture.isOpened()){
+        QThread::sleep(1);
+        qDebug()<< "stream file not yet open, waiting";
+    }
     qDebug() << "Controller: stream file has been succesfully opened";
     // allow the stream to buffer
     detectionController->setSequence(capture);
 
+
     // allow the stream to bufer for a second
-    QThread::sleep(1);
+    qDebug() << "Controller: starting detectioncontroller";
     detectionController->start();
 
 }
@@ -112,6 +117,10 @@ void Controller::stopStream(DroneModule* d)
     detectionController->streamFinished();
 }
 
+void Controller::onSearchEmitted(Search* s){
+    qDebug() << "Controller::saved search";
+    search = s;
+}
 
 /*****************
  *    Getters

@@ -1,5 +1,6 @@
 #include "overviewwidget.h"
 #include "ui_overviewwidget.h"
+#include <QDebug>
 
 OverviewWidget::OverviewWidget(QWidget *parent) :
     QWidget(parent),
