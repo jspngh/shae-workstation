@@ -49,3 +49,21 @@ QList<DetectionResult> DetectionResultDAO::dbRetrieveDetectionResults(QUuid dron
     }
     return returnList;
 }
+
+QList<DetectionResult> DetectionResultDAO::dbRetrieveDetectionResults(QUuid searchId)
+{
+    QSqlQuery query;
+    QList<DetectionResult> returnList = QList<DetectionResult>();
+    query.prepare("SELECT latitude, longitude, score FROM detectionresults WHERE searchID = (:searchID)");
+    query.bindValue(":searchID", searchId);
+    if (query.exec()) {
+        while (query.next()) {
+            DetectionResult output = DetectionResult(QGeoCoordinate(query.value(0).toDouble(), query.value(1).toDouble()), query.value(2).toDouble());
+            returnList.append(output);
+        }
+    } else {
+        qDebug() << "getDetectionResult error:  "
+                 << query.lastError();
+    }
+    return returnList;
+}

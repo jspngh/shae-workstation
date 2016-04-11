@@ -33,7 +33,7 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus)
                   ":nextWaypoints) ");
     query.bindValue(":droneID", droneStatus.getDrone()->getGuid());
     query.bindValue(":timestampDrone", droneStatus.getTimestampDrone());
-    query.bindValue(":timestampWorkstation", droneStatus.getTimestampReceivedWorkstation());
+    query.bindValue(":timestampReceivedWorkstation", droneStatus.getTimestampReceivedWorkstation());
     QGeoCoordinate location = droneStatus.getCurrentLocation();
     query.bindValue(":latitude", location.latitude());
     query.bindValue(":longitude", location.longitude());

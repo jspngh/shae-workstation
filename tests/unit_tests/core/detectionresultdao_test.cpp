@@ -49,13 +49,21 @@ void DetectionResultDAO_Test::testSimpleDetectionResultDAO()
     QUuid searchID = QUuid::createUuid();
     QUuid droneID = QUuid::createUuid();
 
+    DetectionResult s2 = DetectionResult(QGeoCoordinate(5, 5), 5.5);
+    QUuid droneID2 = QUuid::createUuid();
+
     sd.dbSaveDetectionResult(droneID, searchID, s);
+    sd.dbSaveDetectionResult(droneID2, searchID, s2);
 
     QList<DetectionResult> sback = sd.dbRetrieveDetectionResults(droneID, searchID);
 
     QVERIFY(sback.first().getScore() == s.getScore());
     QVERIFY(s.getLocation().longitude() == sback.first().getLocation().longitude());
     QVERIFY(s.getLocation().latitude() == sback.first().getLocation().latitude());
+
+    QList<DetectionResult> sback2 = sd.dbRetrieveDetectionResults(searchID);
+
+    QVERIFY(sback2.size() == 2);
 
     QSqlQuery query;
     query.prepare("DELETE from detectionresults "

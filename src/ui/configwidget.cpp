@@ -1,11 +1,5 @@
 #include "configwidget.h"
 #include "ui_configwidget.h"
-#include "mainwindow.h"
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <string>
-#include <sstream>
 #include <QGeoRectangle>
 #include <QDebug>
 #include <QCheckBox>
@@ -14,6 +8,8 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConfigWidget)
 {
+    this->areaWasSelected = false;
+
     //setup UI
     ui->setupUi(this);
 
@@ -23,18 +19,9 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     ui->droneTable->setColumnWidth(IP_PORT, 150);
     ui->droneTable->verticalHeader()->hide();
 
-    ui->droneTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->droneTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->precisionSlider->setMaximum(100);
-
     //setup connections
-    //welcomewidget
-    connect(((MainWindow *) parent)->getWelcomeWidget(), SIGNAL(configFileSignal(QString)), this, SLOT(initConfScreen(QString)));
-    //lowerbuttons:
-    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
-    connect(ui->backButton, SIGNAL(clicked()), this, SLOT(backButtonPush()));
     connect(ui->locateButton, SIGNAL(clicked()), this, SLOT(locateButtonPush()));
-    //slider
+    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
     connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
     initializeMap();
@@ -55,6 +42,8 @@ void ConfigWidget::initializeMap()
             this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()),
             this, SLOT(onMapLoaded()));
+    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)),
+            this, SLOT(areaSelected()));
 }
 
 void ConfigWidget::onMapLoaded()
@@ -68,6 +57,12 @@ void ConfigWidget::onMapFailedToLoad()
     ui->searchAreaLoadingLabel->setText(QString(
         "Error loading map.\nPlease check your internet connection."
     ));
+}
+
+void ConfigWidget::areaSelected()
+{
+    this->areaWasSelected = true;
+    ui->startButton->setDisabled(false);
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)
@@ -86,45 +81,6 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
             mapView->shiftKeyPressed(false);
     }
     QWidget::keyReleaseEvent(event);
-}
-
-void ConfigWidget::initConfScreen(QString f)
-{
-    QFile file(f);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            QStringList splitLine = line.split(" ");
-            if (splitLine.at(0) == "Precision:") {
-                ui->PrecisionValueLabel->setText(splitLine.at(1));
-                ui->precisionSlider->setValue((((QString)splitLine.at(0).split("%").at(0)).toInt()));
-            } else if (splitLine.at(0) == "Search") {
-                ui->searchStrategyComboBox->setCurrentText((QString) splitLine.at(2));
-            } else if (splitLine.at(0) == "Location") {
-                ui->locateField->setText((QString) splitLine.at(3));
-            } else if (splitLine.at(0) == "Longitude") {
-                ui->longitudeField->setText((QString) splitLine.at(3));
-            } else if (splitLine.at(0) == "Latitude") {
-                ui->latitudeField->setText((QString) splitLine.at(3));
-            } else if (splitLine.at(0) == "Center") {
-                mapView->setCenter(QGeoCoordinate(splitLine.at(5).toDouble(), splitLine.at(4).toDouble(), splitLine.at(6).toDouble()));
-            } else if (splitLine.at(0) == "Bottom") {
-
-            } else if (splitLine.at(0) == "Top") {
-
-            }
-        }
-        file.close();
-    } else {
-        ui->PrecisionValueLabel->setText("0%");
-        ui->precisionSlider->setValue(0);
-        ui->searchStrategyComboBox->setCurrentIndex(0);
-        ui->locateField->setText("0");
-        ui->longitudeField->setText("0");
-        ui->latitudeField->setText("0");
-        mapView->setCenter(QGeoCoordinate(51.022692, 3.709853));
-    }
 }
 
 void ConfigWidget::sliderChanged(int value)
@@ -162,23 +118,15 @@ void ConfigWidget::startButtonPush()
     ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
 
-void ConfigWidget::backButtonPush()
-{
-    ((QStackedWidget *) this->parent())->setCurrentIndex(0);
-}
-
 void ConfigWidget::locateButtonPush()
 {
-    QString choice = ui->locateComboBox->currentText();
-    if (choice == "Location") {
+    if (ui->chooseLocationButton->isChecked()) {
         mapView->setCenter(ui->locateField->text());
-    } else if (choice == "Coordinates") {
+    } else {
         mapView->setCenter(QGeoCoordinate(
             ui->latitudeField->text().toDouble(),
             ui->longitudeField->text().toDouble()
         ));
-    } else {
-        qWarning() << "User chose something else than \"Location\" or \"Coordinates\"";
     }
 }
 
@@ -244,3 +192,4 @@ int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 
     return -1;
 }
+

@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-#include <QLabel>
 #include <QStyleFactory>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -37,11 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
-    statusBar()->addWidget(new QLabel(tr("Ready")));
-
-
     qApp->setStyle("Fusion");
-    QFile file(":styles/main.qss");
+    QFile file(":/ui/styles/main");
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qApp->setStyleSheet(file.readAll());
         file.close();
