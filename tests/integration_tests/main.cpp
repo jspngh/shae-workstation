@@ -1,5 +1,4 @@
 #include "core/system_test.h"
-#include "core/videostreamdetection_test.h"
 #include "core/databasecreator.h"
 #include <QList>
 #include <QTest>
@@ -27,7 +26,7 @@ int main(int argc, char *argv[])
         QTest::qExec(test, a.arguments());
     }
     qDeleteAll(tests.begin(), tests.end());
-    //db.removeDatabase();
+    db.removeDatabase();
     return 0;
 }
 

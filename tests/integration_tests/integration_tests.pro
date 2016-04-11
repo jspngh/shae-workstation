@@ -19,14 +19,12 @@ UI_DIR = $$PWD/build/.ui
 HEADERS += \
     core/qtmapkit_test.h \
     core/system_test.h \
-    core/videostreamdetection_test.h \
     core/databasecreator.h
 
 SOURCES += \
     core/qtmapkit_test.cpp \
     main.cpp \
     core/system_test.cpp \
-    core/videostreamdetection_test.cpp \
     core/databasecreator.cpp
 
 # c++11
