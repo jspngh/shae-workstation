@@ -11,6 +11,7 @@ class Search
 public:
     //constructors
     Search();
+    Search(const Search &d);
     ~Search();
 
     Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing);
@@ -51,4 +52,5 @@ private:
     static constexpr int DEFAULT_GIMBAL_ANGLE = 65;
 };
 
+Q_DECLARE_METATYPE(Search)
 #endif // SEARCH_H

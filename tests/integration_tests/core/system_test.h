@@ -15,6 +15,8 @@ class System_Test : public QObject
 private:
     Controller * controller;
     Search* s;
+    QProcess *simulatorProcess;
+
 
 public:
     System_Test();

@@ -76,6 +76,7 @@ private:
     volatile bool streaming;
     Search *search;
     DroneModule * droneModule;
+    QUuid droneId;
     QString path;
     PersistenceController *persistenceController;
     /*!
@@ -87,7 +88,7 @@ private:
     /*!
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
-    void extractDetectionsFromFrame(cv::Mat frame, double timeFrame);
+    void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
 
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;

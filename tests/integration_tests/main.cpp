@@ -9,8 +9,14 @@
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
     QList<QObject *> tests;
+    qRegisterMetaType<DetectionResult>("DetectionResult");
+    qRegisterMetaType<VideoSequence>("VideoSequence");
+    qRegisterMetaType<Search>("Search");
+    qRegisterMetaType<DroneStatus>("DroneStatus");
+    qRegisterMetaType<Drone>("Drone");
 
     //create db
     DatabaseCreator db = DatabaseCreator();
@@ -18,13 +24,13 @@ int main(int argc, char *argv[])
     db.initDatabase();
 
     //tests.append(new VideostreamDetection_Test());
-    //tests.append(new System_Test());
-    tests.append(new SignalSlotPersistenceTest());
+    tests.append(new System_Test());
+    //tests.append(new SignalSlotPersistenceTest());
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
     qDeleteAll(tests.begin(), tests.end());
-    db.removeDatabase();
+    //db.removeDatabase();
     return 0;
 }
 

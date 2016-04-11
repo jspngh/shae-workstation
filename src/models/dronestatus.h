@@ -30,6 +30,8 @@ public:
     //! Creates a droneStatus object from a Json status messages that can be received from the drone.
     static DroneStatus fromJsonString(QString string);
 
+    QString toString() const;
+
     /*****************
     * Getters/Setters
     *****************/

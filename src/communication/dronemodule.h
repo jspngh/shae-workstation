@@ -183,6 +183,9 @@ private slots:
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
 
+private:
+    void addSignalSlot(); //!< Helper function for connecting the slots and signals
+    void initHeartbeat(); //!< Helper function to initialise the heartbeat connection
 
 private:
     Drone *drone; //!< model containing the data of a drone that will be stored in the database

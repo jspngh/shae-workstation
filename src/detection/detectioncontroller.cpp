@@ -8,35 +8,63 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     persistenceController(pc),
     droneModule(dm)
 {
-    this->path = dm->getVideoController()->getSequencePath();
+    qDebug() << "starting DetectionControler";
+    if(this->search==nullptr){
+        qDebug() << "error: search not transmitted";
+        this->search = new Search();
+        this->search->setGimbalAngle(65);
+        this->search->setFpsProcessing(2);
+        this->search->setHeight(3);
+    }else{
+        qDebug() << "search transmitted";
+
+    }
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
+    this->path = dm->getVideoController()->getSequencePath();
 }
 
 void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
-
     // setup variables required for processing
-    qDebug() << "starting detectioncontroller";
     this->streaming = true;
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
+    qDebug() <<  (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
-    qDebug() << "new frames have been found, new total " << numFrames;
+    qDebug() << "frames have been found, total " << numFrames;
 
     int oldnumFrames = 0;
     int iteratorFrames = 0;
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
     this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
-    qDebug() << "original number of frames " << numFrames;
+    qDebug() << "framehop " << frameHop;
+    if(!(this->frameHop>0&&this->frameHop<30)){
+        this->frameHop=30;
+    }
+    droneId = this->droneModule->getGuid();
+    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
+
     cv::Mat frame;
     do {
 
         while (iteratorFrames < numFrames) {
-            this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
-            this->sequence >> frame;
-            double timeFrame = iteratorFrames * this->search->getFpsProcessing();
-            qDebug() << "processing frame  " << iteratorFrames;
-            extractDetectionsFromFrame(frame,timeFrame);
+                try
+                {
+                    this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
+                    bool captured =  this->sequence.read(frame);
+                    double timeFrame = (double)iteratorFrames / (double)fpsOriginal;
+                    if(captured){
+                        QDateTime time = QDateTime::currentDateTime();
+                        time.setTime(sequenceStartTime);
+                        time = time.addMSecs((quint64) timeFrame * 1000.0);
+                        qDebug() << "processing frame  " << iteratorFrames << " at time " << time;
+                        extractDetectionsFromFrame(frame,time);
+                    }
+                }
+                catch (cv::Exception e)
+                {
+                    qDebug()<<"opencv error";
+                }
             iteratorFrames += this->frameHop;
         }
 
@@ -62,9 +90,9 @@ void DetectionController::run()
 
 void DetectionController::setMediator(Mediator *mediator)
 {
-    this->mediator = mediator;;
-    mediator->addSignal(this, (char *) SIGNAL(newDetection(QUuid, DetectionResult)), QString("newDetection(DroneId, DetectionResult)"));
-    mediator->addSignal(this, (char *) SIGNAL(detectionFinished()), QString("detectionFinished()"));
+    this->mediator = mediator;
+    mediator->addSignal(this, SIGNAL(newDetection(QUuid, DetectionResult)), QString("newDetection(QUuid, DetectionResult)"));
+    mediator->addSignal(this, SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
 void DetectionController::streamFinished()
@@ -90,23 +118,17 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
 }
 
 
-void DetectionController::extractDetectionsFromFrame(cv::Mat frame, double timeFrame){
+void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time){
     if(frame.rows != 0 && frame.cols != 0)
     {
-
-        QUuid droneId = this->droneModule->getGuid();
-        QDateTime time = QDateTime::currentDateTime();
-        QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
-        time.setTime(sequenceStartTime);
-        time.addMSecs((quint64) timeFrame * 1000.0);
         DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
-
         QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
         double orientation = droneStatus.getOrientation();
-
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
+        qDebug()<< "nr of detections: " << detectionList.getSize();
         for (int i = 0; i < detectionList.getSize(); i++) {
+            qDebug()<< "emitting a detection";
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1));
             nrDetections++;
         }

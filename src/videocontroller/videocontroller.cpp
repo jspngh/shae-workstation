@@ -19,8 +19,8 @@ void VideoController::setMediator(Mediator *m)
 {
     this->mediator = m;
 
-    mediator->addSignal(this, (char *) SIGNAL(streamStarted(QUuid, VideoSequence)), QString("streamStarted(DroneId, VideoSequence)"));
-    mediator->addSignal(this, (char *) SIGNAL(streamStopped()), QString("streamStopped()"));
+    mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence)), QString("streamStarted(QUuid, VideoSequence)"));
+    mediator->addSignal(this, SIGNAL(streamStopped()), QString("streamStopped()"));
 }
 
 VideoSequence VideoController::onStartStream(Drone * drone)
@@ -45,12 +45,13 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     mp = libvlc_media_player_new_from_media(m);
 
     /* play the media_player */
+    QTime startStreamTime = QTime::currentTime();
     libvlc_media_player_play(mp);
     //allow vlc some time to create the file
     QThread::sleep(1);
     int size = 0;
-    //buffer maximally 20 seconds
-    int maxBuffertime = 20;
+    //buffer maximally 60 seconds
+    int maxBuffertime = 60;
     int buffertime = 0;
     QFile droneFile("dependencies/drone_stream.mpg");
     if (droneFile.open(QIODevice::ReadOnly)){
@@ -66,10 +67,9 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     qDebug() << "Videocontroller: File has been created by vlc.";
     qDebug() << "Videocontroller: File has a size of " << size;
 
-    VideoSequence sequence = VideoSequence(QString("dependencies/drone_stream.mpg"), QUuid::createUuid());
+    VideoSequence sequence =  VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, QString("dependencies/drone_stream.mpg"));
     this->sequence_path = sequence.getPath();
     emit this->streamStarted(drone->getGuid(), sequence);
-
     return sequence;
 }
 
@@ -83,7 +83,6 @@ void VideoController::onStopStream(Drone *drone)
     libvlc_media_player_release(mp);
 
     libvlc_release(inst);
-
 
     libvlc_release(inst);
     emit this->streamStopped();

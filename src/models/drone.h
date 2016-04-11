@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QUuid>
+#include <QMetaType>
 
 /**
  * \brief The Drone class holds the data belonging to a drone.
@@ -13,12 +14,13 @@ class Drone
 {
 public:
     Drone();
+    Drone(const Drone &d);
+    ~Drone();
+
 
     Drone(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
 
     Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
-
-    ~Drone();
 
     QUuid getGuid() const;
 
@@ -51,5 +53,7 @@ public:
     static constexpr double MIN_VISIONWIDTH = 0.00000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 
 };
+
+Q_DECLARE_METATYPE(Drone)
 
 #endif // DRONE_H

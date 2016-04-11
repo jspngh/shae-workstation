@@ -43,7 +43,8 @@ public:
     QString initWorkstationIP();
 
     QString getWorkstationIP() const;
-
+public slots:
+    void onSearchEmitted(Search* s);
 private:
     QString workstationIP;
     MainWindow *mainWindow;

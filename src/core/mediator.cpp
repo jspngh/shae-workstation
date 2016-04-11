@@ -4,14 +4,14 @@
 Mediator::Mediator(QObject *parent)
     : QObject(parent)
 {
-    qRegisterMetaType<DroneStatus>("DroneStatus");
+
 }
 
 int Mediator::addSignal(QObject *sender, const char *signal, QString signalName)
 {
     int count = 0;
     this->mutex.lock();
-    qDebug() << "Adding signal: " << signalName;
+    //qDebug() << "Adding signal: " << signalName;
 
     QList<Element>::iterator i;
     // search for a slot listing to the signal
@@ -40,7 +40,7 @@ int Mediator::addSlot(QObject *receiver, const char *slot, QString signalName)
     int count = 0;
 
     this->mutex.lock();
-    qDebug() << "Adding slot " << slot << " for signal: " << signalName;
+    //qDebug() << "Adding slot " << slot << " for signal: " << signalName;
 
     QList<Element>::iterator i;
     // search for a signal emitting the desired signal

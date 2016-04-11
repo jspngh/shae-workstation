@@ -1,11 +1,26 @@
 #include "drone.h"
 
 Drone::Drone()
-    : Drone(6331, 5502, "10.1.1.10", "10.1.1.1", "sololink.sdp", MIN_VISIONWIDTH)
-
 {
-
+    guid = QUuid::createUuid();
+    dronePort = 6331;
+    streamPort = 5502;
+    controllerIp = "10.1.1.10";
+    droneIp = "10.1.1.1";
+    streamPath = "sololink.sdp";
+    visionWidth =MIN_VISIONWIDTH;
 }
+
+Drone::Drone(const Drone &d){
+    guid = d.guid;
+    dronePort = d.dronePort;
+    streamPort = d.streamPort;
+    controllerIp = d.controllerIp;
+    droneIp = d.droneIp;
+    streamPath= d.streamPath;
+    visionWidth = d.visionWidth;
+}
+
 
 Drone::Drone(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath, double visionWidth):
     guid(QUuid::createUuid()),
