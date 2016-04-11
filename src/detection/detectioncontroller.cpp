@@ -8,17 +8,6 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     persistenceController(pc),
     droneModule(dm)
 {
-    qDebug() << "starting DetectionControler";
-    if(this->search==nullptr){
-        qDebug() << "error: search not transmitted";
-        this->search = new Search();
-        this->search->setGimbalAngle(65);
-        this->search->setFpsProcessing(2);
-        this->search->setHeight(3);
-    }else{
-        qDebug() << "search transmitted";
-
-    }
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
     this->path = dm->getVideoController()->getSequencePath();
 }
@@ -46,7 +35,6 @@ void DetectionController::run()
 
     cv::Mat frame;
     do {
-
         while (iteratorFrames < numFrames) {
                 try
                 {
@@ -80,12 +68,9 @@ void DetectionController::run()
     } while (this->streaming || (oldnumFrames!=numFrames));
     qDebug() << "Processing is finished at " << iteratorFrames;
 
-    if(this->sequence.isOpened()){
+    if(this->sequence.isOpened())
         this->sequence.release();
-    }
     emit this->detectionFinished();
-
-
 }
 
 void DetectionController::setMediator(Mediator *mediator)
@@ -160,9 +145,7 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
         //first seven lines are currently not used
         //TODO: parse first seven lines for checks
         for (int i = 0; i < 7; i++)
-        {
             getline(file, line);
-        }
 
         getline(file, line);
         //next lines are used for the xLUT and yLUT

@@ -40,32 +40,28 @@ Controller::~Controller()
 
     // delete persistenceController;
     delete pathLogicController;
-    if(detectionController){
-    delete detectionController;
-    }
+    if(detectionController)
+        delete detectionController;
 }
 
 void Controller::init()
 {
-    // init the controller for single drone use.
-    // configure every component with the controller
+    // configure every component with the mediator
     pathLogicController->setMediator(mediator);
-
     for (int i = 0; i < drones->size(); i++)
         (*drones)[i]->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
-
-    //finally define the slots of the persistence
     persistenceController->setMediator(mediator);
 
+    // place every component in a different thread
     persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
-    DroneModule *d = drones->first();
-    d->moveToThread(&droneThread);
-    //already start the stream on the drone
-    d->getStream();
+    for (int i = 0; i < drones->size(); i++)
+        (*drones)[i]->moveToThread(&droneThread);
 
+    // already start the stream on the drone
+    drones->first()->getStream();
 
     // start all the threads
     persistenceThread.start();
