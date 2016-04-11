@@ -75,8 +75,9 @@ void QMMarker::rotate(const double degrees)
 void QMMarker::setOrientation(const double degrees)
 {
     Q_D(QMMarker);
-    rotate(-(d->orientation));
-    rotate(degrees);
+    if(degrees == d->orientation) return;
+
+    rotate(degrees - d->orientation);
 }
 
 void QMMarker::scale(const double width, const double height)
