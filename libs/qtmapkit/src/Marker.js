@@ -99,14 +99,14 @@
      */
     Marker.prototype.addTransformation = function(transformCallback) {
         var self = this;
-        self.imgLoadedPromise = self.imgLoadedPromise.done(function() {
-            var context = self.canvas.getContext("2d");
-            // Clear previous
-            context.save();
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-            context.restore();
+        var context = self.canvas.getContext("2d");
 
+        self.imgLoadedPromise.done(function() {
+            // Clear previous
+            context.clearRect(-self.image.width/2, -self.image.height/2,
+                               self.image.width,  self.image.height);
+
+            // Transform, then draw current
             transformCallback(context, self.image);
             context.drawImage(self.image, -self.image.width/2, -self.image.height/2);
 
