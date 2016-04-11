@@ -160,7 +160,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
     } else {
         qDebug() << "getDronestatus error:  "
                  << query.lastError();
-        qDebug() << "a bogus VideoSequence was created, which is necessary for unit and integration tests";
+        qDebug() << "a bogus DroneStatus was created, which is necessary for unit and integration tests";
         return DroneStatus();
     }
     if(returnList.size()>0)
@@ -169,7 +169,7 @@ DroneStatus DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
     }
     else
     {
-        qDebug() << "a bogus VideoSequence was created, because the DroneStatusDAO has failed";
+        qDebug() << "a bogus DroneStatus was created, which is necessary for unit and integration tests";
         return DroneStatus();
     }
 }

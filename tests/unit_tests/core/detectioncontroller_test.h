@@ -20,7 +20,6 @@ public:
 
 private Q_SLOTS:
     void testProcessSequence();
-    void testIncorrectParseConfiguration();
     void initTestCase();
     void cleanupTestCase();
 
