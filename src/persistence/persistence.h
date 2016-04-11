@@ -11,6 +11,7 @@
 #include "models/search.h"
 #include "models/drone.h"
 #include "detectionresultdao.h"
+#include "detectionresultwriter.h"
 #include "dronedao.h"
 #include "dronestatusdao.h"
 #include "searchdao.h"
@@ -37,6 +38,7 @@ public:
     Drone retrieveDrone(QUuid droneId);
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
+    QList<DetectionResult> retrieveDetectionResults(QUuid searchId);
 
 public slots:
 
@@ -47,6 +49,7 @@ public slots:
     //will register a videosequence in the database (already saved in location)
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
     void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
+    void printDetectionResult(QUuid searchId, QString fileName);
 
 
 private:
@@ -57,6 +60,7 @@ private:
     DroneStatusDAO dronestatusdao;
     SearchDAO searchdao;
     VideoSequenceDAO videosequencedao;
+    DetectionResultWriter detectionresultwriter;
 
     //! \brief Initializes the database (sets the projectShaeDatabase-property).
     void initDatabase();

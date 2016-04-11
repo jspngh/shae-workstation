@@ -21,6 +21,7 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     dronesearchdao = DroneSearchDAO(&projectShaeDatabase);
     searchdao = SearchDAO(&projectShaeDatabase);
     videosequencedao = VideoSequenceDAO(&projectShaeDatabase);
+    detectionresultwriter = DetectionResultWriter();
 
     //register slots at mediator
     mediator->addSlot(this, SLOT(saveSearch(Search)), QString("startSearch(Search)"));
@@ -30,6 +31,7 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     mediator->addSlot(this, SLOT(saveDrone(Drone)), QString("saveDrone(Drone)"));
     mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, QUuid, VideoSequence)), QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
     mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, QUuid, DetectionResult)), QString("saveDetectionResult(QUuid,QUuid,DetectionResult)"));
+    mediator->addSlot(this, SLOT(printDetectionResult(QUuid, QString)), QString("printDetectionResult(QUuid, QString)"));
 
 }
 
@@ -106,6 +108,17 @@ void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionRe
 QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 {
     return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
+}
+
+QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid searchId)
+{
+    return detectionresultdao.dbRetrieveDetectionResults(searchId);
+}
+
+void Persistence::printDetectionResult(QUuid searchId, QString fileName)
+{
+    QList<DetectionResult> results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    detectionresultwriter.writeDetectionResultToFile(fileName, results);
 }
 
 void Persistence::initDatabase()
