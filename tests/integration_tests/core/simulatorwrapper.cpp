@@ -24,6 +24,8 @@ void SimulatorWrapper::stopSimulator()
     simulatorProcess->terminate();
     simulatorProcess->waitForFinished();
     simulatorProcess->close();
+    QTest::qWait(500);
+    qDebug() << "Closed simulator";
 
     delete simulatorProcess;
 }

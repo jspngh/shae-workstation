@@ -15,6 +15,12 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testDroneConnection();
 
+private:
+    int count;
+
+private slots:
+    void onDroneResponse(QString string);
+
 };
 
 #endif // DRONECONNECTION_INTEGRATIONTEST_H

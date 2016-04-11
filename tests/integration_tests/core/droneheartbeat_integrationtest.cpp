@@ -38,9 +38,13 @@ void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 
 
 
+
     QTest::qWait(5000);
     QVERIFY(count > 0);
 
+
+    delete drone;
+    delete m;
 
 
     simulator->stopSimulator();
