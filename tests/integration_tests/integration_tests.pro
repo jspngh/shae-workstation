@@ -19,13 +19,19 @@ UI_DIR = $$PWD/build/.ui
 HEADERS += \
     core/qtmapkit_test.h \
     core/videostreamdetection.h \
-    core/droneheartbeat_integrationtest.h
+    core/droneheartbeat_integrationtest.h \
+    core/dronemodule_integrationtest.h \
+    core/droneconnection_integrationtest.h \
+    core/simulatorwrapper.h
 
 SOURCES += \
     core/qtmapkit_test.cpp \
     core/videostreamdetection.cpp \
     main.cpp \
-    core/droneheartbeat_integrationtest.cpp
+    core/droneheartbeat_integrationtest.cpp \
+    core/dronemodule_integrationtest.cpp \
+    core/droneconnection_integrationtest.cpp \
+    core/simulatorwrapper.cpp
 
 # c++11
 CONFIG += c++11

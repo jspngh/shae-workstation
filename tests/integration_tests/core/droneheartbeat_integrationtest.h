@@ -1,6 +1,7 @@
 #ifndef DRONEHEARTBEAT_INTEGRATIONTEST_H
 #define DRONEHEARTBEAT_INTEGRATIONTEST_H
 #include <QtTest>
+#include "simulatorwrapper.h"
 
 class DroneHeartbeat_IntegrationTest : public QObject
 {
