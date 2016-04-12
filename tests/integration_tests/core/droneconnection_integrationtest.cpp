@@ -44,7 +44,8 @@ void Droneconnection_IntegrationTest::testDroneConnection()
 
     QVERIFY(count > 0);
 
-
+    th.quit();
+    th.wait();
     delete drone;
     delete m;
 
