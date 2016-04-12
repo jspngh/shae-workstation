@@ -14,6 +14,8 @@
         this.image;
         this.imgLoadedPromise;
 
+        this.rotation = 0;
+
         var location;
         if(locationLat && locationLng)
             location = new google.maps.LatLng(locationLat, locationLng);
@@ -52,6 +54,7 @@
         var self = this;
         this.addTransformation(function(context) {
             context.rotate(degrees * Math.PI / 180);
+            self.rotation += degrees * Math.PI / 180;
         });
     };
 
@@ -60,11 +63,12 @@
 
         var self = this;
         this.addTransformation(function(context, image) {
-            if(width > 1 && height > 1) {
-                context.canvas.width *= width;
-                context.canvas.height *= height;
-                context.translate(context.canvas.width/2, context.canvas.height/2);
-            }
+            context.canvas.width *= width;
+            context.canvas.height *= height;
+
+            // Changing a canvas' width/height resets all transformations
+            context.translate(context.canvas.width/2, context.canvas.height/2);
+            context.rotate(self.rotation);
             context.scale(width, height);
         });
     };
