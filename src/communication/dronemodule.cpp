@@ -55,7 +55,7 @@ DroneModule::~DroneModule()
     delete connectionThread;
     delete videoController;
     if(heartbeatReceiver)
-            delete heartbeatReceiver;
+            heartbeatReceiver->deleteLater();
     //TODO: delete waypoints fails if no waypoints assigned
 
 }

@@ -193,7 +193,7 @@ private:
     Mediator *mediator;
     QString workstationIp;
     VideoController * videoController;
-    DroneHeartBeatReceiver *heartbeatReceiver;
+    DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
     QThread *connectionThread;
     DroneConnection *droneConnection;
     QThread *streamThread;
