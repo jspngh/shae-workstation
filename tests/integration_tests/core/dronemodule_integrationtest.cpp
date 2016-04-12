@@ -8,6 +8,7 @@ Dronemodule_IntegrationTest::Dronemodule_IntegrationTest()
 
 void Dronemodule_IntegrationTest::initTestCase()
 {
+    count = 0;
     sim = new SimulatorWrapper();
     sim->startSimulator();
 
@@ -25,36 +26,39 @@ void Dronemodule_IntegrationTest::initTestCase()
     drone->moveToThread(&th);
     th.start();
 
+
 }
 
 void Dronemodule_IntegrationTest::cleanupTestCase()
 {
-    QTest::qWait(1000);
+    QTest::qWait(500);
     th.quit();
     th.wait();
+    QTest::qWait(500);
     delete drone;
     delete m;
     sim->stopSimulator();
+    QTest::qWait(500);
     delete sim;
 }
 
 
 void Dronemodule_IntegrationTest::testNavigationMessages()
 {
-    qDebug() << "Sending waypoints... "<< endl;
+    qDebug() << "Sending waypoints... ";
 
     drone->sendWaypoints();
-    QTest::qWait(500);
-    qDebug() << "Sending start... "<< endl;
+    QTest::qWait(300);
+    qDebug() << "Sending start... ";
     drone->startFlight();
-    qDebug() << "Waiting for simulator to start flying... "<< endl;
+    qDebug() << "Waiting for simulator to start flying, this takes some time... ";
     QTest::qWait(30000);
-    qDebug() << "Sending stop... "<< endl;
+    qDebug() << "Sending stop... ";
     drone->stopFlight();
-    QTest::qWait(2000);
-    qDebug() << "Sending emergency... "<< endl;
+    QTest::qWait(300);
+    qDebug() << "Sending emergency... ";
     drone->emergencyLanding();
-    QTest::qWait(2000);
+    QTest::qWait(300);
 
     QList<QString> check = QList<QString>();
     check.push_back("workstation_config");
@@ -64,7 +68,7 @@ void Dronemodule_IntegrationTest::testNavigationMessages()
     check.push_back("emergency");
 
 
-    qDebug() << "Checking if simulator has received all these messages in correct order... "<< endl;
+    qDebug() << "Checking if simulator has received all these messages in correct order... ";
 
     QByteArray output = sim->simulatorProcess->readAllStandardOutput();
     //qDebug() << "Simulator has the generated the following output, which we wil check for the right messages: "<< endl << output;
@@ -97,17 +101,76 @@ void Dronemodule_IntegrationTest::testNavigationMessages()
         j++;
 
     }
-    qDebug() << "All messages received in right order "<< endl;
+    qDebug() << "All messages received in right order ";
 
 
 }
 
 void Dronemodule_IntegrationTest::testStatusMessages()
 {
+    qDebug() << "requesting all status fields of drone... ";
+
+    DroneConnection* connection = drone->getDroneConnection();
+
+    connect(connection, SIGNAL(droneResponse(QString)), this, SLOT(onDroneResponse(QString)));
+
+
+    drone->requestStatus();
+    QTest::qWait(500);
+
+    QList<QString> check = QList<QString>();
+    check.push_back("all_statuses");
+
+
+
+    qDebug() << "Checking if simulator has received the correct message... ";
+
+    QByteArray output = sim->simulatorProcess->readAllStandardOutput();
+    //qDebug() << "Simulator has the generated the following output, which we wil check for the right messages: "<< endl << output;
+    int j = 0;
+    int indexend = 0;
+    while ((j = output.indexOf("{\n", indexend)) != -1) {
+        //get index of first opening {
+        //get index of closing }
+        int indexstart = j;
+        //qDebug() << "Start parse at position " << j;
+        int j = output.indexOf("\n}\n\n", indexstart);
+        //qDebug() << "Stop parse at position " << j;
+        indexend = j + 2 ;
+
+        //then we got indexes of a json message that can be analyzed
+
+
+        QByteArray jsonbits = output.mid(indexstart, indexend - indexstart).simplified();
+        qDebug() << "Simulator has received this message: " << jsonbits;
+        QJsonDocument jsondoc = QJsonDocument::fromJson(jsonbits);
+        QJsonObject json = jsondoc.object();
+        //qDebug() << json["message"] << endl;
+        QVERIFY(json["message"].toString() == check.front());
+        check.pop_front();
+
+
+
+
+        //qDebug() << "Found \" \n}\n\n \" at index position " << j << endl;
+        j++;
+
+    }
+    qDebug() << "Correct message was received by simulator ";
+
+
+    QTest::qWait(1000);
+    QVERIFY(count > 0);
+    qDebug() << "Answer from simulator was received ";
 
 }
 
 void Dronemodule_IntegrationTest::testSettingsMessages()
 {
 
+}
+
+void Dronemodule_IntegrationTest::onDroneResponse(QString string)
+{
+    count++;
 }

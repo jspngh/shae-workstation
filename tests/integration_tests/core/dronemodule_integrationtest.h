@@ -24,6 +24,10 @@ private:
     DroneModule* drone;
     Mediator* m;
     QThread th;
+    int count;
+
+private slots:
+    void onDroneResponse(QString string);
 };
 
 #endif // DRONEMODULE_INTEGRATIONTEST_H

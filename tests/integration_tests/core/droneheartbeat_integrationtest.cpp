@@ -1,6 +1,5 @@
 #include "droneheartbeat_integrationtest.h"
-#include "communication/dronemodule.h"
-#include "core/controller.h"
+
 
 DroneHeartbeat_IntegrationTest::DroneHeartbeat_IntegrationTest()
 {
@@ -10,26 +9,36 @@ DroneHeartbeat_IntegrationTest::DroneHeartbeat_IntegrationTest()
 void DroneHeartbeat_IntegrationTest::initTestCase()
 {
     count = 0;
+    simulator = new SimulatorWrapper();
+    simulator->startSimulator();
+
+    drone = new DroneModule(6330, 5502,QString("127.0.0.1"), QString("127.0.0.1"),QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
+    m = new Mediator();
+
+    drone->setMediator(m);
+    drone->moveToThread(&th);
+    th.start();
+
 }
 
 void DroneHeartbeat_IntegrationTest::cleanupTestCase()
 {
+    QTest::qWait(500);
+    th.quit();
+    th.wait();
+    QTest::qWait(500);
+    delete drone;
+    delete m;
 
+
+    simulator->stopSimulator();
+    QTest::qWait(500);
+    delete simulator;
 }
 
 
 void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 {
-    SimulatorWrapper* simulator = new SimulatorWrapper();
-    simulator->startSimulator();
-
-    DroneModule* drone = new DroneModule(6330, 5502,QString("127.0.0.1"), QString("127.0.0.1"),QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
-    Mediator* m = new Mediator();
-
-    drone->setMediator(m);
-    QThread th;
-    drone->moveToThread(&th);
-    th.start();
 
 
     DroneHeartBeatReceiver* receiver = drone->getHeartbeatReceiver();
@@ -41,15 +50,9 @@ void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 
     QTest::qWait(5000);
     QVERIFY(count > 0);
-
-    th.quit();
-    th.wait();
-    delete drone;
-    delete m;
+    qDebug() << "Heartbeats get received";
 
 
-    simulator->stopSimulator();
-    delete simulator;
 }
 
 void DroneHeartbeat_IntegrationTest::onDroneHeartbeatReceived(QString string)
