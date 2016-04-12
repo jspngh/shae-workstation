@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <vlc/vlc.h>
+#include "core/mediator.h"
 #include "models/drone.h"
 #include "models/videosequence.h"
 
@@ -26,7 +27,9 @@ public:
     //! DetectionController is a class, that retrieves a video stream and saves it to a file
     VideoController(QObject *parent = 0);
     ~VideoController() {}
-
+    QString getSequencePath();
+    void setSequencePath(QString sp);
+    void setMediator(Mediator *m);
 
 public slots:
     /*!
@@ -44,7 +47,7 @@ signals:
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been started.
      */
-    void streamStarted(VideoSequence seq);
+    void streamStarted(QUuid droneId, VideoSequence seq);
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been stopped.
      */
@@ -53,6 +56,8 @@ private:
     libvlc_media_player_t *mp;
     libvlc_instance_t *inst;
     libvlc_media_t *m;
+    QString sequence_path;
+    Mediator *mediator;
 
 };
 #endif // VIDEOCONTROLLER_H

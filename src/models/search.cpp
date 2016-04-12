@@ -13,6 +13,17 @@ Search::~Search()
 {
 }
 
+Search::Search(const Search &d)
+{
+    searchID =d.searchID,
+    startTime =d.startTime,
+    area = d.area;
+    height = d.height;
+    gimbalAngle = d.gimbalAngle;
+    fpsProcessing = d.fpsProcessing;
+}
+
+
 Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing):
     searchID(searchID),
     startTime(start),
@@ -23,14 +34,15 @@ Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int 
 {
 }
 
-QUuid Search::getSearchID() const
-{
-    return searchID;
-}
 
 QTime Search::getStartTime() const
 {
     return startTime;
+}
+
+void Search::setStartTime(QTime start)
+{
+    startTime = start;
 }
 
 QGeoRectangle Search::getArea() const
@@ -82,4 +94,15 @@ void Search::setFpsProcessing(int value)
 {
     fpsProcessing = value;
 }
+
+void Search::setSearchID(QUuid value)
+{
+    searchID = value;
+}
+
+QUuid Search::getSearchID() const
+{
+    return searchID;
+}
+
 

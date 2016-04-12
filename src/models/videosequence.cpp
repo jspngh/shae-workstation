@@ -5,6 +5,20 @@ VideoSequence::VideoSequence()
 
 }
 
+VideoSequence::VideoSequence(const VideoSequence &d)
+{
+    start = d.start;
+    end = d.end;
+    frameCount = d.frameCount;
+    path=d.path;
+    videoId = d.videoId;
+}
+
+VideoSequence::~VideoSequence()
+{
+
+}
+
 VideoSequence::VideoSequence(QUuid videoId)
 {
     this->videoId = videoId;

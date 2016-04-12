@@ -19,8 +19,6 @@ Search SearchDAO::dbSaveSearch(Search search)
     QSqlQuery query;
     query.prepare("INSERT INTO searches (searchID, startTime, area, height, gimballAngle, fpsProcessing) "
                   "VALUES (:searchID, :startTime, :area, :height, :gimballAngle, :fpsProcessing)");
-    query.bindValue(":searchID", search.getSearchID());
-    query.bindValue(":startTime", search.getStartTime());
 
     std::ostringstream os;
 
@@ -29,13 +27,14 @@ Search SearchDAO::dbSaveSearch(Search search)
 
     QString pathString = QString(os.str().c_str());
 
+    query.bindValue(":searchID", search.getSearchID());
+    query.bindValue(":startTime", search.getStartTime());
     query.bindValue(":area", pathString);
     query.bindValue(":height", search.getHeight());
     query.bindValue(":gimballAngle", search.getGimbalAngle());
     query.bindValue(":fpsProcessing", search.getFpsProcessing());
-
     if (query.exec()) {
-        qDebug() << "insert succes";
+        qDebug() << "insert search succes";
     } else {
         qDebug() << "addsearch error:  "
                  << query.lastError();

@@ -260,7 +260,7 @@ void DroneStatus::setTimestampDrone(const QDateTime &value)
     timestampDrone = value;
 }
 
-QDateTime DroneStatus::getTimestampRecievedWorkstation() const
+QDateTime DroneStatus::getTimestampReceivedWorkstation() const
 {
     return timestampReceivedWorkstation;
 }
