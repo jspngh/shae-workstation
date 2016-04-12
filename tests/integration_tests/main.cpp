@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     tests.append(new Droneconnection_IntegrationTest());
 
-    //tests.append(new DroneHeartbeat_IntegrationTest());
+    tests.append(new DroneHeartbeat_IntegrationTest());
 
     //tests.append(new VideostreamDetection_Test());
 

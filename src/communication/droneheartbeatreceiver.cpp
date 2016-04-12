@@ -1,5 +1,5 @@
 #include "droneheartbeatreceiver.h"
-
+#include <unistd.h>
 
 
 DroneHeartBeatReceiver::DroneHeartBeatReceiver(const QString ip, QObject *parent)
@@ -19,6 +19,7 @@ DroneHeartBeatReceiver::DroneHeartBeatReceiver(const QString ip, QObject *parent
 
 DroneHeartBeatReceiver::~DroneHeartBeatReceiver()
 {
+    server->close();
     delete server;
 }
 
