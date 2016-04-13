@@ -27,7 +27,7 @@
           <string>Export search</string>
          </property>
          <property name="icon">
-          <iconset resource="../application.qrc">
+          <iconset resource="../../../../../../../../Desktop/shae/workstation/src/application.qrc">
            <normaloff>:/ui/icons/export</normaloff>:/ui/icons/export</iconset>
          </property>
         </widget>
@@ -66,7 +66,7 @@
 </string>
        </property>
        <property name="text">
-        <string>Heartbeat: </string>
+        <string>Drone is taking off...</string>
        </property>
       </widget>
      </item>
@@ -75,7 +75,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../application.qrc"/>
+  <include location="../../../../../../../../Desktop/shae/workstation/src/application.qrc"/>
  </resources>
  <connections/>
 </ui>

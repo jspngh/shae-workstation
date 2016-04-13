@@ -39,7 +39,7 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
     } else {
         QMMarker& marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
         marker.setIcon("qrc:///ui/icons/drone");
-        marker.scale(0.2, 0.2);
+        marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
         marker.show();
     }
