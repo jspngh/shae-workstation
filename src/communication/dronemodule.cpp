@@ -67,15 +67,28 @@ Getters/Setters
 void DroneModule::setMediator(Mediator* med)
 {
     mediator = med;
+    videoController->setMediator(med);
+    addSignalSlot();
+    initHeartbeat();
 
-    med->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    med->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    med->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
-    med->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
-    med->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
-    med->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
-    med->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
+    DroneStatus droneStatus;
+    droneStatus.setDrone(this);
+    emit droneStatusReceived(droneStatus);
+}
 
+void DroneModule::addSignalSlot()
+{
+    mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
+    mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
+    mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
+    mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
+    mediator->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
+}
+
+void DroneModule::initHeartbeat()
+{
     heartbeatReceiver = new DroneHeartBeatReceiver(workstationIp);
     //heartbeatThread = new QThread();
     //heartbeatReceiver->moveToThread(heartbeatThread);
@@ -87,11 +100,6 @@ void DroneModule::setMediator(Mediator* med)
             this, SLOT(onDroneResponseError(int, QString)));
 
     setWorkstationConfiguration(workstationIp, heartbeatReceiver->getWorkstationHeartbeatPort());
-
-    DroneStatus droneStatus;
-    droneStatus.setDrone(this);
-
-    emit droneStatusReceived(droneStatus);
 }
 
 void DroneModule::getStream()
@@ -172,6 +180,7 @@ Slots
 ************************/
 void DroneModule::onPathCalculated(Search *s)
 {
+    qDebug() << "****************************************";
     bool droneInList = false;
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen

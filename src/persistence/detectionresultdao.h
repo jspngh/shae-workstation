@@ -31,6 +31,11 @@ public:
      * certain drone and search.
      */
     QList<DetectionResult> dbRetrieveDetectionResults(QUuid droneId, QUuid searchId);
+    /**
+     * \brief dbRetrieveDetectionResult Retrieves al the detection results for a
+     * certain  search.
+     */
+    QList<DetectionResult> dbRetrieveDetectionResults(QUuid searchId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

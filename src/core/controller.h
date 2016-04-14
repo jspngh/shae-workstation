@@ -12,7 +12,7 @@
 #include "detection/detectioncontroller.h"
 #include "mediator.h"
 #include "pathlogic/simplepathalgorithm.h"
-#include "persistence/persistence.h"
+#include "persistence/persistencecontroller.h"
 #include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"
 
@@ -43,15 +43,17 @@ public:
     QString initWorkstationIP();
 
     QString getWorkstationIP() const;
-
+public slots:
+    void onSearchEmitted(Search* s);
 private:
     QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<DroneModule *>* drones;
 
-    Persistence *persistenceController;
-    DetectionController *detectionController;
+    PersistenceController *persistenceController;
+    VideoController *videoController;
+    DetectionController *detectionController = nullptr;
     PathAlgorithm *pathLogicController;
     Search* search;
 

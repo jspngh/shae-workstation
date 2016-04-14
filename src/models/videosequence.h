@@ -3,6 +3,7 @@
 #include <QTime>
 #include <QString>
 #include <QUuid>
+#include <QMetaType>
 
 
 class VideoSequence
@@ -10,6 +11,9 @@ class VideoSequence
 public:
     //constructors
     VideoSequence();
+    VideoSequence(const VideoSequence &d);
+    ~VideoSequence();
+
     VideoSequence(QUuid videoId);
     VideoSequence(QString path, QUuid videoId);
     VideoSequence(QUuid videoId, QTime start, QTime end, int frameCount, QString path);
@@ -31,4 +35,5 @@ private:
     QUuid videoId;
 };
 
+Q_DECLARE_METATYPE(VideoSequence)
 #endif // VIDEOSEQUENCE_H

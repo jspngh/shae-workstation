@@ -23,7 +23,7 @@ DetectionResult DetectionResultDAO::dbSaveDetectionResult(QUuid droneId, QUuid s
     query.bindValue(":longitude", location.longitude());
     query.bindValue(":score", result.getScore());
     if (query.exec()) {
-        qDebug() << "insert succes";
+        qDebug() << "detection insert succes";
     } else {
         qDebug() << "addDetectionResult error:  "
                  << query.lastError();
@@ -38,6 +38,24 @@ QList<DetectionResult> DetectionResultDAO::dbRetrieveDetectionResults(QUuid dron
     query.prepare("SELECT latitude, longitude, score FROM detectionresults WHERE searchID = (:searchID) and droneID = (:droneID)");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
+    if (query.exec()) {
+        while (query.next()) {
+            DetectionResult output = DetectionResult(QGeoCoordinate(query.value(0).toDouble(), query.value(1).toDouble()), query.value(2).toDouble());
+            returnList.append(output);
+        }
+    } else {
+        qDebug() << "getDetectionResult error:  "
+                 << query.lastError();
+    }
+    return returnList;
+}
+
+QList<DetectionResult> DetectionResultDAO::dbRetrieveDetectionResults(QUuid searchId)
+{
+    QSqlQuery query;
+    QList<DetectionResult> returnList = QList<DetectionResult>();
+    query.prepare("SELECT latitude, longitude, score FROM detectionresults WHERE searchID = (:searchID)");
+    query.bindValue(":searchID", searchId);
     if (query.exec()) {
         while (query.next()) {
             DetectionResult output = DetectionResult(QGeoCoordinate(query.value(0).toDouble(), query.value(1).toDouble()), query.value(2).toDouble());

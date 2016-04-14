@@ -10,6 +10,7 @@
 #include <QWaitCondition>
 #include <QProcess>
 #include "detection/detectioncontroller.h"
+#include "videocontroller/videocontroller.h"
 
 class DetectionController_Test : public QObject
 {
@@ -17,12 +18,8 @@ class DetectionController_Test : public QObject
 public:
     DetectionController_Test(QObject *parent = 0);
 
-private:
-    void onNewDetection(DetectionResult result);
-
 private Q_SLOTS:
     void testProcessSequence();
-    void testIncorrectParseConfiguration();
     void initTestCase();
     void cleanupTestCase();
 

@@ -3,9 +3,9 @@
 
 #include <QListWidgetItem>
 #include <QMap>
+#include <QtMath>
 #include <QMMarker.h>
 #include <QMMapView.h>
-#include <QStackedWidget>
 #include <QUuid>
 #include <QWidget>
 #include "overviewdroneitem.h"
@@ -28,16 +28,16 @@ public:
 
 private:
     QMMapView *mapView;
+    bool mapViewLoaded;
     Ui::OverviewWidget *ui;
     Search *search;
     Mediator *mediator;
     QMap<QUuid, OverviewDroneItem*> mapIdListItem;
 
 private slots:
-    void clickButtonPush();
-    void backButtonPush();
+    void exportSearchButtonPush();
     void onSearchStarted(Search *s);
-    void onHeartBeatReceived(const QString heartbeat);
+    void onHeartBeatReceived(DroneStatus heartbeat);
     void fillDroneList();
     void updateDroneList(DroneStatus s);
     void onMapLoaded();

@@ -21,6 +21,7 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     dronesearchdao = DroneSearchDAO(&projectShaeDatabase);
     searchdao = SearchDAO(&projectShaeDatabase);
     videosequencedao = VideoSequenceDAO(&projectShaeDatabase);
+    detectionresultwriter = DetectionResultWriter();
 
     //register slots at mediator
     mediator->addSlot(this, SLOT(saveSearch(Search)), QString("startSearch(Search)"));
@@ -30,6 +31,7 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     mediator->addSlot(this, SLOT(saveDrone(Drone)), QString("saveDrone(Drone)"));
     mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, QUuid, VideoSequence)), QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
     mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, QUuid, DetectionResult)), QString("saveDetectionResult(QUuid,QUuid,DetectionResult)"));
+    mediator->addSlot(this, SLOT(printDetectionResult(QUuid, QString)), QString("printDetectionResult(QUuid, QString)"));
 
 }
 
@@ -50,7 +52,7 @@ Search Persistence::retrieveSearch(QUuid searchId)
 
 void Persistence::saveDroneStatus(DroneStatus droneStatus)
 {
-    dronestatusdao.dbSaveDroneStatus(droneStatus, droneStatus.getDrone()->getGuid());
+    dronestatusdao.dbSaveDroneStatus(droneStatus);
 }
 
 QList<DroneStatus> Persistence::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
@@ -68,9 +70,9 @@ DroneStatus Persistence::retrieveDroneStatus(QUuid droneId, QDateTime time)
     return dronestatusdao.dbRetrieveDroneStatus(droneId, time);
 }
 
-void Persistence::saveDrone(Drone drone)
+void Persistence::saveDrone(Drone *drone)
 {
-    dronedao.dbSaveDrone(drone);
+    dronedao.dbSaveDrone(*drone);
 }
 
 Drone Persistence::retrieveDrone(QUuid droneId)
@@ -78,9 +80,9 @@ Drone Persistence::retrieveDrone(QUuid droneId)
     return dronedao.dbRetrieveDrone(droneId);
 }
 
-void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
+void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path)
 {
-    dronesearchdao.dbSaveDronePath(droneId, searchId, path);
+    dronesearchdao.dbSaveDronePath(droneId, searchId, *path);
 }
 
 QList<QGeoCoordinate> Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
@@ -106,6 +108,17 @@ void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionRe
 QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 {
     return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
+}
+
+QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid searchId)
+{
+    return detectionresultdao.dbRetrieveDetectionResults(searchId);
+}
+
+void Persistence::printDetectionResult(QUuid searchId, QString fileName)
+{
+    QList<DetectionResult> results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    detectionresultwriter.writeDetectionResultToFile(fileName, results);
 }
 
 void Persistence::initDatabase()
@@ -134,6 +147,7 @@ void Persistence::initDatabase()
     if (dbNotCreatedYet) {
         createDatabase();
     }
+
 }
 
 QString Persistence::databaseLocation()

@@ -12,9 +12,12 @@
 #include "core/mediator_test.h"
 #include "core/pathalgorithm_test.h"
 #include "core/dronestatus_test.h"
+
 #include "core/parseexception_test.h"
 #include "core/streamconnection_test.h"
 #include "core/droneheartbeatreceiver_test.h"
+
+#include "core/xmlwriter_test.h"
 
 
 
@@ -38,6 +41,7 @@ int main(int argc, char *argv[])
     /********************
      * Testing pathlogic
      * *****************/
+
     tests.append(new Pathalgorithm_Test());
     tests.append(new SimplePathAlgorithm_Test());
     tests.append(new GeoPolygon_test());
@@ -85,9 +89,9 @@ int main(int argc, char *argv[])
      * Testing other stuff
      * *****************/
 
+    tests.append(new XMLWriter_Test());
+
     tests.append(new Mediator_Test());
-
-
 
 
 

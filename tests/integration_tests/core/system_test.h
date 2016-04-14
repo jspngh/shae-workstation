@@ -1,7 +1,5 @@
-#ifndef VIDEOSTREAMDETECTION_H
-#define VIDEOSTREAMDETECTION_H
-
-
+#ifndef SYSTEM_TEST_H
+#define SYSTEM_TEST_H
 
 #include <QString>
 #include <QProcess>
@@ -10,22 +8,28 @@
 #include "core/controller.h"
 #include "ui/mainwindow.h"
 
-class VideostreamDetection_Test : public QObject
+class System_Test : public QObject
 {
     Q_OBJECT
 
 private:
     Controller * controller;
+    Search* s;
     QProcess *simulatorProcess;
 
+
 public:
-    VideostreamDetection_Test();
-    ~VideostreamDetection_Test();
+    System_Test();
+    ~System_Test();
+
+signals:
+    void startSearch(Search *s);
 
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void VideostreamDetectionTest();
+    void systemTest();
 };
 
-#endif // VIDEOSTREAMDETECTION_H
+
+#endif // SYSTEM_TEST_H

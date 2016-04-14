@@ -52,6 +52,11 @@ public:
               bool selectable, QWidget *parent = 0);
 
     /*!
+     * Returns whether the map has loaded and is safe to perform functions on.
+     */
+    bool hasLoaded() const;
+
+    /*!
      * \brief Returns the display type of the map (e.g. satellite/road, ...)
      */
     MapType mapType() const;
@@ -148,6 +153,12 @@ public slots:
      * \param location The coordinate of the marker
      */
     QMMarker& addMarker(QString markerId, const QGeoCoordinate &location);
+
+    /*!
+     * \brief Checks whether a marker with the given id exists.
+     * \param markerId The id of the maerker
+     */
+    bool hasMarker(const QString markerId) const;
 
     /*!
      * \brief Get a marker.

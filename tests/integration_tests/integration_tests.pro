@@ -18,20 +18,23 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/qtmapkit_test.h \
-    core/videostreamdetection.h \
     core/droneheartbeat_integrationtest.h \
     core/dronemodule_integrationtest.h \
     core/droneconnection_integrationtest.h \
-    core/simulatorwrapper.h
+    core/simulatorwrapper.h \
+    core/system_test.h \
+    core/databasecreator.h
 
 SOURCES += \
     core/qtmapkit_test.cpp \
-    core/videostreamdetection.cpp \
     main.cpp \
     core/droneheartbeat_integrationtest.cpp \
     core/dronemodule_integrationtest.cpp \
     core/droneconnection_integrationtest.cpp \
-    core/simulatorwrapper.cpp
+    core/simulatorwrapper.cpp \
+    core/system_test.cpp \
+    core/databasecreator.cpp
+
 
 # c++11
 CONFIG += c++11
@@ -44,4 +47,7 @@ QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
+
+RESOURCES += \
+    integrationtestapplication.qrc
 

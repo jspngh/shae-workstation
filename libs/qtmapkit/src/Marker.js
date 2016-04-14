@@ -11,9 +11,10 @@
     function Marker(map, locationLat, locationLng) {
         this.map = map;
         this.canvas = document.createElement("canvas");
-        this.imageData = null;
         this.image;
         this.imgLoadedPromise;
+
+        this.rotation = 0;
 
         var location;
         if(locationLat && locationLng)
@@ -23,6 +24,7 @@
 
         this.marker = new google.maps.Marker({
             position: location,
+            clickable: false
         });
     }
 
@@ -51,9 +53,8 @@
 
         var self = this;
         this.addTransformation(function(context) {
-            context.translate(context.canvas.width/2, context.canvas.height/2);
             context.rotate(degrees * Math.PI / 180);
-            context.translate(-(context.canvas.width)/2, -(context.canvas.height)/2);
+            self.rotation += degrees * Math.PI / 180;
         });
     };
 
@@ -62,8 +63,12 @@
 
         var self = this;
         this.addTransformation(function(context, image) {
-            self.canvas.width *= width;
-            self.canvas.height *= height;
+            context.canvas.width *= width;
+            context.canvas.height *= height;
+
+            // Changing a canvas' width/height resets all transformations
+            context.translate(context.canvas.width/2, context.canvas.height/2);
+            context.rotate(self.rotation);
             context.scale(width, height);
         });
     };
@@ -77,14 +82,16 @@
         this.imgLoadedPromise = $.Deferred();
 
         this.image.addEventListener("load", function() {
+            // set canvas big enough so it doesn't crop the image after rotation.
+            self.canvas.width = self.image.width * 2;
+            self.canvas.height = self.image.height * 2;
+
             self.imgLoadedPromise.resolve();
         });
         this.image.src = uri;
 
         this.addTransformation(function(context, image) {
-            // set canvas big enough so it doesn't crop the image after rotation.
-            self.canvas.width = image.width * 2;
-            self.canvas.height = image.height * 2;
+            context.translate(context.canvas.width/2, context.canvas.height/2);
         });
     };
 
@@ -96,16 +103,16 @@
      */
     Marker.prototype.addTransformation = function(transformCallback) {
         var self = this;
-        self.imgLoadedPromise = self.imgLoadedPromise.done(function() {
-            var context = self.canvas.getContext("2d");
-            // Clear previous
-            context.save();
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, self.canvas.width, self.canvas.height);
-            context.restore();
+        var context = self.canvas.getContext("2d");
 
+        self.imgLoadedPromise.done(function() {
+            // Clear previous
+            context.clearRect(-self.image.width/2, -self.image.height/2,
+                               self.image.width,  self.image.height);
+
+            // Transform, then draw current
             transformCallback(context, self.image);
-            context.drawImage(self.image, self.canvas.width/2, self.canvas.height/2);
+            context.drawImage(self.image, -self.image.width/2, -self.image.height/2);
 
             self.marker.setIcon({
                 url: self.canvas.toDataURL("image/png"),

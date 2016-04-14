@@ -132,13 +132,12 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     if (! value.isNull()) {
         status.setHeartbeat(value.toBool());
     }
-    value = json["manufacturer"];
-    if (! value.isNull()) {
-        status.setManufacturer(value.toString());
-    }
-    value = json["type"];
-    if (! value.isNull()) {
-        status.setType(value.toString());
+
+    value = json["drone_type"];
+    if (! value.isNull() && value.isObject()) {
+        QJsonObject drone_type = value.toObject();
+        status.setManufacturer(drone_type["manufacturer"].toString());
+        status.setType(drone_type["model"].toString());
     }
 
     value = json["height"];
@@ -180,12 +179,20 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     }
     value = json["timestamp"];
     if (! value.isNull()) {
-        QString format = "ddmmyyyyHHmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
+        QString format = "ddMMyyyyhhmmsszzz"; //see http://doc.qt.io/qt-5/qdatetime.html#fromString
         status.setTimestampDrone(QDateTime::fromString(value.toString(), format));
     }
-
     return status;
 
+}
+
+QString DroneStatus::toString() const
+{
+    QString s;
+    s.append("[Time Send]  " + timestampDrone.toString("hh:mm:ss.zzz"));
+    s.append("\t[Time Received]  " + timestampReceivedWorkstation.toString("hh:mm:ss.zzz"));
+    s.append("\t[Location]  " + currentLocation.toString());
+    return s;
 }
 
 
@@ -253,7 +260,7 @@ void DroneStatus::setTimestampDrone(const QDateTime &value)
     timestampDrone = value;
 }
 
-QDateTime DroneStatus::getTimestampRecievedWorkstation() const
+QDateTime DroneStatus::getTimestampReceivedWorkstation() const
 {
     return timestampReceivedWorkstation;
 }
