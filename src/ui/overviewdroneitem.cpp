@@ -6,7 +6,11 @@ OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *p
       ui(new Ui::OverviewDroneItem)
 {
     ui->setupUi(this);
+
     setDroneNr(number);
+
+    connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
+    connect(ui->haltButton, SIGNAL(clicked()), drone, SLOT(stopFlight()));
 }
 
 OverviewDroneItem::~OverviewDroneItem()
