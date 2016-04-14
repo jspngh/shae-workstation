@@ -1,7 +1,4 @@
 #include "controller.h"
-#include <QUuid>
-
-#include <QUdpSocket>
 
 Controller::Controller(MainWindow *window, QObject *p)
     : QObject(p)
@@ -146,28 +143,8 @@ void Controller::readPendingDatagrams()
 
 void Controller::processHelloRaw(QByteArray helloRaw)
 {
-    QJsonParseError err;
-    QJsonDocument jsondoc = QJsonDocument::fromJson(helloRaw, &err);
-
-    if (!jsondoc.isObject()) return;
-
-    QJsonObject json = jsondoc.object();
-    QString messageType = json["message_type"].toString();
-
-    qDebug() << messageType;
-
-    QString ipDrone = json["ip_drone"].toString();
-    int portCommands = json["port_commands"].toInt();
-    int portStream = json["port_stream"].toInt();
-    QString streamFile = json["stream_file"].toString();
-    double visionWidth = json["vision_width"].toDouble();
-
-    qDebug() << ipDrone;
-    qDebug() << portCommands;
-    qDebug() << portStream;
-    qDebug() << streamFile;
-    qDebug() << visionWidth;
-
+    HelloMessage hello = HelloMessage::parse(helloRaw);
+    qDebug() << "found a drone with ip: " + hello.getDroneIp();
 }
 
 

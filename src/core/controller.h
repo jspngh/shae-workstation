@@ -3,9 +3,11 @@
 
 #include <QList>
 #include <QDebug>
+#include <QUuid>
+#include <QUdpSocket>
+#include <QThread>
 
 #include "mediator.h"
-#include <QThread>
 #include "communication/droneconnection.h"
 #include "communication/droneheartbeatreceiver.h"
 #include "communication/dronemodule.h"
@@ -15,6 +17,7 @@
 #include "persistence/persistencecontroller.h"
 #include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"
+#include "models/hellomessage.h"
 
 namespace Core {
 class Controller;

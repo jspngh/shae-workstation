@@ -2,6 +2,10 @@
 #define HELLOMESSAGE_H
 
 #include <QString>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDebug>
 
 class HelloMessage
 {

@@ -1,6 +1,6 @@
 #include "hellomessage.h"
 
-HelloMessage(QString droneIp,
+HelloMessage::HelloMessage(QString droneIp,
              QString streamFile,
              int commandsPort,
              int streamPort,
@@ -19,7 +19,7 @@ HelloMessage::HelloMessage()
 
 }
 
-HelloMessage(const HelloMessage& hello)
+HelloMessage::HelloMessage(const HelloMessage& hello)
 {
     droneIp = hello.droneIp;
     streamFile = hello.streamFile;
@@ -28,10 +28,40 @@ HelloMessage(const HelloMessage& hello)
     visionWidth = hello.visionWidth;
 }
 
-~HelloMessage()
+HelloMessage::~HelloMessage()
 {
     // nothing needs to be deleted
 }
+
+// Static helper function to pare HelloMessages received over the network
+HelloMessage HelloMessage::parse(QByteArray helloRaw)
+{
+    QJsonParseError err;
+    QJsonDocument jsondoc = QJsonDocument::fromJson(helloRaw, &err);
+
+    if (!jsondoc.isObject()) return HelloMessage();
+
+    QJsonObject json = jsondoc.object();
+    QString messageType = json["message_type"].toString();
+
+    qDebug() << messageType;
+
+    QString ipDrone = json["ip_drone"].toString();
+    int portCommands = json["port_commands"].toInt();
+    int portStream = json["port_stream"].toInt();
+    QString streamFile = json["stream_file"].toString();
+    double visionWidth = json["vision_width"].toDouble();
+
+    qDebug() << ipDrone;
+    qDebug() << portCommands;
+    qDebug() << portStream;
+    qDebug() << streamFile;
+    qDebug() << visionWidth;
+
+    return HelloMessage(ipDrone, streamFile, portCommands, portStream, visionWidth);
+}
+
+// Getters
 
 double HelloMessage::getVisionWidth() const
 {
