@@ -1,6 +1,7 @@
 #include "controller.h"
 #include <QUuid>
 
+#include <QUdpSocket>
 
 Controller::Controller(MainWindow *window, QObject *p)
     : QObject(p)
@@ -14,12 +15,17 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     drones = new QList<DroneModule*>();
     // dronePort, streamPort, droneIp, controllerIp, workstationIp
-    drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
-    drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("sololink.sdp"), 0.0001));
+    // drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
+    // drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("sololink.sdp"), 0.0001));
 
     // create controllers
     pathLogicController = new SimplePathAlgorithm();
     persistenceController = new PersistenceController();
+
+    udpSocket  = new QUdpSocket(this);
+    host  = new QHostAddress("127.0.0.1");
+    udpSocket->bind(*host, 4849);
+    connect(udpSocket,SIGNAL(readyRead()),this,SLOT(readPendingDatagrams()));
 }
 
 Controller::~Controller()
@@ -61,7 +67,7 @@ void Controller::init()
         (*drones)[i]->moveToThread(&droneThread);
 
     // already start the stream on the drone
-    drones->first()->getStream();
+    // drones->first()->getStream();
 
     // start all the threads
     persistenceThread.start();
@@ -121,6 +127,46 @@ void Controller::onSearchEmitted(Search* s){
     qDebug() << "Controller::saved search";
     search = s;
 }
+
+
+void Controller::readPendingDatagrams()
+{
+    qDebug()<< "something came in";
+    while (udpSocket->hasPendingDatagrams()) {
+        QByteArray helloRaw;
+        QHostAddress sender;
+        quint16 senderPort;
+
+        helloRaw.resize(udpSocket->pendingDatagramSize());
+        udpSocket->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
+
+        qDebug() << helloRaw;
+        processHelloRaw(helloRaw);
+    }
+}
+
+void Controller::processHelloRaw(QByteArray helloRaw)
+{
+    QJsonParseError err;
+    QJsonDocument jsondoc = QJsonDocument::fromJson(helloRaw, &err);
+
+    if (!jsondoc.isObject()) return;
+
+    QJsonObject json = jsondoc.object();
+    QString messageType = json["message_type"].toString();
+
+    qDebug() << messageType;
+
+    QString ipDrone = json["ip_drone"].toString();
+    int portCommands = json["port_commands"].toInt();
+    int portStream = json["port_stream"].toInt();
+
+    qDebug() << ipDrone;
+    qDebug() << portCommands;
+    qDebug() << portStream;
+
+}
+
 
 /*****************
  *    Getters
