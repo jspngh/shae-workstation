@@ -9,7 +9,6 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     droneModule(dm)
 {
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
-    this->path = dm->getVideoController()->getSequencePath();
 }
 
 void DetectionController::run()
@@ -17,6 +16,7 @@ void DetectionController::run()
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
     this->streaming = true;
+    qDebug() << path;
     this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() <<  (double) fpsOriginal;
@@ -65,7 +65,7 @@ void DetectionController::run()
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         qDebug() << "new frames have been found, new total " << numFrames;
-
+        qDebug() << this->streaming;
     } while (this->streaming || (oldnumFrames!=numFrames));
     qDebug() << "Processing is finished at " << iteratorFrames;
 
@@ -85,6 +85,8 @@ void DetectionController::streamFinished()
 {
     qDebug() << "DetectionController: stream has been stopped";
     this->streaming = false;
+    qDebug() << this->streaming;
+
 }
 
 
@@ -101,6 +103,11 @@ cv::VideoCapture DetectionController::getSequence() const
 void DetectionController::setSequence(const cv::VideoCapture &value)
 {
     sequence = value;
+}
+
+void DetectionController::setPath(const QString &value)
+{
+    path = value;
 }
 
 

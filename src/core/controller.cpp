@@ -25,8 +25,6 @@ Controller::Controller(MainWindow *window, QObject *p)
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
     mediator->addSignal(this, (char *) SIGNAL(startStreamSignal(Search*, DroneModule*, PersistenceController*)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
     mediator->addSignal(this, (char *) SIGNAL(stopStreamSignal(DroneModule*)), QString("stopStreamSignal(DroneModule*)"));
-
-
 }
 
 Controller::~Controller()
@@ -98,8 +96,6 @@ void Controller::stopStream(DroneModule* d)
 void Controller::onSearchEmitted(Search* s){
     qDebug() << "Controller::saved search";
     search = s;
-    QThread::sleep(1);
-    initStream(drones->first());
 }
 
 /*****************

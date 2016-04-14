@@ -21,16 +21,19 @@ DroneModule::DroneModule(int dataPort,
     drone = new Drone(dataPort, streamPort, droneIp, controllerIp, streamPath, visionWidth);
     droneConnection = new DroneConnection(droneIp, (quint16) dataPort);
     streamConnection = new StreamConnection(controllerIp, (quint16) streamPort);
+    videoController = new VideoController();
     connectionThread = new QThread();
     streamThread = new QThread();
     videoThread = new QThread();
     this->workstationIp = workstationIp;
     droneConnection->moveToThread(connectionThread);
     streamConnection->moveToThread(streamThread);
+    videoController->moveToThread(videoThread);
     connectionThread->start();
     streamThread->start();
-    videoController = new VideoController();
-    videoController->moveToThread(videoThread);
+    videoThread->start();
+
+
     detectionController = nullptr;
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
@@ -42,6 +45,9 @@ DroneModule::DroneModule(int dataPort,
     // TODO: create a seperate onStreamError slot
     connect(streamConnection, SIGNAL(streamError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
+    connect(this, SIGNAL(startStream(Drone*)), videoController, SLOT(onStartStream(Drone*)));
+    connect(this, SIGNAL(stopStream(Drone*)), videoController, SLOT(onStopStream(Drone*)));
+    connect(videoController, SIGNAL(streamStarted(QUuid,VideoSequence)), this, SLOT(initDetection()));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -85,15 +91,13 @@ void DroneModule::setMediator(Mediator* med)
 
 void DroneModule::addSignalSlot()
 {
-    mediator->addSignal(this, SIGNAL(stopStream(Drone*)), QString("onStopStream(Drone*)"));
-    mediator->addSignal(this, SIGNAL(startStream(Drone*)), QString("onStartStream(Drone*)"));
+
     mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
     mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
     mediator->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
-    mediator->addSlot(this, (char *) SLOT(initDetection()), QString("streamStarted(QUuid, VideoSequence)"));
     mediator->addSlot(this, (char *) SLOT(initStream(Search*, DroneModule*,PersistenceController*)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
     mediator->addSlot(this, (char *) SLOT(stopStream(DroneModule*)), QString("stopStreamSignal(DroneModule*)"));
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
@@ -261,6 +265,7 @@ void DroneModule::initStream(Search* search, DroneModule* dm,PersistenceControll
 
 void DroneModule::initDetection()
 {
+    detectionController->setPath(videoController->getSequencePath());
     detectionController->start();
 }
 
@@ -268,9 +273,10 @@ void DroneModule::stopStream(DroneModule* dm)
 {
     if(this->getDrone()->getGuid()==dm->getDrone()->getGuid())
     {
-    emit stopStream(drone);
-    stopStreamConnection();
-    detectionController->streamFinished();
+     qDebug() << "stopping videocontroller and detectioncontroller";
+     detectionController->streamFinished();
+     emit stopStream(drone);
+     stopStreamConnection();
     }
 }
 

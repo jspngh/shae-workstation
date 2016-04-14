@@ -18,8 +18,6 @@ void VideoController::setSequencePath(QString sp)
 void VideoController::setMediator(Mediator *m)
 {    
     this->mediator = m;        
-    mediator->addSlot(this, SLOT(onStartStream(Drone *)), QString("onStartStream(Drone*)"));
-    mediator->addSlot(this, SLOT(onStopStream(Drone *)), QString("onStopStream(Drone*)"));
     mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence)), QString("streamStarted(QUuid, VideoSequence)"));
     mediator->addSignal(this, SIGNAL(streamStopped()), QString("streamStopped()"));
 }

@@ -33,7 +33,6 @@ public:
     void init();
     void initStream(DroneModule* dm);
     void stopStream(DroneModule* dm);
-
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones();
     void setDrones(QList<DroneModule *>* list);
