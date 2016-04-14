@@ -24,6 +24,7 @@ void OverviewWidget::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult)), QString("newDetection(QUuid, DetectionResult)"));
 }
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
@@ -43,6 +44,21 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
         marker.show();
     }
+}
+
+void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult result)
+{
+    if(!mapIdListItem.contains(droneId))
+        qWarning() << "WARNING: detection from drone " << droneId.toString();
+
+    OverviewDroneItem *droneItem = mapIdListItem.value(droneId);
+    // Update sidebar
+    searchDetails->incrementPeopleLocated();
+    droneItem->incrementPeopleLocated();
+    // Update map
+    QString markerId = droneId.toString() + QString::number(droneItem->getPeopleLocated());
+    QMMarker& marker = mapView->addMarker(markerId, result.getLocation());
+    marker.show();
 }
 
 void OverviewWidget::exportSearchButtonPush()

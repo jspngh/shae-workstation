@@ -3,7 +3,8 @@
 
 OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *parent)
     : QWidget(parent),
-      ui(new Ui::OverviewDroneItem)
+      ui(new Ui::OverviewDroneItem),
+      locatedPeople(0)
 {
     ui->setupUi(this);
 
@@ -31,5 +32,16 @@ void OverviewDroneItem::updateStatus(DroneStatus status)
     double batteryLevel = status.getBatteryLevel();
     if(batteryLevel != -1)
         ui->batteryValue->setText(QString::number(batteryLevel) + "%");
+}
+
+int OverviewDroneItem::getPeopleLocated()
+{
+    return locatedPeople;
+}
+
+void OverviewDroneItem::incrementPeopleLocated()
+{
+    locatedPeople++;
+    ui->locatedPeopleValue->setText(QString::number(locatedPeople));
 }
 

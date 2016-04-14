@@ -12,6 +12,7 @@
 #include "overviewsearchitem.h"
 #include "communication/dronemodule.h"
 #include "core/mediator.h"
+#include "models/detectionresult.h"
 #include "models/search.h"
 
 namespace Ui {
@@ -41,6 +42,7 @@ private slots:
     void exportSearchButtonPush();
     void onSearchStarted(Search *s);
     void onHeartBeatReceived(DroneStatus heartbeat);
+    void onNewDetection(QUuid droneId, DetectionResult result);
     void fillDroneList();
     void updateDroneList(DroneStatus s);
     void onMapLoaded();
