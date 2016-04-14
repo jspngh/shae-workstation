@@ -13,8 +13,8 @@ public:
     Dronemodule_IntegrationTest();
 
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
+    void init();
+    void cleanup();
     void testNavigationMessages();
     void testStatusMessages();
     void testSettingsMessages();

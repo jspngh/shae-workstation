@@ -6,7 +6,7 @@ Dronemodule_IntegrationTest::Dronemodule_IntegrationTest()
 }
 
 
-void Dronemodule_IntegrationTest::initTestCase()
+void Dronemodule_IntegrationTest::init()
 {
     count = 0;
     sim = new SimulatorWrapper();
@@ -29,7 +29,7 @@ void Dronemodule_IntegrationTest::initTestCase()
 
 }
 
-void Dronemodule_IntegrationTest::cleanupTestCase()
+void Dronemodule_IntegrationTest::cleanup()
 {
     QTest::qWait(500);
     th.quit();
@@ -120,6 +120,7 @@ void Dronemodule_IntegrationTest::testStatusMessages()
     QTest::qWait(500);
 
     QList<QString> check = QList<QString>();
+    check.push_back("workstation_config");
     check.push_back("all_statuses");
 
 
