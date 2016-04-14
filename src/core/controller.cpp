@@ -131,7 +131,6 @@ void Controller::onSearchEmitted(Search* s){
 
 void Controller::readPendingDatagrams()
 {
-    qDebug()<< "something came in";
     while (udpSocket->hasPendingDatagrams()) {
         QByteArray helloRaw;
         QHostAddress sender;
@@ -160,10 +159,14 @@ void Controller::processHelloRaw(QByteArray helloRaw)
     QString ipDrone = json["ip_drone"].toString();
     int portCommands = json["port_commands"].toInt();
     int portStream = json["port_stream"].toInt();
+    QString streamFile = json["stream_file"].toString();
+    double visionWidth = json["vision_width"].toDouble();
 
     qDebug() << ipDrone;
     qDebug() << portCommands;
     qDebug() << portStream;
+    qDebug() << streamFile;
+    qDebug() << visionWidth;
 
 }
 
