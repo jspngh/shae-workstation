@@ -39,11 +39,11 @@ public:
     int getCommandsPort() const;
 
 private:
-    double visionWidth;
+    double visionWidth = -1;
     QString streamFile;
     QString droneIp;
-    int streamPort;
-    int commandsPort;
+    int streamPort = -1;
+    int commandsPort = -1;
 };
 
 #endif // HELLOMESSAGE_H

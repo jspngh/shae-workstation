@@ -42,21 +42,13 @@ HelloMessage HelloMessage::parse(QByteArray helloRaw)
     if (!jsondoc.isObject()) return HelloMessage();
 
     QJsonObject json = jsondoc.object();
-    QString messageType = json["message_type"].toString();
 
-    qDebug() << messageType;
-
+    // read date fields
     QString ipDrone = json["ip_drone"].toString();
     int portCommands = json["port_commands"].toInt();
     int portStream = json["port_stream"].toInt();
     QString streamFile = json["stream_file"].toString();
     double visionWidth = json["vision_width"].toDouble();
-
-    qDebug() << ipDrone;
-    qDebug() << portCommands;
-    qDebug() << portStream;
-    qDebug() << streamFile;
-    qDebug() << visionWidth;
 
     return HelloMessage(ipDrone, streamFile, portCommands, portStream, visionWidth);
 }

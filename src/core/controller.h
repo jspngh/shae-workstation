@@ -48,7 +48,7 @@ public:
     void setDrones(QList<DroneModule *>* list);
 
 private:
-    void processHelloRaw(QByteArray helloRaw);
+    void processHelloMessage(QByteArray helloRaw);
     QString initWorkstationIP();
 
 public slots:
@@ -56,6 +56,7 @@ public slots:
     void readPendingDatagrams();
 
 private:
+    QString controllerIp = QString("10.1.1.1");
     QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;

@@ -136,14 +136,29 @@ void Controller::readPendingDatagrams()
         helloRaw.resize(udpSocket->pendingDatagramSize());
         udpSocket->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
 
-        qDebug() << helloRaw;
-        processHelloRaw(helloRaw);
+        processHelloMessage(helloRaw);
     }
 }
 
-void Controller::processHelloRaw(QByteArray helloRaw)
+void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
+
+    int cmdPort = hello.getCommandsPort();
+    int streamPort = hello.getStreamPort();
+    QString ip = hello.getDroneIp();
+    QString streamfile =  hello.getStreamFile();
+    double vision = hello.getVisionWidth();
+
+    DroneModule *drone =
+            new DroneModule(cmdPort, streamPort, ip, controllerIp, workstationIP, streamfile, vision);
+
+    drone->setMediator(mediator);
+    drone->moveToThread(&droneThread);
+    drone->requestStatus();
+
+    drones->append(drone);
+
     qDebug() << "found a drone with ip: " + hello.getDroneIp();
 }
 
