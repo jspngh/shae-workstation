@@ -48,6 +48,7 @@ void DetectionController::run()
                         time.setTime(sequenceStartTime);
                         time = time.addMSecs((quint64) timeFrame * 1000.0);
                         extractDetectionsFromFrame(frame,time);
+                        qDebug() << "processing frame " << iteratorFrames << "of " << numFrames;
                     }
                 }
                 catch (cv::Exception e)
@@ -65,7 +66,6 @@ void DetectionController::run()
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         qDebug() << "new frames have been found, new total " << numFrames;
-        qDebug() << this->streaming;
     } while (this->streaming || (oldnumFrames!=numFrames));
     qDebug() << "Processing is finished at " << iteratorFrames;
 

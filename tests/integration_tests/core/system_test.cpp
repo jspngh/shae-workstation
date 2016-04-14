@@ -27,12 +27,12 @@ void System_Test::initTestCase()
     list->append(controller->getDrones()->first());
     s = new Search();
     //the following parameters are defined through configwidget
-    s->setFpsProcessing(2);
+    s->setFpsProcessing(0.5);
     s->setGimbalAngle(65);
     s->setHeight(3);
     s->setStartTime(QTime::currentTime());
     s->setSearchID(QUuid::createUuid());
-    s->setArea(QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022306, 3.709591)));
+    s->setArea(QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022683, 3.709591)));
     s->setDroneList((*list));
 
     emit startSearch(s);
