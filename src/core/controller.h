@@ -31,20 +31,22 @@ public:
     Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
-    void initStream(DroneModule* d);
-    void stopStream(DroneModule* d);
-
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones();
     void setDrones(QList<DroneModule *>* list);
 
     Search *getSearch() const;
-    DetectionController *getDetectionController() const;
     QString initWorkstationIP();
 
     QString getWorkstationIP() const;
 public slots:
     void onSearchEmitted(Search* s);
+    void initStream(DroneModule* dm);
+    void stopStream(DroneModule* dm);
+signals:
+    void startStreamSignal(Search* s, DroneModule* d, PersistenceController*p);
+    void stopStreamSignal(DroneModule* d);
+
 private:
     QString workstationIP;
     MainWindow *mainWindow;
@@ -52,8 +54,6 @@ private:
     QList<DroneModule *>* drones;
 
     PersistenceController *persistenceController;
-    VideoController *videoController;
-    DetectionController *detectionController = nullptr;
     PathAlgorithm *pathLogicController;
     Search* search;
 
