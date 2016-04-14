@@ -6,6 +6,7 @@ SOURCES += \
     $$PWD/welcomewidget.cpp \
     $$PWD/configwidget.cpp \
     $$PWD/overviewwidget.cpp \
+    $$PWD/overviewsearchitem.cpp \
     $$PWD/overviewdroneitem.cpp
 
 HEADERS += \
@@ -13,6 +14,7 @@ HEADERS += \
     $$PWD/welcomewidget.h \
     $$PWD/configwidget.h \
     $$PWD/overviewwidget.h \
+    $$PWD/overviewsearchitem.h \
     $$PWD/overviewdroneitem.h
 
 FORMS += \
@@ -20,5 +22,6 @@ FORMS += \
     $$PWD/welcomewidget.ui \
     $$PWD/configwidget.ui \
     $$PWD/overviewwidget.ui \
+    $$PWD/overviewsearchitem.ui \
     $$PWD/overviewdroneitem.ui
 

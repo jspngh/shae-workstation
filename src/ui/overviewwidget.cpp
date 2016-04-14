@@ -59,6 +59,8 @@ void OverviewWidget::updateDroneList(DroneStatus s)
 void OverviewWidget::onSearchStarted(Search *s)
 {
     this->search = s;
+
+    // Initialize map
     mapView = new QMMapView(QMMapView::Satellite,
                             s->getArea().center(),
                             11,
@@ -69,6 +71,11 @@ void OverviewWidget::onSearchStarted(Search *s)
     connect(mapView, SIGNAL(mapLoaded()),
             this, SLOT(onMapLoaded()));
 
+    // Show search details
+    searchDetails = new OverviewSearchItem(s, this);
+    ui->sidebar->insertWidget(0, searchDetails);
+
+    // Fill list drones
     fillDroneList();
 }
 

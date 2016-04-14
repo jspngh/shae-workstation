@@ -9,6 +9,7 @@
 #include <QUuid>
 #include <QWidget>
 #include "overviewdroneitem.h"
+#include "overviewsearchitem.h"
 #include "communication/dronemodule.h"
 #include "core/mediator.h"
 #include "models/search.h"
@@ -27,9 +28,11 @@ public:
     void setMediator(Mediator *mediator);
 
 private:
+    Ui::OverviewWidget *ui;
     QMMapView *mapView;
     bool mapViewLoaded;
-    Ui::OverviewWidget *ui;
+    OverviewSearchItem *searchDetails;
+
     Search *search;
     Mediator *mediator;
     QMap<QUuid, OverviewDroneItem*> mapIdListItem;
