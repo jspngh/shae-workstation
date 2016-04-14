@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
     QList<QObject *> tests;
 
 
+    //TODO: somethig is still wrong when closing this test
+  tests.append(new Droneconnection_IntegrationTest());
 
  tests.append(new DroneHeartbeat_IntegrationTest());
 
@@ -20,8 +22,6 @@ int main(int argc, char *argv[])
    tests.append(new Dronemodule_IntegrationTest());
 
 
-   //TODO: somethig is still wrong when closing this test
- tests.append(new Droneconnection_IntegrationTest());
 
 
 

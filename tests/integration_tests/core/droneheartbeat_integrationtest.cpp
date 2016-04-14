@@ -34,6 +34,7 @@ void DroneHeartbeat_IntegrationTest::cleanupTestCase()
     simulator->stopSimulator();
     QTest::qWait(500);
     delete simulator;
+    QTest::qWait(5000);
 }
 
 

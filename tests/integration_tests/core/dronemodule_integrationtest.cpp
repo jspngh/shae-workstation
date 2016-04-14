@@ -40,6 +40,7 @@ void Dronemodule_IntegrationTest::cleanupTestCase()
     sim->stopSimulator();
     QTest::qWait(500);
     delete sim;
+    QTest::qWait(5000);
 }
 
 
