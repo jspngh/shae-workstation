@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QList>
+#include <QtMath>
 #include <QMMapView.h>
 #include <QMainWindow>
 #include <QPair>
@@ -51,7 +52,8 @@ private:
     QMMapView *mapView;
     Mediator *mediator;
 
-    bool areaWasSelected;
+    bool areaWasSelected = false;
+    bool mapCentered = false;
 
     void writeConfigToFile();
     void initializeMap();
@@ -62,8 +64,6 @@ private:
     // Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
     int getDroneInTableIndex(DroneModule *d);
-
-    bool mapCentered = false;
 
     QList<QPair<int, DroneModule *>> dronesInTable;
 
