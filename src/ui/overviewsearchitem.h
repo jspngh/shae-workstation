@@ -3,6 +3,7 @@
 
 #include <QChar>
 #include <QString>
+#include <QTimer>
 #include <QWidget>
 #include "models/search.h"
 
@@ -20,11 +21,15 @@ public:
 
 public slots:
     void setLocatedPeople(int nrPeople);
-    void setDuration(int seconds);
     void setSearchedArea(double area);
+
+private slots:
+    void incrementDuration();
 
 private:
     Ui::OverviewSearchItem *ui;
+    QTimer *timer;
+    int duration = 0;
 };
 
 #endif // OVERVIEWSEARCHITEM_H
