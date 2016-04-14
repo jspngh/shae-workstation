@@ -53,7 +53,7 @@ private:
 
     PersistenceController *persistenceController;
     VideoController *videoController;
-    DetectionController *detectionController;
+    DetectionController *detectionController = nullptr;
     PathAlgorithm *pathLogicController;
     Search* search;
 

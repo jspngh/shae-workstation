@@ -140,6 +140,10 @@ public:
     VideoController *getVideoController() const;
     void setVideoController(VideoController *value);
 
+    DroneHeartBeatReceiver *getHeartbeatReceiver() const;
+
+    DroneConnection *getDroneConnection() const;
+
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
     //! is connected to droneconnection directly in the constructor of drone.
@@ -192,7 +196,7 @@ private:
     Mediator *mediator;
     QString workstationIp;
     VideoController * videoController;
-    DroneHeartBeatReceiver *heartbeatReceiver;
+    DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
     QThread *connectionThread;
     DroneConnection *droneConnection;
     QThread *streamThread;
