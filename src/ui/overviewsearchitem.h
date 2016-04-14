@@ -29,7 +29,7 @@ private slots:
 private:
     Ui::OverviewSearchItem *ui;
     QTimer *timer;
-    int duration = 0;
+    int duration;
 };
 
 #endif // OVERVIEWSEARCHITEM_H
