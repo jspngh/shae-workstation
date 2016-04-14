@@ -34,16 +34,10 @@ ConfigWidget::~ConfigWidget()
 
 void ConfigWidget::initializeMap()
 {
-    mapView = new QMMapView(QMMapView::Satellite,
-                            QGeoCoordinate(51.02, 3.73),
-                            11,
-                            true);
-    connect(mapView, SIGNAL(mapFailedToLoad()),
-            this, SLOT(onMapFailedToLoad()));
-    connect(mapView, SIGNAL(mapLoaded()),
-            this, SLOT(onMapLoaded()));
-    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)),
-            this, SLOT(areaSelected()));
+    mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11, true);
+    connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
+    connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
+    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)), this, SLOT(areaSelected()));
 }
 
 void ConfigWidget::onMapLoaded()
@@ -135,16 +129,35 @@ void ConfigWidget::setSignalSlots()
     mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
     mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
 }
 
 
-void ConfigWidget::updateMapCenter(DroneStatus s)
+void ConfigWidget::updateMapCenter(DroneStatus heartbeat)
 {
-    if(mapCentered) return;
+    if(!mapView->hasLoaded()) return;
 
-    mapView->setCenter(s.getCurrentLocation());
-    mapCentered = true;
+    // position drone on map
+    QGeoCoordinate center = heartbeat.getCurrentLocation();
+    QString id = heartbeat.getDrone()->getGuid().toString();
+    if(mapView->hasMarker(id)) {
+        QMMarker& marker = mapView->getMarker(id);
+        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.moveTo(center);
+    } else {
+        QMMarker& marker = mapView->addMarker(id, center);
+        marker.setIcon("qrc:///ui/icons/drone");
+        marker.scale(0.1, 0.1);
+        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.show();
+    }
+
+    // only center the map once
+    if(!mapCentered){
+        mapView->setCenter(center);
+        mapView->setZoomLevel(11);
+        mapCentered = true;
+    }
 }
 
 
