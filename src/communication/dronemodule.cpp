@@ -54,7 +54,8 @@ DroneModule::~DroneModule()
     delete drone;
     delete connectionThread;
     delete videoController;
-    //TODO: delete heartbeatReceiver;
+    if(heartbeatReceiver)
+            heartbeatReceiver->deleteLater();
     //TODO: delete waypoints fails if no waypoints assigned
 
 }
@@ -62,6 +63,7 @@ DroneModule::~DroneModule()
 /***********************
 Getters/Setters
 ************************/
+
 void DroneModule::setMediator(Mediator* med)
 {
     mediator = med;
@@ -196,26 +198,36 @@ void DroneModule::onPathCalculated(Search *s)
 
 void DroneModule::onDroneResponse(const QString &response)
 {
-    qDebug() << "In processResponse";
+    //qDebug() << "In processResponse";
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
         status.setDrone(this);
         if (status.getHeartbeat()) {
-            qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
+            //qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);
         } else {
-            qDebug() << "emit DroneModule::droneStatusReceived(status)";
+            //qDebug() << "emit DroneModule::droneStatusReceived(status)";
             emit droneStatusReceived(status);
         }
 
     } else
-        qDebug() << response;
+        qDebug() << "Not a status or hearbeat :" << response;
 }
 
 void DroneModule::onDroneResponseError(int socketError, const QString &message)
 {
-    qDebug() << message;
+    qDebug() << "DroneResponseError received :" << message;
+}
+
+DroneConnection *DroneModule::getDroneConnection() const
+{
+    return droneConnection;
+}
+
+DroneHeartBeatReceiver *DroneModule::getHeartbeatReceiver() const
+{
+    return heartbeatReceiver;
 }
 
 VideoController *DroneModule::getVideoController() const
@@ -440,7 +452,9 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAddress, int po
     json["message_type"] = QString("settings");
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
+
     config["ip_address"] = ipAddress;
+
     config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);

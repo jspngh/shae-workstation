@@ -40,6 +40,21 @@ void StreamConnection::onStreamRequest()
     }
 }
 
+bool StreamConnection::getGetStream() const
+{
+    return getStream;
+}
+
+quint16 StreamConnection::getStreamPort() const
+{
+    return streamPort;
+}
+
+QString StreamConnection::getDroneIpAddress() const
+{
+    return droneIpAddress;
+}
+
 void StreamConnection::stopConnection()
 {
     getStream = false;
