@@ -111,6 +111,9 @@ public:
     //! Sends a Json message to the drone to stop the flight.
     QJsonDocument stopFlight();
 
+    //! Sends a Json message to the drone to return to home.
+    QJsonDocument returnToHome();
+
     //! Sends a Json message to the drone to make an emergency landing.
     QJsonDocument emergencyLanding();
 

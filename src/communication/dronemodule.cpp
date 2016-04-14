@@ -278,6 +278,23 @@ QJsonDocument DroneModule::stopFlight()
     return jsondoc;
 }
 
+QJsonDocument DroneModule::returnToHome()
+{
+    // Create json message to stop the flight conform the interface of the wiki
+    QJsonObject json = QJsonObject();
+
+    json["message"] = QString("rth");
+    json["message_type"] = QString("navigation");
+    QJsonDocument jsondoc(json);
+
+    // Send the json message
+    QString message = jsondoc.toJson(QJsonDocument::Indented);
+
+    emit droneRequest(message);
+
+    return jsondoc;
+}
+
 QJsonDocument DroneModule::emergencyLanding()
 {
     // Create json message to make an emergency landing conform the interface of the wiki
