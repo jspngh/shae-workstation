@@ -45,6 +45,7 @@ DroneModule::DroneModule(int dataPort,
     // TODO: create a seperate onStreamError slot
     connect(streamConnection, SIGNAL(streamError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
+    //connect the dronemodule with the corresponding videocontroller (should not occur via the mediator as it is an 1-1 relation)
     connect(this, SIGNAL(startStream(Drone*)), videoController, SLOT(onStartStream(Drone*)));
     connect(this, SIGNAL(stopStream(Drone*)), videoController, SLOT(onStopStream(Drone*)));
     connect(videoController, SIGNAL(streamStarted(QUuid,VideoSequence)), this, SLOT(initDetection()));
@@ -107,9 +108,6 @@ void DroneModule::addSignalSlot()
 void DroneModule::initHeartbeat()
 {
     heartbeatReceiver = new DroneHeartBeatReceiver(workstationIp);
-    //heartbeatThread = new QThread();
-    //heartbeatReceiver->moveToThread(heartbeatThread);
-    //heartbeatThread->start();
 
     connect(heartbeatReceiver, SIGNAL(droneHeartBeat(QString)),
             this, SLOT(onDroneResponse(QString)));
@@ -126,7 +124,6 @@ DetectionController *DroneModule::getDetectionController() const
 
 void DroneModule::getStreamConnection()
 {
-    qDebug() << "DroneModule:: getting stream";
     emit streamRequest();
 }
 
@@ -256,7 +253,6 @@ void DroneModule::initStream(Search* search, DroneModule* dm,PersistenceControll
 {
     if(this->getDrone()->getGuid()==dm->getDrone()->getGuid())
     {
-    qDebug() << "starting videocontroller and detectioncontroller";
     emit startStream(drone);
     detectionController = new DetectionController(search, this, persistenceController);
     detectionController->setMediator(mediator);
@@ -273,9 +269,8 @@ void DroneModule::stopStream(DroneModule* dm)
 {
     if(this->getDrone()->getGuid()==dm->getDrone()->getGuid())
     {
-     qDebug() << "stopping videocontroller and detectioncontroller";
-     detectionController->streamFinished();
      emit stopStream(drone);
+     detectionController->streamFinished();
      stopStreamConnection();
     }
 }

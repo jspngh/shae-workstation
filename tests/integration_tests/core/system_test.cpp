@@ -46,7 +46,7 @@ void System_Test::initTestCase()
     //assume that after 10  seconds, the drone is at the correct waypoint and the system is correctly started
     QTest::qWait(1000*10);
     controller->initStream(controller->getDrones()->first());
-    QTest::qWait(1000*10);
+    QTest::qWait(1000*20);
     //assume that after 10  seconds, the drone is at the final waypoint.
     controller->stopStream(controller->getDrones()->first());
     QTest::qWait(1000*60*2);
