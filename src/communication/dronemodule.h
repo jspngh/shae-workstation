@@ -166,8 +166,10 @@ public slots:
     /*! \brief Sends a Json message to the drone to request certain multiple statuses.
      *  See RequestedDroneStatus enum to see which statuses can be requested. */
     QJsonDocument requestStatuses(QList<RequestedDroneStatus> statuses);
+
     //! Sends a Json message that asks for the heartbeat.
     QJsonDocument requestHeartbeat();
+
 
     //! Sends a Json message to the drone to start the flight.
     QJsonDocument startFlight();
@@ -177,6 +179,9 @@ public slots:
 
     //! Sends a Json message to the drone to make an emergency landing.
     QJsonDocument emergencyLanding();
+
+    //! Sends a Json message to the drone to return to home.
+    QJsonDocument returnToHome();
 
 private slots:
     //! Connected via mediator
