@@ -17,6 +17,7 @@ void DetectionController::run()
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
     this->streaming = true;
+    this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() <<  (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);

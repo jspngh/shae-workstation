@@ -15,10 +15,11 @@
 #include "communication/streamconnection.h"
 #include "models/drone.h"
 #include "videocontroller/videocontroller.h"
-
-
-class Controller;
 class Search;
+class Controller;
+class DetectionController;
+class PersistenceController;
+
 
 enum RequestedDroneStatus {
     Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
@@ -71,9 +72,9 @@ public:
     ************************/
     void setMediator(Mediator *med);
 
-    void getStream();
+    void getStreamConnection();
+    void stopStreamConnection();
 
-    void stopStream();
 
     QUuid getGuid() const;
 
@@ -140,6 +141,8 @@ public:
     VideoController *getVideoController() const;
     void setVideoController(VideoController *value);
 
+    DetectionController *getDetectionController() const;
+
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
     //! is connected to droneconnection directly in the constructor of drone.
@@ -155,6 +158,10 @@ signals:
     //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
     //! Is connected to the mediator.
     void droneHeartBeatReceived(DroneStatus status);
+
+    void startStream(Drone* drone);
+
+    void stopStream(Drone* drone);
 
     /*********************
      Slots
@@ -174,6 +181,12 @@ public slots:
     //! Sends a Json message that asks for the heartbeat.
     QJsonDocument requestHeartbeat();
 
+    void initStream(Search* search, DroneModule* dm,PersistenceController* persistenceController);
+    void stopStream(DroneModule* dm);
+
+    void initDetection();
+
+
 private slots:
     //! Connected via mediator
     void onPathCalculated(Search *s);
@@ -191,7 +204,9 @@ private:
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
     Mediator *mediator;
     QString workstationIp;
+    QThread * videoThread;
     VideoController * videoController;
+    DetectionController * detectionController;
     DroneHeartBeatReceiver *heartbeatReceiver;
     QThread *connectionThread;
     DroneConnection *droneConnection;

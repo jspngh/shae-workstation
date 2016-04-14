@@ -51,7 +51,7 @@ void System_Test::initTestCase()
     controller->stopStream(controller->getDrones()->first());
     QTest::qWait(1000*60*2);
     //after the stream has stopped, no statusses need to be saved anymore
-    controller->getDetectionController()->wait();
+    controller->getDrones()->first()->getDetectionController()->wait();
 }
 
 
