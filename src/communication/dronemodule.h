@@ -105,18 +105,6 @@ public:
     //! Sends a Json message to the drone that contains all waypoints.
     QJsonDocument sendWaypoints();
 
-    //! Sends a Json message to the drone to start the flight.
-    QJsonDocument startFlight();
-
-    //! Sends a Json message to the drone to stop the flight.
-    QJsonDocument stopFlight();
-
-    //! Sends a Json message to the drone to return to home.
-    QJsonDocument returnToHome();
-
-    //! Sends a Json message to the drone to make an emergency landing.
-    QJsonDocument emergencyLanding();
-
     /**************************
     Setting messages methods
     **************************/
@@ -178,8 +166,22 @@ public slots:
     /*! \brief Sends a Json message to the drone to request certain multiple statuses.
      *  See RequestedDroneStatus enum to see which statuses can be requested. */
     QJsonDocument requestStatuses(QList<RequestedDroneStatus> statuses);
+
     //! Sends a Json message that asks for the heartbeat.
     QJsonDocument requestHeartbeat();
+
+
+    //! Sends a Json message to the drone to start the flight.
+    QJsonDocument startFlight();
+
+    //! Sends a Json message to the drone to stop the flight.
+    QJsonDocument stopFlight();
+
+    //! Sends a Json message to the drone to make an emergency landing.
+    QJsonDocument emergencyLanding();
+
+    //! Sends a Json message to the drone to return to home.
+    QJsonDocument returnToHome();
 
 private slots:
     //! Connected via mediator
