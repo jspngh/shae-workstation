@@ -88,7 +88,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="goHomeButton">
+      <widget class="QPushButton" name="returnHomeButton">
        <property name="icon">
          <iconset resource="../application.qrc">:/ui/icons/home</iconset>
        </property>

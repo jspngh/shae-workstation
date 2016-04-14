@@ -11,6 +11,7 @@ OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *p
 
     connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
     connect(ui->haltButton, SIGNAL(clicked()), drone, SLOT(stopFlight()));
+    connect(ui->returnHomeButton, SIGNAL(clicked()), drone, SLOT(returnToHome()));
 }
 
 OverviewDroneItem::~OverviewDroneItem()
