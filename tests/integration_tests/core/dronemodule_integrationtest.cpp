@@ -168,7 +168,75 @@ void Dronemodule_IntegrationTest::testStatusMessages()
 
 void Dronemodule_IntegrationTest::testSettingsMessages()
 {
+    qDebug() << "trying some settings messages... ";
 
+    DroneConnection* connection = drone->getDroneConnection();
+
+    connect(connection, SIGNAL(droneResponse(QString)), this, SLOT(onDroneResponse(QString)));
+    QList<RequestedDroneSetting> settings = QList<RequestedDroneSetting>();
+    QList<int> values = QList<int>();
+
+    settings.push_back(Height_To_Set);
+    settings.push_back(Speed_To_Set);
+    settings.push_back(Camera_Angle_To_Set);
+    settings.push_back(FPS_To_Set);
+    settings.push_back(Resolution_To_Set);
+
+    values.push_back(3);
+    values.push_back(4);
+    values.push_back(70);
+    values.push_back(30);
+    values.push_back(720);
+
+
+    drone->setSettings(settings, values);
+    QTest::qWait(500);
+
+    qDebug() << "Checking if simulator has received the correct message... ";
+
+    QByteArray output = sim->simulatorProcess->readAllStandardOutput();
+    //qDebug() << "Simulator has the generated the following output, which we wil check for the right messages: "<< endl << output;
+    int j = 0;
+    int indexend = 0;
+    while ((j = output.indexOf("{\n", indexend)) != -1) {
+        //get index of first opening {
+        //get index of closing }
+        int indexstart = j;
+        //qDebug() << "Start parse at position " << j;
+        int j = output.indexOf("\n}\n\n", indexstart);
+        //qDebug() << "Stop parse at position " << j;
+        indexend = j + 2 ;
+
+        //then we got indexes of a json message that can be analyzed
+
+
+        QByteArray jsonbits = output.mid(indexstart, indexend - indexstart).simplified();
+        qDebug() << "Simulator has received this message: " << jsonbits;
+        QJsonDocument jsondoc = QJsonDocument::fromJson(jsonbits);
+        QJsonObject json = jsondoc.object();
+        //qDebug() << json["message"] << endl;
+        QVERIFY(json["message_type"].toString() == "settings");
+        QJsonArray array = json["message"].toArray();
+        for(QJsonValue value: array){
+            QJsonObject obj = value.toObject();
+            if(obj["key"].toString() == "height")
+                QVERIFY(obj["value"].toInt() == 3);
+            if(obj["key"].toString() == "speed")
+                QVERIFY(obj["value"].toInt() == 4);
+            if(obj["key"].toString() == "camera_angle")
+                QVERIFY(obj["value"].toInt() == 70);
+            if(obj["key"].toString() == "fps")
+                QVERIFY(obj["value"].toInt() == 30);
+            if(obj["key"].toString() == "resolution")
+                QVERIFY(obj["value"].toInt() == 720);
+        }
+        j++;
+
+    }
+    qDebug() << "Correct message was received by simulator ";
+
+
+    QTest::qWait(1000);
 }
 
 void Dronemodule_IntegrationTest::onDroneResponse(QString string)
