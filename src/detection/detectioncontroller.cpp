@@ -47,7 +47,6 @@ void DetectionController::run()
                         QDateTime time = QDateTime::currentDateTime();
                         time.setTime(sequenceStartTime);
                         time = time.addMSecs((quint64) timeFrame * 1000.0);
-                        qDebug() << "processing frame  " << iteratorFrames << " at time " << time;
                         extractDetectionsFromFrame(frame,time);
                     }
                 }
@@ -119,9 +118,7 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         double orientation = droneStatus.getOrientation();
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
-        qDebug()<< "nr of detections: " << detectionList.getSize();
         for (int i = 0; i < detectionList.getSize(); i++) {
-            qDebug()<< "emitting a detection";
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1));
             nrDetections++;
         }

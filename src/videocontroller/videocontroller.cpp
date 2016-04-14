@@ -25,6 +25,7 @@ void VideoController::setMediator(Mediator *m)
 
 VideoSequence VideoController::onStartStream(Drone * drone)
 {
+    QFile::remove(QString("dependencies/drone_stream.mpg"));
     qDebug() << "starting to save the stream";
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
     // Launch VLC

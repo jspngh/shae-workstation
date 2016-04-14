@@ -1,20 +1,25 @@
 #include "droneheartbeatreceiver.h"
-
+#include <unistd.h>
 
 
 DroneHeartBeatReceiver::DroneHeartBeatReceiver(const QString ip, QObject *parent)
     : QObject(parent)
 {
+    //qDebug() << "DroneHeartBeatReceiver constructor";
     server = new QTcpServer();
     server->listen(QHostAddress(ip));
     workstationHeartbeatPort = server->serverPort();
 
     //connect receive slot to newConnection signal of Qt so this will get called on each connection
-    connect(server, &QTcpServer::newConnection, this, &DroneHeartBeatReceiver::receiveHeartbeat);
+    auto res = connect(server, &QTcpServer::newConnection, this, &DroneHeartBeatReceiver::receiveHeartbeat);
+
+    //qDebug() << ip;
+    //qDebug() << server->serverPort();
 }
 
 DroneHeartBeatReceiver::~DroneHeartBeatReceiver()
 {
+    server->close();
     delete server;
 }
 
@@ -50,8 +55,10 @@ void DroneHeartBeatReceiver::receiveHeartbeat()
 
     QByteArray raw;
     in >> raw;
-    // qDebug() << raw;
+    //qDebug() << raw;
     QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
+
+
 
     emit droneHeartBeat(response);
 

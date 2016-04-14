@@ -12,6 +12,11 @@
 #include "core/mediator_test.h"
 #include "core/pathalgorithm_test.h"
 #include "core/dronestatus_test.h"
+
+#include "core/parseexception_test.h"
+#include "core/streamconnection_test.h"
+#include "core/droneheartbeatreceiver_test.h"
+
 #include "core/xmlwriter_test.h"
 
 
@@ -33,33 +38,62 @@ int main(int argc, char *argv[])
 
     QList<QObject *> tests;
 
+    /********************
+     * Testing pathlogic
+     * *****************/
+
     tests.append(new Pathalgorithm_Test());
     tests.append(new SimplePathAlgorithm_Test());
     tests.append(new GeoPolygon_test());
     tests.append(new PolygonPathAlgorithm_Test());
+
+    /********************
+     * Testing jsonstuff
+     * *****************/
+    //sending using dronemodule (inside communication)
     tests.append(new Json_Messages_Test());
+    //receiving using dronestatus (inside models
     tests.append(new DroneStatus_Test());
 
+    /************************
+     * Testing communication
+     * *********************/
+    tests.append(new ParseException_Test());
+    tests.append(new StreamConnection_Test());
+    tests.append(new DroneHeartbeatReceiver_Test());
 
-
-    tests.append(new GeoPolygon_test());
-    tests.append(new PolygonPathAlgorithm_Test());
-
+    /********************
+     * Testing persistence
+     * *****************/
     tests.append(new SearchDAO_Test());
 
-    tests.append(new VideoController_Test());
-    tests.append(new DetectionController_Test());
+
+
 
     tests.append(new DetectionResultDAO_Test());
     tests.append(new DroneDAO_Test());
     tests.append(new DroneSearchDAO_Test());
     tests.append(new DroneStatusDAO_Test());
+    tests.append(new VideoSequenceDAO_Test());
+
+
+    /********************
+     * Testing videostuff
+     * *****************/
+    tests.append(new VideoController_Test());
+    tests.append(new DetectionController_Test());
+
+
+
+    /********************
+     * Testing other stuff
+     * *****************/
 
     tests.append(new XMLWriter_Test());
 
     tests.append(new Mediator_Test());
 
-    tests.append(new VideoSequenceDAO_Test());
+
 
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());

@@ -14,7 +14,7 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     drones = new QList<DroneModule*>();
     // dronePort, streamPort, droneIp, controllerIp, workstationIp
-    drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
+    drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001, true));
     drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("sololink.sdp"), 0.0001));
 
     // create controllers
@@ -25,6 +25,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
     mediator->addSignal(this, (char *) SIGNAL(startStreamSignal(Search*, DroneModule*, PersistenceController*)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
     mediator->addSignal(this, (char *) SIGNAL(stopStreamSignal(DroneModule*)), QString("stopStreamSignal(DroneModule*)"));
+    mediator->addSlot(this, (char *) SLOT(initStream(DroneModule*)), QString("startStreamWorkstation(DroneModule*)"));
 }
 
 Controller::~Controller()

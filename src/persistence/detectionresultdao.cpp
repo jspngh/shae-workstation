@@ -23,7 +23,6 @@ DetectionResult DetectionResultDAO::dbSaveDetectionResult(QUuid droneId, QUuid s
     query.bindValue(":longitude", location.longitude());
     query.bindValue(":score", result.getScore());
     if (query.exec()) {
-        qDebug() << "detection insert succes";
     } else {
         qDebug() << "addDetectionResult error:  "
                  << query.lastError();

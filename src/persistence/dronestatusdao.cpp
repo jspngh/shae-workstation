@@ -63,7 +63,6 @@ DroneStatus DroneStatusDAO::dbSaveDroneStatus(DroneStatus droneStatus)
 
     query.bindValue(":nextWaypoints", pathString);
     if (query.exec()) {
-        qDebug() << "insert status succes with time " << droneStatus.getTimestampDrone();
     } else {
         qDebug() << "addDroneStatus error:  "
                  << query.lastError();

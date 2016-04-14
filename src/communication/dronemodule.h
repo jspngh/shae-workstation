@@ -58,7 +58,8 @@ public:
                          QString controllerIp,
                          QString workstationIp,
                          QString streamPath,
-                         double visionWidth = MIN_VISIONWIDTH);
+                         double visionWidth = MIN_VISIONWIDTH,
+                         bool video=false);
 
 
     //! Copy constructor
@@ -100,20 +101,17 @@ public:
 
     void addWaypoint(const QGeoCoordinate &waypoint);
 
+    VideoController *getVideoController() const;
+    void setVideoController(VideoController *value);
+    DetectionController *getDetectionController() const;
+    DroneHeartBeatReceiver *getHeartbeatReceiver() const;
+    DroneConnection *getDroneConnection() const;
+
     /***********************
     Navigation message methods
     ************************/
     //! Sends a Json message to the drone that contains all waypoints.
     QJsonDocument sendWaypoints();
-
-    //! Sends a Json message to the drone to start the flight.
-    QJsonDocument startFlight();
-
-    //! Sends a Json message to the drone to stop the flight.
-    QJsonDocument stopFlight();
-
-    //! Sends a Json message to the drone to make an emergency landing.
-    QJsonDocument emergencyLanding();
 
     /**************************
     Setting messages methods
@@ -138,11 +136,6 @@ public:
     Signals
     *******************/
 
-    VideoController *getVideoController() const;
-    void setVideoController(VideoController *value);
-
-    DetectionController *getDetectionController() const;
-
 signals:
     //! A signal generated to let droneconnection know that something needs to be sent.
     //! is connected to droneconnection directly in the constructor of drone.
@@ -163,6 +156,8 @@ signals:
 
     void stopStream(Drone* drone);
 
+    void startStreamWorkstation(DroneModule * dm);
+
     /*********************
      Slots
      *********************/
@@ -178,14 +173,29 @@ public slots:
     /*! \brief Sends a Json message to the drone to request certain multiple statuses.
      *  See RequestedDroneStatus enum to see which statuses can be requested. */
     QJsonDocument requestStatuses(QList<RequestedDroneStatus> statuses);
+
     //! Sends a Json message that asks for the heartbeat.
     QJsonDocument requestHeartbeat();
 
+    //! Allows to start the stream for a given drone, linked to a search and persistence component.
     void initStream(Search* search, DroneModule* dm,PersistenceController* persistenceController);
+    //! Allows to stop the stream for a given drone, linked to a search and persistence component.
     void stopStream(DroneModule* dm);
-
+    //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
 
+
+    //! Sends a Json message to the drone to start the flight.
+    QJsonDocument startFlight();
+
+    //! Sends a Json message to the drone to stop the flight.
+    QJsonDocument stopFlight();
+
+    //! Sends a Json message to the drone to make an emergency landing.
+    QJsonDocument emergencyLanding();
+
+    //! Sends a Json message to the drone to return to home.
+    QJsonDocument returnToHome();
 
 private slots:
     //! Connected via mediator
@@ -206,12 +216,15 @@ private:
     QString workstationIp;
     QThread * videoThread;
     VideoController * videoController;
-    DetectionController * detectionController;
-    DroneHeartBeatReceiver *heartbeatReceiver;
+    DetectionController* detectionController;
+    DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
     QThread *connectionThread;
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
+    bool videoProcessing;
+    bool videoActive;
+    bool videoInactive;
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };

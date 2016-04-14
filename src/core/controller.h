@@ -31,8 +31,6 @@ public:
     Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
-    void initStream(DroneModule* dm);
-    void stopStream(DroneModule* dm);
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones();
     void setDrones(QList<DroneModule *>* list);
@@ -43,6 +41,8 @@ public:
     QString getWorkstationIP() const;
 public slots:
     void onSearchEmitted(Search* s);
+    void initStream(DroneModule* dm);
+    void stopStream(DroneModule* dm);
 signals:
     void startStreamSignal(Search* s, DroneModule* d, PersistenceController*p);
     void stopStreamSignal(DroneModule* d);

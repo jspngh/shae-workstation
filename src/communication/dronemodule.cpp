@@ -16,7 +16,8 @@ DroneModule::DroneModule(int dataPort,
                          QString controllerIp,
                          QString workstationIp,
                          QString streamPath,
-                         double visionWidth)
+                         double visionWidth,
+                         bool video)
 {
     drone = new Drone(dataPort, streamPort, droneIp, controllerIp, streamPath, visionWidth);
     droneConnection = new DroneConnection(droneIp, (quint16) dataPort);
@@ -32,7 +33,10 @@ DroneModule::DroneModule(int dataPort,
     connectionThread->start();
     streamThread->start();
     videoThread->start();
-
+    waypoints=nullptr;
+    videoProcessing = video;
+    videoActive = false;
+    videoInactive = false;
 
     detectionController = nullptr;
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
@@ -71,6 +75,8 @@ DroneModule::~DroneModule()
         delete detectionController;
     }
     //TODO: delete heartbeatReceiver;
+    if(heartbeatReceiver != nullptr)
+            heartbeatReceiver->deleteLater();
     //TODO: delete waypoints fails if no waypoints assigned
 
 }
@@ -78,6 +84,7 @@ DroneModule::~DroneModule()
 /***********************
 Getters/Setters
 ************************/
+
 void DroneModule::setMediator(Mediator* med)
 {
     mediator = med;
@@ -95,6 +102,7 @@ void DroneModule::addSignalSlot()
 
     mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    mediator->addSignal(this, (char *) SIGNAL(startStreamWorkstation(DroneModule*)), QString("startStreamWorkstation(DroneModule*)"));
     mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
     mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
@@ -217,26 +225,52 @@ void DroneModule::onPathCalculated(Search *s)
 
 void DroneModule::onDroneResponse(const QString &response)
 {
-    qDebug() << "In processResponse";
+    //qDebug() << "In processResponse";
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
         status.setDrone(this);
+        if(status.getPreviousWaypointOrder()==1&&videoProcessing&&!videoActive)
+        {
+            qDebug() << "In first waypoint, starting stream";
+            emit startStreamWorkstation(this);
+            videoActive = true;
+        }
+        if(waypoints!=nullptr)
+        {
+         if(status.getPreviousWaypointOrder()==waypoints->size()&&videoProcessing&&!videoInactive)
+        {
+             videoInactive = true;
+            qDebug() << "In last waypoint, stopping stream";
+            stopStream(this);
+        }
+        }
+
         if (status.getHeartbeat()) {
-            qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
+            //qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(status);
         } else {
-            qDebug() << "emit DroneModule::droneStatusReceived(status)";
+            //qDebug() << "emit DroneModule::droneStatusReceived(status)";
             emit droneStatusReceived(status);
         }
 
     } else
-        qDebug() << response;
+        qDebug() << "Not a status or hearbeat :" << response;
 }
 
 void DroneModule::onDroneResponseError(int socketError, const QString &message)
 {
-    qDebug() << message;
+    qDebug() << "DroneResponseError received :" << message;
+}
+
+DroneConnection *DroneModule::getDroneConnection() const
+{
+    return droneConnection;
+}
+
+DroneHeartBeatReceiver *DroneModule::getHeartbeatReceiver() const
+{
+    return heartbeatReceiver;
 }
 
 VideoController *DroneModule::getVideoController() const
@@ -301,6 +335,23 @@ QJsonDocument DroneModule::stopFlight()
     QJsonObject json = QJsonObject();
 
     json["message"] = QString("stop");
+    json["message_type"] = QString("navigation");
+    QJsonDocument jsondoc(json);
+
+    // Send the json message
+    QString message = jsondoc.toJson(QJsonDocument::Indented);
+
+    emit droneRequest(message);
+
+    return jsondoc;
+}
+
+QJsonDocument DroneModule::returnToHome()
+{
+    // Create json message to stop the flight conform the interface of the wiki
+    QJsonObject json = QJsonObject();
+
+    json["message"] = QString("rth");
     json["message_type"] = QString("navigation");
     QJsonDocument jsondoc(json);
 
@@ -486,7 +537,9 @@ QJsonDocument DroneModule::setWorkstationConfiguration(QString ipAddress, int po
     json["message_type"] = QString("settings");
     json["message"] = QString("workstation_config");
     QJsonObject config = QJsonObject();
+
     config["ip_address"] = ipAddress;
+
     config["port"] = QString::number(port);
     json["configuration"] = config;
     QJsonDocument jsondoc(json);

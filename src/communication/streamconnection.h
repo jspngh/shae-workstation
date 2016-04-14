@@ -24,6 +24,12 @@ public:
     void stopConnection();
     bool getStream; /*!< A boolean that indicates if we still need the connection */
 
+    QString getDroneIpAddress() const;
+
+    quint16 getStreamPort() const;
+
+    bool getGetStream() const;
+
 public slots:
     void onStreamRequest();
 
