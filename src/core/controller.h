@@ -70,7 +70,7 @@ private:
     //      the application is only allowed to request one stream
     //      (even if there are multiple drones available).
     //      The boolean oneStream will store if a stream is already requested
-    static bool oneStream = false;
+    bool oneStream = false;
 
     QString controllerIp = QString("10.1.1.1");
     QString workstationIP;
