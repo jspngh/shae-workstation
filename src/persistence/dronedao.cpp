@@ -23,7 +23,6 @@ Drone DroneDAO::dbSaveDrone(Drone drone)
     query.bindValue(":controllerIp", drone.getControllerIp());
     query.bindValue(":streamPath", drone.getStreamPath());
     if (query.exec()) {
-        qDebug() << "insert drone succes";
     } else {
         qDebug() << "addDrone error:  "
                  << query.lastError();

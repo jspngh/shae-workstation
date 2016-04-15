@@ -48,6 +48,8 @@ signals:
      * \brief streamStarted is a signal that indicates that the stream has been started.
      */
     void streamStarted(QUuid droneId, VideoSequence seq);
+    void streamPersistence(QUuid droneId, VideoSequence seq);
+
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been stopped.
      */

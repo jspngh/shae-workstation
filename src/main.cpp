@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
 
     Controller controller(&w);
     controller.init();
-
     return a.exec();
 }
 
