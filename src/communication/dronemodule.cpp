@@ -70,10 +70,6 @@ void DroneModule::setMediator(Mediator* med)
     videoController->setMediator(med);
     addSignalSlot();
     initHeartbeat();
-
-    DroneStatus droneStatus;
-    droneStatus.setDrone(this);
-    emit droneStatusReceived(droneStatus);
 }
 
 void DroneModule::addSignalSlot()

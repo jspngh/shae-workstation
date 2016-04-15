@@ -11,18 +11,12 @@ Controller::Controller(MainWindow *window, QObject *p)
     workstationIP = initWorkstationIP();
 
     drones = new QList<DroneModule*>();
-    // dronePort, streamPort, droneIp, controllerIp, workstationIp
-    // drones->append(new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001));
-    // drones->append(new DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", workstationIP, QString("sololink.sdp"), 0.0001));
 
     // create controllers
     pathLogicController = new SimplePathAlgorithm();
     persistenceController = new PersistenceController();
 
-    udpSocket  = new QUdpSocket(this);
-    host  = new QHostAddress("127.0.0.1");
-    udpSocket->bind(*host, 4849);
-    connect(udpSocket,SIGNAL(readyRead()),this,SLOT(readPendingDatagrams()));
+    startListingForDrones();
 }
 
 Controller::~Controller()
@@ -51,8 +45,6 @@ void Controller::init()
 {
     // configure every component with the mediator
     pathLogicController->setMediator(mediator);
-    for (int i = 0; i < drones->size(); i++)
-        (*drones)[i]->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
     persistenceController->setMediator(mediator);
@@ -60,11 +52,6 @@ void Controller::init()
     // place every component in a different thread
     persistenceController->moveToThread(&persistenceThread);
     pathLogicController->moveToThread(&pathLogicThread);
-    for (int i = 0; i < drones->size(); i++)
-        (*drones)[i]->moveToThread(&droneThread);
-
-    // already start the stream on the drone
-    // drones->first()->getStream();
 
     // start all the threads
     persistenceThread.start();
@@ -123,6 +110,14 @@ void Controller::stopStream(DroneModule* d)
 void Controller::onSearchEmitted(Search* s){
     qDebug() << "Controller::saved search";
     search = s;
+}
+
+void Controller::startListingForDrones()
+{
+    udpSocket  = new QUdpSocket(this);
+    host  = new QHostAddress("127.0.0.1");
+    udpSocket->bind(*host, 4849);
+    connect(udpSocket,SIGNAL(readyRead()),this,SLOT(readPendingDatagrams()));
 }
 
 
