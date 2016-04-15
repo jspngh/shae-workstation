@@ -51,6 +51,10 @@ private:
     void processHelloMessage(QByteArray helloRaw);
     QString initWorkstationIP();
 
+    // return the dronemodule if the drone with the ip has already send a hello message
+    // if the drone hasn't send hello yet the nullptr is returned
+    DroneModule *receivedHelloFrom(QString ip);
+
 public slots:
     void onSearchEmitted(Search* s);
     void readPendingDatagrams();

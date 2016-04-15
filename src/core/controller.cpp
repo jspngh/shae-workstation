@@ -144,23 +144,32 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
 
-    int cmdPort = hello.getCommandsPort();
-    int streamPort = hello.getStreamPort();
     QString ip = hello.getDroneIp();
-    QString streamfile =  hello.getStreamFile();
+    QString strFile =  hello.getStreamFile();
+    int cmdPort = hello.getCommandsPort();
+    int strPort = hello.getStreamPort();
     double vision = hello.getVisionWidth();
 
-    DroneModule *drone =
-            new DroneModule(cmdPort, streamPort, ip, controllerIp, workstationIP, streamfile, vision);
+    DroneModule *drone = receivedHelloFrom(ip);
+    if(drone == nullptr) {
+        // first time that the drone with this IP has sent a Hello message
+        drone = new DroneModule(cmdPort, strPort, ip, controllerIp, workstationIP, strFile, vision);
+        drone->setMediator(mediator);
+        drone->moveToThread(&droneThread);
+        drones->append(drone);
+    }
 
-    drone->setMediator(mediator);
-    drone->moveToThread(&droneThread);
     drone->requestStatus();
-
-    drones->append(drone);
-
-    qDebug() << "found a drone with ip: " + hello.getDroneIp();
 }
+
+ DroneModule *Controller::receivedHelloFrom(QString ip)
+ {
+    for(int i = 0; i < drones->size(); i++){
+        if((*drones)[i]->getDroneIp() == ip)
+            return (*drones)[i];
+    }
+    return nullptr;
+ }
 
 
 /*****************
