@@ -7,6 +7,8 @@
 #include <QApplication>
 #include "core/controller.h"
 #include "ui/mainwindow.h"
+#include "simulatorwrapper.h"
+
 
 class System_Test : public QObject
 {
@@ -15,7 +17,7 @@ class System_Test : public QObject
 private:
     Controller * controller;
     Search* s;
-    QProcess *simulatorProcess;
+    SimulatorWrapper* simulator;
 
 
 public:

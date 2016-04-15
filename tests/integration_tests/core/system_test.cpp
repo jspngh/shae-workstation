@@ -11,14 +11,8 @@ System_Test::~System_Test()
 void System_Test::initTestCase()
 {
 
-    QString program = "python2";
-    QStringList arguments;
-    qDebug() << "opening simulator";
-    arguments << "../../../drone/simulator/src/simulator.py";
-    simulatorProcess = new QProcess(this);
-    qDebug() << "simulator opened";
-    simulatorProcess->start(program, arguments);
-    QTest::qWait(1000*30);
+    simulator = new SimulatorWrapper();
+    simulator->startSimulator();
 
 
     MainWindow w;
@@ -33,25 +27,17 @@ void System_Test::initTestCase()
     list->append(controller->getDrones()->first());
     s = new Search();
     //the following parameters are defined through configwidget
-    s->setFpsProcessing(2);
+    s->setFpsProcessing(0.5);
     s->setGimbalAngle(65);
     s->setHeight(3);
     s->setStartTime(QTime::currentTime());
     s->setSearchID(QUuid::createUuid());
-    s->setArea(QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022306, 3.710001)));
+    s->setArea(QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022683, 3.709591)));
     s->setDroneList((*list));
 
     emit startSearch(s);
-    qDebug() << "emit ConfigWidget::startSearch(Search *s)";
-    //assume that after 10  seconds, the drone is at the correct waypoint and the system is correctly started
     QTest::qWait(1000*10);
-    controller->initStream(controller->getDrones()->first());
-    QTest::qWait(1000*10);
-    //assume that after 10  seconds, the drone is at the final waypoint.
-    controller->stopStream(controller->getDrones()->first());
-    QTest::qWait(1000*60*2);
-    //after the stream has stopped, no statusses need to be saved anymore
-    controller->getDetectionController()->wait();
+    QTest::qWait(1000*60*4);
 }
 
 
@@ -61,10 +47,10 @@ void System_Test::cleanupTestCase()
     droneFile.remove();
 
     qDebug() << "closing of simulator";
-    simulatorProcess->terminate();
-    simulatorProcess->waitForFinished();
-    simulatorProcess->close();
-    delete simulatorProcess;
+    simulator->stopSimulator();
+    QTest::qWait(500);
+    delete simulator;
+    QTest::qWait(5000);
     delete controller;
     delete s;
 }

@@ -9,14 +9,16 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     droneModule(dm)
 {
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
-    this->path = dm->getVideoController()->getSequencePath();
+    this->streaming = true;
+
 }
 
 void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
-    this->streaming = true;
+    qDebug() << path;
+    this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() <<  (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
@@ -45,8 +47,8 @@ void DetectionController::run()
                         QDateTime time = QDateTime::currentDateTime();
                         time.setTime(sequenceStartTime);
                         time = time.addMSecs((quint64) timeFrame * 1000.0);
-                        qDebug() << "processing frame  " << iteratorFrames << " at time " << time;
                         extractDetectionsFromFrame(frame,time);
+                        qDebug() << "processing frame " << iteratorFrames << "of " << numFrames;
                     }
                 }
                 catch (cv::Exception e)
@@ -64,7 +66,6 @@ void DetectionController::run()
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         qDebug() << "new frames have been found, new total " << numFrames;
-
     } while (this->streaming || (oldnumFrames!=numFrames));
     qDebug() << "Processing is finished at " << iteratorFrames;
 
@@ -84,6 +85,7 @@ void DetectionController::streamFinished()
 {
     qDebug() << "DetectionController: stream has been stopped";
     this->streaming = false;
+
 }
 
 
@@ -102,6 +104,11 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
     sequence = value;
 }
 
+void DetectionController::setPath(const QString &value)
+{
+    path = value;
+}
+
 
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time){
     if(frame.rows != 0 && frame.cols != 0)
@@ -111,9 +118,7 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         double orientation = droneStatus.getOrientation();
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
-        qDebug()<< "nr of detections: " << detectionList.getSize();
         for (int i = 0; i < detectionList.getSize(); i++) {
-            qDebug()<< "emitting a detection";
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1));
             nrDetections++;
         }
