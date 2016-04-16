@@ -49,11 +49,15 @@ private:
     void processHelloMessage(QByteArray helloRaw);
     QString initWorkstationIP();
     //!< listens for hello messages from drones on the network
-    void startListingForDrones();
+    void startListeningForDrones();
 
     //!< return the dronemodule if the drone with the ip has already send a hello message
     //!< if the drone hasn't send hello yet the nullptr is returned
     DroneModule *receivedHelloFrom(QString ip);
+
+    //!< will configure a drone:
+    //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
+    DroneModule *configureDrone(DroneModule *drone);
 
 public slots:
     void onSearchEmitted(Search* s);

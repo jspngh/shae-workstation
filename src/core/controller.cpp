@@ -16,7 +16,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     pathLogicController = new SimplePathAlgorithm();
     persistenceController = new PersistenceController();
 
-    startListingForDrones();
+    startListeningForDrones();
 
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
@@ -89,7 +89,7 @@ void Controller::onSearchEmitted(Search* s){
     search = s;
 }
 
-void Controller::startListingForDrones()
+void Controller::startListeningForDrones()
 {
     udpSocket  = new QUdpSocket(this);
     host  = new QHostAddress("127.0.0.1");
@@ -126,18 +126,26 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     if(drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
         drone = new DroneModule(cmdPort, strPort, ip, controllerIp, workstationIP, strFile, vision);
-        drones->append(drone);
-        drone->setMediator(mediator);
-        drone->moveToThread(&droneThread);
-        if(!oneStream) {
-            // make sure that a stream is only requested once (even if there are multiple drones)
-            drone->getStreamConnection();
-            oneStream = true;
-        }
+        drone = configureDrone(drone);
     }
 
     drone->requestStatus();
 }
+
+DroneModule *Controller::configureDrone(DroneModule *drone)
+{
+    drones->append(drone);
+    drone->setMediator(mediator);
+    drone->moveToThread(&droneThread);
+    if(!oneStream) {
+        // make sure that a stream is only requested once (even if there are multiple drones)
+        drone->getStreamConnection();
+        oneStream = true;
+    }
+
+    return drone;
+}
+
 
  DroneModule *Controller::receivedHelloFrom(QString ip)
  {
