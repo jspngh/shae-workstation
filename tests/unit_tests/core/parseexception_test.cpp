@@ -5,7 +5,8 @@ ParseException_Test::ParseException_Test()
 
 }
 
-void ParseException_Test::initTestCase(){
+void ParseException_Test::initTestCase()
+{
 
 }
 
@@ -24,12 +25,11 @@ void ParseException_Test::testConstructor()
 
 void ParseException_Test::testThrow()
 {
-    int count =0;
-    try{
+    int count = 0;
+    try {
         throw ParseException("error", "message");
-    }
-    catch(ParseException e){
+    } catch (ParseException e) {
         count++;
     }
-    QVERIFY(count == 1 );
+    QVERIFY(count == 1);
 }

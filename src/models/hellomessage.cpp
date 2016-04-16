@@ -1,10 +1,10 @@
 #include "hellomessage.h"
 
 HelloMessage::HelloMessage(QString droneIp,
-             QString streamFile,
-             int commandsPort,
-             int streamPort,
-             double visionWidth):
+                           QString streamFile,
+                           int commandsPort,
+                           int streamPort,
+                           double visionWidth):
     droneIp(droneIp),
     streamFile(streamFile),
     commandsPort(commandsPort),
@@ -19,7 +19,7 @@ HelloMessage::HelloMessage()
 
 }
 
-HelloMessage::HelloMessage(const HelloMessage& hello)
+HelloMessage::HelloMessage(const HelloMessage &hello)
 {
     droneIp = hello.droneIp;
     streamFile = hello.streamFile;

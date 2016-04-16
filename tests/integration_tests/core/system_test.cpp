@@ -23,7 +23,7 @@ void System_Test::initTestCase()
     qDebug() << "adding ConfigWidget signal/slots";
     controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 
-    QList<DroneModule *>* list  = new QList<DroneModule *>();
+    QList<DroneModule *> *list  = new QList<DroneModule *>();
     list->append(controller->getDrones()->first());
     s = new Search();
     //the following parameters are defined through configwidget
@@ -36,8 +36,8 @@ void System_Test::initTestCase()
     s->setDroneList((*list));
 
     emit startSearch(s);
-    QTest::qWait(1000*10);
-    QTest::qWait(1000*60*4);
+    QTest::qWait(1000 * 10);
+    QTest::qWait(1000 * 60 * 4);
 }
 
 

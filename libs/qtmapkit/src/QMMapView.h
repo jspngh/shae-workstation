@@ -152,7 +152,7 @@ public slots:
      * \param markerId The id of the maerker
      * \param location The coordinate of the marker
      */
-    QMMarker& addMarker(QString markerId, const QGeoCoordinate &location);
+    QMMarker &addMarker(QString markerId, const QGeoCoordinate &location);
 
     /*!
      * \brief Checks whether a marker with the given id exists.
@@ -164,7 +164,7 @@ public slots:
      * \brief Get a marker.
      * \param markerId The id of the maerker
      */
-    QMMarker& getMarker(const QString markerId);
+    QMMarker &getMarker(const QString markerId);
 
     /*!
      * \brief Removes a marker.

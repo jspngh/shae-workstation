@@ -23,8 +23,7 @@ void PersistenceController::setMediator(Mediator *mediator)
 void PersistenceController::saveSearch(Search *s)
 {
     persistence->saveSearch(*s);
-    foreach(DroneModule *dm, s->getDroneList())
-    {
+    foreach (DroneModule *dm, s->getDroneList()) {
         Drone *d = dm->getDrone();
         persistence->saveDrone(d);
     }
@@ -34,9 +33,8 @@ void PersistenceController::saveSearch(Search *s)
 
 void PersistenceController::saveDronePaths(Search *s)
 {
-    foreach(DroneModule *dm, s->getDroneList())
-    {
-        Drone* d = dm->getDrone();
+    foreach (DroneModule *dm, s->getDroneList()) {
+        Drone *d = dm->getDrone();
         persistence->saveDronePath(d->getGuid(), s->getSearchID(), dm->getWaypoints());
     }
 }

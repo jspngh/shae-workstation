@@ -17,9 +17,9 @@ private Q_SLOTS:
     void testDroneConnection();
 
 private:
-    SimulatorWrapper* sim;
-    DroneModule* drone;
-    Mediator* m;
+    SimulatorWrapper *sim;
+    DroneModule *drone;
+    Mediator *m;
     QThread th;
     int count;
 

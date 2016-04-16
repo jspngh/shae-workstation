@@ -5,7 +5,7 @@
 #include "models/search.h"
 
 DroneModule::DroneModule()
-    // default configuration for a drone on the solo's network
+// default configuration for a drone on the solo's network
     : DroneModule(6330, 5502, "10.1.1.10", "10.1.1.1", "10.1.1.179", "sololink.sdp", MIN_VISIONWIDTH)
 {
 }
@@ -33,7 +33,7 @@ DroneModule::DroneModule(int dataPort,
     connectionThread->start();
     streamThread->start();
     videoThread->start();
-    waypoints=nullptr;
+    waypoints = nullptr;
     videoProcessing = video;
     videoActive = false;
     videoInactive = false;
@@ -50,9 +50,9 @@ DroneModule::DroneModule(int dataPort,
     connect(streamConnection, SIGNAL(streamError(int, const QString &)),
             this, SLOT(onDroneResponseError(int, const QString &)));
     //connect the dronemodule with the corresponding videocontroller (should not occur via the mediator as it is an 1-1 relation)
-    connect(this, SIGNAL(startStream(Drone*)), videoController, SLOT(onStartStream(Drone*)));
-    connect(this, SIGNAL(stopStream(Drone*)), videoController, SLOT(onStopStream(Drone*)));
-    connect(videoController, SIGNAL(streamStarted(QUuid,VideoSequence)), this, SLOT(initDetection()));
+    connect(this, SIGNAL(startStream(Drone *)), videoController, SLOT(onStartStream(Drone *)));
+    connect(this, SIGNAL(stopStream(Drone *)), videoController, SLOT(onStopStream(Drone *)));
+    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence)), this, SLOT(initDetection()));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -70,13 +70,12 @@ DroneModule::~DroneModule()
     delete connectionThread;
     delete videoController;
     delete videoThread;
-    if(detectionController != nullptr)
-    {
+    if (detectionController != nullptr) {
         delete detectionController;
     }
     //TODO: delete heartbeatReceiver;
-    if(heartbeatReceiver != nullptr)
-            heartbeatReceiver->deleteLater();
+    if (heartbeatReceiver != nullptr)
+        heartbeatReceiver->deleteLater();
     //TODO: delete waypoints fails if no waypoints assigned
 
 }
@@ -85,7 +84,7 @@ DroneModule::~DroneModule()
 Getters/Setters
 ************************/
 
-void DroneModule::setMediator(Mediator* med)
+void DroneModule::setMediator(Mediator *med)
 {
     mediator = med;
     videoController->setMediator(med);
@@ -98,13 +97,13 @@ void DroneModule::addSignalSlot()
 
     mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
-    mediator->addSignal(this, (char *) SIGNAL(startStreamWorkstation(DroneModule*)), QString("startStreamWorkstation(DroneModule*)"));
+    mediator->addSignal(this, (char *) SIGNAL(startStreamWorkstation(DroneModule *)), QString("startStreamWorkstation(DroneModule*)"));
     mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
     mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
     mediator->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
-    mediator->addSlot(this, (char *) SLOT(initStream(Search*, DroneModule*,PersistenceController*)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
-    mediator->addSlot(this, (char *) SLOT(stopStream(DroneModule*)), QString("stopStreamSignal(DroneModule*)"));
+    mediator->addSlot(this, (char *) SLOT(initStream(Search *, DroneModule *, PersistenceController *)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
+    mediator->addSlot(this, (char *) SLOT(stopStream(DroneModule *)), QString("stopStreamSignal(DroneModule*)"));
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
 
 }
@@ -226,20 +225,17 @@ void DroneModule::onDroneResponse(const QString &response)
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
         status.setDrone(this);
-        if(status.getPreviousWaypointOrder()==1&&videoProcessing&&!videoActive)
-        {
+        if (status.getPreviousWaypointOrder() == 1 && videoProcessing && !videoActive) {
             qDebug() << "In first waypoint, starting stream";
             emit startStreamWorkstation(this);
             videoActive = true;
         }
-        if(waypoints!=nullptr)
-        {
-         if(status.getPreviousWaypointOrder()==waypoints->size()&&videoProcessing&&!videoInactive)
-        {
-             videoInactive = true;
-            qDebug() << "In last waypoint, stopping stream";
-            stopStream(this);
-        }
+        if (waypoints != nullptr) {
+            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && !videoInactive) {
+                videoInactive = true;
+                qDebug() << "In last waypoint, stopping stream";
+                stopStream(this);
+            }
         }
 
         if (status.getHeartbeat()) {
@@ -279,13 +275,12 @@ void DroneModule::setVideoController(VideoController *value)
     videoController = value;
 }
 
-void DroneModule::initStream(Search* search, DroneModule* dm,PersistenceController* persistenceController)
+void DroneModule::initStream(Search *search, DroneModule *dm, PersistenceController *persistenceController)
 {
-    if(this->getDrone()->getGuid()==dm->getDrone()->getGuid())
-    {
-    emit startStream(drone);
-    detectionController = new DetectionController(search, this, persistenceController);
-    detectionController->setMediator(mediator);
+    if (this->getDrone()->getGuid() == dm->getDrone()->getGuid()) {
+        emit startStream(drone);
+        detectionController = new DetectionController(search, this, persistenceController);
+        detectionController->setMediator(mediator);
     }
 }
 
@@ -295,13 +290,12 @@ void DroneModule::initDetection()
     detectionController->start();
 }
 
-void DroneModule::stopStream(DroneModule* dm)
+void DroneModule::stopStream(DroneModule *dm)
 {
-    if(this->getDrone()->getGuid()==dm->getDrone()->getGuid())
-    {
-     emit stopStream(drone);
-     detectionController->streamFinished();
-     stopStreamConnection();
+    if (this->getDrone()->getGuid() == dm->getDrone()->getGuid()) {
+        emit stopStream(drone);
+        detectionController->streamFinished();
+        stopStreamConnection();
     }
 }
 
@@ -387,7 +381,7 @@ QJsonDocument DroneModule::sendWaypoints()
 
     QJsonArray coordinates = QJsonArray();
     int i = 0;
-    foreach(const QGeoCoordinate waypoint, *waypoints) {
+    foreach (const QGeoCoordinate waypoint, *waypoints) {
         i++;
         QJsonObject coordinate = QJsonObject();
 
@@ -445,7 +439,7 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
     QJsonObject json = QJsonObject();
     json["message_type"] = QString("status");
     QJsonArray requestedStatuses = QJsonArray();
-    foreach(const RequestedDroneStatus status, statuses) {
+    foreach (const RequestedDroneStatus status, statuses) {
         QJsonObject requestedStatus = QJsonObject();
         QString key;
         switch (status) {

@@ -28,8 +28,8 @@ void XMLWriter_Test::testSimpleDetectionResultWriter()
     QString fileName = folder.append("/xmltest.xml");
     QList<DetectionResult> results = QList<DetectionResult>();
 
-    results.push_front(DetectionResult(QGeoCoordinate(5,5), 5.5));
-    results.push_front(DetectionResult(QGeoCoordinate(6,6), 6.6));
+    results.push_front(DetectionResult(QGeoCoordinate(5, 5), 5.5));
+    results.push_front(DetectionResult(QGeoCoordinate(6, 6), 6.6));
 
     DetectionResultWriter dw = DetectionResultWriter();
 
@@ -38,34 +38,24 @@ void XMLWriter_Test::testSimpleDetectionResultWriter()
     QList<DetectionResult> expectedResults = QList<DetectionResult>();
 
     QFile file(fileName);
-    if(file.open(QIODevice::ReadOnly))
-    {
+    if (file.open(QIODevice::ReadOnly)) {
         QXmlStreamReader reader(&file);
-        while(!reader.isEndDocument())
-        {
-            if(reader.isStartElement() && reader.name() == "DetectionResult")
-            {
+        while (!reader.isEndDocument()) {
+            if (reader.isStartElement() && reader.name() == "DetectionResult") {
                 double score, longitude, latitude;
-                while(reader.name() != "DetectionResult")
-                {
-                    if(reader.isStartElement())
-                    {
-                        if(reader.name() == "Score")
-                        {
+                while (reader.name() != "DetectionResult") {
+                    if (reader.isStartElement()) {
+                        if (reader.name() == "Score") {
                             score = reader.readElementText().toDouble();
-                        }
-                        else if (reader.name() == "Latitude")
-                        {
+                        } else if (reader.name() == "Latitude") {
                             latitude = reader.readElementText().toDouble();
-                        }
-                        else if ( reader.name() == "Longitude")
-                        {
+                        } else if (reader.name() == "Longitude") {
                             longitude = reader.readElementText().toDouble();
                         }
                     }
                     reader.readNext();
                 }
-                expectedResults.push_back(DetectionResult(QGeoCoordinate(latitude,longitude),score));
+                expectedResults.push_back(DetectionResult(QGeoCoordinate(latitude, longitude), score));
             }
             reader.readNext();
         }

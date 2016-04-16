@@ -43,7 +43,7 @@ public:
     QString getWorkstationIP() const;
 
     // only used for test purposes
-    void setDrones(QList<DroneModule *>* list);
+    void setDrones(QList<DroneModule *> *list);
 
 private:
     void processHelloMessage(QByteArray helloRaw);
@@ -60,14 +60,14 @@ private:
     DroneModule *configureDrone(DroneModule *drone);
 
 public slots:
-    void onSearchEmitted(Search* s);
+    void onSearchEmitted(Search *s);
     void readPendingDatagrams();
-    void initStream(DroneModule* dm);
-    void stopStream(DroneModule* dm);
+    void initStream(DroneModule *dm);
+    void stopStream(DroneModule *dm);
 
 signals:
-    void startStreamSignal(Search* s, DroneModule* d, PersistenceController*p);
-    void stopStreamSignal(DroneModule* d);
+    void startStreamSignal(Search *s, DroneModule *d, PersistenceController *p);
+    void stopStreamSignal(DroneModule *d);
 
 private:
     //TODO: due to some limitions in the streaming librairy VLC
@@ -80,7 +80,7 @@ private:
     QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<DroneModule *>* drones;
+    QList<DroneModule *> *drones;
 
     PersistenceController *persistenceController;
     PathAlgorithm *pathLogicController;

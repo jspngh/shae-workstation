@@ -19,14 +19,14 @@ void DroneHeartbeatReceiver_Test::cleanupTestCase()
 
 void DroneHeartbeatReceiver_Test::testConstructorDestructor()
 {
-    DroneHeartBeatReceiver* receiver = new DroneHeartBeatReceiver("127.0.0.1");
+    DroneHeartBeatReceiver *receiver = new DroneHeartBeatReceiver("127.0.0.1");
     QVERIFY(receiver->getWorkstationHeartbeatPort() > 0);
     delete receiver;
 }
 
 void DroneHeartbeatReceiver_Test::testSetandGet()
 {
-    DroneHeartBeatReceiver* receiver = new DroneHeartBeatReceiver("127.0.0.1");
+    DroneHeartBeatReceiver *receiver = new DroneHeartBeatReceiver("127.0.0.1");
 
     receiver->setWorkstationHeartbeatPort(9000);
     QVERIFY(receiver->getWorkstationHeartbeatPort() == 9000);

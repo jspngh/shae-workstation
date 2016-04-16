@@ -28,7 +28,7 @@ void OverviewDroneItem::setDroneNr(uint number)
 void OverviewDroneItem::updateStatus(DroneStatus status)
 {
     double batteryLevel = status.getBatteryLevel();
-    if(batteryLevel != -1)
+    if (batteryLevel != -1)
         ui->batteryValue->setText(QString::number(batteryLevel) + "%");
 }
 

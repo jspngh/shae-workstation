@@ -49,8 +49,8 @@ void ConfigWidget::onMapLoaded()
 void ConfigWidget::onMapFailedToLoad()
 {
     ui->searchAreaLoadingLabel->setText(QString(
-        "Error loading map.\nPlease check your internet connection."
-    ));
+                                            "Error loading map.\nPlease check your internet connection."
+                                        ));
 }
 
 void ConfigWidget::areaSelected()
@@ -118,9 +118,9 @@ void ConfigWidget::locateButtonPush()
         mapView->setCenter(ui->locateField->text());
     } else {
         mapView->setCenter(QGeoCoordinate(
-            ui->latitudeField->text().toDouble(),
-            ui->longitudeField->text().toDouble()
-        ));
+                               ui->latitudeField->text().toDouble(),
+                               ui->longitudeField->text().toDouble()
+                           ));
     }
 }
 
@@ -135,17 +135,17 @@ void ConfigWidget::setSignalSlots()
 
 void ConfigWidget::updateMapCenter(DroneStatus heartbeat)
 {
-    if(!mapView->hasLoaded()) return;
+    if (!mapView->hasLoaded()) return;
 
     // position drone on map
     QGeoCoordinate center = heartbeat.getCurrentLocation();
     QString id = heartbeat.getDrone()->getGuid().toString();
-    if(mapView->hasMarker(id)) {
-        QMMarker& marker = mapView->getMarker(id);
+    if (mapView->hasMarker(id)) {
+        QMMarker &marker = mapView->getMarker(id);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
         marker.moveTo(center);
     } else {
-        QMMarker& marker = mapView->addMarker(id, center);
+        QMMarker &marker = mapView->addMarker(id, center);
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
@@ -153,7 +153,7 @@ void ConfigWidget::updateMapCenter(DroneStatus heartbeat)
     }
 
     // only center the map once
-    if(!mapCentered){
+    if (!mapCentered) {
         mapView->setCenter(center);
         mapView->setZoomLevel(11);
         mapCentered = true;
@@ -168,7 +168,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
     DroneModule *d = s.getDrone();
     int currentRow = getDroneInTableIndex(d);
 
-    if(currentRow == -1) {
+    if (currentRow == -1) {
         ui->droneTable->insertRow(ui->droneTable->rowCount());
         currentRow = ui->droneTable->rowCount() - 1;
     }
@@ -178,7 +178,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
     ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
 
     // set type
-    if(s.getType().isEmpty())
+    if (s.getType().isEmpty())
         ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Not available")));
     else
         ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(s.getType()));
@@ -188,7 +188,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
         ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
     else
         ui->droneTable->setItem(currentRow, BATTERY,
-                                new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
+                                new QTableWidgetItem(QString::number(s.getBatteryLevel()) + " %"));
 
     // set ip and port
     QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
@@ -199,8 +199,8 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
 
 int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 {
-    for(int i = 0; i < dronesInTable.size(); i++)
-        if(dronesInTable[i].second->getGuid() == d->getGuid())
+    for (int i = 0; i < dronesInTable.size(); i++)
+        if (dronesInTable[i].second->getGuid() == d->getGuid())
             return i;
 
     return -1;

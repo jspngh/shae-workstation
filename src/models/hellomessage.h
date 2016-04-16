@@ -25,7 +25,7 @@ public:
                  double visionWidth);
 
     HelloMessage();
-    HelloMessage(const HelloMessage& hello);
+    HelloMessage(const HelloMessage &hello);
     ~HelloMessage();
 
     double getVisionWidth() const;

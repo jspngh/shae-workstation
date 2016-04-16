@@ -12,7 +12,7 @@ void Dronemodule_IntegrationTest::init()
     sim = new SimulatorWrapper();
     sim->startSimulator();
 
-    drone = new DroneModule(6330, 5502,QString("127.0.0.1"), QString("127.0.0.1"),QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
+    drone = new DroneModule(6330, 5502, QString("127.0.0.1"), QString("127.0.0.1"), QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
     QList<QGeoCoordinate> *waypointList = new QList<QGeoCoordinate>();
     waypointList->push_back(QGeoCoordinate(1.0, 1.0));
     waypointList->push_back(QGeoCoordinate(2.0, 2.0));
@@ -111,7 +111,7 @@ void Dronemodule_IntegrationTest::testStatusMessages()
 {
     qDebug() << "requesting all status fields of drone... ";
 
-    DroneConnection* connection = drone->getDroneConnection();
+    DroneConnection *connection = drone->getDroneConnection();
 
     connect(connection, SIGNAL(droneResponse(QString)), this, SLOT(onDroneResponse(QString)));
 
@@ -171,7 +171,7 @@ void Dronemodule_IntegrationTest::testSettingsMessages()
 {
     qDebug() << "trying some settings messages... ";
 
-    DroneConnection* connection = drone->getDroneConnection();
+    DroneConnection *connection = drone->getDroneConnection();
 
     connect(connection, SIGNAL(droneResponse(QString)), this, SLOT(onDroneResponse(QString)));
     QList<RequestedDroneSetting> settings = QList<RequestedDroneSetting>();
@@ -218,17 +218,17 @@ void Dronemodule_IntegrationTest::testSettingsMessages()
         //qDebug() << json["message"] << endl;
         QVERIFY(json["message_type"].toString() == "settings");
         QJsonArray array = json["message"].toArray();
-        for(QJsonValue value: array){
+        for (QJsonValue value : array) {
             QJsonObject obj = value.toObject();
-            if(obj["key"].toString() == "height")
+            if (obj["key"].toString() == "height")
                 QVERIFY(obj["value"].toInt() == 3);
-            if(obj["key"].toString() == "speed")
+            if (obj["key"].toString() == "speed")
                 QVERIFY(obj["value"].toInt() == 4);
-            if(obj["key"].toString() == "camera_angle")
+            if (obj["key"].toString() == "camera_angle")
                 QVERIFY(obj["value"].toInt() == 70);
-            if(obj["key"].toString() == "fps")
+            if (obj["key"].toString() == "fps")
                 QVERIFY(obj["value"].toInt() == 30);
-            if(obj["key"].toString() == "resolution")
+            if (obj["key"].toString() == "resolution")
                 QVERIFY(obj["value"].toInt() == 720);
         }
         j++;

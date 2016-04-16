@@ -116,7 +116,7 @@ std::vector<std::pair<double, double>> DetectorManager::calculatePositions(Detec
     for (int i = 0; i < dl.getSize(); i++) {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
-        distance =  std::pair<double, double>(cos(orientation)*distance.first,sin(orientation)*distance.second);
+        distance =  std::pair<double, double>(cos(orientation) * distance.first, sin(orientation) * distance.second);
         //distance contains an x,y distance pair, that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
         std::pair<double, double> temp2 = changeLongitude(location, distance.second);
