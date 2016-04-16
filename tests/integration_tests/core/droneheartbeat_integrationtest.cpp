@@ -46,10 +46,7 @@ void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
     connect(receiver, SIGNAL(droneHeartBeat(QString)), this, SLOT(onDroneHeartbeatReceived(QString)));
 
 
-
-
-
-    QTest::qWait(5000);
+    QTest::qWait(10000);
     QVERIFY(count > 0);
     qDebug() << "Heartbeats get received";
 

@@ -50,7 +50,7 @@ void Droneconnection_IntegrationTest::testDroneConnection()
 
     drone->requestStatus();
 
-    QTest::qWait(1000);
+    QTest::qWait(2000);
 
     QVERIFY(count > 0);
     qDebug() << "Simulator responds to query and response is received";

@@ -20,6 +20,7 @@ public:
 public:
     HelloMessage(QString droneIp,
                  QString streamFile,
+                 QString controllerIp,
                  int commandsPort,
                  int streamPort,
                  double visionWidth);
@@ -38,10 +39,13 @@ public:
 
     int getCommandsPort() const;
 
+    QString getControllerIp() const;
+
 private:
     double visionWidth = -1;
     QString streamFile;
     QString droneIp;
+    QString controllerIp;
     int streamPort = -1;
     int commandsPort = -1;
 };

@@ -119,6 +119,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 
     QString ip = hello.getDroneIp();
     QString strFile =  hello.getStreamFile();
+    QString ctrIp = hello.getControllerIp();
     int cmdPort = hello.getCommandsPort();
     int strPort = hello.getStreamPort();
     double vision = hello.getVisionWidth();
@@ -126,7 +127,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     DroneModule *drone = receivedHelloFrom(ip);
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, controllerIp, workstationIP, strFile, vision);
+        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIP, strFile, vision);
         drone = configureDrone(drone);
     }
 

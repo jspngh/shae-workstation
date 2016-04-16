@@ -115,15 +115,12 @@ void Dronemodule_IntegrationTest::testStatusMessages()
 
     connect(connection, SIGNAL(droneResponse(QString)), this, SLOT(onDroneResponse(QString)));
 
-
     drone->requestStatus();
     QTest::qWait(500);
 
     QList<QString> check = QList<QString>();
     check.push_back("workstation_config");
     check.push_back("all_statuses");
-
-
 
     qDebug() << "Checking if simulator has received the correct message... ";
 
@@ -151,9 +148,6 @@ void Dronemodule_IntegrationTest::testStatusMessages()
         QVERIFY(json["message"].toString() == check.front());
         check.pop_front();
 
-
-
-
         //qDebug() << "Found \" \n}\n\n \" at index position " << j << endl;
         j++;
 
@@ -161,7 +155,7 @@ void Dronemodule_IntegrationTest::testStatusMessages()
     qDebug() << "Correct message was received by simulator ";
 
 
-    QTest::qWait(1000);
+    QTest::qWait(2000);
     QVERIFY(count > 0);
     qDebug() << "Answer from simulator was received ";
 

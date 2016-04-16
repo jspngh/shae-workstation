@@ -2,11 +2,13 @@
 
 HelloMessage::HelloMessage(QString droneIp,
                            QString streamFile,
+                           QString controllerIp,
                            int commandsPort,
                            int streamPort,
                            double visionWidth):
     droneIp(droneIp),
     streamFile(streamFile),
+    controllerIp(controllerIp),
     commandsPort(commandsPort),
     streamPort(streamPort),
     visionWidth(visionWidth)
@@ -23,6 +25,7 @@ HelloMessage::HelloMessage(const HelloMessage &hello)
 {
     droneIp = hello.droneIp;
     streamFile = hello.streamFile;
+    controllerIp = hello.controllerIp;
     commandsPort = hello.commandsPort;
     streamPort = hello.streamPort;
     visionWidth = hello.visionWidth;
@@ -49,8 +52,11 @@ HelloMessage HelloMessage::parse(QByteArray helloRaw)
     int portStream = json["port_stream"].toInt();
     QString streamFile = json["stream_file"].toString();
     double visionWidth = json["vision_width"].toDouble();
+    QString controllerIp = json["ip_controller"].toString();
 
-    return HelloMessage(ipDrone, streamFile, portCommands, portStream, visionWidth);
+    qDebug() << controllerIp;
+
+    return HelloMessage(ipDrone, streamFile, controllerIp, portCommands, portStream, visionWidth);
 }
 
 // Getters
@@ -78,5 +84,10 @@ int HelloMessage::getStreamPort() const
 int HelloMessage::getCommandsPort() const
 {
     return commandsPort;
+}
+
+QString HelloMessage::getControllerIp() const
+{
+    return controllerIp;
 }
 

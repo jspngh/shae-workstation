@@ -76,7 +76,6 @@ private:
     //      The boolean oneStream will store if a stream is already requested
     bool oneStream = false;
 
-    QString controllerIp = QString("10.1.1.1");
     QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;
