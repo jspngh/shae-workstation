@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include <QtTest>
+#include "core/controller.h"
+#include "pathlogic/pathalgorithm.h"
+#include "pathlogic/simplepathalgorithm.h"
 #include "persistence/persistencecontroller.h"
 #include "core/mediator.h"
 
@@ -22,6 +25,7 @@ public slots:
     void testSaveDronePaths();
 
 private:
+    Controller *c;
     Mediator *m;
     PersistenceController *pc;
 };

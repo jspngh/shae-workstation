@@ -66,7 +66,6 @@ QList<QUuid> DroneSearchDAO::dbRetrieveDroneIds(QUuid searchId)
     if (query.exec()) {
         if (query.next()) {
             QUuid *droneId = new QUuid(query.value(0).toString());
-            qDebug() << *droneId << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$";
             returnList.append(*droneId);
         }
     } else {

@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
     db.initDatabase();
 
     //tests.append(new VideostreamDetection_Test());
-    tests.append(new System_Test());
-    //tests.append(new SignalSlotPersistenceTest());
+    //tests.append(new System_Test());
+    tests.append(new SignalSlotPersistenceTest());
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
