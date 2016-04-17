@@ -10,6 +10,9 @@
 #include <QTextStream>
 #include <QDateTime>
 
+#include "core/mediator.h"
+#include "models/dronestatus.h"
+
 namespace Ui {
 class WelcomeWidget;
 }
@@ -22,11 +25,20 @@ public:
     explicit WelcomeWidget(QWidget *parent = 0);
     ~WelcomeWidget();
 
+    void setMediator(Mediator *mediator);
+
+private:
+    void setSignalSlots();
+
+    void setupReady();
+
 private slots:   
     void on_configSearchButton_clicked();
+    void droneDetected(DroneStatus s);
 
 private:
     Ui::WelcomeWidget *ui;
+    Mediator *mediator;
 };
 
 #endif // WELCOMEWIDGET_H

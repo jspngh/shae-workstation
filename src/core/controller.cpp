@@ -51,6 +51,7 @@ void Controller::init()
     pathLogicController->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
+    mainWindow->getWelcomeWidget()->setMediator(mediator);
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread

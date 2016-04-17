@@ -30,7 +30,7 @@
           <string>Connecting on controller's Wifi (make sure controller is turned on).
 Setting up gateway on the controller.
 Reconnecting to controller's network.
-Searching for drone's on the network.
+Searching for drones on the network.
 Searching for GPS signal (may take a while).</string>
          </property>
         </widget>
