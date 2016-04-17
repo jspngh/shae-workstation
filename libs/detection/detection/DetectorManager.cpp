@@ -3,11 +3,12 @@
 
 DetectorManager::DetectorManager()
 {
-    this->detector = new HOGDetector();
+    this->detector = new ACFDetector(std::string("dependencies/INRIA_ACF.xml"));
+    //this->detector = new HOGDetector();
     //TODO: remove hardcoding of values
-
     this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150, 20, 20);
-    this->fps = 2;
+    this->fps = 1;
+    this->videoDetection = cv::VideoWriter("dependencies/drone_stream.avi",CV_FOURCC('M','J','P','G'),this->fps, cv::Size(1280,720),true);
 }
 
 DetectorManager::DetectorManager(Detector *det, WindowSelection *wndSel, int fps)
@@ -47,7 +48,6 @@ DetectionList DetectorManager::process(std::string seq)
     while (producer.frameAvailable()) {
         frame = producer.giveFrame();
         detections = this->applyDetector(frame);
-        // std::cout << "#: " << detections.getSize() << std::endl;
     }
 
     return detections;
@@ -63,9 +63,10 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
         //use standardNMS as dollarNMS fails on the given detectionList from ACF
         if (detections.getSize() > 0)
             detections = NMS.standardNMS(detections, 0.2);
-        return detections;
+        detections.draw(frame);
+        this->videoDetection.write(frame);
     }
-
+/*
     cv::Rect win;
     cv::Mat roi;
 
@@ -103,6 +104,7 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     // the suppression is done via the dollarNMS function provided in the NonMaximumSuppression class
     if (detections.getSize() > 0)
         detections = NMS.standardNMS(detections, 0.2);
+    */
     return detections;
 }
 

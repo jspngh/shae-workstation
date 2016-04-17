@@ -66,7 +66,7 @@ private:
     WindowSelection *windowSelection;
     int fps; //< Frames per second on which the sequence will be analysed
     std::pair<double, double> derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT);
-
+    cv::VideoWriter videoDetection;
 };
 
 #endif /* DETECTORMANAGER_H_ */

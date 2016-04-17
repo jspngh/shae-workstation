@@ -28,6 +28,7 @@ SOURCES += \
     $$PWD/detection/*.cpp \
     $$PWD/detection/detectors/HOG/*.cpp \
     $$PWD/detection/detectors/ACF/*.cpp \
+    $$PWD/detection/detectors/ACF/*.hpp \
     $$PWD/detection/suppression/*.cpp \
     $$PWD/detection/window_selection/*.cpp \
     $$PWD/utils/*.cpp

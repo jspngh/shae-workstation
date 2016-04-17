@@ -38,7 +38,7 @@ void System_Test::initTestCase()
 
     s = new Search();
     //the following parameters are defined through the configwidget
-    s->setFpsProcessing(0.5);
+    s->setFpsProcessing(1);
     s->setGimbalAngle(65);
     s->setHeight(3);
     s->setStartTime(QTime::currentTime());
