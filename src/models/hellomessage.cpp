@@ -54,8 +54,6 @@ HelloMessage HelloMessage::parse(QByteArray helloRaw)
     double visionWidth = json["vision_width"].toDouble();
     QString controllerIp = json["ip_controller"].toString();
 
-    qDebug() << controllerIp;
-
     return HelloMessage(ipDrone, streamFile, controllerIp, portCommands, portStream, visionWidth);
 }
 
