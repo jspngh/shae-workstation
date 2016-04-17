@@ -42,6 +42,7 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.trackPath();
         marker.show();
     }
 }

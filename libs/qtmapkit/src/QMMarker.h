@@ -38,6 +38,11 @@ public slots:
     void show();
 
     /*!
+     * Tracks the marker's path on the map.
+     */
+    void trackPath();
+
+    /*!
      * Moves the icon to the given location.
      * \param to The location to move the marker to.
      */

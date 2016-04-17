@@ -54,6 +54,12 @@ void QMMarker::show()
     d->evaluateMethod(QString("show()"));
 }
 
+void QMMarker::trackPath()
+{
+    Q_D(QMMarker);
+    d->evaluateMethod(QString("trackPath()"));
+}
+
 void QMMarker::moveTo(const QGeoCoordinate &to)
 {
     Q_D(QMMarker);
