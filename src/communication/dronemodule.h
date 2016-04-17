@@ -222,14 +222,10 @@ private:
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
-<<<<<<< HEAD
     QList<QGeoCoordinate> *waypoints = new QList<QGeoCoordinate>(); //!< Keeps the list of waypoints the drone needs to fly.
-=======
     bool videoProcessing;
     bool videoActive;
     bool videoInactive;
-    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
->>>>>>> develop
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 

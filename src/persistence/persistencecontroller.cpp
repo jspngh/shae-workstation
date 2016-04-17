@@ -109,8 +109,8 @@ QList<DetectionResult*>* PersistenceController::retrieveDetectionResults(QUuid d
 
 void PersistenceController::printDetectionResult(QUuid searchId, QString fileName)
 {
-    QList<DetectionResult> results = persistence->retrieveDetectionResults(searchId);
-    detectionresultwriter.writeDetectionResultToFile(fileName, results);
+    QList<DetectionResult*>* results = persistence->retrieveDetectionResults(searchId);
+    detectionresultwriter->writeDetectionResultToFile(fileName, results);
 }
 
 VideoSequence* PersistenceController::retrieveVideoSequence(QUuid droneId, QUuid searchId)

@@ -90,7 +90,7 @@ DroneStatus* DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId)
                   " WHERE droneID = (:droneID)"
                   " ORDER BY timestampDrone");
     query.bindValue(":droneID", droneId);
-    return retrieveQuery(query).back();
+    return retrieveQuery(query)->back();
 }
 
 //retrieve dronestatus closest to time parameter
@@ -117,7 +117,7 @@ QList<DroneStatus*>* DroneStatusDAO::retrieveQuery(QSqlQuery query)
     QList<DroneStatus*>* returnList = new QList<DroneStatus*>;
     if (query.exec()) {
         while (query.next()) {
-            QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(21).toString());
+            QList<QGeoCoordinate> nextWaypoints = *uncypherPathString(query.value(21).toString());
             DroneStatus *output = new DroneStatus(
                                      query.value(1).toDateTime(),
                                      query.value(2).toDateTime(),

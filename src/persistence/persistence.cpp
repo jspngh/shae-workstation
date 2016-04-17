@@ -103,7 +103,7 @@ QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid droneId, QU
     return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
 }
 
-QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid searchId)
+QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid searchId)
 {
     return detectionresultdao.dbRetrieveDetectionResults(searchId);
 }
