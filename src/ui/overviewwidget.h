@@ -37,9 +37,9 @@ private:
 private slots:
     void exportSearchButtonPush();
     void onSearchStarted(Search *s);
-    void onHeartBeatReceived(DroneStatus heartbeat);
+    void onHeartBeatReceived(DroneStatus *heartbeat);
     void fillDroneList();
-    void updateDroneList(DroneStatus s);
+    void updateDroneList(DroneStatus *s);
     void onMapLoaded();
     void onMapFailedToLoad();
 };

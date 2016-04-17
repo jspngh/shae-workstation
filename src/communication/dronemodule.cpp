@@ -69,16 +69,16 @@ void DroneModule::setMediator(Mediator* med)
     addSignalSlot();
     initHeartbeat();
 
-    DroneStatus droneStatus;
-    droneStatus.setDrone(this);
+    DroneStatus *droneStatus = new DroneStatus();
+    droneStatus->setDrone(this);
     emit droneStatusReceived(droneStatus);
 }
 
 void DroneModule::addSignalSlot()
 {
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
     mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
     mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
@@ -178,7 +178,6 @@ Slots
 ************************/
 void DroneModule::onPathCalculated(Search *s)
 {
-    qDebug() << "****************************************";
     bool droneInList = false;
     // check if this drone is selected for this search
     // if the drone is indeed selected we continue, if not, nothing will happen
@@ -203,10 +202,10 @@ void DroneModule::onDroneResponse(const QString &response)
         status.setDrone(this);
         if (status.getHeartbeat()) {
             qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
-            emit droneHeartBeatReceived(status);
+            emit droneHeartBeatReceived(&status);
         } else {
             qDebug() << "emit DroneModule::droneStatusReceived(status)";
-            emit droneStatusReceived(status);
+            emit droneStatusReceived(&status);
         }
 
     } else

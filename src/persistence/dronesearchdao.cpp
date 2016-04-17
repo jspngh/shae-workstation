@@ -13,7 +13,7 @@ DroneSearchDAO::DroneSearchDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-QList<QGeoCoordinate> DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> path)
+QList<QGeoCoordinate>* DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate>* path)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO dronessearches (searchID, droneID, path) "
@@ -23,7 +23,7 @@ QList<QGeoCoordinate> DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searc
 
     std::ostringstream os;
 
-    for (QGeoCoordinate gc : path) {
+    for (QGeoCoordinate gc : *path) {
         os << gc.latitude() << "-" << gc.longitude() << ":";
     }
 
@@ -39,10 +39,10 @@ QList<QGeoCoordinate> DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searc
     return path;
 }
 
-QList<QGeoCoordinate> DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid searchId)
+QList<QGeoCoordinate>* DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid searchId)
 {
     QSqlQuery query;
-    QList<QGeoCoordinate> returnList = QList<QGeoCoordinate>();
+    QList<QGeoCoordinate> *returnList = new QList<QGeoCoordinate>();
     query.prepare("SELECT path FROM dronessearches WHERE searchID = (:searchID) and droneID = (:droneID)");
     query.bindValue(":searchID", searchId);
     query.bindValue(":droneID", droneId);
@@ -57,16 +57,16 @@ QList<QGeoCoordinate> DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid s
     return returnList;
 }
 
-QList<QUuid> DroneSearchDAO::dbRetrieveDroneIds(QUuid searchId)
+QList<QUuid>* DroneSearchDAO::dbRetrieveDroneIds(QUuid searchId)
 {
     QSqlQuery query;
-    QList<QUuid> returnList = QList<QUuid>();
+    QList<QUuid> *returnList = new QList<QUuid>();
     query.prepare("SELECT droneID FROM dronessearches WHERE searchID = (:searchID)");
     query.bindValue(":searchID", searchId);
     if (query.exec()) {
         if (query.next()) {
-            QUuid *droneId = new QUuid(query.value(0).toString());
-            returnList.append(*droneId);
+            QUuid droneId = QUuid(query.value(0).toString());
+            returnList->append(droneId);
         }
     } else {
         qDebug() << "getDroneId error:  "

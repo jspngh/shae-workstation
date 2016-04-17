@@ -150,11 +150,11 @@ signals:
 
     //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
     //! Is connected to the mediator
-    void droneStatusReceived(DroneStatus status);
+    void droneStatusReceived(DroneStatus *status);
 
     //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
     //! Is connected to the mediator.
-    void droneHeartBeatReceived(DroneStatus status);
+    void droneHeartBeatReceived(DroneStatus *status);
 
     /*********************
      Slots

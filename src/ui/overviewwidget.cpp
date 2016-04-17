@@ -22,25 +22,25 @@ void OverviewWidget::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
-    mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
-    mediator->addSlot(this, SLOT(updateDroneList(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
 }
 
-void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
+void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 {
     if(!mapViewLoaded) return;
-    ui->heartBeat->setText(heartbeat.toString());
+    ui->heartBeat->setText(heartbeat->toString());
 
-    QString id = heartbeat.getDrone()->getGuid().toString();
+    QString id = heartbeat->getDrone()->getGuid().toString();
     if(mapView->hasMarker(id)) {
         QMMarker& marker = mapView->getMarker(id);
-        marker.moveTo(heartbeat.getCurrentLocation());
-        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.moveTo(heartbeat->getCurrentLocation());
+        marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
     } else {
-        QMMarker& marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
+        QMMarker& marker = mapView->addMarker(id, heartbeat->getCurrentLocation());
         marker.setIcon("qrc:///ui/img/map/drone-icon");
         marker.scale(0.2, 0.2);
-        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.show();
     }
 }
@@ -49,11 +49,11 @@ void OverviewWidget::exportSearchButtonPush()
 {
 }
 
-void OverviewWidget::updateDroneList(DroneStatus s)
+void OverviewWidget::updateDroneList(DroneStatus *s)
 {
-    const QUuid droneId = s.getDrone()->getGuid();
+    const QUuid droneId = s->getDrone()->getGuid();
     if(mapIdListItem.contains(droneId))
-        mapIdListItem.value(droneId)->updateStatus(s);
+        mapIdListItem.value(droneId)->updateStatus(*s);
 }
 
 void OverviewWidget::onSearchStarted(Search *s)

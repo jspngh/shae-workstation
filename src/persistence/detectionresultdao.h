@@ -25,12 +25,12 @@ public:
      * Both ids are for referencing to tables in the database while the object is
      * the one that needs to be stored.
      */
-    DetectionResult dbSaveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
+    DetectionResult* dbSaveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult* result);
     /**
      * \brief dbRetrieveDetectionResult Retrieves al the detection results for a
      * certain drone and search.
      */
-    QList<DetectionResult> dbRetrieveDetectionResults(QUuid droneId, QUuid searchId);
+    QList<DetectionResult*>* dbRetrieveDetectionResults(QUuid droneId, QUuid searchId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

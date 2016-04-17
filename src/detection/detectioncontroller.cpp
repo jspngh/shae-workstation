@@ -42,7 +42,7 @@ void DetectionController::run()
         this->frameHop=30;
     }
     droneId = this->droneModule->getGuid();
-    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
+    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID())->getStart();
 
     cv::Mat frame;
     do {
@@ -121,9 +121,9 @@ void DetectionController::setSequence(const cv::VideoCapture &value)
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time){
     if(frame.rows != 0 && frame.cols != 0)
     {
-        DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
-        QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
-        double orientation = droneStatus.getOrientation();
+        DroneStatus *droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
+        QGeoCoordinate frameLocation = droneStatus->getCurrentLocation();
+        double orientation = droneStatus->getOrientation();
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
         qDebug()<< "nr of detections: " << detectionList.getSize();

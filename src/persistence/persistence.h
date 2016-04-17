@@ -26,26 +26,26 @@ public:
     Persistence(Mediator *mediator, QObject *parent = 0);
     ~Persistence();
 
-    Search retrieveSearch(QUuid searchId);
+    Search* retrieveSearch(QUuid searchId);
     //compare with timestamp of workstation
-    QList<DroneStatus> retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
+    QList<DroneStatus*>* retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     //retrieve latest dronestatus
-    DroneStatus retrieveDroneStatus(QUuid droneId);
+    DroneStatus* retrieveDroneStatus(QUuid droneId);
     //retrieve dronestatus closest to time parameter
-    DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
-    QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
-    Drone retrieveDrone(QUuid droneId);
-    QList<QUuid> retrieveDroneIds(QUuid searchId);
-    VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId);
-    QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
+    DroneStatus* retrieveDroneStatus(QUuid droneId, QDateTime time);
+    QList<QGeoCoordinate>* retrieveDronePath(QUuid droneId, QUuid searchId);
+    Drone* retrieveDrone(QUuid droneId);
+    QList<QUuid>* retrieveDroneIds(QUuid searchId);
+    VideoSequence* retrieveVideoSequence(QUuid droneId, QUuid searchId);
+    QList<DetectionResult*>* retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
-    void saveSearch(Search search);
-    void saveDroneStatus(DroneStatus droneStatus);
+    void saveSearch(Search *search);
+    void saveDroneStatus(DroneStatus *droneStatus);
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path);
     void saveDrone(Drone *drone);
     //will register a videosequence in the database (already saved in location)
-    void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
-    void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
+    void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence* sequence);
+    void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult* result);
 
 
 public slots:

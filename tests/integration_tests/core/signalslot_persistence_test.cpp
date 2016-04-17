@@ -37,18 +37,18 @@ void SignalSlotPersistenceTest::testSaveSearch()
     spa->setWaypointsForDrones(*area, droneList);
     emit pathCalculated(s);
 
-    Search receivedSearch = pc->retrieveSearch(s->getSearchID());
-    QVERIFY(s->getSearchID() == receivedSearch.getSearchID());
-    QVERIFY(s->getFpsProcessing() == receivedSearch.getFpsProcessing());
-    QVERIFY(s->getGimbalAngle() == receivedSearch.getGimbalAngle());
-    QVERIFY(s->getHeight() == receivedSearch.getHeight());
-    QVERIFY(s->getStartTime() == receivedSearch.getStartTime());
-    QVERIFY(s->getDroneList().length() == receivedSearch.getDroneList().length());
+    Search *receivedSearch = pc->retrieveSearch(s->getSearchID());
+    QVERIFY(s->getSearchID() == receivedSearch->getSearchID());
+    QVERIFY(s->getFpsProcessing() == receivedSearch->getFpsProcessing());
+    QVERIFY(s->getGimbalAngle() == receivedSearch->getGimbalAngle());
+    QVERIFY(s->getHeight() == receivedSearch->getHeight());
+    QVERIFY(s->getStartTime() == receivedSearch->getStartTime());
+    QVERIFY(s->getDroneList().length() == receivedSearch->getDroneList().length());
 
     foreach (DroneModule *dm1, droneList)
     {
         //QVERIFY(receivedSearch.getDroneList().contains(dm1));
-        foreach (DroneModule *dm2, receivedSearch.getDroneList())
+        foreach (DroneModule *dm2, receivedSearch->getDroneList())
         {
             qDebug() << "dm2" << dm2->getGuid();
             if (dm1->getGuid() == dm2->getGuid())
@@ -92,12 +92,12 @@ void SignalSlotPersistenceTest::testSaveDronePaths()
     emit pathCalculated(s);
 
     qDebug() << "Done1";
-    QList<QGeoCoordinate> paths = pc->retrieveDronePaths(d->getGuid(), s->getSearchID());
+    QList<QGeoCoordinate>* paths = pc->retrieveDronePaths(d->getGuid(), s->getSearchID());
 
     qDebug() << "Done2";
     foreach (QGeoCoordinate waypoint, *(dm->getWaypoints()))
     {
-        QVERIFY(paths.contains(waypoint));
+        QVERIFY(paths->contains(waypoint));
     }
 
 }

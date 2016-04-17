@@ -45,17 +45,17 @@ void DetectionResultDAO_Test::testSimpleDetectionResultDAO()
 {
     DetectionResultDAO sd = DetectionResultDAO(&projectShaeDatabase);
 
-    DetectionResult s = DetectionResult(QGeoCoordinate(5, 5), 5.5);
+    DetectionResult *dr = new DetectionResult(QGeoCoordinate(5, 5), 5.5);
     QUuid searchID = QUuid::createUuid();
     QUuid droneID = QUuid::createUuid();
 
-    sd.dbSaveDetectionResult(droneID, searchID, s);
+    sd.dbSaveDetectionResult(droneID, searchID, dr);
 
-    QList<DetectionResult> sback = sd.dbRetrieveDetectionResults(droneID, searchID);
+    QList<DetectionResult*>* sback = sd.dbRetrieveDetectionResults(droneID, searchID);
 
-    QVERIFY(sback.first().getScore() == s.getScore());
-    QVERIFY(s.getLocation().longitude() == sback.first().getLocation().longitude());
-    QVERIFY(s.getLocation().latitude() == sback.first().getLocation().latitude());
+    QVERIFY(sback->first()->getScore() == dr->getScore());
+    QVERIFY(dr->getLocation().longitude() == sback->first()->getLocation().longitude());
+    QVERIFY(dr->getLocation().latitude() == sback->first()->getLocation().latitude());
 
     QSqlQuery query;
     query.prepare("DELETE from detectionresults "
