@@ -18,13 +18,13 @@ void HelloMessage_Test::cleanupTestCase()
 void HelloMessage_Test::parse_test()
 {
     QString helloString = "{"
-                              "\"message_type\": \"hello\","
-                              "\"ip_drone\": \"10.1.1.10\","
-                              "\"ip_controller\": \"10.1.1.1\","
-                              "\"port_stream\": 22,"
-                              "\"port_commands\": 23,"
-                              "\"stream_file\": \"path\","
-                              "\"vision_width\": 0.1"
+                          "\"message_type\": \"hello\","
+                          "\"ip_drone\": \"10.1.1.10\","
+                          "\"ip_controller\": \"10.1.1.1\","
+                          "\"port_stream\": 22,"
+                          "\"port_commands\": 23,"
+                          "\"stream_file\": \"path\","
+                          "\"vision_width\": 0.1"
                           "}";
 
     QByteArray helloBytes = helloString.toLocal8Bit();
@@ -50,11 +50,11 @@ void HelloMessage_Test::getters_test()
     double visionWidth = 0.1;
 
     HelloMessage *hello = new HelloMessage(ipDrone,
-                                         streamFile,
-                                         ipController,
-                                         portCommands,
-                                         portStream,
-                                         visionWidth);
+                                           streamFile,
+                                           ipController,
+                                           portCommands,
+                                           portStream,
+                                           visionWidth);
 
     QVERIFY(hello->getCommandsPort() == portCommands);
     QVERIFY(hello->getStreamPort() == portStream);
