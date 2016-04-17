@@ -35,7 +35,7 @@ private:
 
     Search *search;
     Mediator *mediator;
-    QMap<QUuid, OverviewDroneItem*> mapIdListItem;
+    QMap<QUuid, OverviewDroneItem *> mapIdListItem;
 
 private slots:
     void exportSearchButtonPush();

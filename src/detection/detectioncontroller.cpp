@@ -4,9 +4,9 @@ using namespace std;
 
 DetectionController::DetectionController(Search *search, DroneModule *dm, PersistenceController *pc, QObject *parent)
     : QThread(parent),
-    search(search),
-    persistenceController(pc),
-    droneModule(dm)
+      search(search),
+      persistenceController(pc),
+      droneModule(dm)
 {
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
     this->streaming = true;
@@ -20,7 +20,7 @@ void DetectionController::run()
     qDebug() << path;
     this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
-    qDebug() <<  (double) fpsOriginal;
+    qDebug() << (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
     qDebug() << "frames have been found, total " << numFrames;
 
@@ -29,8 +29,8 @@ void DetectionController::run()
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
     this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
     qDebug() << "framehop " << frameHop;
-    if(!(this->frameHop>0&&this->frameHop<30)){
-        this->frameHop=30;
+    if (!(this->frameHop > 0 && this->frameHop < 30)) {
+        this->frameHop = 30;
     }
     droneId = this->droneModule->getGuid();
     QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
@@ -38,23 +38,20 @@ void DetectionController::run()
     cv::Mat frame;
     do {
         while (iteratorFrames < numFrames) {
-                try
-                {
-                    this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
-                    bool captured =  this->sequence.read(frame);
-                    double timeFrame = (double)iteratorFrames / (double)fpsOriginal;
-                    if(captured){
-                        QDateTime time = QDateTime::currentDateTime();
-                        time.setTime(sequenceStartTime);
-                        time = time.addMSecs((quint64) timeFrame * 1000.0);
-                        extractDetectionsFromFrame(frame,time);
-                        qDebug() << "processing frame " << iteratorFrames << "of " << numFrames;
-                    }
+            try {
+                this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
+                bool captured =  this->sequence.read(frame);
+                double timeFrame = (double)iteratorFrames / (double)fpsOriginal;
+                if (captured) {
+                    QDateTime time = QDateTime::currentDateTime();
+                    time.setTime(sequenceStartTime);
+                    time = time.addMSecs((quint64) timeFrame * 1000.0);
+                    extractDetectionsFromFrame(frame, time);
+                    qDebug() << "processing frame " << iteratorFrames << "of " << numFrames;
                 }
-                catch (cv::Exception e)
-                {
-                    qDebug()<<"opencv error";
-                }
+            } catch (cv::Exception e) {
+                qDebug() << "opencv error";
+            }
             iteratorFrames += this->frameHop;
         }
 
@@ -66,10 +63,10 @@ void DetectionController::run()
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
         qDebug() << "new frames have been found, new total " << numFrames;
-    } while (this->streaming || (oldnumFrames!=numFrames));
+    } while (this->streaming || (oldnumFrames != numFrames));
     qDebug() << "Processing is finished at " << iteratorFrames;
 
-    if(this->sequence.isOpened())
+    if (this->sequence.isOpened())
         this->sequence.release();
     emit this->detectionFinished();
 }
@@ -110,22 +107,20 @@ void DetectionController::setPath(const QString &value)
 }
 
 
-void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time){
-    if(frame.rows != 0 && frame.cols != 0)
-    {
+void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time)
+{
+    if (frame.rows != 0 && frame.cols != 0) {
         DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
         QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
         double orientation = droneStatus.getOrientation();
         DetectionList detectionList = this->manager.applyDetector(frame);
         vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
-            emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1));
+            emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
             nrDetections++;
         }
 
-    }
-    else
-    {
+    } else {
         qDebug() << "Frame is empty";
     }
 }
@@ -140,13 +135,11 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
     file.open(path);
     //if the file does not exist, fall back to the original configuration
     //might result in faulty detections
-    if(!file.is_open())
-    {
-       path = "dependencies/gopro_3m_65deg.cfg";
-       file.open(path);
+    if (!file.is_open()) {
+        path = "dependencies/gopro_3m_65deg.cfg";
+        file.open(path);
     }
-    if (file.is_open())
-    {
+    if (file.is_open()) {
         //first seven lines are currently not used
         //TODO: parse first seven lines for checks
         for (int i = 0; i < 7; i++)

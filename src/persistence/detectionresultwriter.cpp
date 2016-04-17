@@ -14,13 +14,11 @@ DetectionResultWriter::DetectionResultWriter()
 void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<DetectionResult> results)
 {
     QFile file(fileName);
-    if(file.open(QIODevice::WriteOnly))
-    {
+    if (file.open(QIODevice::WriteOnly)) {
         QXmlStreamWriter xmlWriter(&file);
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("DetectionResults");
-        for(DetectionResult detectionResult : results)
-        {
+        for (DetectionResult detectionResult : results) {
             xmlWriter.writeStartElement("DetectionResult");
             xmlWriter.writeStartElement("Score");
             xmlWriter.writeCharacters(QString::number(detectionResult.getScore()));

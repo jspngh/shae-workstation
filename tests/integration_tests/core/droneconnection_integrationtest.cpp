@@ -15,7 +15,7 @@ void Droneconnection_IntegrationTest::initTestCase()
 
 
 
-    drone = new DroneModule(6330, 5502,QString("127.0.0.1"), QString("127.0.0.1"),QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
+    drone = new DroneModule(6330, 5502, QString("127.0.0.1"), QString("127.0.0.1"), QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
     m = new Mediator();
 
     drone->setMediator(m);
@@ -43,14 +43,14 @@ void Droneconnection_IntegrationTest::testDroneConnection()
 {
 
 
-    DroneConnection* connection = drone->getDroneConnection();
+    DroneConnection *connection = drone->getDroneConnection();
 
     connect(connection, SIGNAL(droneResponse(QString)), this, SLOT(onDroneResponse(QString)));
 
 
     drone->requestStatus();
 
-    QTest::qWait(1000);
+    QTest::qWait(2000);
 
     QVERIFY(count > 0);
     qDebug() << "Simulator responds to query and response is received";

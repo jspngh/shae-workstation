@@ -15,9 +15,9 @@ class System_Test : public QObject
     Q_OBJECT
 
 private:
-    Controller * controller;
-    Search* s;
-    SimulatorWrapper* simulator;
+    Controller *controller;
+    Search *s;
+    SimulatorWrapper *simulator;
 
 
 public:

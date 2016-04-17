@@ -10,7 +10,7 @@ VideoSequence::VideoSequence(const VideoSequence &d)
     start = d.start;
     end = d.end;
     frameCount = d.frameCount;
-    path=d.path;
+    path = d.path;
     videoId = d.videoId;
 }
 

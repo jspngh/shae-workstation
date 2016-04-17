@@ -15,8 +15,8 @@ Search::~Search()
 
 Search::Search(const Search &d)
 {
-    searchID =d.searchID,
-    startTime =d.startTime,
+    searchID = d.searchID,
+    startTime = d.startTime,
     area = d.area;
     height = d.height;
     gimbalAngle = d.gimbalAngle;

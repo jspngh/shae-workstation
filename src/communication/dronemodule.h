@@ -59,7 +59,7 @@ public:
                          QString workstationIp,
                          QString streamPath,
                          double visionWidth = MIN_VISIONWIDTH,
-                         bool video=false);
+                         bool video = false);
 
 
     //! Copy constructor
@@ -152,11 +152,11 @@ signals:
     //! Is connected to the mediator.
     void droneHeartBeatReceived(DroneStatus status);
 
-    void startStream(Drone* drone);
+    void startStream(Drone *drone);
 
-    void stopStream(Drone* drone);
+    void stopStream(Drone *drone);
 
-    void startStreamWorkstation(DroneModule * dm);
+    void startStreamWorkstation(DroneModule *dm);
 
     /*********************
      Slots
@@ -178,9 +178,9 @@ public slots:
     QJsonDocument requestHeartbeat();
 
     //! Allows to start the stream for a given drone, linked to a search and persistence component.
-    void initStream(Search* search, DroneModule* dm,PersistenceController* persistenceController);
+    void initStream(Search *search, DroneModule *dm, PersistenceController *persistenceController);
     //! Allows to stop the stream for a given drone, linked to a search and persistence component.
-    void stopStream(DroneModule* dm);
+    void stopStream(DroneModule *dm);
     //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
 
@@ -214,9 +214,9 @@ private:
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
     Mediator *mediator;
     QString workstationIp;
-    QThread * videoThread;
-    VideoController * videoController;
-    DetectionController* detectionController;
+    QThread *videoThread;
+    VideoController *videoController;
+    DetectionController *detectionController;
     DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
     QThread *connectionThread;
     DroneConnection *droneConnection;

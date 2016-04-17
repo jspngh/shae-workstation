@@ -8,16 +8,17 @@ Drone::Drone()
     controllerIp = "10.1.1.10";
     droneIp = "10.1.1.1";
     streamPath = "sololink.sdp";
-    visionWidth =MIN_VISIONWIDTH;
+    visionWidth = MIN_VISIONWIDTH;
 }
 
-Drone::Drone(const Drone &d){
+Drone::Drone(const Drone &d)
+{
     guid = d.guid;
     dronePort = d.dronePort;
     streamPort = d.streamPort;
     controllerIp = d.controllerIp;
     droneIp = d.droneIp;
-    streamPath= d.streamPath;
+    streamPath = d.streamPath;
     visionWidth = d.visionWidth;
 }
 
