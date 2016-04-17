@@ -197,7 +197,7 @@ private:
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
-    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
+    QList<QGeoCoordinate> *waypoints = new QList<QGeoCoordinate>(); //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 
