@@ -24,9 +24,21 @@ void System_Test::initTestCase()
     controller->getMediator()->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
 
     QList<DroneModule *> *list  = new QList<DroneModule *>();
-    list->append(controller->getDrones()->first());
+
+    // wait until a drone is connected to the controller
+    // the controller needs to wait until the drone sends a hello message, indicating that it is ready
+    while(controller->numDronesConnected() < 1) {
+        qDebug() << "wait until a drone is connected to the controller";
+        QTest::qWait(1000 * 5);
+    }
+
+    // select the first drone that has connected to the controller
+    DroneModule *drone = (*(controller->getDrones()))[0];
+
+    list->append(drone);
+
     s = new Search();
-    //the following parameters are defined through configwidget
+    //the following parameters are defined through the configwidget
     s->setFpsProcessing(0.5);
     s->setGimbalAngle(65);
     s->setHeight(3);

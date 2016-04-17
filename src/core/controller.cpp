@@ -61,7 +61,6 @@ void Controller::init()
     persistenceThread.start();
     pathLogicThread.start();
     droneThread.start();
-
 }
 
 void Controller::initStream(DroneModule *dm)
@@ -88,6 +87,11 @@ void Controller::onSearchEmitted(Search *s)
 {
     qDebug() << "Controller::saved search";
     search = s;
+}
+
+int Controller::numDronesConnected()
+{
+    return drones->size();
 }
 
 void Controller::startListeningForDrones()

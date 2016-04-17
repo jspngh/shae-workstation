@@ -35,6 +35,13 @@ public:
     ~Controller();
     void init();
 
+    /**
+     * \brief numDronesConnected returns the number of drones
+     * that are connected to the the system.
+     * \return positive integer (incl zero) indicating the number of drones connected.
+     */
+    int numDronesConnected();
+
     // getters
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones();
@@ -73,7 +80,7 @@ private:
     //TODO: due to some limitions in the streaming librairy VLC
     //      the application is only allowed to request one stream
     //      (even if there are multiple drones available).
-    //      The boolean oneStream will store if a stream is already requested
+    //      The boolean oneStream will store if a stream is already requested.
     bool oneStream = false;
 
     QString workstationIP;
