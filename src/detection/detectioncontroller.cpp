@@ -88,7 +88,6 @@ void DetectionController::streamFinished()
 
 }
 
-
 int DetectionController::getNrDetections()
 {
     return this->nrDetections;
@@ -109,7 +108,6 @@ void DetectionController::setPath(const QString &value)
     path = value;
 }
 
-
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time){
     if(frame.rows != 0 && frame.cols != 0)
     {
@@ -117,7 +115,7 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
         double orientation = droneStatus.getOrientation();
         DetectionList detectionList = this->manager.applyDetector(frame);
-        vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
+        vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second),1));
             nrDetections++;
@@ -129,7 +127,6 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         qDebug() << "Frame is empty";
     }
 }
-
 
 void DetectionController::parseConfiguration(int height, int gimbalAngle)
 {
