@@ -8,7 +8,7 @@ DetectionController_Test::DetectionController_Test(QObject *parent) : QObject(pa
 
 void DetectionController_Test::initTestCase()
 {
-    DroneModule *dm;
+    DroneModule *dm = new DroneModule(6330, 5502, "127.0.0.1", "127.0.0.1", "127.0.0.1", QString("rtp://127.0.0.1:5000"),  0.0001);
     QList<DroneModule *> droneList;
     droneList.append(dm);
     Search *s = new Search();
@@ -16,40 +16,17 @@ void DetectionController_Test::initTestCase()
     s->setGimbalAngle(65);
     s->setFpsProcessing(2);
     s->setDroneList(droneList);
-    Mediator *m;
-    PersistenceController *pc = new PersistenceController(m);
+    Mediator *m = new Mediator();
+    PersistenceController *pc = new PersistenceController();
+    pc->setMediator(m);
     // "dependencies/drone_stream.mpg"
     QString footage = "dependencies/testfootage.mp4";
-    VideoController *videoController;
+    VideoController *videoController = new VideoController();
     videoController->setSequencePath(footage);
     cv::VideoCapture capture = cv::VideoCapture(footage.toStdString());
     dm->setVideoController(videoController);
     this->controller = new DetectionController(s, dm, pc);
     this->controller->setSequence(capture);
-    this->numDetections = 0;
-}
-
-void DetectionController_Test::testIncorrectParseConfiguration()
-{
-    DroneModule *dm;
-    QList<DroneModule *> droneList;
-    droneList.append(dm);
-    Search *s = new Search();
-    s->setHeight(0);
-    s->setGimbalAngle(0);
-    s->setFpsProcessing(0);
-    s->setDroneList(droneList);
-    Mediator *m;
-    PersistenceController *pc = new PersistenceController(m);
-    QString footage = "dependencies/testfootage.mp4";
-    VideoController *videoController;
-    videoController->setSequencePath(footage);
-    dm->setVideoController(videoController);
-    DetectionController* d = new DetectionController(s, dm, pc);
-    //verify that the method has executed correctly
-    delete s;
-    delete d;
-    QVERIFY(true);
 }
 
 

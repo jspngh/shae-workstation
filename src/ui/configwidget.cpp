@@ -1,11 +1,5 @@
 #include "configwidget.h"
 #include "ui_configwidget.h"
-#include "mainwindow.h"
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <string>
-#include <sstream>
 #include <QGeoRectangle>
 #include <QDebug>
 #include <QCheckBox>
@@ -14,6 +8,8 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConfigWidget)
 {
+    this->areaWasSelected = false;
+
     //setup UI
     ui->setupUi(this);
 
@@ -23,18 +19,9 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     ui->droneTable->setColumnWidth(IP_PORT, 150);
     ui->droneTable->verticalHeader()->hide();
 
-    ui->droneTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->droneTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->precisionSlider->setMaximum(100);
-
     //setup connections
-    //welcomewidget
-    connect(((MainWindow *) parent)->getWelcomeWidget(), SIGNAL(configFileSignal(QString)), this, SLOT(initConfScreen(QString)));
-    //lowerbuttons:
-    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
-    connect(ui->backButton, SIGNAL(clicked()), this, SLOT(backButtonPush()));
     connect(ui->locateButton, SIGNAL(clicked()), this, SLOT(locateButtonPush()));
-    //slider
+    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
     connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
     initializeMap();
@@ -47,14 +34,10 @@ ConfigWidget::~ConfigWidget()
 
 void ConfigWidget::initializeMap()
 {
-    mapView = new QMMapView(QMMapView::Satellite,
-                            QGeoCoordinate(51.02, 3.73),
-                            11,
-                            true);
-    connect(mapView, SIGNAL(mapFailedToLoad()),
-            this, SLOT(onMapFailedToLoad()));
-    connect(mapView, SIGNAL(mapLoaded()),
-            this, SLOT(onMapLoaded()));
+    mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11, true);
+    connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
+    connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
+    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)), this, SLOT(areaSelected()));
 }
 
 void ConfigWidget::onMapLoaded()
@@ -66,8 +49,14 @@ void ConfigWidget::onMapLoaded()
 void ConfigWidget::onMapFailedToLoad()
 {
     ui->searchAreaLoadingLabel->setText(QString(
-        "Error loading map.\nPlease check your internet connection."
-    ));
+                                            "Error loading map.\nPlease check your internet connection."
+                                        ));
+}
+
+void ConfigWidget::areaSelected()
+{
+    this->areaWasSelected = true;
+    ui->startButton->setDisabled(false);
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)
@@ -86,45 +75,6 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
             mapView->shiftKeyPressed(false);
     }
     QWidget::keyReleaseEvent(event);
-}
-
-void ConfigWidget::initConfScreen(QString f)
-{
-    QFile file(f);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            QStringList splitLine = line.split(" ");
-            if (splitLine.at(0) == "Precision:") {
-                ui->PrecisionValueLabel->setText(splitLine.at(1));
-                ui->precisionSlider->setValue((((QString)splitLine.at(0).split("%").at(0)).toInt()));
-            } else if (splitLine.at(0) == "Search") {
-                ui->searchStrategyComboBox->setCurrentText((QString) splitLine.at(2));
-            } else if (splitLine.at(0) == "Location") {
-                ui->locateField->setText((QString) splitLine.at(3));
-            } else if (splitLine.at(0) == "Longitude") {
-                ui->longitudeField->setText((QString) splitLine.at(3));
-            } else if (splitLine.at(0) == "Latitude") {
-                ui->latitudeField->setText((QString) splitLine.at(3));
-            } else if (splitLine.at(0) == "Center") {
-                mapView->setCenter(QGeoCoordinate(splitLine.at(5).toDouble(), splitLine.at(4).toDouble(), splitLine.at(6).toDouble()));
-            } else if (splitLine.at(0) == "Bottom") {
-
-            } else if (splitLine.at(0) == "Top") {
-
-            }
-        }
-        file.close();
-    } else {
-        ui->PrecisionValueLabel->setText("0%");
-        ui->precisionSlider->setValue(0);
-        ui->searchStrategyComboBox->setCurrentIndex(0);
-        ui->locateField->setText("0");
-        ui->longitudeField->setText("0");
-        ui->latitudeField->setText("0");
-        mapView->setCenter(QGeoCoordinate(51.022692, 3.709853));
-    }
 }
 
 void ConfigWidget::sliderChanged(int value)
@@ -162,23 +112,15 @@ void ConfigWidget::startButtonPush()
     ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
 
-void ConfigWidget::backButtonPush()
-{
-    ((QStackedWidget *) this->parent())->setCurrentIndex(0);
-}
-
 void ConfigWidget::locateButtonPush()
 {
-    QString choice = ui->locateComboBox->currentText();
-    if (choice == "Location") {
+    if (ui->chooseLocationButton->isChecked()) {
         mapView->setCenter(ui->locateField->text());
-    } else if (choice == "Coordinates") {
-        mapView->setCenter(QGeoCoordinate(
-            ui->latitudeField->text().toDouble(),
-            ui->longitudeField->text().toDouble()
-        ));
     } else {
-        qWarning() << "User chose something else than \"Location\" or \"Coordinates\"";
+        mapView->setCenter(QGeoCoordinate(
+                               ui->latitudeField->text().toDouble(),
+                               ui->longitudeField->text().toDouble()
+                           ));
     }
 }
 
@@ -191,12 +133,31 @@ void ConfigWidget::setSignalSlots()
 }
 
 
-void ConfigWidget::updateMapCenter(DroneStatus s)
+void ConfigWidget::updateMapCenter(DroneStatus heartbeat)
 {
-    if(mapCentered) return;
+    if (!mapView->hasLoaded()) return;
 
-    mapView->setCenter(s.getCurrentLocation());
-    mapCentered = true;
+    // position drone on map
+    QGeoCoordinate center = heartbeat.getCurrentLocation();
+    QString id = heartbeat.getDrone()->getGuid().toString();
+    if (mapView->hasMarker(id)) {
+        QMMarker &marker = mapView->getMarker(id);
+        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.moveTo(center);
+    } else {
+        QMMarker &marker = mapView->addMarker(id, center);
+        marker.setIcon("qrc:///ui/icons/drone");
+        marker.scale(0.1, 0.1);
+        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.show();
+    }
+
+    // only center the map once
+    if (!mapCentered) {
+        mapView->setCenter(center);
+        mapView->setZoomLevel(11);
+        mapCentered = true;
+    }
 }
 
 
@@ -207,7 +168,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
     DroneModule *d = s.getDrone();
     int currentRow = getDroneInTableIndex(d);
 
-    if(currentRow == -1) {
+    if (currentRow == -1) {
         ui->droneTable->insertRow(ui->droneTable->rowCount());
         currentRow = ui->droneTable->rowCount() - 1;
     }
@@ -217,7 +178,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
     ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
 
     // set type
-    if(s.getType().isEmpty())
+    if (s.getType().isEmpty())
         ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Not available")));
     else
         ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(s.getType()));
@@ -227,7 +188,7 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
         ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
     else
         ui->droneTable->setItem(currentRow, BATTERY,
-                                new QTableWidgetItem(QString::number(s.getBatteryLevel()) +" %"));
+                                new QTableWidgetItem(QString::number(s.getBatteryLevel()) + " %"));
 
     // set ip and port
     QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
@@ -238,9 +199,10 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
 
 int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 {
-    for(int i = 0; i < dronesInTable.size(); i++)
-        if(dronesInTable[i].second->getGuid() == d->getGuid())
+    for (int i = 0; i < dronesInTable.size(); i++)
+        if (dronesInTable[i].second->getGuid() == d->getGuid())
             return i;
 
     return -1;
 }
+

@@ -34,7 +34,6 @@ Search* SearchDAO::dbSaveSearch(Search *search)
     query.bindValue(":gimballAngle", search->getGimbalAngle());
     query.bindValue(":fpsProcessing", search->getFpsProcessing());
     if (query.exec()) {
-        qDebug() << "insert search succes";
     } else {
         qDebug() << "addsearch error:  "
                  << query.lastError();

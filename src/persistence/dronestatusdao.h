@@ -1,11 +1,11 @@
 #ifndef DRONESTATUSDAO_H
 #define DRONESTATUSDAO_H
 
-#include <QtSql>
-#include <models/dronestatus.h>
-#include <communication/dronemodule.h>
 #include <QUuid>
+#include <QtSql>
 #include "generaldao.h"
+#include <communication/dronemodule.h>
+#include <models/dronestatus.h>
 
 /**
  * \brief The DroneStatusDAO class is responsible for loading and saving
@@ -48,6 +48,8 @@ public:
 private:
     //database
     QSqlDatabase *projectShaeDatabase;
+
+    QList<DroneStatus *> *retrieveQuery(QSqlQuery query);
 };
 
 #endif // DRONESTATUSDAO_H

@@ -18,16 +18,23 @@ UI_DIR = $$PWD/build/.ui
 # Input
 HEADERS += \
     core/qtmapkit_test.h \
+    core/droneheartbeat_integrationtest.h \
+    core/dronemodule_integrationtest.h \
+    core/droneconnection_integrationtest.h \
+    core/simulatorwrapper.h \
     core/system_test.h \
-    core/videostreamdetection_test.h \
     core/databasecreator.h \
     core/signalslot_persistence_test.h
+>>>>>>> develop
 
 SOURCES += \
     core/qtmapkit_test.cpp \
     main.cpp \
+    core/droneheartbeat_integrationtest.cpp \
+    core/dronemodule_integrationtest.cpp \
+    core/droneconnection_integrationtest.cpp \
+    core/simulatorwrapper.cpp \
     core/system_test.cpp \
-    core/videostreamdetection_test.cpp \
     core/databasecreator.cpp \
     core/signalslot_persistence_test.cpp
 

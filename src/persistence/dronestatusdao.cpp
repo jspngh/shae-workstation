@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 
-
 DroneStatusDAO::DroneStatusDAO()
 {
 
@@ -33,7 +32,7 @@ DroneStatus* DroneStatusDAO::dbSaveDroneStatus(DroneStatus *droneStatus)
                   ":nextWaypoints) ");
     query.bindValue(":droneID", droneStatus->getDrone()->getGuid());
     query.bindValue(":timestampDrone", droneStatus->getTimestampDrone());
-    query.bindValue(":timestampWorkstation", droneStatus->getTimestampReceivedWorkstation());
+    query.bindValue(":timestampReceivedWorkstation", droneStatus->getTimestampReceivedWorkstation());
     QGeoCoordinate location = droneStatus->getCurrentLocation();
     query.bindValue(":latitude", location.latitude());
     query.bindValue(":longitude", location.longitude());
@@ -62,11 +61,8 @@ DroneStatus* DroneStatusDAO::dbSaveDroneStatus(DroneStatus *droneStatus)
 
     QString pathString = QString(os.str().c_str());
 
-
     query.bindValue(":nextWaypoints", pathString);
-    if (query.exec()) {
-        qDebug() << "insert status succes with time " << droneStatus->getTimestampDrone();
-    } else {
+    if (!query.exec()) {
         qDebug() << "addDroneStatus error:  "
                  << query.lastError();
     }
@@ -77,99 +73,82 @@ DroneStatus* DroneStatusDAO::dbSaveDroneStatus(DroneStatus *droneStatus)
 QList<DroneStatus*>* DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
 {
     QSqlQuery query;
-    QList<DroneStatus*>* returnList = new QList<DroneStatus*>();
-    query.prepare("SELECT * FROM statuses where droneID = (:droneID) order by timestampDrone");
+    query.prepare("SELECT * FROM statuses"
+                  " WHERE droneID = (:droneID) AND timestampDrone > (:begin) AND timestampDrone < (:end) "
+                  " ORDER BY timestampDrone");
     query.bindValue(":droneID", droneId);
-    if (query.exec()) {
-        while (query.next()) {
-            if (begin <= query.value(1).toDateTime() && query.value(1).toDateTime() <= end) {
-                QList<QGeoCoordinate> nextWaypoints = *uncypherPathString(query.value(21).toString());
-                DroneStatus *output = new DroneStatus(query.value(1).toDateTime(), query.value(2).toDateTime(),
-                                                 QGeoCoordinate(query.value(3).toDouble(), query.value(4).toDouble()),
-                                                 query.value(5).toDouble(), query.value(6).toDouble(), query.value(7).toDouble() ,
-                                                 query.value(8).toDouble() , query.value(9).toDouble() , query.value(10).toDouble() ,
-                                                 query.value(11).toDouble() , query.value(12).toInt() , query.value(13).toInt(),
-                                                 query.value(14).toBool(), query.value(15).toInt(), query.value(16).toString(),
-                                                 query.value(17).toString(),
-                                                 QGeoCoordinate(query.value(19).toDouble(), query.value(18).toDouble()),
-                                                 query.value(20).toInt(),
-                                                 nextWaypoints);
-                returnList->append(output);
-            }
-        }
-    } else {
-        qDebug() << "getDronestatus error:  "
-                 << query.lastError();
-    }
-    return returnList;
+    query.bindValue(":begin", begin);
+    query.bindValue(":end", end);
+    return retrieveQuery(query);
 }
 
 //retrieve latest dronestatus
 DroneStatus* DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId)
 {
     QSqlQuery query;
-    QList<DroneStatus*> returnList = QList<DroneStatus*>();
-    query.prepare("SELECT * FROM statuses where droneID = (:droneID) order by timestampDrone");
+    query.prepare("SELECT * FROM statuses"
+                  " WHERE droneID = (:droneID)"
+                  " ORDER BY timestampDrone");
     query.bindValue(":droneID", droneId);
-    if (query.exec()) {
-        while (query.next()) {
-            QList<QGeoCoordinate> nextWaypoints = *uncypherPathString(query.value(21).toString());
-            DroneStatus *output = new DroneStatus(query.value(1).toDateTime(), query.value(2).toDateTime(),
-                                             QGeoCoordinate(query.value(3).toDouble(), query.value(4).toDouble()),
-                                             query.value(5).toDouble(), query.value(6).toDouble(), query.value(7).toDouble() ,
-                                             query.value(8).toDouble() , query.value(9).toDouble() , query.value(10).toDouble() ,
-                                             query.value(11).toDouble() , query.value(12).toInt() , query.value(13).toInt(),
-                                             query.value(14).toBool(), query.value(15).toInt(), query.value(16).toString(),
-                                             query.value(17).toString(),
-                                             QGeoCoordinate(query.value(19).toDouble(), query.value(18).toDouble()),
-                                             query.value(20).toInt(),
-                                             nextWaypoints);
-            returnList.append(output);
-        }
-    } else {
-        qDebug() << "getDronestatus error:  "
-                 << query.lastError();
-    }
-    return returnList.back();
+    return retrieveQuery(query).back();
 }
 
 //retrieve dronestatus closest to time parameter
 DroneStatus* DroneStatusDAO::dbRetrieveDroneStatus(QUuid droneId, QDateTime time)
 {
     QSqlQuery query;
-    QList<DroneStatus*> returnList = QList<DroneStatus*>();
-    query.prepare("SELECT * FROM statuses where droneID = (:droneID) order by timestampDrone");
+    query.prepare("SELECT * FROM statuses"
+                  " WHERE droneID = (:droneID) AND timestampDrone < (:time)"
+                  " ORDER BY timestampDrone");
     query.bindValue(":droneID", droneId);
-    if (query.exec()) {
-        while (query.next()) {
-            if (query.value(1).toDateTime() < time) {
-                QList<QGeoCoordinate> nextWaypoints = *uncypherPathString(query.value(21).toString());
-                DroneStatus *output = new DroneStatus(query.value(1).toDateTime(), query.value(2).toDateTime(),
-                                                 QGeoCoordinate(query.value(3).toDouble(), query.value(4).toDouble()),
-                                                 query.value(5).toDouble(), query.value(6).toDouble(), query.value(7).toDouble() ,
-                                                 query.value(8).toDouble() , query.value(9).toDouble() , query.value(10).toDouble() ,
-                                                 query.value(11).toDouble() , query.value(12).toInt() , query.value(13).toInt(),
-                                                 query.value(14).toBool(), query.value(15).toInt(), query.value(16).toString(),
-                                                 query.value(17).toString(),
-                                                 QGeoCoordinate(query.value(19).toDouble(), query.value(18).toDouble()),
-                                                 query.value(20).toInt(),
-                                                 nextWaypoints);
-                returnList.append(output);
-            }
-        }
+    query.bindValue(":time", time);
+    QList<DroneStatus*>* returnList = retrieveQuery(query);
+
+    if (returnList->size() > 0) {
+        return returnList->back();
     } else {
-        qDebug() << "getDronestatus error:  "
-                 << query.lastError();
-        qDebug() << "a bogus VideoSequence was created, which is necessary for unit and integration tests";
-        return new DroneStatus();
-    }
-    if(returnList.size()>0)
-    {
-        return returnList.back();
-    }
-    else
-    {
-        qDebug() << "a bogus VideoSequence was created, because the DroneStatusDAO has failed";
+        qDebug() << "a bogus DroneStatus was created, which is necessary for unit and integration tests";
         return new DroneStatus();
     }
 }
+
+QList<DroneStatus*>* DroneStatusDAO::retrieveQuery(QSqlQuery query)
+{
+    QList<DroneStatus*>* returnList = new QList<DroneStatus*>;
+    if (query.exec()) {
+        while (query.next()) {
+            QList<QGeoCoordinate> nextWaypoints = uncypherPathString(query.value(21).toString());
+            DroneStatus *output = new DroneStatus(
+                                     query.value(1).toDateTime(),
+                                     query.value(2).toDateTime(),
+                                     QGeoCoordinate(
+                                         query.value(3).toDouble(),
+                                         query.value(4).toDouble()),
+                                     query.value(5).toDouble(),
+                                     query.value(6).toDouble(),
+                                     query.value(7).toDouble(),
+                                     query.value(8).toDouble(),
+                                     query.value(9).toDouble(),
+                                     query.value(10).toDouble(),
+                                     query.value(11).toDouble(),
+                                     query.value(12).toInt(),
+                                     query.value(13).toInt(),
+                                     query.value(14).toBool(),
+                                     query.value(15).toInt(),
+                                     query.value(16).toString(),
+                                     query.value(17).toString(),
+                                     QGeoCoordinate(
+                                         query.value(19).toDouble(),
+                                         query.value(18).toDouble()),
+                                     query.value(20).toInt(),
+                                     nextWaypoints
+                                 );
+            returnList->append(output);
+        }
+    } else {
+        qDebug() << "getDronestatus error:  " << query.lastError();
+    }
+
+    return returnList;
+}
+

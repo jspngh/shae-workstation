@@ -1,7 +1,11 @@
+#include "core/droneheartbeat_integrationtest.h"
+#include "core/droneconnection_integrationtest.h"
+#include "core/dronemodule_integrationtest.h"
+
 #include "core/system_test.h"
 #include "core/signalslot_persistence_test.h"
-#include "core/videostreamdetection_test.h"
 #include "core/databasecreator.h"
+
 #include <QList>
 #include <QTest>
 #include <QApplication>
@@ -12,6 +16,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     QList<QObject *> tests;
+
     qRegisterMetaType<DetectionResult>("DetectionResult");
     qRegisterMetaType<VideoSequence>("VideoSequence");
     qRegisterMetaType<Search>("Search");
@@ -23,14 +28,18 @@ int main(int argc, char *argv[])
     db.removeDatabase();
     db.initDatabase();
 
-    //tests.append(new VideostreamDetection_Test());
-    //tests.append(new System_Test());
     tests.append(new SignalSlotPersistenceTest());
+    tests.append(new Dronemodule_IntegrationTest());
+    tests.append(new Droneconnection_IntegrationTest());
+    tests.append(new DroneHeartbeat_IntegrationTest());
+    tests.append(new System_Test());
+
     foreach (QObject *test, tests) {
         QTest::qExec(test, a.arguments());
     }
     qDeleteAll(tests.begin(), tests.end());
-    //db.removeDatabase();
+
+    db.removeDatabase();
     return 0;
 }
 

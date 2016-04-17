@@ -34,12 +34,12 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
     QString id = heartbeat->getDrone()->getGuid().toString();
     if(mapView->hasMarker(id)) {
         QMMarker& marker = mapView->getMarker(id);
-        marker.moveTo(heartbeat->getCurrentLocation());
         marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
+        marker.moveTo(heartbeat->getCurrentLocation());
     } else {
         QMMarker& marker = mapView->addMarker(id, heartbeat->getCurrentLocation());
-        marker.setIcon("qrc:///ui/img/map/drone-icon");
-        marker.scale(0.2, 0.2);
+        marker.setIcon("qrc:///ui/icons/drone");
+        marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.show();
     }
@@ -59,6 +59,8 @@ void OverviewWidget::updateDroneList(DroneStatus *s)
 void OverviewWidget::onSearchStarted(Search *s)
 {
     this->search = s;
+
+    // Initialize map
     mapView = new QMMapView(QMMapView::Satellite,
                             s->getArea().center(),
                             11,
@@ -69,15 +71,20 @@ void OverviewWidget::onSearchStarted(Search *s)
     connect(mapView, SIGNAL(mapLoaded()),
             this, SLOT(onMapLoaded()));
 
+    // Show search details
+    searchDetails = new OverviewSearchItem(s, this);
+    ui->sidebar->insertWidget(0, searchDetails);
+
+    // Fill list drones
     fillDroneList();
 }
 
 void OverviewWidget::fillDroneList()
 {
     uint i = 1;
-    Q_FOREACH(DroneModule *drone, search->getDroneList()) {
+    Q_FOREACH (DroneModule *drone, search->getDroneList()) {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setSizeHint(QSize(0, 150));
+        item->setSizeHint(QSize(0, 170));
         ui->droneList->addItem(item);
 
         OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
@@ -99,7 +106,7 @@ void OverviewWidget::onMapLoaded()
 void OverviewWidget::onMapFailedToLoad()
 {
     ui->mapLoadingLabel->setText(QString(
-        "Error loading map.\nPlease check your internet connection."
-    ));
+                                     "Error loading map.\nPlease check your internet connection."
+                                 ));
 }
 

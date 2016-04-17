@@ -34,8 +34,8 @@ private:
     void onStreamStarted();
     void onStreamStopped();
     QProcess *simulatorProcess;
-    StreamConnection* streamConnection;
-    QThread* streamThread;
+    StreamConnection *streamConnection;
+    QThread *streamThread;
     bool started, stopped;
     VideoController vc;
 };

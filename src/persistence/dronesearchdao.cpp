@@ -31,7 +31,6 @@ QList<QGeoCoordinate>* DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid sear
 
     query.bindValue(":path", pathString);
     if (query.exec()) {
-        qDebug() << "insert path succes";
     } else {
         qDebug() << "addPath error:  "
                  << query.lastError();

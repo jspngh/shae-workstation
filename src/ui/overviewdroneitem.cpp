@@ -6,7 +6,11 @@ OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *p
       ui(new Ui::OverviewDroneItem)
 {
     ui->setupUi(this);
+
     setDroneNr(number);
+
+    connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
+    connect(ui->haltButton, SIGNAL(clicked()), drone, SLOT(stopFlight()));
 }
 
 OverviewDroneItem::~OverviewDroneItem()
@@ -24,7 +28,7 @@ void OverviewDroneItem::setDroneNr(uint number)
 void OverviewDroneItem::updateStatus(DroneStatus status)
 {
     double batteryLevel = status.getBatteryLevel();
-    if(batteryLevel != -1)
+    if (batteryLevel != -1)
         ui->batteryValue->setText(QString::number(batteryLevel) + "%");
 }
 

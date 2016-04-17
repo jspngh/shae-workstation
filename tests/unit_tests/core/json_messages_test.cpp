@@ -31,22 +31,27 @@ void Json_Messages_Test::testNavigationMessages()
     usleep(1000);
     QJsonDocument doc4 = drone->stopFlight();
     usleep(1000);
+    QJsonDocument doc5 = drone->returnToHome();
+    usleep(1000);
 
     QJsonObject json1 = doc1.object();
     QJsonObject json2 = doc2.object();
     QJsonObject json3 = doc3.object();
     QJsonObject json4 = doc4.object();
+    QJsonObject json5 = doc5.object();
 
     //compare extracted fields to required fields
     QVERIFY(json1["message_type"] == QString("navigation"));
     QVERIFY(json2["message_type"] == QString("navigation"));
     QVERIFY(json3["message_type"] == QString("navigation"));
     QVERIFY(json4["message_type"] == QString("navigation"));
+    QVERIFY(json5["message_type"] == QString("navigation"));
 
     QVERIFY(json1["message"] == QString("emergency"));
     QVERIFY(json2["message"] == QString("path"));
     QVERIFY(json3["message"] == QString("start"));
     QVERIFY(json4["message"] == QString("stop"));
+    QVERIFY(json5["message"] == QString("rth"));
 
     QJsonArray waypoints = json2["waypoints"].toArray();
     QVERIFY(waypoints.at(0).toObject()["order"] == 1);

@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QList>
+#include <QtMath>
 #include <QMMapView.h>
 #include <QMainWindow>
 #include <QPair>
@@ -36,13 +37,12 @@ signals:
 public slots:
     void onMapLoaded();
     void onMapFailedToLoad();
-    void initConfScreen(QString);
 
 private slots:
     void startButtonPush();
-    void backButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
+    void areaSelected();
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
     void updateDroneTable(DroneStatus s);
     void updateMapCenter(DroneStatus s);
@@ -51,6 +51,9 @@ private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView;
     Mediator *mediator;
+
+    bool areaWasSelected = false;
+    bool mapCentered = false;
 
     void writeConfigToFile();
     void initializeMap();
@@ -61,8 +64,6 @@ private:
     // Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
     int getDroneInTableIndex(DroneModule *d);
-
-    bool mapCentered = false;
 
     QList<QPair<int, DroneModule *>> dronesInTable;
 

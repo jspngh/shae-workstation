@@ -4,13 +4,14 @@
 #include <QObject>
 #include "core/mediator.h"
 #include "persistence.h"
+#include "detectionresultwriter.h"
 
 class PersistenceController : public QObject
 {
     Q_OBJECT
 public:
     explicit PersistenceController(QObject *parent = 0);
-    ~PersistenceController(){}
+    ~PersistenceController() {}
 
     // Setter
     void setMediator(Mediator *mediator);
@@ -29,11 +30,13 @@ public slots:
     void saveDroneStatus(DroneStatus *ds);
     void saveDetectionResult(QUuid droneId, DetectionResult *dr);
     void saveVideoSequence(QUuid droneId, VideoSequence *vs);
+    void printDetectionResult(QUuid searchId, QString fileName);
 
 private:
     Mediator *mediator;
     Persistence *persistence;
     Search *currentSearch;
+    DetectionResultWriter *detectionresultwriter;
 };
 
 #endif // PERSISTENCECONTROLLER_H

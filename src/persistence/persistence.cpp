@@ -103,6 +103,11 @@ QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid droneId, QU
     return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
 }
 
+QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid searchId)
+{
+    return detectionresultdao.dbRetrieveDetectionResults(searchId);
+}
+
 void Persistence::initDatabase()
 {
     bool dbNotCreatedYet = false;
@@ -155,7 +160,7 @@ void Persistence::createDatabase()
         QStringList queryStrings = QTextStream(&sqlScheme).readAll().split(';');
         // Can't execute several queries at once, so split them
         // and execute them one by one.
-        Q_FOREACH(QString queryString, queryStrings) {
+        Q_FOREACH (QString queryString, queryStrings) {
             if (!query.exec(queryString))
                 qDebug() << "Could not issue command: " << queryString;
         }

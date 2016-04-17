@@ -7,15 +7,17 @@
 #include <QApplication>
 #include "core/controller.h"
 #include "ui/mainwindow.h"
+#include "simulatorwrapper.h"
+
 
 class System_Test : public QObject
 {
     Q_OBJECT
 
 private:
-    Controller * controller;
-    Search* s;
-    QProcess *simulatorProcess;
+    Controller *controller;
+    Search *s;
+    SimulatorWrapper *simulator;
 
 
 public:

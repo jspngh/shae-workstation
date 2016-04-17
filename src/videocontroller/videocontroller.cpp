@@ -18,13 +18,15 @@ void VideoController::setSequencePath(QString sp)
 void VideoController::setMediator(Mediator *m)
 {
     this->mediator = m;
-
     mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence)), QString("streamStarted(QUuid, VideoSequence)"));
     mediator->addSignal(this, SIGNAL(streamStopped()), QString("streamStopped()"));
 }
 
-VideoSequence VideoController::onStartStream(Drone * drone)
+
+VideoSequence VideoController::onStartStream(Drone *drone)
 {
+    QFile::remove(QString("dependencies/drone_stream.mpg"));
+    qDebug() << "starting to save the stream";
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
@@ -34,11 +36,11 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     if (drone->getStreamPath().contains(QString("rtp://"))) {
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
-        bufferSize = 8*1024*1024;
+        bufferSize = 8 * 1024 * 1024;
     } else {
         qDebug("started stream from sdp file");
         m = libvlc_media_new_path(inst, drone->getStreamPath().toStdString().c_str());
-        bufferSize = 2*1024*1024;
+        bufferSize = 2 * 1024 * 1024;
     }
 
     /* Create a media player playing environement */
@@ -54,9 +56,9 @@ VideoSequence VideoController::onStartStream(Drone * drone)
     int maxBuffertime = 60;
     int buffertime = 0;
     QFile droneFile("dependencies/drone_stream.mpg");
-    if (droneFile.open(QIODevice::ReadOnly)){
+    if (droneFile.open(QIODevice::ReadOnly)) {
         size = droneFile.size();  //when file does open.
-        while(size<bufferSize && buffertime<maxBuffertime){
+        while (size < bufferSize && buffertime < maxBuffertime) {
             buffertime++;
             QThread::sleep(1);
             size = droneFile.size();  //when file does open.

@@ -54,6 +54,8 @@ public:
     cv::VideoCapture getSequence() const;
     void setSequence(const cv::VideoCapture &value);
 
+    void setPath(const QString &value);
+
 signals:
     /*!
      * \brief the signal that is emitted when a new detection result has been found in the footage.
@@ -75,7 +77,7 @@ private:
     int nrDetections;
     volatile bool streaming;
     Search *search;
-    DroneModule * droneModule;
+    DroneModule *droneModule;
     QUuid droneId;
     QString path;
     PersistenceController *persistenceController;
