@@ -22,22 +22,11 @@ public:
     explicit WelcomeWidget(QWidget *parent = 0);
     ~WelcomeWidget();
 
-signals:
-    void configFileSignal(QString fileName);
-
-private slots:
-    void continueButtonPush();
-    void browse();
-    void find();
-    //void openFileOfItem(int row, int column);
+private slots:   
+    void on_configSearchButton_clicked();
 
 private:
     Ui::WelcomeWidget *ui;
-
-    QStringList findFiles(const QStringList &files, const QString &text);
-    void showFiles(const QStringList &files);
-
-    QDir currentDir;
 };
 
 #endif // WELCOMEWIDGET_H
