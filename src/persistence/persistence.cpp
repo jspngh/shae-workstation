@@ -68,6 +68,11 @@ Drone Persistence::retrieveDrone(QUuid droneId)
     return dronedao.dbRetrieveDrone(droneId);
 }
 
+QList<QUuid> Persistence::retrieveDroneIds(QUuid searchId)
+{
+    return dronesearchdao.dbRetrieveDroneIds(searchId);
+}
+
 void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path)
 {
     dronesearchdao.dbSaveDronePath(droneId, searchId, *path);

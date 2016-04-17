@@ -29,6 +29,11 @@ public:
      * certain drone and search.
      */
     QList<QGeoCoordinate> dbRetrieveDronePath(QUuid droneId, QUuid searchId);
+    /**
+     * \brief dbRetrieveDroneIds Retrieves the ids from the drones for a
+     * certain search.
+     */
+    QList<QUuid> dbRetrieveDroneIds(QUuid searchId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

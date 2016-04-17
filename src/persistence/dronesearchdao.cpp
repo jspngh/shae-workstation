@@ -57,3 +57,22 @@ QList<QGeoCoordinate> DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid s
     return returnList;
 }
 
+QList<QUuid> DroneSearchDAO::dbRetrieveDroneIds(QUuid searchId)
+{
+    QSqlQuery query;
+    QList<QUuid> returnList = QList<QUuid>();
+    query.prepare("SELECT droneID FROM dronessearches WHERE searchID = (:searchID)");
+    query.bindValue(":searchID", searchId);
+    if (query.exec()) {
+        if (query.next()) {
+            QUuid *droneId = new QUuid(query.value(0).toString());
+            qDebug() << *droneId << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$";
+            returnList.append(*droneId);
+        }
+    } else {
+        qDebug() << "getDroneId error:  "
+                 << query.lastError();
+    }
+    return returnList;
+}
+

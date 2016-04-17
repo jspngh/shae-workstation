@@ -59,7 +59,20 @@ void PersistenceController::saveVideoSequence(QUuid droneId, VideoSequence vs)
 
 Search PersistenceController::retrieveSearch(QUuid searchId)
 {
-    return persistence->retrieveSearch(searchId);
+    Search s = persistence->retrieveSearch(searchId);
+
+    QList<QUuid> droneIds = persistence->retrieveDroneIds(searchId);
+    QList<DroneModule*> droneModules = QList<DroneModule*>();
+    foreach (QUuid droneId, droneIds)
+    {
+        DroneModule *dm = new DroneModule();
+        Drone drone = persistence->retrieveDrone(droneId);
+        dm->setDrone(&drone);
+        droneModules.append(dm);
+    }
+    s.setDroneList(droneModules);
+
+    return s;
 }
 
 QList<QGeoCoordinate> PersistenceController::retrieveDronePaths(QUuid droneId, QUuid searchId)

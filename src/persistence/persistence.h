@@ -35,6 +35,7 @@ public:
     DroneStatus retrieveDroneStatus(QUuid droneId, QDateTime time);
     QList<QGeoCoordinate> retrieveDronePath(QUuid droneId, QUuid searchId);
     Drone retrieveDrone(QUuid droneId);
+    QList<QUuid> retrieveDroneIds(QUuid searchId);
     VideoSequence retrieveVideoSequence(QUuid droneId, QUuid searchId);
     QList<DetectionResult> retrieveDetectionResults(QUuid droneId, QUuid searchId);
 
@@ -45,6 +46,7 @@ public:
     //will register a videosequence in the database (already saved in location)
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
     void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
+
 
 public slots:
 
