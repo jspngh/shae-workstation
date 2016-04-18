@@ -1,25 +1,25 @@
 <RCC>
-  <qresource prefix="/ui/styles/">
-    <file alias="main">ui/styles/main.qss</file>
-    <file alias="dark_orange">ui/styles/dark_orange.qss</file>
-  </qresource>
-
-  <qresource prefix="/ui/icons/">
-    <file alias="battery">ui/img/battery-icon.jpg</file>
-    <file alias="checkbox">ui/img/checkbox.png</file>
-    <file alias="down_arrow">ui/img/down_arrow.png</file>
-    <file alias="drone">ui/img/drone-icon.png</file>
-    <file alias="emergency">ui/img/exclamation-icon.png</file>
-    <file alias="export">ui/img/export-icon.png</file>
-    <file alias="handle">ui/img/handle.png</file>
-    <file alias="halt">ui/img/hand-icon.png</file>
-    <file alias="home">ui/img/home-icon.png</file>
-    <file alias="search">ui/img/radar-icon.png</file>
-    <file alias="wireless">ui/img/wireless-icon.png</file>
-  </qresource>
-
-  <qresource prefix="/db">
-    <file alias="createTables.sql">../scripts/createDB.sql</file>
-  </qresource>
+    <qresource prefix="/ui/styles">
+        <file alias="main">ui/styles/main.qss</file>
+        <file alias="dark_orange">ui/styles/dark_orange.qss</file>
+    </qresource>
+    <qresource prefix="/ui/icons">
+        <file alias="battery">ui/img/battery-icon.jpg</file>
+        <file alias="checkbox">ui/img/checkbox.png</file>
+        <file alias="down_arrow">ui/img/down_arrow.png</file>
+        <file alias="drone">ui/img/drone-icon.png</file>
+        <file alias="emergency">ui/img/exclamation-icon.png</file>
+        <file alias="export">ui/img/export-icon.png</file>
+        <file alias="handle">ui/img/handle.png</file>
+        <file alias="halt">ui/img/hand-icon.png</file>
+        <file alias="home">ui/img/home-icon.png</file>
+        <file alias="search">ui/img/radar-icon.png</file>
+        <file alias="wireless">ui/img/wireless-icon.png</file>
+    </qresource>
+    <qresource prefix="/db">
+        <file alias="createTables.sql">../scripts/createDB.sql</file>
+    </qresource>
+    <qresource prefix="/scripts">
+        <file alias="kill_simulator.sh">scripts/kill_simulator.sh</file>
+    </qresource>
 </RCC>
-
