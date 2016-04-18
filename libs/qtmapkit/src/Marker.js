@@ -10,28 +10,48 @@
      */
     function Marker(map, locationLat, locationLng) {
         this.map = map;
-        this.canvas = document.createElement("canvas");
-        this.image;
-        this.imgLoadedPromise;
 
-        this.rotation = 0;
-
+        // Location stuff
         var location;
         if(locationLat && locationLng)
             location = new google.maps.LatLng(locationLat, locationLng);
         else
             location = map.getCenter();
 
+        // Icon stuff
+        this.canvas = document.createElement("canvas");
+        this.image;
+        this.imgLoadedPromise;
+        this.rotation = 0;
+
+        // Tracking stuff
+        this.visitedPoints = [location];
+        this.trackedPath = new google.maps.Polyline({
+            map: this.map,
+            path: this.visitedPoints,
+            clickable: false,
+            strokeColor: '#DF0000',
+            strokeOpacity: 0.3,
+            visible: false
+        });
+
+        // Actual marker
         this.marker = new google.maps.Marker({
             position: location,
             clickable: false
         });
     }
 
-    /* Move the marker to the given position.
+    /* Show the marker on the map.
      */
     Marker.prototype.show = function() {
         this.marker.setMap(this.map);
+    };
+
+    /* Track the marker's path.
+     */
+    Marker.prototype.trackPath = function() {
+        this.trackedPath.setVisible(true);
     };
 
     /* Move the marker to the given position.
@@ -39,9 +59,11 @@
      * @param {number} longitude The longitude of the marker's new location.
      */
     Marker.prototype.moveTo = function(latitude, longitude) {
-        this.marker.setPosition(
-            new google.maps.LatLng(latitude, longitude)
-        );
+        var point = new google.maps.LatLng(latitude, longitude);
+        this.marker.setPosition(point);
+
+        this.visitedPoints.push(point);
+        this.trackedPath.setPath(this.visitedPoints);
     };
 
     /* Rotate the marker by a given amount of degrees.
