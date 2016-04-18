@@ -29,6 +29,9 @@
         this.trackedPath = new google.maps.Polyline({
             map: this.map,
             path: this.visitedPoints,
+            clickable: false,
+            strokeColor: '#DF0000',
+            strokeOpacity: 0.3,
             visible: false
         });
 
