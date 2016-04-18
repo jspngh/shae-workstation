@@ -38,7 +38,8 @@ HEADERS += \
     core/parseexception_test.h \
     core/streamconnection_test.h \
     core/droneheartbeatreceiver_test.h \
-    core/xmlwriter_test.h
+    core/xmlwriter_test.h \
+    core/hellomessage_test.h
 
 
 SOURCES += \
@@ -63,7 +64,8 @@ SOURCES += \
     core/parseexception_test.cpp \
     core/streamconnection_test.cpp \
     core/droneheartbeatreceiver_test.cpp \
-    core/xmlwriter_test.cpp
+    core/xmlwriter_test.cpp \
+    core/hellomessage_test.cpp
 
 # c++11
 CONFIG += c++11

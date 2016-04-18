@@ -20,9 +20,9 @@ private Q_SLOTS:
     void testSettingsMessages();
 
 private:
-    SimulatorWrapper* sim;
-    DroneModule* drone;
-    Mediator* m;
+    SimulatorWrapper *sim;
+    DroneModule *drone;
+    Mediator *m;
     QThread th;
     int count;
 

@@ -20,7 +20,7 @@ public:
     inline QVariant evaluateMethod(const QString &eval)
     {
         QString script = QString("mapKit.getMarker(\"%1\").%2;")
-            .arg(id).arg(eval);
+                         .arg(id).arg(eval);
         return frame->evaluateJavaScript(script);
     }
 };
@@ -64,8 +64,8 @@ void QMMarker::moveTo(const QGeoCoordinate &to)
 {
     Q_D(QMMarker);
     d->evaluateMethod(QString("moveTo(%1, %2)")
-        .arg(to.latitude()).arg(to.longitude())
-    );
+                      .arg(to.latitude()).arg(to.longitude())
+                     );
     d->location = to;
 }
 
@@ -73,15 +73,15 @@ void QMMarker::rotate(const double degrees)
 {
     Q_D(QMMarker);
     d->evaluateMethod(QString("rotate(%1)")
-        .arg(degrees)
-    );
+                      .arg(degrees)
+                     );
     d->orientation += degrees;
 }
 
 void QMMarker::setOrientation(const double degrees)
 {
     Q_D(QMMarker);
-    if(degrees == d->orientation) return;
+    if (degrees == d->orientation) return;
 
     rotate(degrees - d->orientation);
 }
@@ -90,17 +90,17 @@ void QMMarker::scale(const double width, const double height)
 {
     Q_D(QMMarker);
     d->evaluateMethod(QString("scale(%1, %2)")
-        .arg(width)
-        .arg(height)
-    );
+                      .arg(width)
+                      .arg(height)
+                     );
 }
 
 void QMMarker::setIcon(const QString resource)
 {
     Q_D(QMMarker);
     d->evaluateMethod(QString("setIcon(\"%1\")")
-        .arg(resource)
-    );
+                      .arg(resource)
+                     );
     d->orientation = 0;
 }
 

@@ -29,16 +29,16 @@ void OverviewWidget::setMediator(Mediator *mediator)
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
 {
-    if(!mapViewLoaded) return;
+    if (!mapViewLoaded) return;
     ui->heartBeat->setText(heartbeat.toString());
 
     QString id = heartbeat.getDrone()->getGuid().toString();
-    if(mapView->hasMarker(id)) {
-        QMMarker& marker = mapView->getMarker(id);
+    if (mapView->hasMarker(id)) {
+        QMMarker &marker = mapView->getMarker(id);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
         marker.moveTo(heartbeat.getCurrentLocation());
     } else {
-        QMMarker& marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
+        QMMarker &marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
@@ -73,7 +73,7 @@ void OverviewWidget::exportSearchButtonPush()
 void OverviewWidget::updateDroneList(DroneStatus s)
 {
     const QUuid droneId = s.getDrone()->getGuid();
-    if(mapIdListItem.contains(droneId))
+    if (mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(s);
 }
 
@@ -103,7 +103,7 @@ void OverviewWidget::onSearchStarted(Search *s)
 void OverviewWidget::fillDroneList()
 {
     uint i = 1;
-    Q_FOREACH(DroneModule *drone, search->getDroneList()) {
+    Q_FOREACH (DroneModule *drone, search->getDroneList()) {
         QListWidgetItem *item = new QListWidgetItem();
         item->setSizeHint(QSize(0, 170));
         ui->droneList->addItem(item);
@@ -127,7 +127,7 @@ void OverviewWidget::onMapLoaded()
 void OverviewWidget::onMapFailedToLoad()
 {
     ui->mapLoadingLabel->setText(QString(
-        "Error loading map.\nPlease check your internet connection."
-    ));
+                                     "Error loading map.\nPlease check your internet connection."
+                                 ));
 }
 

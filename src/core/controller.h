@@ -3,9 +3,11 @@
 
 #include <QList>
 #include <QDebug>
+#include <QUuid>
+#include <QUdpSocket>
+#include <QThread>
 
 #include "mediator.h"
-#include <QThread>
 #include "communication/droneconnection.h"
 #include "communication/droneheartbeatreceiver.h"
 #include "communication/dronemodule.h"
@@ -15,6 +17,7 @@
 #include "persistence/persistencecontroller.h"
 #include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"
+#include "models/hellomessage.h"
 
 namespace Core {
 class Controller;
@@ -31,31 +34,65 @@ public:
     Controller(MainWindow *window, QObject *p = 0);
     ~Controller();
     void init();
+
+    /**
+     * \brief numDronesConnected returns the number of drones
+     * that are connected to the the system.
+     * \return positive integer (incl zero) indicating the number of drones connected.
+     */
+    int numDronesConnected();
+
+    // getters
     Mediator *getMediator() const;
     QList<DroneModule *> *getDrones();
-    void setDrones(QList<DroneModule *>* list);
-
     Search *getSearch() const;
-    QString initWorkstationIP();
-
+    DetectionController *getDetectionController() const;
     QString getWorkstationIP() const;
-public slots:
-    void onSearchEmitted(Search* s);
-    void initStream(DroneModule* dm);
-    void stopStream(DroneModule* dm);
-signals:
-    void startStreamSignal(Search* s, DroneModule* d, PersistenceController*p);
-    void stopStreamSignal(DroneModule* d);
+
+    // only used for test purposes
+    void setDrones(QList<DroneModule *> *list);
 
 private:
+    void processHelloMessage(QByteArray helloRaw);
+    QString initWorkstationIP();
+    //!< listens for hello messages from drones on the network
+    void startListeningForDrones();
+
+    //!< return the dronemodule if the drone with the ip has already send a hello message
+    //!< if the drone hasn't send hello yet the nullptr is returned
+    DroneModule *receivedHelloFrom(QString ip);
+
+    //!< will configure a drone:
+    //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
+    DroneModule *configureDrone(DroneModule *drone);
+
+public slots:
+    void onSearchEmitted(Search *s);
+    void readPendingDatagrams();
+    void initStream(DroneModule *dm);
+    void stopStream(DroneModule *dm);
+
+signals:
+    void startStreamSignal(Search *s, DroneModule *d, PersistenceController *p);
+    void stopStreamSignal(DroneModule *d);
+
+private:
+    //TODO: due to some limitions in the streaming librairy VLC
+    //      the application is only allowed to request one stream
+    //      (even if there are multiple drones available).
+    //      The boolean oneStream will store if a stream is already requested.
+    bool oneStream = false;
+
     QString workstationIP;
     MainWindow *mainWindow;
     Mediator *mediator;
-    QList<DroneModule *>* drones;
+    QList<DroneModule *> *drones;
 
     PersistenceController *persistenceController;
     PathAlgorithm *pathLogicController;
-    Search* search;
+    Search *search;
+    QUdpSocket *udpSocket;
+    QHostAddress *host;
 
     QThread pathLogicThread;
     QThread droneThread;

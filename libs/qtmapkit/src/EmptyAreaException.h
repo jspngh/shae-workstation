@@ -10,7 +10,7 @@ class EmptyAreaException : public QException
 {
 public:
     void raise() const;
-    EmptyAreaException* clone() const;
+    EmptyAreaException *clone() const;
 };
 
 #endif // EMPTYAREAEXCEPTION_H

@@ -31,7 +31,7 @@ void OverviewSearchItem::incrementDuration()
     duration++;
     QString format = QString("%1:%2");
     QString time = format.arg(duration / 60, 2, 10, QChar('0'))
-                         .arg(duration % 60, 2, 10, QChar('0'));
+                   .arg(duration % 60, 2, 10, QChar('0'));
     ui->durationValue->setText(time);
 }
 

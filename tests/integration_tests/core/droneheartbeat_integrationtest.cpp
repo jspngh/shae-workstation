@@ -12,7 +12,7 @@ void DroneHeartbeat_IntegrationTest::initTestCase()
     simulator = new SimulatorWrapper();
     simulator->startSimulator();
 
-    drone = new DroneModule(6330, 5502,QString("127.0.0.1"), QString("127.0.0.1"),QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
+    drone = new DroneModule(6330, 5502, QString("127.0.0.1"), QString("127.0.0.1"), QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
     m = new Mediator();
 
     drone->setMediator(m);
@@ -42,14 +42,11 @@ void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 {
 
 
-    DroneHeartBeatReceiver* receiver = drone->getHeartbeatReceiver();
+    DroneHeartBeatReceiver *receiver = drone->getHeartbeatReceiver();
     connect(receiver, SIGNAL(droneHeartBeat(QString)), this, SLOT(onDroneHeartbeatReceived(QString)));
 
 
-
-
-
-    QTest::qWait(5000);
+    QTest::qWait(10000);
     QVERIFY(count > 0);
     qDebug() << "Heartbeats get received";
 

@@ -27,8 +27,7 @@ void GeneralDAO_Test::testUncypherGeneralDAO()
     QList<QGeoCoordinate> returnList = generaldao.uncypherPathString(testString);
     QVERIFY(returnList.size() == 4);
     double i = 5;
-    for(QGeoCoordinate coordinate: returnList)
-    {
+    for (QGeoCoordinate coordinate : returnList) {
         QVERIFY(coordinate.longitude() == i);
         QVERIFY(coordinate.latitude() == i);
         i++;

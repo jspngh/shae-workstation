@@ -13,7 +13,7 @@ public:
     void stopSimulator();
 
 
-    QProcess* simulatorProcess;
+    QProcess *simulatorProcess;
 };
 
 #endif // SIMULATORWRAPPER_H

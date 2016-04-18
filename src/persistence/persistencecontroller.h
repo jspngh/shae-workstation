@@ -10,7 +10,7 @@ class PersistenceController : public QObject
     Q_OBJECT
 public:
     explicit PersistenceController(QObject *parent = 0);
-    ~PersistenceController(){}
+    ~PersistenceController() {}
 
     // Setter
     void setMediator(Mediator *mediator);

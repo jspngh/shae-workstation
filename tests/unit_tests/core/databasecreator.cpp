@@ -64,7 +64,7 @@ void DatabaseCreator::createDatabase()
         QStringList queryStrings = QTextStream(&sqlScheme).readAll().split(';');
         // Can't execute several queries at once, so split them
         // and execute them one by one.
-        Q_FOREACH(QString queryString, queryStrings) {
+        Q_FOREACH (QString queryString, queryStrings) {
             if (!query.exec(queryString))
                 qDebug() << "Could not issue command: " << queryString;
         }
@@ -77,7 +77,7 @@ void DatabaseCreator::removeDatabase()
 {
     QString location = databaseLocation();
     QFileInfo checkFile(location);
-    if(checkFile.exists())
+    if (checkFile.exists())
         QFile::remove(databaseLocation());
 }
 

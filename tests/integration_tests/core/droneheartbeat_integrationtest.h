@@ -20,9 +20,9 @@ private Q_SLOTS:
 
 
 private:
-    SimulatorWrapper* simulator;
-    DroneModule* drone;
-    Mediator* m;
+    SimulatorWrapper *simulator;
+    DroneModule *drone;
+    Mediator *m;
     QThread th;
     int count;
 

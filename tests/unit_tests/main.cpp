@@ -12,6 +12,7 @@
 #include "core/mediator_test.h"
 #include "core/pathalgorithm_test.h"
 #include "core/dronestatus_test.h"
+#include "core/hellomessage_test.h"
 
 #include "core/parseexception_test.h"
 #include "core/streamconnection_test.h"
@@ -50,10 +51,11 @@ int main(int argc, char *argv[])
     /********************
      * Testing jsonstuff
      * *****************/
-    //sending using dronemodule (inside communication)
+    // sending using dronemodule (inside communication)
     tests.append(new Json_Messages_Test());
-    //receiving using dronestatus (inside models
+    // receiving using dronestatus (inside models)
     tests.append(new DroneStatus_Test());
+    tests.append(new HelloMessage_Test());
 
     /************************
      * Testing communication
@@ -66,9 +68,6 @@ int main(int argc, char *argv[])
      * Testing persistence
      * *****************/
     tests.append(new SearchDAO_Test());
-
-
-
 
     tests.append(new DetectionResultDAO_Test());
     tests.append(new DroneDAO_Test());
