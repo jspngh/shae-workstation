@@ -9,6 +9,8 @@ Controller::Controller(MainWindow *window, QObject *p)
     mediator = new Mediator();
 
     retrieveWorkstationIpAndBroadcast();
+    qDebug() << workstationBroadcastIp;
+    qDebug() << workstationIp;
 
     drones = new QList<DroneModule *>();
 
