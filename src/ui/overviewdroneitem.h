@@ -19,6 +19,8 @@ public:
 
 public slots:
     void setDroneNr(uint number);
+    void setBatteryLevel(double level);
+    void setSearchedArea(double area);
     void updateStatus(DroneStatus status);
     void incrementPeopleLocated();
 

@@ -27,6 +27,20 @@ void OverviewDroneItem::setDroneNr(uint number)
     );
 }
 
+void OverviewDroneItem::setBatteryLevel(double level)
+{
+    ui->batteryValue->setText(
+        QString("%1 %").arg(level)
+    );
+}
+
+void OverviewDroneItem::setSearchedArea(double area)
+{
+    ui->batteryValue->setText(
+        QString("%1 m²").arg(area)
+    );
+}
+
 void OverviewDroneItem::updateStatus(DroneStatus status)
 {
     double batteryLevel = status.getBatteryLevel();

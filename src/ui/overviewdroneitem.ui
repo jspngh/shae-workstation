@@ -34,7 +34,7 @@
      <item row="0" column="1">
       <widget class="QLabel" name="batteryValue">
        <property name="text">
-        <string>45%</string>
+        <string>...</string>
        </property>
       </widget>
      </item>
@@ -55,7 +55,7 @@
      <item row="2" column="1">
       <widget class="QLabel" name="searchAreaValue">
        <property name="text">
-        <string>543 m²</string>
+        <string>0 m²</string>
        </property>
       </widget>
      </item>

@@ -30,15 +30,23 @@ void OverviewWidget::setMediator(Mediator *mediator)
 void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
 {
     if (!mapViewLoaded) return;
+
+    QUuid uuid = heartbeat.getDrone()->getGuid().toString();
+
+    // Update bottom text
     ui->heartBeat->setText(heartbeat.toString());
 
-    QString id = heartbeat.getDrone()->getGuid().toString();
-    if (mapView->hasMarker(id)) {
-        QMMarker &marker = mapView->getMarker(id);
+    // Update drone list
+    OverviewDroneItem *droneItem = mapIdListItem.value(uuid);
+    droneItem->setBatteryLevel(heartbeat.getBatteryLevel());
+
+    // Update map
+    if (mapView->hasMarker(uuid.toString())) {
+        QMMarker &marker = mapView->getMarker(uuid.toString());
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
         marker.moveTo(heartbeat.getCurrentLocation());
     } else {
-        QMMarker &marker = mapView->addMarker(id, heartbeat.getCurrentLocation());
+        QMMarker &marker = mapView->addMarker(uuid.toString(), heartbeat.getCurrentLocation());
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
