@@ -8,7 +8,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
-    workstationIP = initWorkstationIP();
+    retreiveWorkstationIpAndBroadcast();
 
     drones = new QList<DroneModule *>();
 
@@ -69,14 +69,18 @@ void Controller::initStream(DroneModule *dm)
     emit startStreamSignal(search, dm, persistenceController);
 }
 
-QString Controller::initWorkstationIP()
+void Controller::retreiveWorkstationIpAndBroadcast()
 {
-    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol
-                && address != QHostAddress(QHostAddress::LocalHost))
-            return address.toString();
+    foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
+        foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
+            QHostAddress address = entry.ip();
+            if (address.protocol() == QAbstractSocket::IPv4Protocol
+                    && address != QHostAddress(QHostAddress::LocalHost)){
+                workstationIp = entry.ip().toString();
+                workstationBroadcastIp = entry.broadcast().toString();
+            }
+        }
     }
-    return QString();
 }
 
 void Controller::stopStream(DroneModule *d)
@@ -98,8 +102,8 @@ int Controller::numDronesConnected()
 void Controller::startListeningForDrones()
 {
     udpSocket  = new QUdpSocket(this);
-    host  = new QHostAddress("127.0.0.1");
-    udpSocket->bind(*host, 4849);
+    host  = new QHostAddress(workstationBroadcastIp);
+    udpSocket->bind(*host, helloPort);
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
 
@@ -132,7 +136,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     DroneModule *drone = receivedHelloFrom(ip);
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIP, strFile, vision);
+        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision);
         drone = configureDrone(drone);
     }
 
@@ -191,5 +195,5 @@ Search *Controller::getSearch() const
 
 QString Controller::getWorkstationIP() const
 {
-    return workstationIP;
+    return workstationIp;
 }
