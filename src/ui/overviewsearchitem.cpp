@@ -5,7 +5,8 @@ OverviewSearchItem::OverviewSearchItem(Search *search, QWidget *parent)
     : QWidget(parent),
       ui(new Ui::OverviewSearchItem),
       timer(new QTimer(this)),
-      duration(0)
+      duration(0),
+      locatedPeople(0)
 {
     ui->setupUi(this);
 
@@ -19,9 +20,10 @@ OverviewSearchItem::~OverviewSearchItem()
     delete ui;
 }
 
-void OverviewSearchItem::setLocatedPeople(int nrPeople)
+void OverviewSearchItem::incrementPeopleLocated()
 {
-    ui->locatedPeopleValue->setText(QString::number(nrPeople));
+    locatedPeople++;
+    ui->locatedPeopleValue->setText(QString::number(locatedPeople));
 }
 
 void OverviewSearchItem::incrementDuration()

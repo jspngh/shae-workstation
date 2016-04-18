@@ -24,25 +24,55 @@ void OverviewWidget::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult)), QString("newDetection(QUuid, DetectionResult)"));
 }
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 {
-    if(!mapViewLoaded) return;
+
+    if (!mapViewLoaded) return;
+
+    QUuid uuid = heartbeat->getDrone()->getGuid().toString();
+
+    // Update bottom text
     ui->heartBeat->setText(heartbeat->toString());
 
-    QString id = heartbeat->getDrone()->getGuid().toString();
-    if(mapView->hasMarker(id)) {
-        QMMarker& marker = mapView->getMarker(id);
+    // Update drone list
+    OverviewDroneItem *droneItem = mapIdListItem.value(uuid);
+    droneItem->setBatteryLevel(heartbeat->getBatteryLevel());
+
+    // Update map
+    if (mapView->hasMarker(uuid.toString())) {
+        QMMarker &marker = mapView->getMarker(uuid.toString());
         marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.moveTo(heartbeat->getCurrentLocation());
     } else {
-        QMMarker& marker = mapView->addMarker(id, heartbeat->getCurrentLocation());
+        QMMarker &marker = mapView->addMarker(uuid.toString(), heartbeat->getCurrentLocation());
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
         marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
+        marker.trackPath();
         marker.show();
     }
+}
+
+void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult result)
+{
+    if(!mapIdListItem.contains(droneId))
+        qWarning() << "WARNING: detection from drone " << droneId.toString();
+
+    OverviewDroneItem *droneItem = mapIdListItem.value(droneId);
+
+    // Update sidebar
+    searchDetails->incrementPeopleLocated();
+    droneItem->incrementPeopleLocated();
+
+    // Update map
+    QString markerId = droneId.toString() + "-" + QString::number(droneItem->getPeopleLocated());
+    QMMarker& marker = mapView->addMarker(markerId, result.getLocation());
+    marker.setIcon("qrc:///ui/icons/human");
+    marker.scale(0.1, 0.1);
+    marker.show();
 }
 
 void OverviewWidget::exportSearchButtonPush()

@@ -20,7 +20,7 @@ public:
     ~OverviewSearchItem();
 
 public slots:
-    void setLocatedPeople(int nrPeople);
+    void incrementPeopleLocated();
     void setSearchedArea(double area);
 
 private slots:
@@ -30,6 +30,7 @@ private:
     Ui::OverviewSearchItem *ui;
     QTimer *timer;
     int duration;
+    int locatedPeople;
 };
 
 #endif // OVERVIEWSEARCHITEM_H
