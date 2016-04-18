@@ -22,7 +22,7 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     //setup connections
     connect(ui->locateButton, SIGNAL(clicked()), this, SLOT(locateButtonPush()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
-    connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
+    //connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
     initializeMap();
 }
@@ -79,7 +79,7 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
 
 void ConfigWidget::sliderChanged(int value)
 {
-    ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
+    //ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
 }
 
 void ConfigWidget::setMediator(Mediator *mediator)
