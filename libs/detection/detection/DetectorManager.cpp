@@ -1,14 +1,16 @@
 #include "DetectorManager.h"
 
 
-DetectorManager::DetectorManager(int fps)
+DetectorManager::DetectorManager(int fps, int width, int height)
 {
     this->detector = new ACFDetector(std::string("dependencies/INRIA_ACF.xml"));
     //this->detector = new HOGDetector();
     //TODO: remove hardcoding of values
-    this->windowSelection = new SlidingWindow(720, 1280, 190, 100, 300, 50, 150, 20, 20);
+    this->windowSelection = new SlidingWindow(height, width, 190, 100, 300, 50, 150, 20, 20);
     this->fps = fps;
-    this->videoDetection = cv::VideoWriter("dependencies/drone_stream.avi",CV_FOURCC('M','J','P','G'),this->fps, cv::Size(1280,720),true);
+    this->width = width;
+    this->height = height;
+    this->videoDetection = cv::VideoWriter("dependencies/drone_stream.avi",CV_FOURCC('M','J','P','G'),this->fps, cv::Size(width,height),true);
 }
 
 DetectorManager::DetectorManager(Detector *det, WindowSelection *wndSel, int fps)

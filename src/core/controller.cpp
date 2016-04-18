@@ -8,7 +8,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
-    workstationIP = QString("10.1.1.193");// initWorkstationIP();
+    workstationIP = initWorkstationIP();
 
     drones = new QList<DroneModule *>();
 
@@ -97,7 +97,7 @@ int Controller::numDronesConnected()
 void Controller::startListeningForDrones()
 {
     udpSocket  = new QUdpSocket(this);
-    host  = new QHostAddress(QString("10.1.1.255"));
+    host  = new QHostAddress("127.0.0.1");
     qDebug()<<host->toString();
     udpSocket->bind(*host, 4849);
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));

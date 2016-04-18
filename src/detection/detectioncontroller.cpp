@@ -10,7 +10,7 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
 {
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
     this->streaming = true;
-    this->manager = new DetectorManager(this->search->getFpsProcessing());
+    this->manager = new DetectorManager(this->search->getFpsProcessing(), this->processWidth, this->processHeight);
 
 
 }
@@ -49,7 +49,8 @@ void DetectionController::run()
                     time = time.addMSecs((quint64) timeFrame * 1000.0);
                     QTime Timer;
                     Timer.start();
-                    extractDetectionsFromFrame(frame, time);
+                    cv::Mat croppedFrame = frame(cv::Rect(0,0,this->processWidth,this->processHeight));
+                    extractDetectionsFromFrame(croppedFrame, time);
                     int nMilliseconds = Timer.elapsed();
                     qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
                 }
@@ -149,19 +150,17 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
         for (int i = 0; i < 7; i++)
          {
             getline(file, line);
-            /*
+
              if(i==4)
             {
                 location = line.find_last_of("=");
-                this->processWidth = std::atoi(line.substr(location,line.size()).c_str());
-                qDebug() << this->processWidth;
+                this->processWidth = std::atoi(line.substr((location+1),line.size()).c_str());
             }
             if(i==5)
             {
                 location = line.find_last_of("=");
-                this->processHeight = std::atoi(line.substr(location,line.size()).c_str());
-                qDebug() << this->processHeight;
-            }*/
+                this->processHeight = std::atoi(line.substr((location+1),line.size()).c_str());
+            }
         }
         getline(file, line);
         //next lines are used for the xLUT and yLUT

@@ -25,7 +25,7 @@ public:
      * No-args (default) constructor
      * \brief Initialises a default DetectorManager
      * */
-    DetectorManager(int fps);
+    DetectorManager(int fps, int width, int height);
 
     /*!
      * Constructor
@@ -65,8 +65,11 @@ private:
     Detector *detector;
     WindowSelection *windowSelection;
     int fps; //< Frames per second on which the sequence will be analysed
+    int width;
+    int height;
     std::pair<double, double> derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT);
     cv::VideoWriter videoDetection;
+
 };
 
 #endif /* DETECTORMANAGER_H_ */
