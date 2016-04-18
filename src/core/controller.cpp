@@ -8,7 +8,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
-    retreiveWorkstationIpAndBroadcast();
+    retrieveWorkstationIpAndBroadcast();
 
     drones = new QList<DroneModule *>();
 
@@ -69,7 +69,7 @@ void Controller::initStream(DroneModule *dm)
     emit startStreamSignal(search, dm, persistenceController);
 }
 
-void Controller::retreiveWorkstationIpAndBroadcast()
+void Controller::retrieveWorkstationIpAndBroadcast()
 {
     foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
         foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {

@@ -54,9 +54,9 @@ public:
 
 private:
     void processHelloMessage(QByteArray helloRaw);
-    //! Will retreive the ip and broadcast address of the workstation and set in the members
+    //! Will retrieve the ip and broadcast address of the workstation and set in the members
     //! workstationIp and workstionBroadcastIp
-    void retreiveWorkstationIpAndBroadcast();
+    void retrieveWorkstationIpAndBroadcast();
     //! listens for hello messages from drones on the network
     void startListeningForDrones();
 
