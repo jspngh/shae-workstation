@@ -44,7 +44,7 @@ QMAKE_CXXFLAGS += -std=c++11
 # Code coverage
 LIBS += -lgcov
 QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -g -fprofile-arcs -ftest-cove-rage  -O0
+QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)

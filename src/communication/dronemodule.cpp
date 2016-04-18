@@ -27,13 +27,13 @@ DroneModule::DroneModule(int dataPort,
     streamThread = new QThread();
     videoThread = new QThread();
     this->workstationIp = workstationIp;
+    waypoints = new QList<QGeoCoordinate>();
     droneConnection->moveToThread(connectionThread);
     streamConnection->moveToThread(streamThread);
     videoController->moveToThread(videoThread);
     connectionThread->start();
     streamThread->start();
     videoThread->start();
-    waypoints = nullptr;
     videoProcessing = video;
     videoActive = false;
     videoInactive = false;

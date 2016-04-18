@@ -222,7 +222,7 @@ private:
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
-    QList<QGeoCoordinate> *waypoints = new QList<QGeoCoordinate>(); //!< Keeps the list of waypoints the drone needs to fly.
+    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     bool videoProcessing;
     bool videoActive;
     bool videoInactive;
