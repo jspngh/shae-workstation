@@ -69,7 +69,7 @@ signals:
 
 
 private:
-    DetectorManager manager;
+    DetectorManager* manager;
     cv::VideoCapture sequence;
     Mediator *mediator;
     double fps;
@@ -91,7 +91,8 @@ private:
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
-
+    int processHeight;
+    int processWidth;
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;
 };

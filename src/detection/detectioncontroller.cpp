@@ -10,6 +10,8 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
 {
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
     this->streaming = true;
+    this->manager = new DetectorManager(this->search->getFpsProcessing());
+
 
 }
 
@@ -45,8 +47,11 @@ void DetectionController::run()
                     QDateTime time = QDateTime::currentDateTime();
                     time.setTime(sequenceStartTime);
                     time = time.addMSecs((quint64) timeFrame * 1000.0);
+                    QTime Timer;
+                    Timer.start();
                     extractDetectionsFromFrame(frame, time);
-                    qDebug() << "processing frame " << iteratorFrames << "of " << numFrames;
+                    int nMilliseconds = Timer.elapsed();
+                    qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
                 }
             } catch (cv::Exception e) {
                 qDebug() << "opencv error";
@@ -112,8 +117,8 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
         QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
         double orientation = droneStatus.getOrientation();
-        DetectionList detectionList = this->manager.applyDetector(frame);
-        vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
+        DetectionList detectionList = this->manager->applyDetector(frame);
+        vector<pair<double, double>> locations = this->manager->calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
             nrDetections++;
@@ -142,8 +147,22 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
         //first seven lines are currently not used
         //TODO: parse first seven lines for checks
         for (int i = 0; i < 7; i++)
+         {
             getline(file, line);
-
+            /*
+             if(i==4)
+            {
+                location = line.find_last_of("=");
+                this->processWidth = std::atoi(line.substr(location,line.size()).c_str());
+                qDebug() << this->processWidth;
+            }
+            if(i==5)
+            {
+                location = line.find_last_of("=");
+                this->processHeight = std::atoi(line.substr(location,line.size()).c_str());
+                qDebug() << this->processHeight;
+            }*/
+        }
         getline(file, line);
         //next lines are used for the xLUT and yLUT
         location = line.find_last_of("=");

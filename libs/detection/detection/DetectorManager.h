@@ -25,7 +25,7 @@ public:
      * No-args (default) constructor
      * \brief Initialises a default DetectorManager
      * */
-    DetectorManager();
+    DetectorManager(int fps);
 
     /*!
      * Constructor

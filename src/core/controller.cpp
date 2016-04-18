@@ -8,7 +8,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
-    workstationIP = initWorkstationIP();
+    workstationIP = QString("10.1.1.193");// initWorkstationIP();
 
     drones = new QList<DroneModule *>();
 
@@ -97,7 +97,8 @@ int Controller::numDronesConnected()
 void Controller::startListeningForDrones()
 {
     udpSocket  = new QUdpSocket(this);
-    host  = new QHostAddress("127.0.0.1");
+    host  = new QHostAddress(QString("10.1.1.255"));
+    qDebug()<<host->toString();
     udpSocket->bind(*host, 4849);
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
@@ -109,7 +110,7 @@ void Controller::readPendingDatagrams()
         QByteArray helloRaw;
         QHostAddress sender;
         quint16 senderPort;
-
+        qDebug() << "hello received";
         helloRaw.resize(udpSocket->pendingDatagramSize());
         udpSocket->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
 
@@ -120,7 +121,6 @@ void Controller::readPendingDatagrams()
 void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
-
     QString ip = hello.getDroneIp();
     QString strFile =  hello.getStreamFile();
     QString ctrIp = hello.getControllerIp();
