@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     tests.append(new Dronemodule_IntegrationTest());
     tests.append(new Droneconnection_IntegrationTest());
     tests.append(new DroneHeartbeat_IntegrationTest());
+
     tests.append(new System_Test());
 
     foreach (QObject *test, tests) {
