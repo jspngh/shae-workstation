@@ -59,7 +59,7 @@ public:
                          QString workstationIp,
                          QString streamPath,
                          double visionWidth = MIN_VISIONWIDTH,
-                         bool video = false);
+                         bool video = true);
 
 
     //! Copy constructor
