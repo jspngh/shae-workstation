@@ -99,6 +99,7 @@ void Controller::onSearchEmitted(Search *s)
 int Controller::numDronesConnected()
 {
     return drones->size();
+
 }
 
 void Controller::startListeningForDrones()
