@@ -114,6 +114,7 @@ void Controller::startListeningForDrones()
 void Controller::readPendingDatagrams()
 {
     while (udpSocket->hasPendingDatagrams()) {
+        qDebug() << "receivedHello";
         QByteArray helloRaw;
         QHostAddress sender;
         quint16 senderPort;
@@ -148,6 +149,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 
 DroneModule *Controller::configureDrone(DroneModule *drone)
 {
+    qDebug() << "A new drone with ip " + drone->getDroneIp() + " is connected to the system.";
     drones->append(drone);
     drone->setMediator(mediator);
     drone->moveToThread(&droneThread);

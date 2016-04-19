@@ -14,7 +14,8 @@ void SimulatorWrapper::startSimulator()
     simulatorProcess = new QProcess(this);
 
     simulatorProcess->start(program, arguments);
-    QTest::qWait(25000);
+    //QTest::qWait(25000);
+
     qDebug() << "simulator opened";
 
 }
