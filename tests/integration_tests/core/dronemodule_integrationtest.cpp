@@ -10,7 +10,7 @@ void Dronemodule_IntegrationTest::init()
 {
     count = 0;
     sim = new SimulatorWrapper();
-    sim->startSimulator();
+    //sim->startSimulator();
 
     MainWindow w;
     controller =  new Controller(&w);

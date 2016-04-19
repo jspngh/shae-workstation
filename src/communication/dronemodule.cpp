@@ -232,7 +232,8 @@ void DroneModule::onDroneResponse(const QString &response)
             videoActive = true;
         }
         if (waypoints != nullptr) {
-            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && !videoInactive) {
+            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
+                videoActive = false;
                 videoInactive = true;
                 qDebug() << "In last waypoint, stopping stream";
                 stopStream(this);
