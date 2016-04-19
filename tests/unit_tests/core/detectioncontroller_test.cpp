@@ -27,6 +27,8 @@ void DetectionController_Test::initTestCase()
     dm->setVideoController(videoController);
     this->controller = new DetectionController(s, dm, pc);
     this->controller->setSequence(capture);
+    this->controller->setPath(footage);
+
 }
 
 

@@ -90,7 +90,6 @@ void DetectionController::streamFinished()
 
 }
 
-
 int DetectionController::getNrDetections()
 {
     return this->nrDetections;
@@ -111,7 +110,6 @@ void DetectionController::setPath(const QString &value)
     path = value;
 }
 
-
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time)
 {
     if (frame.rows != 0 && frame.cols != 0) {
@@ -129,7 +127,6 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         qDebug() << "Frame is empty";
     }
 }
-
 
 void DetectionController::parseConfiguration(int height, int gimbalAngle)
 {

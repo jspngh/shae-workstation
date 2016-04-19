@@ -67,7 +67,6 @@ signals:
      */
     void detectionFinished();
 
-
 private:
     DetectorManager* manager;
     cv::VideoCapture sequence;

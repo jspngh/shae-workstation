@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 #include "QMMapView.h"
-#include "QMMarker.h"
 #include <QHBoxLayout>
 #include <QHash>
 #include <QMap>
