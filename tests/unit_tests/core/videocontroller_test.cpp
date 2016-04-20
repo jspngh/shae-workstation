@@ -16,20 +16,7 @@ void VideoController_Test::initTestCase()
     qDebug() << "simulator opened";
     simulatorProcess->start(program, arguments);
 
-    QString ip = "not found";
-
-    foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
-        foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
-            QHostAddress address = entry.ip();
-            if (address.protocol() == QAbstractSocket::IPv4Protocol
-                    && address != QHostAddress(QHostAddress::LocalHost)
-                    && ip == "not found"){
-                ip = entry.ip().toString();
-            }
-        }
-    }
-
-    streamConnection = new StreamConnection(ip, 5502);
+    streamConnection = new StreamConnection("127.0.0.1", 5502);
     streamThread = new QThread();
     streamConnection->moveToThread(streamThread);
     streamThread->start();

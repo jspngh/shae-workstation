@@ -104,24 +104,33 @@ int Controller::numDronesConnected()
 
 void Controller::startListeningForDrones()
 {
-    udpSocket  = new QUdpSocket(this);
+    udpSocketLan  = new QUdpSocket(this);
     host  = new QHostAddress(workstationBroadcastIp);
-    udpSocket->bind(*host, helloPort);
-    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
-}
+    udpSocketLan->bind(*host, helloPort);
+    connect(udpSocketLan, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 
+    udpSocketLo  = new QUdpSocket(this);
+    udpSocketLo->bind(QHostAddress("127.0.0.1"), helloPort);
+    connect(udpSocketLo, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+}
 
 void Controller::readPendingDatagrams()
 {
-    while (udpSocket->hasPendingDatagrams()) {
-        qDebug() << "receivedHello";
-        QByteArray helloRaw;
-        QHostAddress sender;
-        quint16 senderPort;
+    QByteArray helloRaw;
+    QHostAddress sender;
+    quint16 senderPort;
 
-        helloRaw.resize(udpSocket->pendingDatagramSize());
-        udpSocket->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
+    while (udpSocketLan->hasPendingDatagrams()) {
+        qDebug() << "receivedHello from LAN";
+        helloRaw.resize(udpSocketLan->pendingDatagramSize());
+        udpSocketLan->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
+        processHelloMessage(helloRaw);
+    }
 
+    while (udpSocketLo->hasPendingDatagrams()) {
+        qDebug() << "receivedHello from LocalHost";
+        helloRaw.resize(udpSocketLo->pendingDatagramSize());
+        udpSocketLo->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
         processHelloMessage(helloRaw);
     }
 }

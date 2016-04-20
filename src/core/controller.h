@@ -95,7 +95,9 @@ private:
     PersistenceController *persistenceController;
     PathAlgorithm *pathLogicController;
     Search *search;
-    QUdpSocket *udpSocket;
+    QUdpSocket *udpSocketLan;
+    QUdpSocket *udpSocketLo;
+
     QHostAddress *host;
 
     QThread pathLogicThread;
