@@ -28,9 +28,5 @@ void SimulatorWrapper::stopSimulator()
     qDebug() << "Closed simulator";
     QTest::qWait(500);
 
-//    QString program = "kill_simulator.sh";
-//    QProcess *killProcess = new QProcess(this);
-//    killProcess->start(program);
-
     delete simulatorProcess;
 }
