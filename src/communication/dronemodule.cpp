@@ -294,7 +294,6 @@ void DroneModule::initDetection()
 
 void DroneModule::stopStream(DroneModule *dm)
 {
-    qDebug() << "here";
     if (this->getDrone()->getGuid() == dm->getDrone()->getGuid()) {
         emit stopStream(drone);
         detectionController->streamFinished();
