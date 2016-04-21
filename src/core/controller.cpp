@@ -8,7 +8,9 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
-    workstationIP = initWorkstationIP();
+    retrieveWorkstationIpAndBroadcast();
+    qDebug() << workstationBroadcastIp;
+    qDebug() << workstationIp;
 
     drones = new QList<DroneModule *>();
 
@@ -20,9 +22,6 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
-    mediator->addSignal(this, (char *) SIGNAL(startStreamSignal(Search *, DroneModule *, PersistenceController *)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
-    mediator->addSignal(this, (char *) SIGNAL(stopStreamSignal(DroneModule *)), QString("stopStreamSignal(DroneModule*)"));
-    mediator->addSlot(this, (char *) SLOT(initStream(DroneModule *)), QString("startStreamWorkstation(DroneModule*)"));
 }
 
 Controller::~Controller()
@@ -51,6 +50,7 @@ void Controller::init()
     pathLogicController->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
+    mainWindow->getWelcomeWidget()->setMediator(mediator);
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread
@@ -63,56 +63,62 @@ void Controller::init()
     droneThread.start();
 }
 
-void Controller::initStream(DroneModule *dm)
-{
-    emit startStreamSignal(search, dm, persistenceController);
-}
 
-QString Controller::initWorkstationIP()
+void Controller::retrieveWorkstationIpAndBroadcast()
 {
-    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol
-                && address != QHostAddress(QHostAddress::LocalHost))
-            return address.toString();
+    foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
+        foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
+            QHostAddress address = entry.ip();
+            if (address.protocol() == QAbstractSocket::IPv4Protocol
+                    && address != QHostAddress(QHostAddress::LocalHost)){
+                workstationIp = entry.ip().toString();
+                workstationBroadcastIp = entry.broadcast().toString();
+            }
+        }
     }
-    return QString();
 }
 
-void Controller::stopStream(DroneModule *d)
-{
-    emit stopStreamSignal(d);
-}
 
 void Controller::onSearchEmitted(Search *s)
 {
-    qDebug() << "Controller::saved search";
     search = s;
 }
 
 int Controller::numDronesConnected()
 {
     return drones->size();
+
 }
 
 void Controller::startListeningForDrones()
 {
-    udpSocket  = new QUdpSocket(this);
-    host  = new QHostAddress("127.0.0.1");
-    udpSocket->bind(*host, 4849);
-    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
-}
+    udpSocketLan  = new QUdpSocket(this);
+    host  = new QHostAddress(workstationBroadcastIp);
+    udpSocketLan->bind(*host, helloPort);
+    connect(udpSocketLan, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 
+    udpSocketLo  = new QUdpSocket(this);
+    udpSocketLo->bind(QHostAddress("127.0.0.1"), helloPort);
+    connect(udpSocketLo, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+}
 
 void Controller::readPendingDatagrams()
 {
-    while (udpSocket->hasPendingDatagrams()) {
-        QByteArray helloRaw;
-        QHostAddress sender;
-        quint16 senderPort;
+    QByteArray helloRaw;
+    QHostAddress sender;
+    quint16 senderPort;
 
-        helloRaw.resize(udpSocket->pendingDatagramSize());
-        udpSocket->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
+    while (udpSocketLan->hasPendingDatagrams()) {
+        qDebug() << "receivedHello from LAN";
+        helloRaw.resize(udpSocketLan->pendingDatagramSize());
+        udpSocketLan->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
+        processHelloMessage(helloRaw);
+    }
 
+    while (udpSocketLo->hasPendingDatagrams()) {
+        qDebug() << "receivedHello from LocalHost";
+        helloRaw.resize(udpSocketLo->pendingDatagramSize());
+        udpSocketLo->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
         processHelloMessage(helloRaw);
     }
 }
@@ -120,7 +126,6 @@ void Controller::readPendingDatagrams()
 void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
-
     QString ip = hello.getDroneIp();
     QString strFile =  hello.getStreamFile();
     QString ctrIp = hello.getControllerIp();
@@ -131,7 +136,8 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     DroneModule *drone = receivedHelloFrom(ip);
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIP, strFile, vision);
+        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
+        drone->setPersistenceController(persistenceController);
         drone = configureDrone(drone);
     }
 
@@ -140,6 +146,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 
 DroneModule *Controller::configureDrone(DroneModule *drone)
 {
+    qDebug() << "A new drone with ip " + drone->getDroneIp() + " is connected to the system.";
     drones->append(drone);
     drone->setMediator(mediator);
     drone->moveToThread(&droneThread);
@@ -190,5 +197,5 @@ Search *Controller::getSearch() const
 
 QString Controller::getWorkstationIP() const
 {
-    return workstationIP;
+    return workstationIp;
 }

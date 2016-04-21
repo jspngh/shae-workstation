@@ -54,27 +54,23 @@ public:
 
 private:
     void processHelloMessage(QByteArray helloRaw);
-    QString initWorkstationIP();
-    //!< listens for hello messages from drones on the network
+    //! Will retrieve the ip and broadcast address of the workstation and set in the members
+    //! workstationIp and workstionBroadcastIp
+    void retrieveWorkstationIpAndBroadcast();
+    //! listens for hello messages from drones on the network
     void startListeningForDrones();
 
-    //!< return the dronemodule if the drone with the ip has already send a hello message
-    //!< if the drone hasn't send hello yet the nullptr is returned
+    //! return the dronemodule if the drone with the ip has already send a hello message
+    //! if the drone hasn't send hello yet the nullptr is returned
     DroneModule *receivedHelloFrom(QString ip);
 
-    //!< will configure a drone:
+    //! will configure a drone:
     //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
     DroneModule *configureDrone(DroneModule *drone);
 
 public slots:
     void onSearchEmitted(Search *s);
     void readPendingDatagrams();
-    void initStream(DroneModule *dm);
-    void stopStream(DroneModule *dm);
-
-signals:
-    void startStreamSignal(Search *s, DroneModule *d, PersistenceController *p);
-    void stopStreamSignal(DroneModule *d);
 
 private:
     //TODO: due to some limitions in the streaming librairy VLC
@@ -83,7 +79,9 @@ private:
     //      The boolean oneStream will store if a stream is already requested.
     bool oneStream = false;
 
-    QString workstationIP;
+    QString workstationIp;
+    QString workstationBroadcastIp;
+    int helloPort = 4849;
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<DroneModule *> *drones;
@@ -91,7 +89,9 @@ private:
     PersistenceController *persistenceController;
     PathAlgorithm *pathLogicController;
     Search *search;
-    QUdpSocket *udpSocket;
+    QUdpSocket *udpSocketLan;
+    QUdpSocket *udpSocketLo;
+
     QHostAddress *host;
 
     QThread pathLogicThread;

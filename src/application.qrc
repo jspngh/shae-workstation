@@ -13,13 +13,12 @@
     <file alias="export">ui/img/export-icon.png</file>
     <file alias="handle">ui/img/handle.png</file>
     <file alias="halt">ui/img/hand-icon.png</file>
+    <file alias="human">ui/img/human-icon.png</file>
     <file alias="home">ui/img/home-icon.png</file>
     <file alias="search">ui/img/radar-icon.png</file>
     <file alias="wireless">ui/img/wireless-icon.png</file>
   </qresource>
-
   <qresource prefix="/db">
     <file alias="createTables.sql">../scripts/createDB.sql</file>
   </qresource>
 </RCC>
-

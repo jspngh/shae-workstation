@@ -27,7 +27,7 @@ void System_Test::initTestCase()
 
     // wait until a drone is connected to the controller
     // the controller needs to wait until the drone sends a hello message, indicating that it is ready
-    while(controller->numDronesConnected() < 1) {
+    while (controller->numDronesConnected() < 1) {
         qDebug() << "wait until a drone is connected to the controller";
         QTest::qWait(1000 * 5);
     }
@@ -38,7 +38,7 @@ void System_Test::initTestCase()
 
     s = new Search();
     //the following parameters are defined through the configwidget
-    s->setFpsProcessing(0.5);
+    s->setFpsProcessing(1);
     s->setGimbalAngle(65);
     s->setHeight(3);
     s->setStartTime(QTime::currentTime());

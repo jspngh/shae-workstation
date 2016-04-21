@@ -53,7 +53,7 @@ private:
     double speed;
 
     static constexpr int DEFAULT_HEIGHT = 3;
-    static constexpr int DEFAULT_FPS = 3;
+    static constexpr int DEFAULT_FPS = 1;
     static constexpr int DEFAULT_GIMBAL_ANGLE = 65;
     static constexpr double DEFAULT_SPEED = 2 ;
 };

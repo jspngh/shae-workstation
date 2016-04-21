@@ -59,7 +59,7 @@ public:
                          QString workstationIp,
                          QString streamPath,
                          double visionWidth = MIN_VISIONWIDTH,
-                         bool video = false);
+                         bool video = true);
 
 
     //! Copy constructor
@@ -76,6 +76,8 @@ public:
     void getStreamConnection();
     void stopStreamConnection();
 
+    PersistenceController *getPersistenceController() const;
+    void setPersistenceController(PersistenceController *value);
 
     QUuid getGuid() const;
 
@@ -178,11 +180,13 @@ public slots:
     QJsonDocument requestHeartbeat();
 
     //! Allows to start the stream for a given drone, linked to a search and persistence component.
-    void initStream(Search *search, DroneModule *dm, PersistenceController *persistenceController);
+    void initStream();
     //! Allows to stop the stream for a given drone, linked to a search and persistence component.
-    void stopStream(DroneModule *dm);
+    void stopStream();
     //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
+
+    void onSearchEmitted(Search *s);
 
 
     //! Sends a Json message to the drone to start the flight.
@@ -217,14 +221,15 @@ private:
     QThread *videoThread;
     VideoController *videoController;
     DetectionController *detectionController;
+    PersistenceController *persistenceController;
     DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
+    Search* search;
     QThread *connectionThread;
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
     bool videoProcessing;
     bool videoActive;
-    bool videoInactive;
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
