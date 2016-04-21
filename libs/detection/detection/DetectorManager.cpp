@@ -1,16 +1,22 @@
 #include "DetectorManager.h"
 
 
-DetectorManager::DetectorManager(int fps, int width, int height)
+DetectorManager::DetectorManager(int fps, int processWidth, int processHeight, int resolutionWidth, int resolutionHeight)
 {
     this->detector = new ACFDetector(std::string("dependencies/INRIA_ACF.xml"));
-    //this->detector = new HOGDetector();
-    //TODO: remove hardcoding of values
-    this->windowSelection = new SlidingWindow(height, width, 190, 100, 300, 50, 150, 20, 20);
+    // this->detector = new HOGDetector();
+    // TODO: remove hardcoding of values
+    this->windowSelection = new SlidingWindow(processHeight, processWidth, 190, 100, 300, 50, 150, 20, 20);
     this->fps = fps;
-    this->width = width;
-    this->height = height;
-    this->videoDetection = cv::VideoWriter("dependencies/drone_stream.avi",CV_FOURCC('M','J','P','G'),this->fps, cv::Size(width,height),true);
+    this->processWidth = processWidth;
+    this->processHeight = processHeight;
+    this->resolutionWidth = resolutionWidth;
+    this->resolutionHeight = resolutionHeight;
+    this->videoDetection = cv::VideoWriter("dependencies/drone_stream.avi",
+                                           CV_FOURCC('M','J','P','G'),
+                                           this->fps,
+                                           cv::Size(processWidth, processHeight),
+                                           true);
 }
 
 DetectorManager::DetectorManager(Detector *det, WindowSelection *wndSel, int fps)
@@ -62,51 +68,12 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
     NonMaximumSuppression NMS;
     if (this->detector->getType().compare("frame") == 0) {
         detections =  this->detector->applyDetectorOnFrame(frame);
-        //use standardNMS as dollarNMS fails on the given detectionList from ACF
+        // use standardNMS as dollarNMS fails on the given detectionList from ACF
         if (detections.getSize() > 0)
             detections = NMS.standardNMS(detections, 0.2);
         detections.draw(frame);
         this->videoDetection.write(frame);
     }
-/*
-    cv::Rect win;
-    cv::Mat roi;
-
-    // as long as there is a next window we loop over the frame
-    while (this->windowSelection->nextWindow(win)) {
-        // select the window from the complete frame
-        roi = frame(win);
-        // drawRectOnFrame(frame, win, COLOR_WHITE, 0);
-        if (this->detector->getType().compare("window") == 0) {
-            if (this->detector->applyDetectorOnWindow(roi)) {
-                // the detector detected a person in the roi
-                // we add the detection to the list
-                detections.addDetection(win.x, win.y, win.width, win.height, 1, this->detector->getName());
-            }
-        }
-        if (this->detector->getType().compare("band") == 0) {
-            DetectionList DL = this->detector->applyDetectorOnBand(roi);
-            for (int i = 0; i < DL.getSize(); i++) {
-                Detection D = DL.returnDetections()[i];
-                detections.addDetection(D.getX(), D.getY() + win.y, D.getWidth(), D.getHeight(), 1, this->detector->getName());
-            }
-        }
-
-        if (this->detector->getType().compare("frame") == 0) {
-            detections = this->detector->applyDetectorOnFrame(roi);
-        }
-    }
-
-
-
-    // the sliding window needs to be reset after looping over a complete frame.
-    this->windowSelection->reset();
-
-    // do suppression of the results before return the detectionlist.
-    // the suppression is done via the dollarNMS function provided in the NonMaximumSuppression class
-    if (detections.getSize() > 0)
-        detections = NMS.standardNMS(detections, 0.2);
-    */
     return detections;
 }
 
@@ -114,14 +81,19 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
 //location contains the geocoordinate of the frame
 //dl contains the detections associated with the frame
 //xLUT and yLUT contain lookuptables required to map the pixel locations in the frame on a geocoordinate
-std::vector<std::pair<double, double>> DetectorManager::calculatePositions(DetectionList dl, std::pair<double, double> location, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT, double orientation)
+std::vector<std::pair<double, double>> DetectorManager::calculatePositions(DetectionList dl,
+                                                                           std::pair<double, double> location,
+                                                                           std::vector<vector<double>> xLUT,
+                                                                           std::vector<vector<double>> yLUT,
+                                                                           double orientation)
 {
     vector<std::pair<double, double>> result;
     for (int i = 0; i < dl.getSize(); i++) {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
         distance =  std::pair<double, double>(cos(orientation) * distance.first, sin(orientation) * distance.second);
-        //distance contains an x,y distance pair, that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
+        // distance contains an x,y distance pair,
+        // that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
         std::pair<double, double> temp2 = changeLongitude(location, distance.second);
         //save the location of the detection
@@ -141,7 +113,9 @@ positions are derivde from the LUT based on linear interpolation
     3. use the y pixelvalue of the detection to determine the xLUT vector.
     4. interpolate the horizontal distance based on the xLUT vector.
 */
-std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, std::vector<vector<double>> xLUT, std::vector<vector<double>> yLUT)
+std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d,
+                                                                 std::vector<vector<double>> xLUT,
+                                                                 std::vector<vector<double>> yLUT)
 {
     double xPixel = (double)(d.getX());
     double yPixel = (double)(d.getY() + d.getHeight());
@@ -153,7 +127,7 @@ std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, st
             if (i == 0) {
                 yLoc = yLUT[i][1];
             } else {
-                //use linear interpolation
+                // use linear interpolation
                 yLoc = (yLUT[i - 1][1]) * ((yLUT[i][0] - yPixel) / (yLUT[i][0] - yLUT[i - 1][0])) + yLUT[i][1] * ((yPixel - yLUT[i - 1][0]) / (yLUT[i][0] - yLUT[i - 1][0]));
             }
             break;
@@ -162,15 +136,12 @@ std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d, st
     for (int i = 0; i < xLUT.size(); i++) {
         if (yPixel <= xLUT[i][0]) {
             if (i == 0) {
-                //TODO: remove hardcoding of values
-                xLoc = ((xPixel - 1280 / 2) / xLUT[0][1]) * xLUT[0][2] / 2;
+                xLoc = ((xPixel - this->resolutionWidth / 2) / xLUT[0][1]) * xLUT[0][2] / 2;
             } else {
-                //TODO: remove hardcoding of values
-                xLoc = (((xPixel - 1280 / 2) / xLUT[i][1]) * xLUT[i][2] / 2) * ((xLUT[i][0] - yPixel) / (xLUT[i][0] - xLUT[i - 1][0])) + (((xPixel - 1280 / 2) / xLUT[i - 1][1]) * xLUT[i - 1][2] / 2) * ((yPixel - xLUT[i - 1][0]) / (xLUT[i][0] - xLUT[i - 1][0]));
+                xLoc = (((xPixel - this->resolutionWidth / 2) / xLUT[i][1]) * xLUT[i][2] / 2) * ((xLUT[i][0] - yPixel) / (xLUT[i][0] - xLUT[i - 1][0])) + (((xPixel - this->resolutionWidth / 2) / xLUT[i - 1][1]) * xLUT[i - 1][2] / 2) * ((yPixel - xLUT[i - 1][0]) / (xLUT[i][0] - xLUT[i - 1][0]));
             }
             break;
         }
     }
     return std::pair<double, double>(xLoc, yLoc);
 }
-

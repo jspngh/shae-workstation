@@ -8,11 +8,15 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
       persistenceController(pc),
       droneModule(dm)
 {
-    parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
+    int droneHeight = this->search->getHeight();
+    int cameraAngle = this->search->getGimbalAngle();
+    parseConfiguration(droneHeight, cameraAngle);
     this->streaming = true;
-    this->manager = new DetectorManager(this->search->getFpsProcessing(), this->processWidth, this->processHeight);
-
-
+    this->manager = new DetectorManager(this->search->getFpsProcessing(),
+                                        this->processWidth,
+                                        this->processHeight,
+                                        this->resolutionWidth,
+                                        this->resolutionHeight);
 }
 
 void DetectionController::run()
@@ -34,7 +38,8 @@ void DetectionController::run()
         this->frameHop = 30;
     }
     droneId = this->droneModule->getGuid();
-    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
+    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId,
+                                                                                 this->search->getSearchID()).getStart();
 
     cv::Mat frame;
     do {
@@ -49,8 +54,9 @@ void DetectionController::run()
                     time = time.addMSecs((quint64) timeFrame * 1000.0);
                     QTime Timer;
                     Timer.start();
-                    //TODO: remove hardcoding of resolution
-                    cv::Mat croppedFrame = frame(cv::Rect(0,720-this->processHeight,this->processWidth,this->processHeight));
+                    // TODO: remove hardcoding of resolution
+                    cv::Mat croppedFrame = frame(cv::Rect(0, this->resolutionHeight - this->processHeight,
+                                                          this->processWidth, this->processHeight));
                     extractDetectionsFromFrame(croppedFrame, time);
                     int nMilliseconds = Timer.elapsed();
                     qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
@@ -62,9 +68,9 @@ void DetectionController::run()
         }
 
         qDebug() << "frames need to buffer, old total " << numFrames;
-        //allow for frames to buffer
+        // allow for frames to buffer
         QThread::sleep(1);
-        //check if new frames have arrived
+        // check if new frames have arrived
         this->sequence = cv::VideoCapture(path.toStdString());
         oldnumFrames = numFrames;
         numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
@@ -72,8 +78,9 @@ void DetectionController::run()
     } while (this->streaming || (oldnumFrames != numFrames));
     qDebug() << "Processing is finished at " << iteratorFrames;
 
-    if (this->sequence.isOpened())
+    if (this->sequence.isOpened()) {
         this->sequence.release();
+    }
     emit this->detectionFinished();
 }
 
@@ -144,25 +151,29 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
         file.open(path);
     }
     if (file.is_open()) {
-        //first seven lines are currently not used
-        //TODO: parse first seven lines for checks
+        // first seven lines are currently not used
+        // TODO: parse first seven lines for checks
         for (int i = 0; i < 7; i++)
          {
             getline(file, line);
-
-             if(i==4)
-            {
-                location = line.find_last_of("=");
-                this->processWidth = std::atoi(line.substr((location+1),line.size()).c_str());
+            if(i == 2) {
+                std::size_t resolutionStart = line.find_last_of('=');
+                std::string resolution =  line.substr(resolutionStart + 1);
+                std::size_t xMarkPosition = resolution.find_last_of('x');
+                this->resolutionWidth = std::atoi(resolution.substr(xMarkPosition).c_str());
+                this->resolutionHeight = std::atoi(resolution.substr(xMarkPosition + 1).c_str());
             }
-            if(i==5)
-            {
-                location = line.find_last_of("=");
-                this->processHeight = std::atoi(line.substr((location+1),line.size()).c_str());
+            if(i == 4) {
+                location = line.find_last_of('=');
+                this->processWidth = std::atoi(line.substr(location + 1).c_str());
+            }
+            if(i == 5) {
+                location = line.find_last_of('=');
+                this->processHeight = std::atoi(line.substr(location + 1).c_str());
             }
         }
         getline(file, line);
-        //next lines are used for the xLUT and yLUT
+        // next lines are used for the xLUT and yLUT
         location = line.find_last_of("=");
         int xLUTsize = atoi(line.substr(location + 1).c_str());
         for (int i = 0; i < xLUTsize; i++) {
@@ -191,7 +202,5 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
             temp.push_back(realY);
             this->yLUT.push_back(temp);
         }
-
     }
 }
-
