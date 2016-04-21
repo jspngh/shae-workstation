@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QDebug>
+
 
 #include "models/dronestatus.h"
 #include "communication/droneheartbeatreceiver.h"
@@ -15,6 +17,8 @@
 #include "communication/streamconnection.h"
 #include "models/drone.h"
 #include "videocontroller/videocontroller.h"
+
+
 class Search;
 class Controller;
 class DetectionController;
@@ -209,12 +213,14 @@ private slots:
     void onDroneResponse(const QString &response);
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
+    void onDroneStatusReceived(DroneStatus s);
 
 private:
     void addSignalSlot(); //!< Helper function for connecting the slots and signals
     void initHeartbeat(); //!< Helper function to initialise the heartbeat connection
 
 private:
+    DroneStatus lastReceivedDroneStatus;
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
     Mediator *mediator;
     QString workstationIp;
@@ -231,6 +237,8 @@ private:
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     bool videoProcessing;
     bool videoActive;
+    bool videoInactive;
+    QGeoCoordinate homeLocation;
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
