@@ -120,6 +120,7 @@ private:
     QDateTime timestampDrone;
     //! contains long, lat
     QGeoCoordinate currentLocation;
+    //! contains the number of the waypoint it is flying to
     QGeoCoordinate nextWaypoint;
     int previousWaypointOrder;
     QList<QGeoCoordinate> nextWaypoints;
