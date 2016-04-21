@@ -213,7 +213,7 @@ private slots:
     void onDroneResponse(const QString &response);
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
-    void onDroneStatusReceived(DroneStatus s);
+    void onDroneStatusReceived(DroneStatus *s);
 
 private:
     void addSignalSlot(); //!< Helper function for connecting the slots and signals
@@ -239,7 +239,6 @@ private:
     bool videoActive;
     bool videoInactive;
     QGeoCoordinate homeLocation;
-    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 

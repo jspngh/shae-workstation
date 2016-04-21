@@ -105,8 +105,8 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 
-    connect(this, SIGNAL(droneStatusReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
-    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
+    connect(this, SIGNAL(droneStatusReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
+    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
 }
 
 void DroneModule::initHeartbeat()
@@ -212,26 +212,26 @@ void DroneModule::addWaypoint(const QGeoCoordinate &waypoint)
 Slots
 ************************/
 
-void DroneModule::onDroneStatusReceived(DroneStatus status)
+void DroneModule::onDroneStatusReceived(DroneStatus *status)
 {
-    lastReceivedDroneStatus = status;
+    lastReceivedDroneStatus = *status;
 
     if( waypoints != nullptr &&
-        status.getPreviousWaypointOrder() == waypoints->size() &&
-        status.getCurrentLocation().distanceTo(homeLocation) < 1){
+        status->getPreviousWaypointOrder() == waypoints->size() &&
+        status->getCurrentLocation().distanceTo(homeLocation) < 1){
         // the drone is has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
         returnToHome();
     }
 
-    if (status.getPreviousWaypointOrder() == 2 && videoProcessing && !videoActive) {
+    if (status->getPreviousWaypointOrder() == 2 && videoProcessing && !videoActive) {
         qDebug() << "In first waypoint, starting stream";
         initStream();
         videoActive = true;
     }
 
     if (waypoints != nullptr) {
-        if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
+        if (status->getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
             videoActive = false;
             qDebug() << "In last waypoint, stopping stream";
             stopStream();
@@ -269,17 +269,9 @@ void DroneModule::onDroneResponse(const QString &response)
         status.setDrone(this);
 
         if (status.getHeartbeat()) {
-<<<<<<< HEAD
-            //qDebug() << "emit DroneModule::droneHeartBeatReceived(status)";
             emit droneHeartBeatReceived(&status);
         } else {
-            //qDebug() << "emit DroneModule::droneStatusReceived(status)";
             emit droneStatusReceived(&status);
-=======
-            emit droneHeartBeatReceived(status);
-        } else {
-            emit droneStatusReceived(status);
->>>>>>> develop
         }
 
     } else

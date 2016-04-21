@@ -118,8 +118,8 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         DroneStatus *droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
         QGeoCoordinate frameLocation = droneStatus->getCurrentLocation();
         double orientation = droneStatus->getOrientation();
-        DetectionList detectionList = this->manager.applyDetector(frame);
-        vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
+        DetectionList detectionList = this->manager->applyDetector(frame);
+        vector<pair<double, double>> locations = this->manager->calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
 
         for (int i = 0; i < detectionList.getSize(); i++) {
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), detectionList.returnDetections()[i]->getScore()));
