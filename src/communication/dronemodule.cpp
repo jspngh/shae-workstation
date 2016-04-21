@@ -105,7 +105,6 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(initStream(Search *, DroneModule *, PersistenceController *)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
     mediator->addSlot(this, (char *) SLOT(stopStream(DroneModule *)), QString("stopStreamSignal(DroneModule*)"));
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
-
 }
 
 void DroneModule::initHeartbeat()
@@ -213,8 +212,28 @@ void DroneModule::onPathCalculated(Search *s)
     }
     if (droneInList) {
         // the drone is selected for this search
+        QList<RequestedDroneSetting> settings = QList<RequestedDroneSetting>();
+        settings.push_back(Height_To_Set);
+        settings.push_back(Speed_To_Set);
+        settings.push_back(Camera_Angle_To_Set);
+        settings.push_back(FPS_To_Set);
+
+        QList<int> values = QList<int>();
+        values.push_back(s->getHeight());
+        values.push_back(s->getSpeed());
+        values.push_back(s->getGimbalAngle());
+        values.push_back(s->getFpsProcessing());
+
+
+        setSettings(settings, values);
+        usleep(1000);
         startFlight();
+        usleep(1000);
         sendWaypoints();
+        usleep(1000);
+
+        qDebug() << "Drone is starting flight";
+
     }
 }
 

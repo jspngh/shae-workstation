@@ -6,90 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1044</width>
-    <height>593</height>
+    <width>1366</width>
+    <height>768</height>
    </rect>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>1366</width>
+    <height>768</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0" columnstretch="0,0,0">
-   <item row="0" column="0">
-    <layout class="QFormLayout" name="searchParametersForm">
-     <item row="1" column="0">
-      <widget class="QLabel" name="searchStrategyLabel">
-       <property name="text">
-        <string>Search strategy:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="searchStrategyComboBox">
-       <item>
-        <property name="text">
-         <string>Simple Boustrophedon</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Polygon Boustrophedon</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="heightLabel">
-       <property name="text">
-        <string>Height</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QDoubleSpinBox" name="heightDoubleSpinBox">
-       <property name="minimum">
-        <double>3.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>10.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="fpsLabel">
-       <property name="text">
-        <string>FPS to analyze</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QSpinBox" name="fpsSpinBox">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>5</number>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="cameraAngleLabel">
-       <property name="text">
-        <string>Camera Angle</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QDoubleSpinBox" name="cameraAngleDoubleSpinBox">
-       <property name="maximum">
-        <double>90.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>65.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0" columnstretch="0,0,0">
    <item row="0" column="2">
     <layout class="QHBoxLayout" name="mapLocator">
      <item>
@@ -134,16 +64,53 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="locateButton">
+           <property name="text">
+            <string>Locate</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="shapeLabel">
+         <property name="text">
+          <string>Shape to select</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="shapeComboBox">
+         <item>
+          <property name="text">
+           <string>Rectangle</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Polygon</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QPushButton" name="locateButton">
-       <property name="text">
-        <string>Locate</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
@@ -154,6 +121,12 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
      </property>
      <property name="maximumSize">
       <size>
@@ -235,7 +208,7 @@
      <item>
       <widget class="QLabel" name="missingInputLabel">
        <property name="text">
-        <string>Please select an area on the map.</string>
+        <string>Please select an area on the map, by holding the shift key.</string>
        </property>
       </widget>
      </item>
@@ -262,6 +235,84 @@
        </property>
        <property name="text">
         <string>Start</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <layout class="QFormLayout" name="searchParametersForm">
+     <item row="4" column="0">
+      <widget class="QLabel" name="heightLabel">
+       <property name="text">
+        <string>Height</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDoubleSpinBox" name="heightDoubleSpinBox">
+       <property name="minimum">
+        <double>3.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="speedLabel">
+       <property name="text">
+        <string>Speed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QDoubleSpinBox" name="speedDoubleSpinBox">
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>3.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="fpsLabel">
+       <property name="text">
+        <string>Processing FPS</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QSpinBox" name="fpsSpinBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="cameraAngleLabel">
+       <property name="text">
+        <string>Camera Angle</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QDoubleSpinBox" name="cameraAngleDoubleSpinBox">
+       <property name="maximum">
+        <double>90.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>65.000000000000000</double>
        </property>
       </widget>
      </item>
