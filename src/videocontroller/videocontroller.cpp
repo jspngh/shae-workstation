@@ -26,6 +26,7 @@ void VideoController::setMediator(Mediator *m)
 VideoSequence VideoController::onStartStream(Drone *drone)
 {
     QFile::remove(QString("dependencies/drone_stream.mpg"));
+    QFile::remove(QString("dependencies/drone_stream.avi"));
     qDebug() << "starting to save the stream";
     const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
     // Launch VLC
@@ -37,10 +38,17 @@ VideoSequence VideoController::onStartStream(Drone *drone)
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
         bufferSize = 8 * 1024 * 1024;
-    } else {
+    } else if(drone->getStreamPath().contains(QString(".sdp"))) {
         qDebug("started stream from sdp file");
         m = libvlc_media_new_path(inst, drone->getStreamPath().toStdString().c_str());
         bufferSize = 2 * 1024 * 1024;
+    } else
+    {
+        qDebug("started stream from video file");
+        VideoSequence sequence =  VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
+        this->sequence_path = sequence.getPath();
+        emit this->streamStarted(drone->getGuid(), sequence);
+        return sequence;
     }
 
     /* Create a media player playing environement */

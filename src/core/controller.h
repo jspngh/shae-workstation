@@ -71,12 +71,6 @@ private:
 public slots:
     void onSearchEmitted(Search *s);
     void readPendingDatagrams();
-    void initStream(DroneModule *dm);
-    void stopStream(DroneModule *dm);
-
-signals:
-    void startStreamSignal(Search *s, DroneModule *d, PersistenceController *p);
-    void stopStreamSignal(DroneModule *d);
 
 private:
     //TODO: due to some limitions in the streaming librairy VLC

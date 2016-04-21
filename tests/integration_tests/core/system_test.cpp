@@ -27,7 +27,7 @@ void System_Test::initTestCase()
 
     // wait until a drone is connected to the controller
     // the controller needs to wait until the drone sends a hello message, indicating that it is ready
-    while(controller->numDronesConnected() < 1) {
+    while (controller->numDronesConnected() < 1) {
         qDebug() << "wait until a drone is connected to the controller";
         QTest::qWait(1000 * 5);
     }

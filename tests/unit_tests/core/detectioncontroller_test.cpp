@@ -37,13 +37,13 @@ void DetectionController_Test::testProcessSequence()
 {
     //start the detectioncontroller on a separate thread
     this->controller->start();
-    QThread::sleep(1);
+    QTest::qWait(1000 * 1);
     //indicate that the stream has stopped (the controller should finish analyzing all the frames)
     this->controller->streamFinished();
     //check if the controller has signalled detections in the past 10s
     this->controller->wait();
     int count = this->controller->getNrDetections();
-
+    qDebug() << "number of detections" << count;
     QVERIFY(count >= 0);
 }
 
