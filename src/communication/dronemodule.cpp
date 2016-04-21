@@ -533,7 +533,9 @@ QJsonDocument DroneModule::requestStatuses(QList<RequestedDroneStatus> statuses)
         case Next_Waypoints:
             key = "next_waypoints";
             break;
-
+        case GPS_Count:
+            key = "gps_signal";
+            break;
         default:
             key = "current_location";
             break;
