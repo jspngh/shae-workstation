@@ -200,11 +200,18 @@ void DroneModule::addWaypoint(const QGeoCoordinate &waypoint)
 Slots
 ************************/
 
-void DroneModule::onDroneStatusReceived(DroneStatus s)
+void DroneModule::onDroneStatusReceived(DroneStatus status)
 {
-    lastReceivedDroneStatus = s;
+    lastReceivedDroneStatus = status;
 
     //TODO do more work here on reception of a status
+    if( waypoints != nullptr &&
+        status.getPreviousWaypointOrder() == waypoints->size() &&
+        status.getCurrentLocation().distanceTo(homeLocation) < 1){
+        // the drone is has finished it search and is back to its homelocation
+        // issue drone to return to home (this is already done) and then land
+        returnToHome();
+    }
 
 }
 
@@ -223,7 +230,8 @@ void DroneModule::onPathCalculated(Search *s)
         // the drone is selected for this search
         startFlight();
         // add current drone location to waypoint queue to make waypoint loop 'closed'.
-        getWaypoints()->append(lastReceivedDroneStatus.getCurrentLocation());
+        homeLocation = lastReceivedDroneStatus.getCurrentLocation();
+        getWaypoints()->append(homeLocation);
         sendWaypoints();
     }
 }
@@ -609,3 +617,4 @@ QJsonDocument DroneModule::setSettings(QList<RequestedDroneSetting> settings, QL
     emit droneRequest(message);
     return jsondoc;
 }
+
