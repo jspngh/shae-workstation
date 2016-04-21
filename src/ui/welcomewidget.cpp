@@ -11,15 +11,22 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     ui(new Ui::WelcomeWidget)
 {
     ui->setupUi(this);
+
+    //Bottem layout setup
+
     ui->progressBar->setValue(0);
     ui->configSearchButton->setText("Start Setup");
 
+    //non ui fields setup
+
+    status = 0;
+    pictureTimerCounter = 1;
     pictures = QDir( ":/ui/screens" ).entryList();
+
+    //scroll area setup
 
     ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
     mainScrollWidget = new QWidget(ui->hintView);
     vLayout = new QHBoxLayout(mainScrollWidget);
 
@@ -34,12 +41,13 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
 
     ui->scrollArea->setWidget(mainScrollWidget);
 
+    //main picture setup
+
     QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.first()));
     ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
     ui->hintView->setAlignment(Qt::AlignCenter);
 
-    status = 0;
-    pictureTimerCounter = 1;
+    //time setup
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(pictureTimer()));
