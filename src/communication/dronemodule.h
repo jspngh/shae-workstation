@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QDebug>
+
 
 #include "models/dronestatus.h"
 #include "communication/droneheartbeatreceiver.h"
@@ -15,6 +17,9 @@
 #include "communication/streamconnection.h"
 #include "models/drone.h"
 #include "videocontroller/videocontroller.h"
+#include "core/controller.h"
+#include "models/search.h"
+
 class Search;
 class Controller;
 class DetectionController;
@@ -205,12 +210,14 @@ private slots:
     void onDroneResponse(const QString &response);
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
+    void onDroneStatusReceived(DroneStatus s);
 
 private:
     void addSignalSlot(); //!< Helper function for connecting the slots and signals
     void initHeartbeat(); //!< Helper function to initialise the heartbeat connection
 
 private:
+    DroneStatus lastReceivedDroneStatus;
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
     Mediator *mediator;
     QString workstationIp;

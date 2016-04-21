@@ -1,8 +1,5 @@
 #include "dronemodule.h"
-#include <QDebug>
 
-#include "core/controller.h"
-#include "models/search.h"
 
 DroneModule::DroneModule()
 // default configuration for a drone on the solo's network
@@ -106,6 +103,8 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(stopStream(DroneModule *)), QString("stopStreamSignal(DroneModule*)"));
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
 
+    connect(this, SIGNAL(droneStatusReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
+    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
 }
 
 void DroneModule::initHeartbeat()
@@ -200,6 +199,15 @@ void DroneModule::addWaypoint(const QGeoCoordinate &waypoint)
 /***********************
 Slots
 ************************/
+
+void DroneModule::onDroneStatusReceived(DroneStatus s)
+{
+    lastReceivedDroneStatus = s;
+
+    //TODO do more work here on reception of a status
+
+}
+
 void DroneModule::onPathCalculated(Search *s)
 {
     qDebug() << "****************************************";
@@ -214,6 +222,8 @@ void DroneModule::onPathCalculated(Search *s)
     if (droneInList) {
         // the drone is selected for this search
         startFlight();
+        // add current drone location to waypoint queue to make waypoint loop 'closed'.
+        getWaypoints()->append(lastReceivedDroneStatus.getCurrentLocation());
         sendWaypoints();
     }
 }
