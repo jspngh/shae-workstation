@@ -24,7 +24,7 @@ void WelcomeWidget::setMediator(Mediator *mediator)
 
 void WelcomeWidget::setSignalSlots()
 {
-    mediator->addSlot(this, SLOT(droneDetected(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(droneDetected(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
 }
 
 void WelcomeWidget::setupReady()
@@ -41,7 +41,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
     ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
-void WelcomeWidget::droneDetected(DroneStatus s)
+void WelcomeWidget::droneDetected(DroneStatus* s)
 {
     setupReady();
 }
