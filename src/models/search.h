@@ -48,7 +48,7 @@ private:
     int fpsProcessing;
 
     static constexpr int DEFAULT_HEIGHT = 3;
-    static constexpr int DEFAULT_FPS = 3;
+    static constexpr int DEFAULT_FPS = 1;
     static constexpr int DEFAULT_GIMBAL_ANGLE = 65;
 };
 
