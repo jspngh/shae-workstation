@@ -1,19 +1,62 @@
 #include "welcomewidget.h"
 #include "ui_welcomewidget.h"
+#include "clickablelabel.h"
+#include <QDebug>
+#include <QDir>
+#include <QPixmap>
+#include <QTimer>
 
 WelcomeWidget::WelcomeWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WelcomeWidget)
 {
     ui->setupUi(this);
+    ui->progressBar->setValue(0);
+    ui->configSearchButton->setText("Start Setup");
 
-    ui->progressBar->setRange(0, 0);
-    ui->configSearchButton->setEnabled(false);
+    pictures = QDir( ":/ui/screens" ).entryList();
+
+    ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+
+    mainScrollWidget = new QWidget(ui->hintView);
+    vLayout = new QHBoxLayout(mainScrollWidget);
+
+    for(int i = 0; i < pictures.size(); i++)
+    {
+        ClickableLabel *pictureLabel = new ClickableLabel("", i, this);
+        QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(i)));
+        pictureLabel->setPixmap(pic.scaled(100,70,Qt::KeepAspectRatio));
+        connect(pictureLabel, SIGNAL(clicked(int)), this, SLOT(selectedImage(int)));
+        vLayout->addWidget(pictureLabel);
+    }
+
+    ui->scrollArea->setWidget(mainScrollWidget);
+
+    QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.first()));
+    ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
+    ui->hintView->setAlignment(Qt::AlignCenter);
+
+    status = 0;
+    pictureTimerCounter = 1;
+
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(pictureTimer()));
+    timer->start(7500);
+
 }
 
 WelcomeWidget::~WelcomeWidget()
 {
+    for(QObject* w : vLayout->children())
+    {
+        delete w;
+    }
+    delete vLayout;
+    delete mainScrollWidget;
     delete ui;
+    delete timer;
 }
 
 void WelcomeWidget::setMediator(Mediator *mediator)
@@ -32,16 +75,48 @@ void WelcomeWidget::setupReady()
      ui->configSearchButton->setEnabled(true);
 }
 
+/***
+ * Connecting on controller's Wifi (make sure controller is turned on).
+ * \nSetting up gateway on the controller.
+ * \nReconnecting to controller's network.
+ * \nSearching for drones on the network.
+ * \nSearching for GPS signal (may take a while).
+ *
+ *
+ * */
+
 /*************
  *  SLOTS
  * **********/
 
 void WelcomeWidget::on_configSearchButton_clicked()
 {
-    ((QStackedWidget *) this->parent())->setCurrentIndex(1);
+    if(status == 0)
+    {
+        ui->configSearchButton->setText("Configurate Search");
+        ui->configSearchButton->setEnabled(false);
+        status ++;
+    } else {
+        ((QStackedWidget *) this->parent())->setCurrentIndex(1);
+    }
 }
 
 void WelcomeWidget::droneDetected(DroneStatus s)
 {
     setupReady();
+}
+
+void WelcomeWidget::selectedImage(int file)
+{
+    QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(file)));
+    ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
+    pictureTimerCounter = (file + 1) % pictures.size();
+    timer->start(7500);
+}
+
+void WelcomeWidget::pictureTimer()
+{
+    QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(pictureTimerCounter)));
+    ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
+    pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
 }

@@ -7,7 +7,8 @@ SOURCES += \
     $$PWD/configwidget.cpp \
     $$PWD/overviewwidget.cpp \
     $$PWD/overviewsearchitem.cpp \
-    $$PWD/overviewdroneitem.cpp
+    $$PWD/overviewdroneitem.cpp \
+    $$PWD/clickablelabel.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -15,7 +16,8 @@ HEADERS += \
     $$PWD/configwidget.h \
     $$PWD/overviewwidget.h \
     $$PWD/overviewsearchitem.h \
-    $$PWD/overviewdroneitem.h
+    $$PWD/overviewdroneitem.h \
+    $$PWD/clickablelabel.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
