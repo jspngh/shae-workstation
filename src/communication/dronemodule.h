@@ -180,7 +180,7 @@ public slots:
     //! Allows to start the stream for a given drone, linked to a search and persistence component.
     void initStream(Search *search, DroneModule *dm, PersistenceController *persistenceController);
     //! Allows to stop the stream for a given drone, linked to a search and persistence component.
-    void stopStream(DroneModule *dm);
+    void stopStream();
     //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
 
@@ -224,7 +224,6 @@ private:
     StreamConnection *streamConnection;
     bool videoProcessing;
     bool videoActive;
-    bool videoInactive;
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };

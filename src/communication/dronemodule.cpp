@@ -36,7 +36,6 @@ DroneModule::DroneModule(int dataPort,
     waypoints = nullptr;
     videoProcessing = video;
     videoActive = false;
-    videoInactive = false;
 
     detectionController = nullptr;
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
@@ -231,10 +230,9 @@ void DroneModule::onDroneResponse(const QString &response)
             videoActive = true;
         }
         if (waypoints != nullptr) {
-            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && !videoInactive) {
-                videoInactive = true;
+            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
                 qDebug() << "In last waypoint, stopping stream";
-                stopStream(this);
+                stopStream();
             }
         }
 
@@ -290,13 +288,11 @@ void DroneModule::initDetection()
     detectionController->start();
 }
 
-void DroneModule::stopStream(DroneModule *dm)
+void DroneModule::stopStream()
 {
-    if (this->getDrone()->getGuid() == dm->getDrone()->getGuid()) {
         emit stopStream(drone);
         detectionController->streamFinished();
         stopStreamConnection();
-    }
 }
 
 /***********************

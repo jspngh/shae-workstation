@@ -8,7 +8,9 @@ Controller::Controller(MainWindow *window, QObject *p)
     // create the mediator. Note: the same mediator object must be shared among all the components!
     mediator = new Mediator();
 
-    workstationIP = initWorkstationIP();
+    retrieveWorkstationIpAndBroadcast();
+    qDebug() << workstationBroadcastIp;
+    qDebug() << workstationIp;
 
     drones = new QList<DroneModule *>();
 
@@ -51,6 +53,7 @@ void Controller::init()
     pathLogicController->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
+    mainWindow->getWelcomeWidget()->setMediator(mediator);
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread
@@ -68,14 +71,18 @@ void Controller::initStream(DroneModule *dm)
     emit startStreamSignal(search, dm, persistenceController);
 }
 
-QString Controller::initWorkstationIP()
+void Controller::retrieveWorkstationIpAndBroadcast()
 {
-    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol
-                && address != QHostAddress(QHostAddress::LocalHost))
-            return address.toString();
+    foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
+        foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
+            QHostAddress address = entry.ip();
+            if (address.protocol() == QAbstractSocket::IPv4Protocol
+                    && address != QHostAddress(QHostAddress::LocalHost)){
+                workstationIp = entry.ip().toString();
+                workstationBroadcastIp = entry.broadcast().toString();
+            }
+        }
     }
-    return QString();
 }
 
 void Controller::stopStream(DroneModule *d)
@@ -97,9 +104,8 @@ int Controller::numDronesConnected()
 void Controller::startListeningForDrones()
 {
     udpSocket  = new QUdpSocket(this);
-    host  = new QHostAddress("127.0.0.1");
-    qDebug()<<host->toString();
-    udpSocket->bind(*host, 4849);
+    host  = new QHostAddress(workstationBroadcastIp);
+    udpSocket->bind(*host, helloPort);
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
 
@@ -113,7 +119,6 @@ void Controller::readPendingDatagrams()
         qDebug() << "hello received";
         helloRaw.resize(udpSocket->pendingDatagramSize());
         udpSocket->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
-
         processHelloMessage(helloRaw);
     }
 }
@@ -122,7 +127,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
     QString ip = hello.getDroneIp();
-    QString strFile =  hello.getStreamFile();
+    QString strFile =  "dependencies/video_stream.mp4";//hello.getStreamFile();
     QString ctrIp = hello.getControllerIp();
     int cmdPort = hello.getCommandsPort();
     int strPort = hello.getStreamPort();
@@ -131,7 +136,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     DroneModule *drone = receivedHelloFrom(ip);
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIP, strFile, vision, true);
+        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
         drone = configureDrone(drone);
     }
 
@@ -190,5 +195,5 @@ Search *Controller::getSearch() const
 
 QString Controller::getWorkstationIP() const
 {
-    return workstationIP;
+    return workstationIp;
 }

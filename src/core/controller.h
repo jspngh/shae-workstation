@@ -54,15 +54,17 @@ public:
 
 private:
     void processHelloMessage(QByteArray helloRaw);
-    QString initWorkstationIP();
-    //!< listens for hello messages from drones on the network
+    //! Will retrieve the ip and broadcast address of the workstation and set in the members
+    //! workstationIp and workstionBroadcastIp
+    void retrieveWorkstationIpAndBroadcast();
+    //! listens for hello messages from drones on the network
     void startListeningForDrones();
 
-    //!< return the dronemodule if the drone with the ip has already send a hello message
-    //!< if the drone hasn't send hello yet the nullptr is returned
+    //! return the dronemodule if the drone with the ip has already send a hello message
+    //! if the drone hasn't send hello yet the nullptr is returned
     DroneModule *receivedHelloFrom(QString ip);
 
-    //!< will configure a drone:
+    //! will configure a drone:
     //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
     DroneModule *configureDrone(DroneModule *drone);
 
@@ -83,7 +85,9 @@ private:
     //      The boolean oneStream will store if a stream is already requested.
     bool oneStream = false;
 
-    QString workstationIP;
+    QString workstationIp;
+    QString workstationBroadcastIp;
+    int helloPort = 4849;
     MainWindow *mainWindow;
     Mediator *mediator;
     QList<DroneModule *> *drones;

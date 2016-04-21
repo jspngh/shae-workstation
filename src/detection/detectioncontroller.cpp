@@ -49,7 +49,8 @@ void DetectionController::run()
                     time = time.addMSecs((quint64) timeFrame * 1000.0);
                     QTime Timer;
                     Timer.start();
-                    cv::Mat croppedFrame = frame(cv::Rect(0,0,this->processWidth,this->processHeight));
+                    //TODO: remove hardcoding of resolution
+                    cv::Mat croppedFrame = frame(cv::Rect(0,720-this->processHeight,this->processWidth,this->processHeight));
                     extractDetectionsFromFrame(croppedFrame, time);
                     int nMilliseconds = Timer.elapsed();
                     qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
@@ -117,9 +118,10 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
         double orientation = droneStatus.getOrientation();
         DetectionList detectionList = this->manager->applyDetector(frame);
-        vector<pair<double, double>> locations = this->manager->calculatePositions(detectionList, pair<double, double>(frameLocation.longitude(), frameLocation.latitude()), this->xLUT, this->yLUT, orientation);
+        vector<pair<double, double>> locations = this->manager->calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
         for (int i = 0; i < detectionList.getSize(); i++) {
-            emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
+            emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), detectionList.returnDetections()[i]->getScore()));
+            qDebug() << "detection score of " << detectionList.returnDetections()[i]->getScore();
             nrDetections++;
         }
 
