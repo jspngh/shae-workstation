@@ -21,7 +21,6 @@ public:
 
 public slots:
     void incrementPeopleLocated();
-    void setSearchedArea(double area);
 
 private slots:
     void incrementDuration();

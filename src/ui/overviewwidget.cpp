@@ -36,9 +36,6 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
     // Update bottom text
     ui->heartBeat->setText(heartbeat.toString());
 
-    // Update drone list
-    OverviewDroneItem *droneItem = mapIdListItem.value(uuid);
-    droneItem->setBatteryLevel(heartbeat.getBatteryLevel());
 
     // Update map
     if (mapView->hasMarker(uuid.toString())) {
@@ -53,6 +50,9 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus heartbeat)
         marker.trackPath();
         marker.show();
     }
+
+    // Update drone list
+    updateDroneList(heartbeat);
 }
 
 void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult result)
