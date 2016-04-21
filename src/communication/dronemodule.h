@@ -17,8 +17,7 @@
 #include "communication/streamconnection.h"
 #include "models/drone.h"
 #include "videocontroller/videocontroller.h"
-#include "core/controller.h"
-#include "models/search.h"
+
 
 class Search;
 class Controller;

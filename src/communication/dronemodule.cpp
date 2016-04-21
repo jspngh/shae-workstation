@@ -1,5 +1,7 @@
 #include "dronemodule.h"
 
+#include "core/controller.h"
+#include "models/search.h"
 
 DroneModule::DroneModule()
 // default configuration for a drone on the solo's network
