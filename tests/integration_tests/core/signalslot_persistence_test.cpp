@@ -18,6 +18,7 @@ void SignalSlotPersistenceTest::initTestCase()
 
 void SignalSlotPersistenceTest::testSaveSearch()
 {
+
     m->addSignal(this, (char *) SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
     Search *s = new Search();
     Drone *d= new Drone();

@@ -52,7 +52,7 @@ DroneModule::DroneModule(int dataPort,
     //connect the dronemodule with the corresponding videocontroller (should not occur via the mediator as it is an 1-1 relation)
     connect(this, SIGNAL(startStream(Drone *)), videoController, SLOT(onStartStream(Drone *)));
     connect(this, SIGNAL(stopStream(Drone *)), videoController, SLOT(onStopStream(Drone *)));
-    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence)), this, SLOT(initDetection()));
+    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence*)), this, SLOT(initDetection()));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
