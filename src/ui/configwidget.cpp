@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QCheckBox>
 
+
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConfigWidget)
@@ -22,9 +23,10 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     //setup connections
     connect(ui->locateButton, SIGNAL(clicked()), this, SLOT(locateButtonPush()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
-    connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
+    //connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
     initializeMap();
+    ui->startButton->setDisabled(false);
 }
 
 ConfigWidget::~ConfigWidget()
@@ -37,7 +39,7 @@ void ConfigWidget::initializeMap()
     mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11, true);
     connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
-    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)), this, SLOT(areaSelected()));
+    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)), this, SLOT(areaSelected(QGeoRectangle)));
 }
 
 void ConfigWidget::onMapLoaded()
@@ -53,10 +55,11 @@ void ConfigWidget::onMapFailedToLoad()
                                         ));
 }
 
-void ConfigWidget::areaSelected()
+void ConfigWidget::areaSelected(QGeoRectangle area)
 {
     this->areaWasSelected = true;
-    ui->startButton->setDisabled(false);
+
+    //ui->startButton->setDisabled(false);
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)
@@ -79,7 +82,7 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
 
 void ConfigWidget::sliderChanged(int value)
 {
-    ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
+    //ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
 }
 
 void ConfigWidget::setMediator(Mediator *mediator)
@@ -92,24 +95,58 @@ void ConfigWidget::setMediator(Mediator *mediator)
 
 void ConfigWidget::startButtonPush()
 {
-    if (mediator) {
-        Search *s = new Search();
-        s->setArea(mapView->selectedArea());
+    if(!areaWasSelected){
+        QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
 
+    }
+    else{
+        QGeoRectangle area = mapView->selectedArea();
+        this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());
+    }
+    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA){
+         QMessageBox::warning(this, "Warning!","The selected area is too big to be searched!", "OK");
+
+
+    }
+    if(areaWasSelected && areaOfArea < MIN_AREA_OF_AREA){
+         QMessageBox::warning(this, "Warning!","Please select a bigger area", "OK");
+
+
+    }
+    qDebug() << "Selected area has size of :" << this->areaOfArea;
+
+    if(areaWasSelected && areaOfArea <= MAX_AREA_OF_AREA && areaOfArea > MIN_AREA_OF_AREA){
         QList<DroneModule *> dronesInSearch;
         for (int i = 0; i < dronesInTable.size(); i++) {
             QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
             if (cb->isChecked())
                 dronesInSearch.append(dronesInTable[i].second);
         }
-        qDebug() << dronesInSearch.size();
-        s->setDroneList(dronesInSearch);
+        if(dronesInSearch.size() == 0){
+            QMessageBox::warning(this, "Not too fast...!","Please select a drone before starting the search", "OK");
+        }
+        else if (mediator) {
+            Search *s = new Search();
+            s->setArea(mapView->selectedArea());
 
-        emit startSearch(s);
-        qDebug() << "emit ConfigWidget::startSearch(Search *s)";
+
+            s->setHeight(ui->heightDoubleSpinBox->value());
+            s->setFpsProcessing(ui->fpsSpinBox->value());
+            s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
+            s->setSpeed(ui->speedDoubleSpinBox->value());
+
+
+            qDebug() << dronesInSearch.size();
+            s->setDroneList(dronesInSearch);
+
+            qDebug() << "emit ConfigWidget::startSearch(Search *s)";
+            emit startSearch(s);
+
+            ((QStackedWidget *) this->parent())->setCurrentIndex(2);
+        }
+
     }
 
-    ((QStackedWidget *) this->parent())->setCurrentIndex(2);
 }
 
 void ConfigWidget::locateButtonPush()
