@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
      * Testing videostuff
      * *****************/
     tests.append(new VideoController_Test());
-    tests.append(new DetectionController_Test());
+    //tests.append(new DetectionController_Test());
 
 
 
