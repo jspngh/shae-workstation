@@ -9,9 +9,12 @@
 #include <QThread>
 #include <QUuid>
 #include <fstream>
+#include <QNetworkInterface>
 
 #include "videocontroller/videocontroller.h"
 #include "communication/streamconnection.h"
+
+
 
 class VideoController_Test : public QObject
 {

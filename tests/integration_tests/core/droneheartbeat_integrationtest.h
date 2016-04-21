@@ -3,6 +3,8 @@
 #include <QtTest>
 #include "simulatorwrapper.h"
 #include "communication/dronemodule.h"
+#include "core/controller.h"
+#include "ui/mainwindow.h"
 
 class DroneHeartbeat_IntegrationTest : public QObject
 {
@@ -22,8 +24,8 @@ private Q_SLOTS:
 private:
     SimulatorWrapper *simulator;
     DroneModule *drone;
+    Controller *controller;
     Mediator *m;
-    QThread th;
     int count;
 
 };

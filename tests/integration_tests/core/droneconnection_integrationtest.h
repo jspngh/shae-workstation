@@ -2,6 +2,8 @@
 #define DRONECONNECTION_INTEGRATIONTEST_H
 #include "simulatorwrapper.h"
 #include "communication/dronemodule.h"
+#include "core/controller.h"
+#include "ui/mainwindow.h"
 #include <QtTest>
 
 class Droneconnection_IntegrationTest : public QObject
@@ -18,9 +20,9 @@ private Q_SLOTS:
 
 private:
     SimulatorWrapper *sim;
+    Controller *controller;
     DroneModule *drone;
     Mediator *m;
-    QThread th;
     int count;
 
 private slots:

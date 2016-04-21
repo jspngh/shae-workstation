@@ -55,9 +55,9 @@ signals:
      */
     void streamStopped();
 private:
-    libvlc_media_player_t *mp;
-    libvlc_instance_t *inst;
-    libvlc_media_t *m;
+    libvlc_media_player_t *mp = nullptr;
+    libvlc_instance_t *inst = nullptr;
+    libvlc_media_t *m = nullptr;
     QString sequence_path;
     Mediator *mediator;
 
