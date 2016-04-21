@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     db.initDatabase();
     /*
     tests.append(new Dronemodule_IntegrationTest());
+    tests.append(new Dronemodule_IntegrationTest());
     tests.append(new Droneconnection_IntegrationTest());
     tests.append(new DroneHeartbeat_IntegrationTest());
     */

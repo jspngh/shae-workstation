@@ -10,37 +10,35 @@ void Dronemodule_IntegrationTest::init()
 {
     count = 0;
     sim = new SimulatorWrapper();
-    sim->startSimulator();
+    //sim->startSimulator();
 
-    drone = new DroneModule(6330, 5502, QString("127.0.0.1"), QString("127.0.0.1"), QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
+    MainWindow w;
+    controller =  new Controller(&w);
+    controller->init();
+
+    // wait until a drone is connected to the controller
+    // the controller needs to wait until the drone sends a hello message, indicating that it is ready
+    while(controller->numDronesConnected() < 1) {
+        qDebug() << "wait until a drone is connected to the controller";
+        QTest::qWait(1000 * 5);
+    }
+
+    drone = (*(controller->getDrones()))[0];
+    m = controller->getMediator();
+
     QList<QGeoCoordinate> *waypointList = new QList<QGeoCoordinate>();
     waypointList->push_back(QGeoCoordinate(1.0, 1.0));
     waypointList->push_back(QGeoCoordinate(2.0, 2.0));
     drone->setWaypoints(waypointList);
-
-
-    m = new Mediator();
-
-    drone->setMediator(m);
-
-    drone->moveToThread(&th);
-    th.start();
-
-
 }
 
 void Dronemodule_IntegrationTest::cleanup()
 {
-    QTest::qWait(500);
-    th.quit();
-    th.wait();
-    QTest::qWait(500);
-    delete drone;
-    delete m;
     sim->stopSimulator();
     QTest::qWait(500);
     delete sim;
     QTest::qWait(5000);
+    delete controller;
 }
 
 

@@ -76,6 +76,8 @@ public:
     void getStreamConnection();
     void stopStreamConnection();
 
+    PersistenceController *getPersistenceController() const;
+    void setPersistenceController(PersistenceController *value);
 
     QUuid getGuid() const;
 
@@ -178,11 +180,13 @@ public slots:
     QJsonDocument requestHeartbeat();
 
     //! Allows to start the stream for a given drone, linked to a search and persistence component.
-    void initStream(Search *search, DroneModule *dm, PersistenceController *persistenceController);
+    void initStream();
     //! Allows to stop the stream for a given drone, linked to a search and persistence component.
     void stopStream();
     //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
+
+    void onSearchEmitted(Search *s);
 
 
     //! Sends a Json message to the drone to start the flight.
@@ -217,7 +221,9 @@ private:
     QThread *videoThread;
     VideoController *videoController;
     DetectionController *detectionController;
+    PersistenceController *persistenceController;
     DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
+    Search* search;
     QThread *connectionThread;
     DroneConnection *droneConnection;
     QThread *streamThread;

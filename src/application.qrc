@@ -18,9 +18,7 @@
     <file alias="search">ui/img/radar-icon.png</file>
     <file alias="wireless">ui/img/wireless-icon.png</file>
   </qresource>
-
   <qresource prefix="/db">
     <file alias="createTables.sql">../scripts/createDB.sql</file>
   </qresource>
 </RCC>
-

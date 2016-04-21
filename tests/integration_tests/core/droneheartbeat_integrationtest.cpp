@@ -12,45 +12,39 @@ void DroneHeartbeat_IntegrationTest::initTestCase()
     simulator = new SimulatorWrapper();
     simulator->startSimulator();
 
-    drone = new DroneModule(6330, 5502, QString("127.0.0.1"), QString("127.0.0.1"), QString("127.0.0.1"), QString("rtp://127.0.0.1:5000"),  0.0001);
-    m = new Mediator();
+    MainWindow w;
+    controller =  new Controller(&w);
+    controller->init();
 
-    drone->setMediator(m);
-    drone->moveToThread(&th);
-    th.start();
+    // wait until a drone is connected to the controller
+    // the controller needs to wait until the drone sends a hello message, indicating that it is ready
+    while(controller->numDronesConnected() < 1) {
+        qDebug() << "wait until a drone is connected to the controller";
+        QTest::qWait(1000 * 5);
+    }
 
+    drone = (*(controller->getDrones()))[0];
+    m = controller->getMediator();
 }
 
 void DroneHeartbeat_IntegrationTest::cleanupTestCase()
 {
-    QTest::qWait(500);
-    th.quit();
-    th.wait();
-    QTest::qWait(500);
-    delete drone;
-    delete m;
-
-
     simulator->stopSimulator();
     QTest::qWait(500);
     delete simulator;
     QTest::qWait(5000);
+    delete controller;
 }
 
 
 void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 {
-
-
     DroneHeartBeatReceiver *receiver = drone->getHeartbeatReceiver();
     connect(receiver, SIGNAL(droneHeartBeat(QString)), this, SLOT(onDroneHeartbeatReceived(QString)));
-
 
     QTest::qWait(10000);
     QVERIFY(count > 0);
     qDebug() << "Heartbeats get received";
-
-
 }
 
 void DroneHeartbeat_IntegrationTest::onDroneHeartbeatReceived(QString string)
