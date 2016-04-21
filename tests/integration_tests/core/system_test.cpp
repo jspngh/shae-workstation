@@ -34,7 +34,6 @@ void System_Test::initTestCase()
 
     // select the first drone that has connected to the controller
     DroneModule *drone = (*(controller->getDrones()))[0];
-    drone->getDrone()->setStreamPath(QString("dependencies/video_stream.mp4"));
     list->append(drone);
 
     s = new Search();

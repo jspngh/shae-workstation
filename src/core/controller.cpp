@@ -127,7 +127,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
     QString ip = hello.getDroneIp();
-    QString strFile =  "dependencies/video_stream.mp4";//hello.getStreamFile();
+    QString strFile =  hello.getStreamFile();
     QString ctrIp = hello.getControllerIp();
     int cmdPort = hello.getCommandsPort();
     int strPort = hello.getStreamPort();
