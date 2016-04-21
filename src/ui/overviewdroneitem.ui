@@ -34,7 +34,7 @@
      <item row="0" column="1">
       <widget class="QLabel" name="batteryValue">
        <property name="text">
-        <string>45%</string>
+        <string>...</string>
        </property>
       </widget>
      </item>
@@ -55,7 +55,7 @@
      <item row="2" column="1">
       <widget class="QLabel" name="searchAreaValue">
        <property name="text">
-        <string>543 m²</string>
+        <string>0 m²</string>
        </property>
       </widget>
      </item>
@@ -69,7 +69,7 @@
      <item row="3" column="1">
       <widget class="QLabel" name="locatedPeopleValue">
        <property name="text">
-        <string>4</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -88,7 +88,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="goHomeButton">
+      <widget class="QPushButton" name="returnHomeButton">
        <property name="icon">
          <iconset resource="../application.qrc">:/ui/icons/home</iconset>
        </property>

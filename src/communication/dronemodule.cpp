@@ -225,13 +225,15 @@ void DroneModule::onDroneResponse(const QString &response)
     if (jsondoc.isObject()) {
         DroneStatus status = DroneStatus::fromJsonString(response);
         status.setDrone(this);
+
         if (status.getPreviousWaypointOrder() == 1 && videoProcessing && !videoActive) {
             qDebug() << "In first waypoint, starting stream";
             emit startStreamWorkstation(this);
             videoActive = true;
         }
         if (waypoints != nullptr) {
-            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && !videoInactive) {
+            if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
+                videoActive = false;
                 videoInactive = true;
                 qDebug() << "In last waypoint, stopping stream";
                 stopStream(this);
