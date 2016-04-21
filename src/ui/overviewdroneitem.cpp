@@ -6,9 +6,10 @@ OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *p
       ui(new Ui::OverviewDroneItem),
       locatedPeople(0),
       searchedArea(0.0),
-      hasLocation(false),
+      receivedStatus(false),
       visionWidthMeters(0.0),
-      visionWidthDegrees(drone->getVisionWidth())
+      visionWidthDegrees(drone->getVisionWidth()),
+      timer(new QTimer())
 {
     ui->setupUi(this);
 
@@ -16,7 +17,8 @@ OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *p
 
     // init timer
     timer->setInterval(1000);
-    connect(timer, SIGNAL(timeout()), this, SLOT(checkConnectivity()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateConnectivity()));
+    timer->start();
 
     connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
     connect(ui->haltButton, SIGNAL(clicked()), drone, SLOT(stopFlight()));
@@ -45,7 +47,7 @@ void OverviewDroneItem::setBatteryLevel(double level)
 void OverviewDroneItem::setSearchedArea(double area)
 {
     ui->searchAreaValue->setText(
-        QString("%1 m²").arg(area)
+        QString("%1 m²").arg( (int) area)
     );
 }
 
@@ -56,36 +58,21 @@ void OverviewDroneItem::setConnectivity(QString level)
 
 void OverviewDroneItem::updateStatus(DroneStatus status)
 {
-    lastTimestamp = status.getTimestampReceivedWorkstation();
-
     double batteryLevel = status.getBatteryLevel();
     if (batteryLevel != -1)
         setBatteryLevel(batteryLevel);
-        //ui->batteryValue->setText(QString::number(batteryLevel) + "%");
 
-    if (hasLocation) {
-        // calculate the area searched since the last update
-        double distance = status.getCurrentLocation().distanceTo(lastLocation);
-
-        searchedArea += distance * visionWidthMeters;
-        setSearchedArea(searchedArea);
-
-        // update last location
-        lastLocation = status.getCurrentLocation();
+    if (receivedStatus) {
+        updateSearchedArea(status);
     }
 
-    if (!hasLocation) {
-        lastLocation = status.getCurrentLocation();
-        hasLocation = true;
+    // update last status
+    lastStatus = status;
 
-        // calculate the vision width in meters for this received coordinate
-        double newLongitude = lastLocation.longitude() + visionWidthDegrees;
-        QGeoCoordinate referenceCoordinate(lastLocation.latitude(), newLongitude);
-        visionWidthMeters = referenceCoordinate.distanceTo(lastLocation);
-    }
-
-    if (!timer->isActive()) {
-        timer->start();
+    // do some initialization work only when the first heartbeat arrives
+    if (!receivedStatus) {
+        receivedStatus = true;
+        calculateVisionWidthMeters();
     }
 
 }
@@ -101,13 +88,39 @@ void OverviewDroneItem::incrementPeopleLocated()
     ui->locatedPeopleValue->setText(QString::number(locatedPeople));
 }
 
-void OverviewDroneItem::checkConnectivity()
+void OverviewDroneItem::updateConnectivity()
 {
-    double delta = QDateTime::currentDateTime().time().msec() - lastTimestamp.time().msec();
-    qDebug() << "time " << delta;
+    if (receivedStatus) {
+        QDateTime lastTimestamp = lastStatus.getTimestampReceivedWorkstation();
+        double delta = (lastTimestamp.time().msecsTo(QDateTime::currentDateTime().time())) / 1000.0;
 
-    //if (delta < 1.5)
-
-
+        if (delta < 2.0)
+            setConnectivity("good");
+        else if (delta < 5.0)
+            setConnectivity("poor");
+        else if (delta < 20.0)
+            setConnectivity("bad");
+        else
+            setConnectivity("no signal");
+    }
 }
 
+/******************************
+ *   Private Helper Functions *
+ * ****************************/
+
+void OverviewDroneItem::updateSearchedArea(DroneStatus status)
+{
+    QGeoCoordinate lastLocation = lastStatus.getCurrentLocation();
+    double distance = status.getCurrentLocation().distanceTo(lastLocation);
+    searchedArea += (distance * visionWidthMeters);
+    setSearchedArea( (int) searchedArea);
+}
+
+void OverviewDroneItem::calculateVisionWidthMeters()
+{
+    QGeoCoordinate lastLocation = lastStatus.getCurrentLocation();
+    double newLongitude = lastLocation.longitude() + visionWidthDegrees;
+    QGeoCoordinate referenceCoordinate(lastLocation.latitude(), newLongitude);
+    visionWidthMeters = referenceCoordinate.distanceTo(lastLocation);
+}
