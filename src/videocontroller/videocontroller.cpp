@@ -78,14 +78,20 @@ VideoSequence VideoController::onStartStream(Drone *drone)
 
 void VideoController::onStopStream(Drone *drone)
 {
-    /* Stop playing */
-    libvlc_media_player_stop(mp);
 
-    /* Free the media_player */
-    libvlc_media_player_release(mp);
+    if(mp != nullptr){
+        /* Stop playing */
+        libvlc_media_player_stop(mp);
 
-    libvlc_release(inst);
+        /* Free the media_player */
+        libvlc_media_player_release(mp);
+    }
 
-    libvlc_release(inst);
+    if(inst != nullptr){
+        libvlc_release(inst);
+
+        libvlc_release(inst);
+    }
+
     emit this->streamStopped();
 }

@@ -15,7 +15,6 @@ void VideoController_Test::initTestCase()
     simulatorProcess = new QProcess(this);
     qDebug() << "simulator opened";
     simulatorProcess->start(program, arguments);
-    QThread::sleep(20);
 
     streamConnection = new StreamConnection("127.0.0.1", 5502);
     streamThread = new QThread();
