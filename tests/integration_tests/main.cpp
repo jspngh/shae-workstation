@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QList<QObject *> tests;
 
-    qRegisterMetaType<DetectionResult>("DetectionResult");
-    qRegisterMetaType<VideoSequence>("VideoSequence");
-    qRegisterMetaType<Search>("Search");
-    qRegisterMetaType<DroneStatus>("DroneStatus");
-    qRegisterMetaType<Drone>("Drone");
+    qRegisterMetaType<DetectionResult>("DetectionResult*");
+    qRegisterMetaType<VideoSequence>("VideoSequence*");
+    qRegisterMetaType<Search>("Search*");
+    qRegisterMetaType<DroneStatus>("DroneStatus*");
+    qRegisterMetaType<Drone>("Drone*");
 
     //create db
     DatabaseCreator db = DatabaseCreator();
