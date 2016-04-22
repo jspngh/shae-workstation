@@ -44,24 +44,24 @@ void VideoSequenceDAO_Test::testSimpleVideoSequenceDAO()
 {
     VideoSequenceDAO sd = VideoSequenceDAO(&projectShaeDatabase);
 
-    VideoSequence s = VideoSequence(QUuid::createUuid(), QTime(8, 8, 8), QTime(9, 9, 9), 10 , "pathtofile");
+    VideoSequence *s = new VideoSequence(QUuid::createUuid(), QTime(8, 8, 8), QTime(9, 9, 9), 10 , "pathtofile");
     QUuid searchID = QUuid::createUuid();
     QUuid droneID = QUuid::createUuid();
 
     sd.dbSaveVideoSequence(droneID, searchID, s);
 
-    VideoSequence sback = sd.dbRetrieveVideoSequence(droneID, searchID);
+    VideoSequence* sback = sd.dbRetrieveVideoSequence(droneID, searchID);
 
-    QVERIFY(sback.getVideoID() == s.getVideoID());
-    QVERIFY(s.getFrameCount() == sback.getFrameCount());
-    QVERIFY(s.getStart() == sback.getStart());
-    QVERIFY(s.getEnd() == sback.getEnd());
-    QVERIFY(s.getPath() == sback.getPath());
+    QVERIFY(sback->getVideoID() == s->getVideoID());
+    QVERIFY(s->getFrameCount() == sback->getFrameCount());
+    QVERIFY(s->getStart() == sback->getStart());
+    QVERIFY(s->getEnd() == sback->getEnd());
+    QVERIFY(s->getPath() == sback->getPath());
 
     QSqlQuery query;
     query.prepare("DELETE from videosequences "
                   "WHERE videoID == (:videoID)");
-    query.bindValue(":videoID", s.getVideoID());
+    query.bindValue(":videoID", s->getVideoID());
     if (query.exec()) {
         qDebug() << "delete succes";
     } else {

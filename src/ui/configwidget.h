@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QList>
 #include <QtMath>
+#include <QMessageBox>
 #include <QMMapView.h>
 #include <QMainWindow>
 #include <QPair>
@@ -42,10 +43,10 @@ private slots:
     void startButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
-    void areaSelected();
+    void areaSelected(QGeoRectangle area);
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
-    void updateDroneTable(DroneStatus s);
-    void updateMapCenter(DroneStatus s);
+    void updateDroneTable(DroneStatus* s);
+    void updateMapCenter(DroneStatus* s);
 
 private:
     Ui::ConfigWidget *ui;
@@ -54,6 +55,10 @@ private:
 
     bool areaWasSelected = false;
     bool mapCentered = false;
+
+    double areaOfArea = 0.0;
+    constexpr static double MAX_AREA_OF_AREA = 10000.0;
+    constexpr static double MIN_AREA_OF_AREA = 1.0;
 
     void writeConfigToFile();
     void initializeMap();

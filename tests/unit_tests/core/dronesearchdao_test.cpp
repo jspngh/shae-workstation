@@ -43,18 +43,18 @@ void DroneSearchDAO_Test::testSimpleDroneSearchDAO()
 {
     DroneSearchDAO sd = DroneSearchDAO(&projectShaeDatabase);
 
-    QList<QGeoCoordinate> s = QList<QGeoCoordinate>();
+    QList<QGeoCoordinate> *s = new QList<QGeoCoordinate>();
     for (int i = 0; i < 10; i ++)
-        s.append(QGeoCoordinate(i, i));
+        s->append(QGeoCoordinate(i, i));
     QUuid searchID = QUuid::createUuid();
     QUuid droneID = QUuid::createUuid();
 
     sd.dbSaveDronePath(droneID, searchID, s);
 
-    QList<QGeoCoordinate> sback = sd.dbRetrieveDronePath(droneID, searchID);
+    QList<QGeoCoordinate> *sback = sd.dbRetrieveDronePath(droneID, searchID);
 
     int i = 0;
-    for (QGeoCoordinate coordinate : sback) {
+    for (QGeoCoordinate coordinate : *sback) {
         QVERIFY(i == coordinate.longitude());
         QVERIFY(i == coordinate.latitude());
         i++;

@@ -24,10 +24,11 @@ void GeneralDAO_Test::testUncypherGeneralDAO()
 {
     QString testString = QString("5-5:6-6:7-7:8-8");
     GeneralDAO generaldao = GeneralDAO();
-    QList<QGeoCoordinate> returnList = generaldao.uncypherPathString(testString);
-    QVERIFY(returnList.size() == 4);
+    QList<QGeoCoordinate> *returnList = generaldao.uncypherPathString(testString);
+    QVERIFY(returnList->size() == 4);
     double i = 5;
-    for (QGeoCoordinate coordinate : returnList) {
+    for(QGeoCoordinate coordinate: *returnList)
+    {
         QVERIFY(coordinate.longitude() == i);
         QVERIFY(coordinate.latitude() == i);
         i++;
@@ -38,5 +39,5 @@ void GeneralDAO_Test::testUncypherEmptyStringGeneralDAO()
 {
     QString testString = QString("5-5:6-6:7-7:8-8");
     GeneralDAO generaldao = GeneralDAO();
-    QVERIFY(generaldao.uncypherPathString(testString).empty());
+    QVERIFY(generaldao.uncypherPathString(testString)->empty());
 }

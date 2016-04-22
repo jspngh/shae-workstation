@@ -45,25 +45,25 @@ void DetectionResultDAO_Test::testSimpleDetectionResultDAO()
 {
     DetectionResultDAO sd = DetectionResultDAO(&projectShaeDatabase);
 
-    DetectionResult s = DetectionResult(QGeoCoordinate(5, 5), 5.5);
+    DetectionResult *dr = new DetectionResult(QGeoCoordinate(5, 5), 5.5);
     QUuid searchID = QUuid::createUuid();
     QUuid droneID = QUuid::createUuid();
 
-    DetectionResult s2 = DetectionResult(QGeoCoordinate(5, 5), 5.5);
+    DetectionResult *s2 = new DetectionResult(QGeoCoordinate(5, 5), 5.5);
     QUuid droneID2 = QUuid::createUuid();
 
-    sd.dbSaveDetectionResult(droneID, searchID, s);
+    sd.dbSaveDetectionResult(droneID, searchID, dr);
     sd.dbSaveDetectionResult(droneID2, searchID, s2);
 
-    QList<DetectionResult> sback = sd.dbRetrieveDetectionResults(droneID, searchID);
+    QList<DetectionResult*>* sback = sd.dbRetrieveDetectionResults(droneID, searchID);
 
-    QVERIFY(sback.first().getScore() == s.getScore());
-    QVERIFY(s.getLocation().longitude() == sback.first().getLocation().longitude());
-    QVERIFY(s.getLocation().latitude() == sback.first().getLocation().latitude());
+    QVERIFY(sback->first()->getScore() == dr->getScore());
+    QVERIFY(dr->getLocation().longitude() == sback->first()->getLocation().longitude());
+    QVERIFY(dr->getLocation().latitude() == sback->first()->getLocation().latitude());
 
-    QList<DetectionResult> sback2 = sd.dbRetrieveDetectionResults(searchID);
+    QList<DetectionResult*>* sback2 = sd.dbRetrieveDetectionResults(searchID);
 
-    QVERIFY(sback2.size() == 2);
+    QVERIFY(sback2->size() == 2);
 
     QSqlQuery query;
     query.prepare("DELETE from detectionresults "
