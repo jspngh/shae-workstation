@@ -23,12 +23,12 @@ public:
      * Its inputs are a search object.
      * The object is the one that needs to be stored.
      */
-    Search dbSaveSearch(Search search);
+    Search* dbSaveSearch(Search *search);
     /**
      * \brief dbRetrieveSearch Retrieves a search for a
      * certain searchid.
      */
-    Search dbRetrieveSearch(QUuid searchId);
+    Search* dbRetrieveSearch(QUuid searchId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

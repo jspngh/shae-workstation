@@ -45,8 +45,8 @@ private slots:
     void sliderChanged(int);
     void areaSelected(QGeoRectangle area);
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
-    void updateDroneTable(DroneStatus s);
-    void updateMapCenter(DroneStatus s);
+    void updateDroneTable(DroneStatus* s);
+    void updateMapCenter(DroneStatus* s);
 
 private:
     Ui::ConfigWidget *ui;

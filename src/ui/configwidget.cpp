@@ -165,27 +165,27 @@ void ConfigWidget::setSignalSlots()
 {
     mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
     mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
-    mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
 }
 
 
-void ConfigWidget::updateMapCenter(DroneStatus heartbeat)
+void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
 {
     if (!mapView->hasLoaded()) return;
 
     // position drone on map
-    QGeoCoordinate center = heartbeat.getCurrentLocation();
-    QString id = heartbeat.getDrone()->getGuid().toString();
+    QGeoCoordinate center = heartbeat->getCurrentLocation();
+    QString id = heartbeat->getDrone()->getGuid().toString();
     if (mapView->hasMarker(id)) {
         QMMarker &marker = mapView->getMarker(id);
-        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.moveTo(center);
     } else {
         QMMarker &marker = mapView->addMarker(id, center);
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
-        marker.setOrientation(qRadiansToDegrees(heartbeat.getOrientation()));
+        marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.show();
     }
 
@@ -198,11 +198,11 @@ void ConfigWidget::updateMapCenter(DroneStatus heartbeat)
 }
 
 
-void ConfigWidget::updateDroneTable(DroneStatus s)
+void ConfigWidget::updateDroneTable(DroneStatus* s)
 {
     qDebug() << "updateDroneTable";
 
-    DroneModule *d = s.getDrone();
+    DroneModule *d = s->getDrone();
     int currentRow = getDroneInTableIndex(d);
 
     if (currentRow == -1) {
@@ -215,17 +215,17 @@ void ConfigWidget::updateDroneTable(DroneStatus s)
     ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
 
     // set type
-    if (s.getType().isEmpty())
+    if (s->getType().isEmpty())
         ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Not available")));
     else
-        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(s.getType()));
+        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(s->getType()));
 
     // set battery
-    if (s.getBatteryLevel() == -1)
+    if (s->getBatteryLevel() == -1)
         ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
     else
         ui->droneTable->setItem(currentRow, BATTERY,
-                                new QTableWidgetItem(QString::number(s.getBatteryLevel()) + " %"));
+                                new QTableWidgetItem(QString::number(s->getBatteryLevel()) + " %"));
 
     // set ip and port
     QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());

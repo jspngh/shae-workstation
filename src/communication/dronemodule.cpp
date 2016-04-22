@@ -28,13 +28,13 @@ DroneModule::DroneModule(int dataPort,
     streamThread = new QThread();
     videoThread = new QThread();
     this->workstationIp = workstationIp;
+    waypoints = new QList<QGeoCoordinate>();
     droneConnection->moveToThread(connectionThread);
     streamConnection->moveToThread(streamThread);
     videoController->moveToThread(videoThread);
     connectionThread->start();
     streamThread->start();
     videoThread->start();
-    waypoints = nullptr;
     videoProcessing = video;
     videoActive = false;
 
@@ -52,7 +52,7 @@ DroneModule::DroneModule(int dataPort,
     //connect the dronemodule with the corresponding videocontroller (should not occur via the mediator as it is an 1-1 relation)
     connect(this, SIGNAL(startStream(Drone *)), videoController, SLOT(onStartStream(Drone *)));
     connect(this, SIGNAL(stopStream(Drone *)), videoController, SLOT(onStopStream(Drone *)));
-    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence)), this, SLOT(initDetection()));
+    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence*)), this, SLOT(initDetection()));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -94,9 +94,10 @@ void DroneModule::setMediator(Mediator *med)
 
 void DroneModule::addSignalSlot()
 {
-
-    mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
+    mediator->addSignal(this, (char *) SIGNAL(startStreamWorkstation(DroneModule *)), QString("startStreamWorkstation(DroneModule*)"));
+    mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
+    mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
     mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
@@ -104,9 +105,8 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 
-
-    connect(this, SIGNAL(droneStatusReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
-    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
+    connect(this, SIGNAL(droneStatusReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
+    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
 }
 
 void DroneModule::initHeartbeat()
@@ -212,26 +212,26 @@ void DroneModule::addWaypoint(const QGeoCoordinate &waypoint)
 Slots
 ************************/
 
-void DroneModule::onDroneStatusReceived(DroneStatus status)
+void DroneModule::onDroneStatusReceived(DroneStatus *status)
 {
-    lastReceivedDroneStatus = status;
+    lastReceivedDroneStatus = *status;
 
     if( waypoints != nullptr &&
-        status.getPreviousWaypointOrder() == waypoints->size() &&
-        status.getCurrentLocation().distanceTo(homeLocation) < 1){
+        status->getPreviousWaypointOrder() == waypoints->size() &&
+        status->getCurrentLocation().distanceTo(homeLocation) < 1){
         // the drone is has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
         returnToHome();
     }
 
-    if (status.getPreviousWaypointOrder() == 2 && videoProcessing && !videoActive) {
+    if (status->getPreviousWaypointOrder() == 2 && videoProcessing && !videoActive) {
         qDebug() << "In first waypoint, starting stream";
         initStream();
         videoActive = true;
     }
 
     if (waypoints != nullptr) {
-        if (status.getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
+        if (status->getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
             videoActive = false;
             qDebug() << "In last waypoint, stopping stream";
             stopStream();
@@ -291,9 +291,9 @@ void DroneModule::onDroneResponse(const QString &response)
         status.setDrone(this);
 
         if (status.getHeartbeat()) {
-            emit droneHeartBeatReceived(status);
+            emit droneHeartBeatReceived(&status);
         } else {
-            emit droneStatusReceived(status);
+            emit droneStatusReceived(&status);
         }
 
     } else

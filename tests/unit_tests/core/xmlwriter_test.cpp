@@ -26,10 +26,10 @@ void XMLWriter_Test::testSimpleDetectionResultWriter()
 {
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     QString fileName = folder.append("/xmltest.xml");
-    QList<DetectionResult> results = QList<DetectionResult>();
+    QList<DetectionResult*>* results = new QList<DetectionResult*>();
 
-    results.push_front(DetectionResult(QGeoCoordinate(5, 5), 5.5));
-    results.push_front(DetectionResult(QGeoCoordinate(6, 6), 6.6));
+    results->push_front(new DetectionResult(QGeoCoordinate(5, 5), 5.5));
+    results->push_front(new DetectionResult(QGeoCoordinate(6, 6), 6.6));
 
     DetectionResultWriter dw = DetectionResultWriter();
 
@@ -63,5 +63,5 @@ void XMLWriter_Test::testSimpleDetectionResultWriter()
 
     QFile::remove(fileName);
 
-    QVERIFY(results.size() == expectedResults.size());
+    QVERIFY(results->size() == expectedResults.size());
 }
