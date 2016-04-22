@@ -37,6 +37,7 @@ DroneModule::DroneModule(int dataPort,
     waypoints = nullptr;
     videoProcessing = video;
     videoActive = false;
+    isFlying = false;
 
     detectionController = nullptr;
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
@@ -95,6 +96,7 @@ void DroneModule::setMediator(Mediator *med)
 void DroneModule::addSignalSlot()
 {
 
+    mediator->addSignal(this, (char *) SIGNAL(landed(DroneModule *)), QString("landed(DroneModule)"));
     mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
     mediator->addSignal(this, (char *) SIGNAL(droneHeartBeatReceived(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatus()), QString("requestStatus()"));
@@ -103,7 +105,6 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
     mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
-
 
     connect(this, SIGNAL(droneStatusReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
     connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus)), this, SLOT(onDroneStatusReceived(DroneStatus)));
@@ -238,6 +239,12 @@ void DroneModule::onDroneStatusReceived(DroneStatus status)
         }
     }
 
+    if (isFlying && status.height < 0.2) {
+        isFlying = false;
+        qDebug() << "drone has landed";
+        emit landed(this);
+    }
+
 }
 
 void DroneModule::onPathCalculated(Search *s)
@@ -334,6 +341,7 @@ Navigation message methods
 
 QJsonDocument DroneModule::startFlight()
 {
+    isFlying = true;
     // Create json message to start the flight conform the interface of the wiki
     QJsonObject json = QJsonObject();
 

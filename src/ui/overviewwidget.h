@@ -39,6 +39,7 @@ private:
     QMap<QUuid, OverviewDroneItem *> mapIdListItem;
 
 private slots:
+    void onDroneLanded(DroneModule *drone);
     void exportSearchButtonPush();
     void onSearchStarted(Search *s);
     void onHeartBeatReceived(DroneStatus heartbeat);

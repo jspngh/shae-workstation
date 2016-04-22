@@ -164,6 +164,8 @@ signals:
 
     void startStreamWorkstation(DroneModule *dm);
 
+    void landed(DroneModule *dm);
+
     /*********************
      Slots
      *********************/
@@ -237,6 +239,7 @@ private:
     bool videoProcessing;
     bool videoActive;
     bool videoInactive;
+    bool isFlying;
     QGeoCoordinate homeLocation;
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.

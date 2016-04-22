@@ -20,6 +20,11 @@ OverviewDroneItem::~OverviewDroneItem()
     delete ui;
 }
 
+void OverviewDroneItem::setStatus(QString status)
+{
+    ui->statusValue->setText(status);
+}
+
 void OverviewDroneItem::setDroneNr(uint number)
 {
     ui->header->setText(

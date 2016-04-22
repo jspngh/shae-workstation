@@ -21,6 +21,7 @@ public slots:
     void setDroneNr(uint number);
     void setBatteryLevel(double level);
     void setSearchedArea(double area);
+    void setStatus(QString status); //possible values are TAKING OFF, FLYING, LANDED
     void updateStatus(DroneStatus status);
     void incrementPeopleLocated();
 
