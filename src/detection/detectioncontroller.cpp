@@ -12,6 +12,7 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     int cameraAngle = this->search->getGimbalAngle();
     parseConfiguration(droneHeight, cameraAngle);
     this->streaming = true;
+    this->path = NULL;
     this->manager = new DetectorManager(this->search->getFpsProcessing(),
                                         this->processWidth,
                                         this->processHeight,
@@ -23,24 +24,26 @@ void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
+    if(this->path == NULL) {
+        exit(EXIT_FAILURE); // if we get here, mistakes were made
+    }
     this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() << (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
-    qDebug() << "frames have been found, total " << numFrames;
+    qDebug() << numFrames << " frames have been found.";
 
     int oldnumFrames = 0;
     int iteratorFrames = 0;
     // frameHop is the number of frames that need to be skipped to process the sequence at the desired fps
     this->frameHop = fpsOriginal / (double) this->search->getFpsProcessing();
-    qDebug() << "framehop " << frameHop;
+    qDebug() << "Framehop used: " << frameHop;
     if (!(this->frameHop > 0 && this->frameHop < 30)) {
         this->frameHop = 30;
     }
     droneId = this->droneModule->getGuid();
     QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId,
                                                                                  this->search->getSearchID()).getStart();
-
     cv::Mat frame;
     do {
         while (iteratorFrames < numFrames) {
@@ -54,7 +57,6 @@ void DetectionController::run()
                     time = time.addMSecs((quint64) timeFrame * 1000.0);
                     QTime Timer;
                     Timer.start();
-                    // TODO: remove hardcoding of resolution
                     cv::Mat croppedFrame = frame(cv::Rect(0, this->resolutionHeight - this->processHeight,
                                                           this->processWidth, this->processHeight));
                     extractDetectionsFromFrame(croppedFrame, time);
@@ -95,7 +97,6 @@ void DetectionController::streamFinished()
 {
     qDebug() << "DetectionController: stream has been stopped";
     this->streaming = false;
-
 }
 
 int DetectionController::getNrDetections()
@@ -118,7 +119,7 @@ void DetectionController::setPath(const QString &value)
     path = value;
 }
 
-void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time)
+void DetectionController::(cv::Mat frame, QDateTime time)
 {
     if (frame.rows != 0 && frame.cols != 0) {
         DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
@@ -131,7 +132,6 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
             qDebug() << "detection score of " << detectionList.returnDetections()[i]->getScore();
             nrDetections++;
         }
-
     } else {
         qDebug() << "Frame is empty";
     }
@@ -144,8 +144,8 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
     std::size_t location;
     ifstream file;
     file.open(path);
-    //if the file does not exist, fall back to the original configuration
-    //might result in faulty detections
+    // if the file does not exist, fall back to the original configuration
+    // might result in faulty detections
     if (!file.is_open()) {
         path = "dependencies/gopro_3m_65deg.cfg";
         file.open(path);
@@ -188,6 +188,7 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
             temp.push_back(realWidth);
             this->xLUT.push_back(temp);
         }
+
         getline(file, line);
         location = line.find_last_of("=");
         int yLUTsize = atoi(line.substr(location + 1).c_str());

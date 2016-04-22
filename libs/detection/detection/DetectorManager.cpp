@@ -61,7 +61,6 @@ DetectionList DetectorManager::process(std::string seq)
     return detections;
 }
 
-
 DetectionList DetectorManager::applyDetector(cv::Mat &frame)
 {
     DetectionList detections;
