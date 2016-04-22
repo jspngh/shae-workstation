@@ -26,7 +26,6 @@ void OverviewWidget::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
     mediator->addSlot(this, SLOT(onDroneLanded(DroneModule *)), QString("landed(DroneModule*)"));
-
 }
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
