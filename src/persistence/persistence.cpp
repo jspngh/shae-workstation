@@ -31,7 +31,6 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     mediator->addSlot(this, SLOT(saveDrone(Drone)), QString("saveDrone(Drone)"));
     mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, QUuid, VideoSequence)), QString("saveVideoSequence(QUuid,QUuid,VideoSequence)"));
     mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, QUuid, DetectionResult)), QString("saveDetectionResult(QUuid,QUuid,DetectionResult)"));
-    mediator->addSlot(this, SLOT(printDetectionResult(QUuid, QString)), QString("printDetectionResult(QUuid, QString)"));
 
 }
 
@@ -115,10 +114,16 @@ QList<DetectionResult> Persistence::retrieveDetectionResults(QUuid searchId)
     return detectionresultdao.dbRetrieveDetectionResults(searchId);
 }
 
-void Persistence::printDetectionResult(QUuid searchId, QString fileName)
+void Persistence::printDetectionResultXML(QUuid searchId, QString fileName)
 {
     QList<DetectionResult> results = detectionresultdao.dbRetrieveDetectionResults(searchId);
-    detectionresultwriter.writeDetectionResultToFile(fileName, results);
+    detectionresultwriter.writeDetectionResultToFileXML(fileName, results);
+}
+
+void Persistence::printDetectionResultTXT(QUuid searchId, QString fileName)
+{
+    QList<DetectionResult> results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    detectionresultwriter.writeDetectionResultToFileTXT(fileName, results);
 }
 
 void Persistence::initDatabase()

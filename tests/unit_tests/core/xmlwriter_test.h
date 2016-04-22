@@ -26,7 +26,8 @@ private Q_SLOTS:
 
     /*! \brief Basic detectionresultwriter test
      */
-    void testSimpleDetectionResultWriter();
+    void testSimpleDetectionResultXMLWriter();
+    void testSimpleDetectionResultTXTWriter();
 };
 
 

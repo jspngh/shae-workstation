@@ -47,7 +47,8 @@ public:
     //will register a videosequence in the database (already saved in location)
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
     void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult result);
-    void printDetectionResult(QUuid searchId, QString fileName);
+    void printDetectionResultTXT(QUuid searchId, QString fileName);
+    void printDetectionResultXML(QUuid searchId, QString fileName);
 
 public slots:
 

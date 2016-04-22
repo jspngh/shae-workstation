@@ -18,6 +18,8 @@ void PersistenceController::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
     mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, DetectionResult)), QString("newDetection(QUuid, DetectionResult)"));
     mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, VideoSequence)), QString("streamStarted(QUuid, VideoSequence)"));
+    mediator->addSlot(this, SLOT(printDetectionResultXML(QString)), QString("printDetectionResultXML(QString)"));
+    mediator->addSlot(this, SLOT(printDetectionResultTXT(QString)), QString("printDetectionResultTXT(QString)"));
 }
 
 void PersistenceController::saveSearch(Search *s)
@@ -54,6 +56,15 @@ void PersistenceController::saveVideoSequence(QUuid droneId, VideoSequence vs)
     persistence->saveVideoSequence(droneId, currentSearch->getSearchID(), vs);
 }
 
+void PersistenceController::printDetectionResultXML(QString filePath)
+{
+    persistence->printDetectionResultXML(currentSearch->getSearchID(), filePath);
+}
+
+void PersistenceController::printDetectionResultTXT(QString filePath)
+{
+    persistence->printDetectionResultTXT(currentSearch->getSearchID(), filePath);
+}
 
 Search PersistenceController::retrieveSearch(QUuid searchId)
 {

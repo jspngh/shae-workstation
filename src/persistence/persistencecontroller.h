@@ -29,6 +29,8 @@ public slots:
     void saveDroneStatus(DroneStatus ds);
     void saveDetectionResult(QUuid droneId, DetectionResult dr);
     void saveVideoSequence(QUuid droneId, VideoSequence vs);
+    void printDetectionResultXML(QString filePath);
+    void printDetectionResultTXT(QString filePath);
 
 private:
     Mediator *mediator;
