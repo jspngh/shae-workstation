@@ -4,7 +4,8 @@ Search::Search()
     : searchID(QUuid::createUuid()),
       height(DEFAULT_HEIGHT),
       gimbalAngle(DEFAULT_GIMBAL_ANGLE),
-      fpsProcessing(DEFAULT_FPS)
+      fpsProcessing(DEFAULT_FPS),
+      speed(DEFAULT_SPEED)
 {
     // TODO set time
 }
@@ -21,6 +22,7 @@ Search::Search(const Search &d)
     height = d.height;
     gimbalAngle = d.gimbalAngle;
     fpsProcessing = d.fpsProcessing;
+    speed = d.speed;
 }
 
 
@@ -30,7 +32,19 @@ Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int 
     area(area),
     height(height),
     gimbalAngle(gimbalAngle),
-    fpsProcessing(fpsProcessing)
+    fpsProcessing(fpsProcessing),
+    speed(DEFAULT_SPEED)
+{
+}
+
+Search::Search(QUuid searchID, QTime start, QGeoRectangle area, int height, double speed, int gimbalAngle, int fpsProcessing):
+    searchID(searchID),
+    startTime(start),
+    area(area),
+    height(height),
+    gimbalAngle(gimbalAngle),
+    fpsProcessing(fpsProcessing),
+    speed(speed)
 {
 }
 
@@ -103,6 +117,16 @@ void Search::setSearchID(QUuid value)
 QUuid Search::getSearchID() const
 {
     return searchID;
+}
+
+double Search::getSpeed() const
+{
+    return speed;
+}
+
+void Search::setSpeed(double value)
+{
+    speed = value;
 }
 
 

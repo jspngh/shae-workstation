@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QDebug>
+
 
 #include "models/dronestatus.h"
 #include "communication/droneheartbeatreceiver.h"
@@ -15,6 +17,8 @@
 #include "communication/streamconnection.h"
 #include "models/drone.h"
 #include "videocontroller/videocontroller.h"
+
+
 class Search;
 class Controller;
 class DetectionController;
@@ -22,7 +26,7 @@ class PersistenceController;
 
 
 enum RequestedDroneStatus {
-    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
+    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution, GPS_Count
 };
 enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
@@ -76,6 +80,8 @@ public:
     void getStreamConnection();
     void stopStreamConnection();
 
+    PersistenceController *getPersistenceController() const;
+    void setPersistenceController(PersistenceController *value);
 
     QUuid getGuid() const;
 
@@ -146,11 +152,11 @@ signals:
 
     //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
     //! Is connected to the mediator
-    void droneStatusReceived(DroneStatus status);
+    void droneStatusReceived(DroneStatus *status);
 
     //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
     //! Is connected to the mediator.
-    void droneHeartBeatReceived(DroneStatus status);
+    void droneHeartBeatReceived(DroneStatus *status);
 
     void startStream(Drone *drone);
 
@@ -178,11 +184,13 @@ public slots:
     QJsonDocument requestHeartbeat();
 
     //! Allows to start the stream for a given drone, linked to a search and persistence component.
-    void initStream(Search *search, DroneModule *dm, PersistenceController *persistenceController);
+    void initStream();
     //! Allows to stop the stream for a given drone, linked to a search and persistence component.
-    void stopStream(DroneModule *dm);
+    void stopStream();
     //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
+
+    void onSearchEmitted(Search *s);
 
 
     //! Sends a Json message to the drone to start the flight.
@@ -205,27 +213,32 @@ private slots:
     void onDroneResponse(const QString &response);
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
+    void onDroneStatusReceived(DroneStatus *s);
 
 private:
     void addSignalSlot(); //!< Helper function for connecting the slots and signals
     void initHeartbeat(); //!< Helper function to initialise the heartbeat connection
 
 private:
+    DroneStatus lastReceivedDroneStatus;
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
     Mediator *mediator;
     QString workstationIp;
     QThread *videoThread;
     VideoController *videoController;
     DetectionController *detectionController;
+    PersistenceController *persistenceController;
     DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
+    Search* search;
     QThread *connectionThread;
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
+    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     bool videoProcessing;
     bool videoActive;
     bool videoInactive;
-    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
+    QGeoCoordinate homeLocation;
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 

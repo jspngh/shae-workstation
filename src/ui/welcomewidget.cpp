@@ -20,7 +20,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     //non ui fields setup
 
     status = 0;
-    pictureTimerCounter = 1;
+    pictureTimerCounter = 0;
     pictures = QDir( ":/ui/screens" ).entryList();
 
     //scroll area setup
@@ -35,6 +35,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
         ClickableLabel *pictureLabel = new ClickableLabel("", i, this);
         QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(i)));
         pictureLabel->setPixmap(pic.scaled(100,70,Qt::KeepAspectRatio));
+        pictureLabel->setAlignment(Qt::AlignCenter);
         connect(pictureLabel, SIGNAL(clicked(int)), this, SLOT(selectedImage(int)));
         vLayout->addWidget(pictureLabel);
     }
@@ -42,16 +43,13 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     ui->scrollArea->setWidget(mainScrollWidget);
 
     //main picture setup
-
-    QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.first()));
-    ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
     ui->hintView->setAlignment(Qt::AlignCenter);
 
     //time setup
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(pictureTimer()));
-    timer->start(7500);
+    timer->start(1);
 
 }
 
@@ -75,7 +73,7 @@ void WelcomeWidget::setMediator(Mediator *mediator)
 
 void WelcomeWidget::setSignalSlots()
 {
-    mediator->addSlot(this, SLOT(droneDetected(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
+    mediator->addSlot(this, SLOT(droneDetected(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
 }
 
 void WelcomeWidget::setupReady()
@@ -109,7 +107,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
     }
 }
 
-void WelcomeWidget::droneDetected(DroneStatus s)
+void WelcomeWidget::droneDetected(DroneStatus* s)
 {
     setupReady();
 }
@@ -127,4 +125,5 @@ void WelcomeWidget::pictureTimer()
     QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(pictureTimerCounter)));
     ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
     pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
+    timer->start(7500);
 }

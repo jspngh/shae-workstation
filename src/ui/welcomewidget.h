@@ -36,7 +36,7 @@ private:
 
 private slots:   
     void on_configSearchButton_clicked();
-    void droneDetected(DroneStatus s);
+    void droneDetected(DroneStatus* s);
     void pictureTimer();
     void selectedImage(int);
 

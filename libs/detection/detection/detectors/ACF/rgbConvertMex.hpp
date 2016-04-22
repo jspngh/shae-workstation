@@ -6,13 +6,15 @@
 *******************************************************************************/
 #ifndef _H_RGBCONVERT
 #define _H_RGBCONVERT
-#include "sse.hpp"
+
 #include "wrappers.hpp"
 #include <cmath>
 #include <typeinfo>
+#include "sse.hpp"
+
 
 // Constants for rgb2luv conversion and lookup table for y-> l conversion
-template<class oT> oT* rgb2luv_setup( oT z, oT *mr, oT *mg, oT *mb,
+template<class oT> inline oT* rgb2luv_setup( oT z, oT *mr, oT *mg, oT *mb,
   oT &minu, oT &minv, oT &un, oT &vn )
 {
   // set constants for conversion
@@ -36,7 +38,7 @@ template<class oT> oT* rgb2luv_setup( oT z, oT *mr, oT *mg, oT *mb,
 }
 
 // Convert from rgb to luv
-template<class iT, class oT> void rgb2luv( iT *I, oT *J, int n, oT nrm ) {
+template<class iT, class oT> inline void rgb2luv( iT *I, oT *J, int n, oT nrm ) {
   oT minu, minv, un, vn, mr[3], mg[3], mb[3];
   oT *lTable = rgb2luv_setup(nrm,mr,mg,mb,minu,minv,un,vn);
   oT *L=J, *U=L+n, *V=U+n; iT *R=I, *G=R+n, *B=G+n;
@@ -54,7 +56,7 @@ template<class iT, class oT> void rgb2luv( iT *I, oT *J, int n, oT nrm ) {
 }
 
 // Convert from rgb to luv using sse
-template<class iT> void rgb2luv_sse( iT *I, float *J, int n, float nrm ) {
+template<class iT> inline void rgb2luv_sse( iT *I, float *J, int n, float nrm ) {
   const int k=256; float R[k], G[k], B[k];
   if( (size_t(R)&15||size_t(G)&15||size_t(B)&15||size_t(I)&15||size_t(J)&15)
     || n%4>0 ) { rgb2luv(I,J,n,nrm); return; }
@@ -99,8 +101,10 @@ template<class iT> void rgb2luv_sse( iT *I, float *J, int n, float nrm ) {
       _cminu=SET(minu); _cminv=SET(minv);
       for( i1=i; i1<n1; i1+=4 ) {
         _l = *(_L++);
-        *(_U++) = SUB(MUL(_l,*_U),_cminu);
-        *(_V++) = SUB(MUL(_l,*_V),_cminv);
+        *(_U) = SUB(MUL(_l,*_U),_cminu);
+        _U++;
+        *(_V) = SUB(MUL(_l,*_V),_cminv);
+        _V++;
       }
     }
     i = n1;
@@ -108,7 +112,7 @@ template<class iT> void rgb2luv_sse( iT *I, float *J, int n, float nrm ) {
 }
 
 // Convert from rgb to hsv
-template<class iT, class oT> void rgb2hsv( iT *I, oT *J, int n, oT nrm ) {
+template<class iT, class oT> inline void rgb2hsv( iT *I, oT *J, int n, oT nrm ) {
   oT *H=J, *S=H+n, *V=S+n;
   iT *R=I, *G=R+n, *B=G+n;
   for(int i=0; i<n; i++) {
@@ -132,32 +136,32 @@ template<class iT, class oT> void rgb2hsv( iT *I, oT *J, int n, oT nrm ) {
 }
 
 // Convert from rgb to gray
-template<class iT, class oT> void rgb2gray( iT *I, oT *J, int n, oT nrm ) {
+template<class iT, class oT> inline void rgb2gray( iT *I, oT *J, int n, oT nrm ) {
   oT *GR=J; iT *R=I, *G=R+n, *B=G+n; int i;
   oT mr=(oT).2989360213*nrm, mg=(oT).5870430745*nrm, mb=(oT).1140209043*nrm;
   for(i=0; i<n; i++) *(GR++)=(oT)*(R++)*mr + (oT)*(G++)*mg + (oT)*(B++)*mb;
 }
 
 // Convert from rgb (double) to gray (float)
-template<> void rgb2gray( double *I, float *J, int n, float nrm ) {
+template<> inline void rgb2gray( double *I, float *J, int n, float nrm ) {
   float *GR=J; double *R=I, *G=R+n, *B=G+n; int i;
   double mr=.2989360213*nrm, mg=.5870430745*nrm, mb=.1140209043*nrm;
   for(i=0; i<n; i++) *(GR++) = (float) (*(R++)*mr + *(G++)*mg + *(B++)*mb);
 }
 
 // Copy and normalize only
-template<class iT, class oT> void normalize( iT *I, oT *J, int n, oT nrm ) {
+template<class iT, class oT> inline void normalize( iT *I, oT *J, int n, oT nrm ) {
   for(int i=0; i<n; i++) *(J++)=(oT)*(I++)*nrm;
 }
 
 // Convert rgb to various colorspaces
 template<class iT, class oT>
-oT* rgbConvert( iT *I, int n, int d, int flag, oT nrm ) {
+inline oT* rgbConvert( iT *I, int n, int d, int flag, oT nrm ) {
   oT *J = (oT*) wrMalloc(n*(flag==0 ? (d==1?1:d/3) : d)*sizeof(oT));
   int i, n1=d*(n<1000?n/10:100); oT thr = oT(1.001);
   if(flag>1 && nrm==1) for(i=0; i<n1; i++) if(I[i]>thr)
     wrError("For floats all values in I must be smaller than 1.");
-  bool useSse = n%4==0 && typeid(oT)==typeid(float);
+  bool useSse = true && typeid(oT)==typeid(float); // Disable SSE
   if( flag==2 && useSse )
     for(i=0; i<d/3; i++) rgb2luv_sse(I+i*n*3,(float*)(J+i*n*3),n,(float)nrm);
   else if( (flag==0 && d==1) || flag==1 ) normalize(I,J,n*d,nrm);
@@ -167,4 +171,5 @@ oT* rgbConvert( iT *I, int n, int d, int flag, oT nrm ) {
   else wrError("Unknown flag.");
   return J;
 }
+
 #endif

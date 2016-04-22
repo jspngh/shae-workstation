@@ -10,6 +10,8 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
 {
     parseConfiguration(this->search->getHeight(), this->search->getGimbalAngle());
     this->streaming = true;
+    this->manager = new DetectorManager(this->search->getFpsProcessing(), this->processWidth, this->processHeight);
+
 
 }
 
@@ -17,7 +19,6 @@ void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
-    qDebug() << path;
     this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() << (double) fpsOriginal;
@@ -33,7 +34,7 @@ void DetectionController::run()
         this->frameHop = 30;
     }
     droneId = this->droneModule->getGuid();
-    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID()).getStart();
+    QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID())->getStart();
 
     cv::Mat frame;
     do {
@@ -46,8 +47,13 @@ void DetectionController::run()
                     QDateTime time = QDateTime::currentDateTime();
                     time.setTime(sequenceStartTime);
                     time = time.addMSecs((quint64) timeFrame * 1000.0);
-                    extractDetectionsFromFrame(frame, time);
-                    qDebug() << "processing frame " << iteratorFrames << "of " << numFrames;
+                    QTime Timer;
+                    Timer.start();
+                    //TODO: remove hardcoding of resolution
+                    cv::Mat croppedFrame = frame(cv::Rect(0,720-this->processHeight,this->processWidth,this->processHeight));
+                    extractDetectionsFromFrame(croppedFrame, time);
+                    int nMilliseconds = Timer.elapsed();
+                    qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
                 }
             } catch (cv::Exception e) {
                 qDebug() << "opencv error";
@@ -74,7 +80,7 @@ void DetectionController::run()
 void DetectionController::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
-    mediator->addSignal(this, SIGNAL(newDetection(QUuid, DetectionResult)), QString("newDetection(QUuid, DetectionResult)"));
+    mediator->addSignal(this, SIGNAL(newDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
     mediator->addSignal(this, SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
@@ -107,14 +113,17 @@ void DetectionController::setPath(const QString &value)
 
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time)
 {
-    if (frame.rows != 0 && frame.cols != 0) {
-        DroneStatus droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
-        QGeoCoordinate frameLocation = droneStatus.getCurrentLocation();
-        double orientation = droneStatus.getOrientation();
-        DetectionList detectionList = this->manager.applyDetector(frame);
-        vector<pair<double, double>> locations = this->manager.calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
+    if(frame.rows != 0 && frame.cols != 0)
+    {
+        DroneStatus *droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
+        QGeoCoordinate frameLocation = droneStatus->getCurrentLocation();
+        double orientation = droneStatus->getOrientation();
+        DetectionList detectionList = this->manager->applyDetector(frame);
+        vector<pair<double, double>> locations = this->manager->calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
+
         for (int i = 0; i < detectionList.getSize(); i++) {
-            emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), 1));
+            emit this->newDetection(droneId, new DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), detectionList.returnDetections()[i]->getScore()));
+            qDebug() << "detection score of " << detectionList.returnDetections()[i]->getScore();
             nrDetections++;
         }
 
@@ -140,8 +149,20 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
         //first seven lines are currently not used
         //TODO: parse first seven lines for checks
         for (int i = 0; i < 7; i++)
+         {
             getline(file, line);
 
+             if(i==4)
+            {
+                location = line.find_last_of("=");
+                this->processWidth = std::atoi(line.substr((location+1),line.size()).c_str());
+            }
+            if(i==5)
+            {
+                location = line.find_last_of("=");
+                this->processHeight = std::atoi(line.substr((location+1),line.size()).c_str());
+            }
+        }
         getline(file, line);
         //next lines are used for the xLUT and yLUT
         location = line.find_last_of("=");
