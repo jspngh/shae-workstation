@@ -95,6 +95,9 @@ public:
     DroneModule *getDrone() const;
     void setDrone(DroneModule *value);
 
+    int getGpsCount() const;
+    void setGpsCount(int value);
+
 private:
     /**************
     * Attributes
@@ -113,6 +116,7 @@ private:
     double batteryLevel = -1;
     int droneState = -1;
     int fps = -1;
+    int gpsCount = -1;
     int resolution = -1;
     bool heartbeat = false;
     QString manufacturer = "";

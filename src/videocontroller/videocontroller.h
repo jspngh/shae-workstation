@@ -37,7 +37,7 @@ public slots:
      * This string can either contain an rtp address (formatted as rtp://XXX.XXX.XXX.XXX) or as an sdp file (formatted as xxx.sdp)
      * As this slot is non-blocking, the VideoSequence is both emitted and returned
      */
-    VideoSequence onStartStream(Drone *drone);
+    VideoSequence* onStartStream(Drone *drone);
     /*!
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
      */
@@ -47,8 +47,7 @@ signals:
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been started.
      */
-    void streamStarted(QUuid droneId, VideoSequence seq);
-    void streamPersistence(QUuid droneId, VideoSequence seq);
+    void streamStarted(QUuid droneId, VideoSequence* seq);
 
     /*!
      * \brief streamStarted is a signal that indicates that the stream has been stopped.

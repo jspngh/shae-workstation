@@ -15,6 +15,7 @@ public:
     ~Search();
 
     Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing);
+    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, double speed, int gimbalAngle, int fpsProcessing);
 
     QGeoRectangle getArea() const;
     void setArea(const QGeoRectangle &value);
@@ -38,6 +39,9 @@ public:
     QUuid getSearchID() const;
 
 
+    double getSpeed() const;
+    void setSpeed(double value);
+
 private:
     QUuid searchID;
     QTime startTime;
@@ -46,10 +50,12 @@ private:
     int gimbalAngle;
     QList<DroneModule *> droneList;
     int fpsProcessing;
+    double speed;
 
     static constexpr int DEFAULT_HEIGHT = 3;
     static constexpr int DEFAULT_FPS = 1;
     static constexpr int DEFAULT_GIMBAL_ANGLE = 65;
+    static constexpr double DEFAULT_SPEED = 2 ;
 };
 
 Q_DECLARE_METATYPE(Search)

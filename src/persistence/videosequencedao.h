@@ -26,13 +26,13 @@ public:
      * The id is for referencing to the drone table in the database while the object is
      * the one that needs to be stored.
      */
-    VideoSequence dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence sequence);
+    VideoSequence* dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence *sequence);
     /**
      * \brief dbRetrieveVideoSequence Retrieves a videosequence for a
      * certain droneid and searchid.
      */
 
-    VideoSequence dbRetrieveVideoSequence(QUuid droneId, QUuid searchId);
+    VideoSequence* dbRetrieveVideoSequence(QUuid droneId, QUuid searchId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

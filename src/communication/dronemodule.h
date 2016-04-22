@@ -26,7 +26,7 @@ class PersistenceController;
 
 
 enum RequestedDroneStatus {
-    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution
+    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution, GPS_Count
 };
 enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
@@ -152,11 +152,11 @@ signals:
 
     //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
     //! Is connected to the mediator
-    void droneStatusReceived(DroneStatus status);
+    void droneStatusReceived(DroneStatus *status);
 
     //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
     //! Is connected to the mediator.
-    void droneHeartBeatReceived(DroneStatus status);
+    void droneHeartBeatReceived(DroneStatus *status);
 
     void startStream(Drone *drone);
 
@@ -215,7 +215,7 @@ private slots:
     void onDroneResponse(const QString &response);
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
-    void onDroneStatusReceived(DroneStatus s);
+    void onDroneStatusReceived(DroneStatus *s);
 
 private:
     void addSignalSlot(); //!< Helper function for connecting the slots and signals
@@ -236,12 +236,12 @@ private:
     DroneConnection *droneConnection;
     QThread *streamThread;
     StreamConnection *streamConnection;
+    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     bool videoProcessing;
     bool videoActive;
     bool videoInactive;
     bool isFlying;
     QGeoCoordinate homeLocation;
-    QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 

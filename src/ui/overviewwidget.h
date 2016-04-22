@@ -42,10 +42,10 @@ private slots:
     void onDroneLanded(DroneModule *drone);
     void exportSearchButtonPush();
     void onSearchStarted(Search *s);
-    void onHeartBeatReceived(DroneStatus heartbeat);
-    void onNewDetection(QUuid droneId, DetectionResult result);
+    void onHeartBeatReceived(DroneStatus *heartbeat);
+    void onNewDetection(QUuid droneId, DetectionResult* result);
     void fillDroneList();
-    void updateDroneList(DroneStatus s);
+    void updateDroneList(DroneStatus *s);
     void onMapLoaded();
     void onMapFailedToLoad();
 };

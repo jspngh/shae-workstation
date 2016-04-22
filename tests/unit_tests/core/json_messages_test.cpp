@@ -82,6 +82,7 @@ void Json_Messages_Test::testStatusMessages()
     list.push_back(Camera_Angle);
     list.push_back(FPS);
     list.push_back(Resolution);
+    list.push_back(GPS_Count);
 
     QJsonDocument jsondoc = drone->requestStatuses(list);
     usleep(1000);
@@ -102,7 +103,7 @@ void Json_Messages_Test::testStatusMessages()
     QVERIFY(message.at(10).toObject()["key"] == QString("camera_angle"));
     QVERIFY(message.at(11).toObject()["key"] == QString("fps"));
     QVERIFY(message.at(12).toObject()["key"] == QString("resolution"));
-
+    QVERIFY(message.at(13).toObject()["key"] == QString("gps_signal"));
 
 
     //Also test if just 1 status is sent
