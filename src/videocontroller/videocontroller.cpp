@@ -50,7 +50,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
         emit this->streamStarted(drone->getGuid(), sequence);
         return sequence;
     }
-+
+
     /* Create a media player playing environement */
     mp = libvlc_media_player_new_from_media(m);
 
