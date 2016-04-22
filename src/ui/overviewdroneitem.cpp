@@ -114,7 +114,7 @@ void OverviewDroneItem::updateSearchedArea(DroneStatus status)
     QGeoCoordinate lastLocation = lastStatus.getCurrentLocation();
     double distance = status.getCurrentLocation().distanceTo(lastLocation);
     searchedArea += (distance * visionWidthMeters);
-    setSearchedArea( (int) searchedArea);
+    setSearchedArea(searchedArea);
 }
 
 void OverviewDroneItem::calculateVisionWidthMeters()
