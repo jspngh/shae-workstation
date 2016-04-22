@@ -10,22 +10,25 @@ PersistenceController::PersistenceController(QObject *parent)
 void PersistenceController::setMediator(Mediator *mediator)
 {
     this->persistence = new Persistence(mediator, this);
+    this->detectionresultwriter = new DetectionResultWriter();
+
     qDebug() << "adding PersistenceController signal/slots";
     // Add save slots to mediator
     mediator->addSlot(this, SLOT(saveSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(saveDronePaths(Search *)), QString("pathCalculated(Search*)"));
-    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneStatusReceived(DroneStatus)"));
-    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus)), QString("droneHeartBeatReceived(DroneStatus)"));
-    mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, DetectionResult)), QString("newDetection(QUuid, DetectionResult)"));
-    mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, VideoSequence)), QString("streamStarted(QUuid, VideoSequence)"));
     mediator->addSlot(this, SLOT(printDetectionResultXML(QString)), QString("printDetectionResultXML(QString)"));
     mediator->addSlot(this, SLOT(printDetectionResultTXT(QString)), QString("printDetectionResultTXT(QString)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(saveDroneStatus(DroneStatus*)), QString("droneHeartBeatReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(saveDetectionResult(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
+    mediator->addSlot(this, SLOT(saveVideoSequence(QUuid, VideoSequence*)), QString("streamStarted(QUuid, VideoSequence*)"));
 }
 
 void PersistenceController::saveSearch(Search *s)
 {
-    persistence->saveSearch(*s);
-    foreach (DroneModule *dm, s->getDroneList()) {
+    persistence->saveSearch(s);
+    foreach(DroneModule *dm, s->getDroneList())
+    {
         Drone *d = dm->getDrone();
         persistence->saveDrone(d);
     }
@@ -41,17 +44,17 @@ void PersistenceController::saveDronePaths(Search *s)
     }
 }
 
-void PersistenceController::saveDroneStatus(DroneStatus ds)
+void PersistenceController::saveDroneStatus(DroneStatus *ds)
 {
     persistence->saveDroneStatus(ds);
 }
 
-void PersistenceController::saveDetectionResult(QUuid droneId, DetectionResult dr)
+void PersistenceController::saveDetectionResult(QUuid droneId, DetectionResult *dr)
 {
     persistence->saveDetectionResult(droneId, currentSearch->getSearchID(), dr);
 }
 
-void PersistenceController::saveVideoSequence(QUuid droneId, VideoSequence vs)
+void PersistenceController::saveVideoSequence(QUuid droneId, VideoSequence *vs)
 {
     persistence->saveVideoSequence(droneId, currentSearch->getSearchID(), vs);
 }
@@ -66,43 +69,55 @@ void PersistenceController::printDetectionResultTXT(QString filePath)
     persistence->printDetectionResultTXT(currentSearch->getSearchID(), filePath);
 }
 
-Search PersistenceController::retrieveSearch(QUuid searchId)
+Search* PersistenceController::retrieveSearch(QUuid searchId)
 {
-    return persistence->retrieveSearch(searchId);
+    Search *s = persistence->retrieveSearch(searchId);
+
+    QList<QUuid>* droneIds = persistence->retrieveDroneIds(searchId);
+    QList<DroneModule*> droneModules = QList<DroneModule*>();
+    foreach (QUuid droneId, *droneIds)
+    {
+        DroneModule *dm = new DroneModule();
+        Drone *drone = persistence->retrieveDrone(droneId);
+        dm->setDrone(drone);
+        droneModules.append(dm);
+    }
+    s->setDroneList(droneModules);
+    return s;
 }
 
-QList<QGeoCoordinate> PersistenceController::retrieveDronePaths(QUuid droneId, QUuid searchId)
+QList<QGeoCoordinate>* PersistenceController::retrieveDronePaths(QUuid droneId, QUuid searchId)
 {
     return persistence->retrieveDronePath(droneId, searchId);
 }
 
-Drone PersistenceController::retrieveDrone(QUuid droneId)
+Drone* PersistenceController::retrieveDrone(QUuid droneId)
 {
     return persistence->retrieveDrone(droneId);
 }
 
-DroneStatus PersistenceController::retrieveDroneStatus(QUuid droneId)
+DroneStatus* PersistenceController::retrieveDroneStatus(QUuid droneId)
 {
     return persistence->retrieveDroneStatus(droneId);
 }
 
-DroneStatus PersistenceController::retrieveDroneStatus(QUuid droneId, QDateTime time)
+DroneStatus* PersistenceController::retrieveDroneStatus(QUuid droneId, QDateTime time)
 {
     return persistence->retrieveDroneStatus(droneId, time);
 }
 
-QList<DroneStatus> PersistenceController::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
+QList<DroneStatus*>* PersistenceController::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
 {
     return persistence->retrieveDroneStatus(droneId, begin, end);
 }
 
-QList<DetectionResult> PersistenceController::retrieveDetectionResults(QUuid droneId, QUuid searchId)
+QList<DetectionResult*>* PersistenceController::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 {
     return persistence->retrieveDetectionResults(droneId, searchId);
 
 }
 
-VideoSequence PersistenceController::retrieveVideoSequence(QUuid droneId, QUuid searchId)
+VideoSequence* PersistenceController::retrieveVideoSequence(QUuid droneId, QUuid searchId)
 {
     return persistence->retrieveVideoSequence(droneId, searchId);
 }

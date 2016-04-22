@@ -95,6 +95,9 @@ public:
     DroneModule *getDrone() const;
     void setDrone(DroneModule *value);
 
+    int getGpsCount() const;
+    void setGpsCount(int value);
+
 private:
     /**************
     * Attributes
@@ -113,6 +116,7 @@ private:
     double batteryLevel = -1;
     int droneState = -1;
     int fps = -1;
+    int gpsCount = -1;
     int resolution = -1;
     bool heartbeat = false;
     QString manufacturer = "";
@@ -120,6 +124,7 @@ private:
     QDateTime timestampDrone;
     //! contains long, lat
     QGeoCoordinate currentLocation;
+    //! contains the number of the waypoint it is flying to
     QGeoCoordinate nextWaypoint;
     int previousWaypointOrder;
     QList<QGeoCoordinate> nextWaypoints;

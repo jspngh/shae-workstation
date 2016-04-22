@@ -23,7 +23,8 @@ HEADERS += \
     core/droneconnection_integrationtest.h \
     core/simulatorwrapper.h \
     core/system_test.h \
-    core/databasecreator.h
+    core/databasecreator.h \
+    core/signalslot_persistence_test.h
 
 SOURCES += \
     core/qtmapkit_test.cpp \
@@ -33,8 +34,8 @@ SOURCES += \
     core/droneconnection_integrationtest.cpp \
     core/simulatorwrapper.cpp \
     core/system_test.cpp \
-    core/databasecreator.cpp
-
+    core/databasecreator.cpp \
+    core/signalslot_persistence_test.cpp
 
 # c++11
 CONFIG += c++11

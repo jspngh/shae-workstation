@@ -24,12 +24,12 @@ public:
      * Its inputs are a drone object.
      * The object is the one that needs to be stored.
      */
-    Drone dbSaveDrone(Drone drone);
+    Drone* dbSaveDrone(Drone *drone);
     /**
      * \brief dbRetrieveDrone Retrieves a drone for a
      * certain droneid.
      */
-    Drone dbRetrieveDrone(QUuid droneId);
+    Drone* dbRetrieveDrone(QUuid droneId);
 private:
     QSqlDatabase *projectShaeDatabase;
 };

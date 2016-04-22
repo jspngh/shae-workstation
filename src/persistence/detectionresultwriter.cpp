@@ -12,23 +12,24 @@ DetectionResultWriter::DetectionResultWriter()
 {
 
 }
-void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QList<DetectionResult> results)
+
+void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QList<DetectionResult*>* results)
 {
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly)) {
         QXmlStreamWriter xmlWriter(&file);
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("DetectionResults");
-        for (DetectionResult detectionResult : results) {
+        for (DetectionResult *detectionResult : *results) {
             xmlWriter.writeStartElement("DetectionResult");
             xmlWriter.writeStartElement("Score");
-            xmlWriter.writeCharacters(QString::number(detectionResult.getScore()));
+            xmlWriter.writeCharacters(QString::number(detectionResult->getScore()));
             xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Latitude");
-            xmlWriter.writeCharacters(QString::number(detectionResult.getLocation().latitude()));
+            xmlWriter.writeCharacters(QString::number(detectionResult->getLocation().latitude()));
             xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Longitude");
-            xmlWriter.writeCharacters(QString::number(detectionResult.getLocation().longitude()));
+            xmlWriter.writeCharacters(QString::number(detectionResult->getLocation().longitude()));
             xmlWriter.writeEndElement();
             xmlWriter.writeEndElement();
         }
@@ -38,7 +39,7 @@ void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QLis
     }
 }
 
-void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QList<DetectionResult> results)
+void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QList<DetectionResult*>* results)
 {
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly)) {
@@ -48,12 +49,12 @@ void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QLis
         stream << "******************************************" << endl;
         stream << "score             longitude       latitude" << endl;
         stream << "------------------------------------------" << endl;
-        for (DetectionResult detectionResult : results) {
-             stream << QString::number(detectionResult.getScore())
+        for (DetectionResult* detectionResult : *results) {
+             stream << QString::number(detectionResult->getScore())
                        .append("\t\t")
-                       .append(QString::number(detectionResult.getLocation().longitude()))
+                       .append(QString::number(detectionResult->getLocation().longitude()))
                        .append("\t\t")
-                       .append(QString::number(detectionResult.getLocation().latitude()))
+                       .append(QString::number(detectionResult->getLocation().latitude()))
                        << endl;
         }
         file.close();
