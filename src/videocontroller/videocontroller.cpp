@@ -18,12 +18,12 @@ void VideoController::setSequencePath(QString sp)
 void VideoController::setMediator(Mediator *m)
 {
     this->mediator = m;
-    mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence)), QString("streamStarted(QUuid, VideoSequence)"));
+    mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence*)), QString("streamStarted(QUuid, VideoSequence*)"));
     mediator->addSignal(this, SIGNAL(streamStopped()), QString("streamStopped()"));
 }
 
 
-VideoSequence VideoController::onStartStream(Drone *drone)
+VideoSequence* VideoController::onStartStream(Drone *drone)
 {
     QFile::remove(QString("dependencies/drone_stream.mpg"));
     QFile::remove(QString("dependencies/drone_stream.avi"));
@@ -45,9 +45,9 @@ VideoSequence VideoController::onStartStream(Drone *drone)
     } else
     {
         qDebug("started stream from video file");
+        VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
+        this->sequence_path = sequence->getPath();
         QThread::sleep(10);
-        VideoSequence sequence =  VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
-        this->sequence_path = sequence.getPath();
         emit this->streamStarted(drone->getGuid(), sequence);
         return sequence;
     }
@@ -78,8 +78,8 @@ VideoSequence VideoController::onStartStream(Drone *drone)
     qDebug() << "Videocontroller: File has been created by vlc.";
     qDebug() << "Videocontroller: File has a size of " << size;
 
-    VideoSequence sequence =  VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, QString("dependencies/drone_stream.mpg"));
-    this->sequence_path = sequence.getPath();
+    VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, QString("dependencies/drone_stream.mpg"));
+    this->sequence_path = sequence->getPath();
     emit this->streamStarted(drone->getGuid(), sequence);
     return sequence;
 }

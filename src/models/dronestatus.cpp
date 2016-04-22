@@ -152,6 +152,10 @@ DroneStatus DroneStatus::fromJsonString(QString string)
     if (! value.isNull()) {
         status.setResolution(value.toInt());
     }
+    value = json["gps_signal"];
+    if (! value.isNull()) {
+        status.setGpsCount(value.toInt());
+    }
 
     value = json["current_location"];
     if (! value.isNull() && value.isObject()) {
@@ -388,6 +392,16 @@ DroneModule *DroneStatus::getDrone() const
 void DroneStatus::setDrone(DroneModule *value)
 {
     drone = value;
+}
+
+int DroneStatus::getGpsCount() const
+{
+    return gpsCount;
+}
+
+void DroneStatus::setGpsCount(int value)
+{
+    gpsCount = value;
 }
 
 int DroneStatus::getResolution() const
