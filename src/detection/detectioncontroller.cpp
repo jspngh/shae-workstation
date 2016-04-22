@@ -40,6 +40,7 @@ void DetectionController::run()
     do {
         while (iteratorFrames < numFrames) {
             try {
+                QThread::sleep(1);
                 this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
                 bool captured =  this->sequence.read(frame);
                 double timeFrame = (double)iteratorFrames / (double)fpsOriginal;
@@ -122,6 +123,8 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         for (int i = 0; i < detectionList.getSize(); i++) {
             emit this->newDetection(droneId, DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), detectionList.returnDetections()[i]->getScore()));
             qDebug() << "detection score of " << detectionList.returnDetections()[i]->getScore();
+            qDebug() << "difference in lat: " << locations[i].first - frameLocation.latitude();
+            qDebug() << "difference in long: " << locations[i].second - frameLocation.longitude();
             nrDetections++;
         }
 
