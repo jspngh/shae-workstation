@@ -79,7 +79,11 @@ void WelcomeWidget::setSignalSlots()
 
 void WelcomeWidget::setupReady()
 {
-     droneConnected = true;
+     if(status > 0)
+         ui->configSearchButton->setEnabled(true);
+     else
+         droneConnected = true;
+
 }
 
 /***
