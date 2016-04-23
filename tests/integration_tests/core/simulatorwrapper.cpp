@@ -7,7 +7,7 @@ SimulatorWrapper::SimulatorWrapper()
 
 void SimulatorWrapper::startSimulator()
 {
-    QString program = "python";
+    QString program = "python2";
     QStringList arguments;
     qDebug() << "opening simulator, this takes some time...";
     arguments << "../../../drone/simulator/src/simulator.py";

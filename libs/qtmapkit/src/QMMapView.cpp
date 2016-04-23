@@ -310,9 +310,8 @@ QMMarker &QMMapView::addMarker(const QString markerId, const QGeoCoordinate &poi
     QString format = QString("mapKit.addMarker(\"%1\", %2, %3);");
     QString js = format
                  .arg(markerId)
-                 .arg(point.latitude()).arg(point.longitude());
+                 .arg(point.latitude(),0,'f',15).arg(point.longitude(),0,'f',15);
     d->evaluateJavaScript(js);
-
     d->markers[markerId] = new QMMarker(markerId, point, d->frame(), this);
     return getMarker(markerId);
 }
