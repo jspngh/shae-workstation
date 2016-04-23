@@ -117,7 +117,7 @@ void WelcomeWidget::selectedImage(int file)
     QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(file)));
     ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
     pictureTimerCounter = (file + 1) % pictures.size();
-    timer->start(7500);
+    timer->start(30000);
 }
 
 void WelcomeWidget::pictureTimer()
@@ -125,5 +125,5 @@ void WelcomeWidget::pictureTimer()
     QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(pictureTimerCounter)));
     ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
     pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
-    timer->start(7500);
+    timer->start(10000);
 }
