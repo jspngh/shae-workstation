@@ -1,6 +1,7 @@
 #include "overviewwidget.h"
 #include "ui_overviewwidget.h"
 #include <QDebug>
+#include <QFileDialog>
 
 OverviewWidget::OverviewWidget(QWidget *parent) :
     QWidget(parent),
@@ -22,9 +23,12 @@ void OverviewWidget::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
+    mediator->addSignal(this, SIGNAL(printDetectionResultXML(QString)), QString("printDetectionResultXML(QString)"));
+    mediator->addSignal(this, SIGNAL(printDetectionResultTXT(QString)), QString("printDetectionResultTXT(QString)"));
     mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
+
 }
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
@@ -78,6 +82,14 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
 
 void OverviewWidget::exportSearchButtonPush()
 {
+    QString filter = "XML sheet (*.xml);;Text File (*.txt)";
+    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
+    if(filter == QString("Text File (*.txt)"))
+    {
+        emit printDetectionResultTXT(saveFileName.append(".txt"));
+    } else {
+        emit printDetectionResultXML(saveFileName.append(".xml"));
+    }
 }
 
 void OverviewWidget::updateDroneList(DroneStatus *s)

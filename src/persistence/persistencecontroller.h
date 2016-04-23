@@ -27,10 +27,11 @@ public:
 public slots:
     void saveSearch(Search *s);
     void saveDronePaths(Search *s);
+    void printDetectionResultXML(QString filePath);
+    void printDetectionResultTXT(QString filePath);
     void saveDroneStatus(DroneStatus *ds);
     void saveDetectionResult(QUuid droneId, DetectionResult *dr);
     void saveVideoSequence(QUuid droneId, VideoSequence *vs);
-    void printDetectionResult(QUuid searchId, QString fileName);
 
 private:
     Mediator *mediator;
