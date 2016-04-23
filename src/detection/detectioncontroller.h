@@ -92,6 +92,8 @@ private:
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
     int processHeight;
     int processWidth;
+    int resolutionHeight;
+    int resolutionWidth;
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;
 };
