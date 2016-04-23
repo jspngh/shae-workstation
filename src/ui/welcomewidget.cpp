@@ -20,6 +20,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     //non ui fields setup
 
     status = 0;
+    droneConnected = false;
     pictureTimerCounter = 0;
     pictures = QDir( ":/ui/screens" ).entryList();
 
@@ -78,7 +79,7 @@ void WelcomeWidget::setSignalSlots()
 
 void WelcomeWidget::setupReady()
 {
-     ui->configSearchButton->setEnabled(true);
+     droneConnected = true;
 }
 
 /***
@@ -102,7 +103,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
         ui->configSearchButton->setText("Configure Search");
         ui->configSearchButton->setEnabled(false);
         status ++;
-    } else {
+    } else if(droneConnected) {
         ((QStackedWidget *) this->parent())->setCurrentIndex(1);
     }
 }

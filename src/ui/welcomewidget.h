@@ -44,6 +44,7 @@ private:
     Ui::WelcomeWidget *ui;
     Mediator *mediator;
     int status;
+    bool droneConnected;
     int pictureTimerCounter;
     QTimer* timer;
     QStringList pictures;
