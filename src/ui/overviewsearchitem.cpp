@@ -35,8 +35,3 @@ void OverviewSearchItem::incrementDuration()
     ui->durationValue->setText(time);
 }
 
-void OverviewSearchItem::setSearchedArea(double area)
-{
-    ui->searchAreaValue->setText(QString::number(area) + "m²");
-}
-

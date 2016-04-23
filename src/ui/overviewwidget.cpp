@@ -58,6 +58,9 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
         marker.trackPath();
         marker.show();
     }
+
+    // Update drone list
+    updateDroneList(heartbeat);
 }
 
 void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
