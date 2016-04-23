@@ -122,7 +122,7 @@ std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d,
                                                                  std::vector<vector<double>> yLUT)
 {
     double xPixel = (double)(d.getX());
-    double yPixel = (double)(this->height-(d.getY() + d.getHeight()));
+    double yPixel = (double)(this->processHeight-(d.getY() + d.getHeight()));
     double xLoc = 0.0;
     double yLoc = 0.0;
 
