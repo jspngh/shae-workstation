@@ -35,7 +35,7 @@ void Dronemodule_IntegrationTest::init()
 void Dronemodule_IntegrationTest::cleanup()
 {
     sim->stopSimulator();
-    QTest::qWait(500);
+    QTest::qWait(5000);
     delete sim;
     QTest::qWait(5000);
     delete controller;

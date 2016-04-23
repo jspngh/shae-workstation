@@ -46,25 +46,25 @@ void SearchDAO_Test::testSimpleSearchDAO()
 
     SearchDAO sd = SearchDAO(&projectShaeDatabase);
 
-    Search s = Search(QUuid::createUuid(), QTime(7, 6), QGeoRectangle(QGeoCoordinate(5, 6), QGeoCoordinate(4, 3)), 5, 6, 7);
+    Search *s = new Search(QUuid::createUuid(), QTime(7, 6), QGeoRectangle(QGeoCoordinate(5, 6), QGeoCoordinate(4, 3)), 5, 6, 7);
 
     sd.dbSaveSearch(s);
 
-    Search sback = sd.dbRetrieveSearch(s.getSearchID());
+    Search *sback = sd.dbRetrieveSearch(s->getSearchID());
 
-    QVERIFY(sback.getSearchID() == s.getSearchID());
-    QVERIFY(s.getStartTime() == sback.getStartTime());
-    QVERIFY(s.getArea().topLeft() == sback.getArea().topLeft());
-    QVERIFY(s.getArea().bottomRight() == sback.getArea().bottomRight());
-    QVERIFY(s.getHeight() == sback.getHeight());
-    QVERIFY(s.getGimbalAngle() == sback.getGimbalAngle());
-    QVERIFY(s.getFpsProcessing() == sback.getFpsProcessing());
+    QVERIFY(sback->getSearchID() == s->getSearchID());
+    QVERIFY(s->getStartTime() == sback->getStartTime());
+    QVERIFY(s->getArea().topLeft() == sback->getArea().topLeft());
+    QVERIFY(s->getArea().bottomRight() == sback->getArea().bottomRight());
+    QVERIFY(s->getHeight() == sback->getHeight());
+    QVERIFY(s->getGimbalAngle() == sback->getGimbalAngle());
+    QVERIFY(s->getFpsProcessing() == sback->getFpsProcessing());
 
 
     QSqlQuery query;
     query.prepare("DELETE from searches "
                   "WHERE searchID == (:searchID)");
-    query.bindValue(":searchID", s.getSearchID());
+    query.bindValue(":searchID", s->getSearchID());
     if (query.exec()) {
         qDebug() << "delete succes";
     } else {

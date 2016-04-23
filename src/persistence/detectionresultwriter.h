@@ -10,7 +10,7 @@ class DetectionResultWriter
 public:
     DetectionResultWriter();
 
-    void writeDetectionResultToFile(QString fileName, QList<DetectionResult> results);
+    void writeDetectionResultToFile(QString fileName, QList<DetectionResult*>* results);
 };
 
 #endif // DETECTIONRESULTWRITER_H

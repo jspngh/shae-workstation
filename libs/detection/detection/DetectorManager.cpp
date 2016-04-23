@@ -90,7 +90,10 @@ std::vector<std::pair<double, double>> DetectorManager::calculatePositions(Detec
     for (int i = 0; i < dl.getSize(); i++) {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
-        distance =  std::pair<double, double>(cos(orientation) * distance.first, sin(orientation) * distance.second);
+        distance =  std::pair<double, double>(cos(abs(orientation))*distance.first-sin(abs(orientation))*distance.second, sin(abs(orientation)) * distance.first+cos(abs(orientation))*distance.second);
+        std::cout <<  "orientation " << orientation << std::endl;
+        std::cout <<  "x distance " << distance.first << std::endl;
+        std::cout <<  "y distance " << distance.second << std::endl;
         // distance contains an x,y distance pair,
         // that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
@@ -111,13 +114,15 @@ positions are derivde from the LUT based on linear interpolation
     2. interpolate the vertical distance based on the 2 closest yLUT vectors.
     3. use the y pixelvalue of the detection to determine the xLUT vector.
     4. interpolate the horizontal distance based on the xLUT vector.
+    origin is top left corner for a detection,
+    while LUT uses bottom left corner
 */
 std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d,
                                                                  std::vector<vector<double>> xLUT,
                                                                  std::vector<vector<double>> yLUT)
 {
     double xPixel = (double)(d.getX());
-    double yPixel = (double)(d.getY() + d.getHeight());
+    double yPixel = (double)(this->height-(d.getY() + d.getHeight()));
     double xLoc = 0.0;
     double yLoc = 0.0;
 
