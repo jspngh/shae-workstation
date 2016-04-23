@@ -101,9 +101,10 @@ void WelcomeWidget::on_configSearchButton_clicked()
     if(status == 0)
     {
         ui->configSearchButton->setText("Configure Search");
-        ui->configSearchButton->setEnabled(false);
+        if(!droneConnected)
+            ui->configSearchButton->setEnabled(false);
         status ++;
-    } else if(droneConnected) {
+    } else {
         ((QStackedWidget *) this->parent())->setCurrentIndex(1);
     }
 }
