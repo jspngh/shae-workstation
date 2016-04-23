@@ -18,6 +18,7 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
                                         this->processHeight,
                                         this->resolutionWidth,
                                         this->resolutionHeight);
+    this->nrDetections = 0;
 }
 
 void DetectionController::run()
