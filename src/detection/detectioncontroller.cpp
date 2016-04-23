@@ -40,7 +40,6 @@ void DetectionController::run()
     do {
         while (iteratorFrames < numFrames) {
             try {
-                QThread::sleep(1);
                 this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
                 bool captured =  this->sequence.read(frame);
                 double timeFrame = (double)iteratorFrames / (double)fpsOriginal;
@@ -121,13 +120,8 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
         double orientation = droneStatus->getOrientation();
         DetectionList detectionList = this->manager->applyDetector(frame);
         vector<pair<double, double>> locations = this->manager->calculatePositions(detectionList, pair<double, double>(frameLocation.latitude(), frameLocation.longitude()), this->xLUT, this->yLUT, orientation);
-        qDebug() << qSetRealNumberPrecision( 15 )  << "frame at lat " << frameLocation.latitude();
-        qDebug() << qSetRealNumberPrecision( 15 )  << "frame at long " << frameLocation.longitude();
-
         for (int i = 0; i < detectionList.getSize(); i++) {
             emit this->newDetection(droneId, new DetectionResult(QGeoCoordinate(locations[i].first, locations[i].second), detectionList.returnDetections()[i]->getScore()));
-            qDebug() << qSetRealNumberPrecision( 15 )  << "detection at lat " << locations[i].first;
-            qDebug() << qSetRealNumberPrecision( 15 )  << "detection at long " << locations[i].second;
             nrDetections++;
         }
 
