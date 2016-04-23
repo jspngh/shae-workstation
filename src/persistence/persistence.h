@@ -17,6 +17,7 @@
 #include "searchdao.h"
 #include "dronesearchdao.h"
 #include "videosequencedao.h"
+#include "detectionresultwriter.h"
 
 class Persistence : public QObject
 {
@@ -46,9 +47,11 @@ public:
     void saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path);
     void saveDrone(Drone *drone);
     //will register a videosequence in the database (already saved in location)
+    void printDetectionResultTXT(QUuid searchId, QString fileName);
+    void printDetectionResultXML(QUuid searchId, QString fileName);
     void saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence* sequence);
     void saveDetectionResult(QUuid droneId, QUuid searchId, DetectionResult* result);
-    void printDetectionResult(QUuid searchId, QString fileName);
+
 
 public slots:
 
@@ -60,6 +63,7 @@ private:
     DroneStatusDAO dronestatusdao;
     SearchDAO searchdao;
     VideoSequenceDAO videosequencedao;
+    DetectionResultWriter detectionresultwriter;
 
     //! \brief Initializes the database (sets the projectShaeDatabase-property).
     void initDatabase();

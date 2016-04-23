@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QList>
 #include <QString>
+#include <QTextStream>
 #include <QXmlStreamWriter>
 
 
@@ -11,7 +12,8 @@ DetectionResultWriter::DetectionResultWriter()
 {
 
 }
-void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<DetectionResult*>* results)
+
+void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QList<DetectionResult*>* results)
 {
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly)) {
@@ -36,4 +38,27 @@ void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<D
         file.close();
     }
 }
+
+void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QList<DetectionResult*>* results)
+{
+    QFile file(fileName);
+    if (file.open(QIODevice::WriteOnly)) {
+        QTextStream stream( &file );
+        stream << "******************************************" << endl;
+        stream << "*            DETECTION RESULTS           *" << endl;
+        stream << "******************************************" << endl;
+        stream << "score             longitude       latitude" << endl;
+        stream << "------------------------------------------" << endl;
+        for (DetectionResult* detectionResult : *results) {
+             stream << QString::number(detectionResult->getScore())
+                       .append("\t\t")
+                       .append(QString::number(detectionResult->getLocation().longitude()))
+                       .append("\t\t")
+                       .append(QString::number(detectionResult->getLocation().latitude()))
+                       << endl;
+        }
+        file.close();
+    }
+}
+
 
