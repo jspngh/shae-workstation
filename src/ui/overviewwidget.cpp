@@ -74,6 +74,7 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
     // Update map
     QString markerId = droneId.toString() + "-" + QString::number(droneItem->getPeopleLocated());
     QMMarker& marker = mapView->addMarker(markerId, result->getLocation());
+
     marker.setIcon("qrc:///ui/icons/human");
     marker.scale(0.1, 0.1);
     marker.show();

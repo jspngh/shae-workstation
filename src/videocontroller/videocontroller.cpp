@@ -47,6 +47,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
         qDebug("started stream from video file");
         VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
         this->sequence_path = sequence->getPath();
+        QThread::sleep(10);
         emit this->streamStarted(drone->getGuid(), sequence);
         return sequence;
     }
