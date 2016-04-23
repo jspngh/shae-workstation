@@ -99,7 +99,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
 {
     if(status == 0)
     {
-        ui->configSearchButton->setText("Configurate Search");
+        ui->configSearchButton->setText("Configure Search");
         ui->configSearchButton->setEnabled(false);
         status ++;
     } else {
@@ -115,7 +115,7 @@ void WelcomeWidget::droneDetected(DroneStatus* s)
 void WelcomeWidget::selectedImage(int file)
 {
     QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(file)));
-    ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
+    ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
     pictureTimerCounter = (file + 1) % pictures.size();
     timer->start(7500);
 }
@@ -123,7 +123,7 @@ void WelcomeWidget::selectedImage(int file)
 void WelcomeWidget::pictureTimer()
 {
     QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(pictureTimerCounter)));
-    ui->hintView->setPixmap(pic.scaled(ui->hintView->width(), ui->hintView->height(), Qt::KeepAspectRatio));
+    ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
     pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
     timer->start(7500);
 }
