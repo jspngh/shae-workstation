@@ -26,10 +26,10 @@ void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QLis
             xmlWriter.writeCharacters(QString::number(detectionResult->getScore()));
             xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Latitude");
-            xmlWriter.writeCharacters(QString::number(detectionResult->getLocation().latitude()));
+            xmlWriter.writeCharacters(QString("%1").arg(detectionResult->getLocation().latitude(),0,'f',15));
             xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Longitude");
-            xmlWriter.writeCharacters(QString::number(detectionResult->getLocation().longitude()));
+            xmlWriter.writeCharacters(QString("%1").arg(detectionResult->getLocation().longitude(),0,'f',15));
             xmlWriter.writeEndElement();
             xmlWriter.writeEndElement();
         }
@@ -50,12 +50,11 @@ void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QLis
         stream << "score             longitude       latitude" << endl;
         stream << "------------------------------------------" << endl;
         for (DetectionResult* detectionResult : *results) {
-             stream << QString::number(detectionResult->getScore())
-                       .append("\t\t")
-                       .append(QString::number(detectionResult->getLocation().longitude()))
-                       .append("\t\t")
-                       .append(QString::number(detectionResult->getLocation().latitude()))
-                       << endl;
+            QString detectionString = QString("%1\t\t%2\t\t%3");
+            QString js = detectionString
+                         .arg(detectionResult->getScore())
+                         .arg(detectionResult->getLocation().latitude(),0,'f',15).arg(detectionResult->getLocation().longitude(),0,'f',15);
+             stream << js << endl;
         }
         file.close();
     }
