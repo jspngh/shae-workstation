@@ -21,6 +21,7 @@ Persistence::Persistence(Mediator *mediator, QObject *parent):
     dronesearchdao = DroneSearchDAO(&projectShaeDatabase);
     searchdao = SearchDAO(&projectShaeDatabase);
     videosequencedao = VideoSequenceDAO(&projectShaeDatabase);
+    detectionresultwriter = DetectionResultWriter();
 }
 
 Persistence::~Persistence()
@@ -106,6 +107,18 @@ QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid droneId, QU
 QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid searchId)
 {
     return detectionresultdao.dbRetrieveDetectionResults(searchId);
+}
+
+void Persistence::printDetectionResultXML(QUuid searchId, QString fileName)
+{
+    QList<DetectionResult*>* results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    detectionresultwriter.writeDetectionResultToFileXML(fileName, results);
+}
+
+void Persistence::printDetectionResultTXT(QUuid searchId, QString fileName)
+{
+    QList<DetectionResult*>* results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    detectionresultwriter.writeDetectionResultToFileTXT(fileName, results);
 }
 
 void Persistence::initDatabase()

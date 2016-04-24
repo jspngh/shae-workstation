@@ -48,6 +48,9 @@ private slots:
     void updateDroneList(DroneStatus *s);
     void onMapLoaded();
     void onMapFailedToLoad();
+signals:
+    void  printDetectionResultXML(QString);
+    void  printDetectionResultTXT(QString);
 };
 
 #endif // OVERVIEWWIDGET_H

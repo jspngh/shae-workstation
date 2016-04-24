@@ -52,13 +52,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="searchAreaValue">
-       <property name="text">
-        <string>0 m²</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="locatedPeopleLabel">
        <property name="text">
@@ -73,37 +66,54 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="searchAreaValue">
+       <property name="text">
+        <string>0 m²</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="connectivityValue">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="emergencyButton">
-       <property name="icon">
-         <iconset resource="../application.qrc">:/ui/icons/emergency</iconset>
-       </property>
        <property name="toolTip">
         <string>Emergency Landing</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../../../../../../Desktop/shae/workstation/src/application.qrc">
+         <normaloff>:/ui/icons/emergency</normaloff>:/ui/icons/emergency</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="returnHomeButton">
-       <property name="icon">
-         <iconset resource="../application.qrc">:/ui/icons/home</iconset>
-       </property>
        <property name="toolTip">
         <string>Go Home</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../../../../../../Desktop/shae/workstation/src/application.qrc">
+         <normaloff>:/ui/icons/home</normaloff>:/ui/icons/home</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="haltButton">
-       <property name="icon">
-         <iconset resource="../application.qrc">:/ui/icons/halt</iconset>
-       </property>
        <property name="toolTip">
         <string>Halt</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../../../../../../Desktop/shae/workstation/src/application.qrc">
+         <normaloff>:/ui/icons/halt</normaloff>:/ui/icons/halt</iconset>
        </property>
       </widget>
      </item>
@@ -111,6 +121,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../../../../../Desktop/shae/workstation/src/application.qrc"/>
+ </resources>
  <connections/>
 </ui>

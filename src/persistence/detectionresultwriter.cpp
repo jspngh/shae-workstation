@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QList>
 #include <QString>
+#include <QTextStream>
 #include <QXmlStreamWriter>
 
 
@@ -11,7 +12,8 @@ DetectionResultWriter::DetectionResultWriter()
 {
 
 }
-void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<DetectionResult*>* results)
+
+void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QList<DetectionResult*>* results)
 {
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly)) {
@@ -24,10 +26,10 @@ void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<D
             xmlWriter.writeCharacters(QString::number(detectionResult->getScore()));
             xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Latitude");
-            xmlWriter.writeCharacters(QString::number(detectionResult->getLocation().latitude()));
+            xmlWriter.writeCharacters(QString("%1").arg(detectionResult->getLocation().latitude(),0,'f',15));
             xmlWriter.writeEndElement();
             xmlWriter.writeStartElement("Longitude");
-            xmlWriter.writeCharacters(QString::number(detectionResult->getLocation().longitude()));
+            xmlWriter.writeCharacters(QString("%1").arg(detectionResult->getLocation().longitude(),0,'f',15));
             xmlWriter.writeEndElement();
             xmlWriter.writeEndElement();
         }
@@ -36,4 +38,26 @@ void DetectionResultWriter::writeDetectionResultToFile(QString fileName, QList<D
         file.close();
     }
 }
+
+void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QList<DetectionResult*>* results)
+{
+    QFile file(fileName);
+    if (file.open(QIODevice::WriteOnly)) {
+        QTextStream stream( &file );
+        stream << "******************************************" << endl;
+        stream << "*            DETECTION RESULTS           *" << endl;
+        stream << "******************************************" << endl;
+        stream << "score             longitude       latitude" << endl;
+        stream << "------------------------------------------" << endl;
+        for (DetectionResult* detectionResult : *results) {
+            QString detectionString = QString("%1\t\t%2\t\t%3");
+            QString js = detectionString
+                         .arg(detectionResult->getScore())
+                         .arg(detectionResult->getLocation().latitude(),0,'f',15).arg(detectionResult->getLocation().longitude(),0,'f',15);
+             stream << js << endl;
+        }
+        file.close();
+    }
+}
+
 
