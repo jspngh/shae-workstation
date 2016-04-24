@@ -33,10 +33,12 @@ function PolygonMapSelection(map) {
 
     this.onShiftPressed = function() {
         this.removeSelectedArea();
+        this.map.setOptions({draggable: false});
         this.shiftPressed = true;
     };
 
     this.onShiftReleased = function() {
+        this.map.setOptions({draggable: true});
         this.shiftPressed = false;
     };
 
