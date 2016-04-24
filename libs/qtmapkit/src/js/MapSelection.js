@@ -10,12 +10,18 @@
 function MapSelection(map) {
     this.map = map;
     this.selectedArea = null;
-    this.shiftPressed = false;
-    this.mouseDown = false;
     this.isSelecting = false;
+    this.shiftPressed = false;
 };
 
 MapSelection.prototype = {
+
+    /* Called automatically when the mouse is clicked on a given point on the map.
+     * @param {google.maps.LatLng} point The point where it is clicked.
+     */
+    onMouseClicked: function(point) {
+        throw "Error: method <onMouseClicked> not implemented by subclass.";
+    },
 
     /* Called automatically when the mouse moves to a given point on the map.
      * @param {google.maps.LatLng} point
@@ -38,12 +44,14 @@ MapSelection.prototype = {
         throw "Error: method <onMouseUp> not implemented by subclass.";
     },
 
-    /* Returns whether selection mode is enabled by the user.
-     * @returns {boolean} Whether the keys to enable selection mode have
-     *                    been pressed.
-     */
-    keysPressed: function() {
-        throw "Error: method <keysPressed> not implemented by subclass.";
+    /* Called automatically when shift is pressed. */
+    onShiftPressed: function() {
+        throw "Error: method <onShiftPressed> not implemented by subclass.";
+    },
+
+    /* Called automatically when the shift key is released. */
+    onShiftReleased: function() {
+        throw "Error: method <onShiftReleased> not implemented by subclass.";
     },
 
     /* Creates a selection area on the map. If there was one before, it

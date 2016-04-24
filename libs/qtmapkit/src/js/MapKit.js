@@ -11,7 +11,7 @@
     function MapKit(lng, lat, type, zoom) {
         this.map = this.initializeMap(lng, lat, type, zoom);
         this.geocoder = new google.maps.Geocoder();
-        this.mapSelection = new SquareMapSelection(this.map);
+        this.mapSelection = new PolygonMapSelection(this.map);
         this.markers = {};
 
         this.addEventListeners();
@@ -47,6 +47,7 @@
         });
         google.maps.event.addListener(self.map, "click", function(e) {
             var p = e.latLng;
+            self.mapSelection.onMouseClicked(p);
             qMapView.jsMouseClickedAt(p.lat(), p.lng());
         });
         google.maps.event.addListener(self.map, "dblclick", function(e) {
@@ -198,11 +199,11 @@
     };
 
     MapKit.prototype.shiftKeyDown = function() {
-        this.mapSelection.shiftPressed = true;
+        this.mapSelection.onShiftPressed();
     };
 
     MapKit.prototype.shiftKeyUp = function() {
-        this.mapSelection.shiftPressed = false;
+        this.mapSelection.onShiftReleased();
     };
 
     MapKit.prototype.addMarker = function(id, locationLat, locationLng) {

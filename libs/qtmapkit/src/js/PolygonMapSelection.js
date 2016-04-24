@@ -8,29 +8,59 @@
 function PolygonMapSelection(map) {
     MapSelection.call(this, map);
 
-    this.keysPressed = function() {
+    /* --------- */
+    /* VARIABLES */
+    /* --------- */
+    this.paths = [];
+    this.selectedArea = new google.maps.Polygon({
+        map: this.map,
+        clickable: false,
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        fillColor: "#FF0000",
+        fillOpacity: 0.25,
+        paths: this.paths
+    });
+
+    /* --------- */
+    /*  METHODS  */
+    /* --------- */
+    this.onMouseClicked = function(point) {
+        if(!this.shiftPressed) return;
+
+        this.extendSelectedArea(point);
     };
 
-    this.onMouseMoved = function(point) {
+    this.onShiftPressed = function() {
+        this.removeSelectedArea();
+        this.shiftPressed = true;
     };
 
-    this.onMouseDown = function(point) {
+    this.onShiftReleased = function() {
+        this.shiftPressed = false;
     };
 
-    this.onMouseUp = function(point) {
-    };
+    // These mouse events are not used.
+    this.onMouseMoved = function(point) {};
+    this.onMouseDown = function(point) {};
+    this.onMouseUp = function(point) {};
 
     this.createSelectedArea = function(bounds) {
     };
 
     this.extendSelectedArea = function(latLng) {
+        this.paths.push(latLng);
+        this.selectedArea.setPaths(this.paths);
     };
 
     this.removeSelectedArea = function() {
+        this.paths = [];
+        this.selectedArea.setPaths(this.paths);
     };
 
     this.getSelectedArea = function() {
-    }
+        return this.paths;
+    };
 };
 
 PolygonMapSelection.prototype = Object.create(MapSelection.prototype, {

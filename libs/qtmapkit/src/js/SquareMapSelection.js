@@ -8,6 +8,19 @@
 function SquareMapSelection(map) {
     MapSelection.call(this, map);
 
+    /* --------- */
+    /* VARIABLES */
+    /* --------- */
+    this.mouseDown = false;
+
+    /* --------- */
+    /*  METHODS  */
+    /* --------- */
+
+    /* Returns whether selection mode is enabled by the user.
+     * @returns {boolean} Whether the keys to enable selection mode have
+     *                    been pressed.
+     */
     this.keysPressed = function() {
         return this.shiftPressed && this.mouseDown;
     };
@@ -34,6 +47,17 @@ function SquareMapSelection(map) {
         this.isSelecting = false;
         this.map.setOptions({draggable: true});
     };
+
+    this.onShiftPressed = function() {
+        this.shiftPressed = true;
+    };
+
+    this.onShiftReleased = function() {
+        this.shiftPressed = false;
+    };
+
+    // Unused
+    this.onMouseClicked = function(point) {};
 
     this.createSelectedArea = function(bounds) {
         if(this.selectedArea != null) this.removeSelectedArea();
@@ -81,7 +105,7 @@ function SquareMapSelection(map) {
             south: southWest.lat(),
             west: southWest.lng()
         };
-    }
+    };
 };
 
 SquareMapSelection.prototype = Object.create(MapSelection.prototype, {
