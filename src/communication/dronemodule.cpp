@@ -242,7 +242,7 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
         }
     }
 
-    if (isFlying && status.height < 0.2) {
+    if (isFlying && status->getHeight() < 0.1) {
         isFlying = false;
         qDebug() << "drone has landed";
         emit landed(this);
