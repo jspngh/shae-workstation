@@ -60,7 +60,7 @@ signals:
     /*!
      * \brief the signal that is emitted when a new detection result has been found in the footage.
      */
-    void newDetection(QUuid droneId, DetectionResult result);
+    void newDetection(QUuid droneId, DetectionResult* result);
     /*!
      * \brief the signal that is emitted when the detectionController is finished. This requires the function streamFinished() to be
      * called beforehand.
@@ -68,7 +68,7 @@ signals:
     void detectionFinished();
 
 private:
-    DetectorManager manager;
+    DetectorManager* manager;
     cv::VideoCapture sequence;
     Mediator *mediator;
     double fps;
@@ -90,7 +90,10 @@ private:
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
-
+    int processHeight;
+    int processWidth;
+    int resolutionHeight;
+    int resolutionWidth;
     std::vector<vector<double>> xLUT;
     std::vector<vector<double>> yLUT;
 };

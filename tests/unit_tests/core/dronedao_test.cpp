@@ -44,24 +44,24 @@ void DroneDAO_Test::testSimpleDroneDAO()
 {
     DroneDAO sd = DroneDAO(&projectShaeDatabase);
 
-    Drone s = Drone(1, 2, "3", "4", "6", 5.6);
+    Drone *s = new Drone(1, 2, "3", "4", "6",5.6);
 
     sd.dbSaveDrone(s);
 
-    Drone sback = sd.dbRetrieveDrone(s.getGuid());
+    Drone *sback = sd.dbRetrieveDrone(s->getGuid());
 
-    QVERIFY(sback.getGuid() == s.getGuid());
-    QVERIFY(sback.getDronePort() == s.getDronePort());
-    QVERIFY(sback.getDroneIp() == s.getDroneIp());
-    QVERIFY(sback.getControllerIp() == s.getControllerIp());
-    QVERIFY(sback.getStreamPath() == s.getStreamPath());
-    QVERIFY(sback.getStreamPort() == s.getStreamPort());
-    QVERIFY(sback.getVisionWidth() == s.getVisionWidth());
+    QVERIFY(sback->getGuid() == s->getGuid());
+    QVERIFY(sback->getDronePort() == s->getDronePort());
+    QVERIFY(sback->getDroneIp() == s->getDroneIp());
+    QVERIFY(sback->getControllerIp() == s->getControllerIp());
+    QVERIFY(sback->getStreamPath() == s->getStreamPath());
+    QVERIFY(sback->getStreamPort() == s->getStreamPort());
+    QVERIFY(sback->getVisionWidth() == s->getVisionWidth());
 
     QSqlQuery query;
     query.prepare("DELETE from drones "
                   "WHERE droneID == (:droneID)");
-    query.bindValue(":droneID", s.getGuid());
+    query.bindValue(":droneID", s->getGuid());
     if (query.exec()) {
         qDebug() << "delete succes";
     } else {

@@ -22,9 +22,6 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
-    mediator->addSignal(this, (char *) SIGNAL(startStreamSignal(Search *, DroneModule *, PersistenceController *)), QString("startStreamSignal(Search*,DroneModule*,PersistenceController*)"));
-    mediator->addSignal(this, (char *) SIGNAL(stopStreamSignal(DroneModule *)), QString("stopStreamSignal(DroneModule*)"));
-    mediator->addSlot(this, (char *) SLOT(initStream(DroneModule *)), QString("startStreamWorkstation(DroneModule*)"));
 }
 
 Controller::~Controller()
@@ -66,10 +63,6 @@ void Controller::init()
     droneThread.start();
 }
 
-void Controller::initStream(DroneModule *dm)
-{
-    emit startStreamSignal(search, dm, persistenceController);
-}
 
 void Controller::retrieveWorkstationIpAndBroadcast()
 {
@@ -85,14 +78,9 @@ void Controller::retrieveWorkstationIpAndBroadcast()
     }
 }
 
-void Controller::stopStream(DroneModule *d)
-{
-    emit stopStreamSignal(d);
-}
 
 void Controller::onSearchEmitted(Search *s)
 {
-    qDebug() << "Controller::saved search";
     search = s;
 }
 
@@ -138,9 +126,8 @@ void Controller::readPendingDatagrams()
 void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
-
     QString ip = hello.getDroneIp();
-    QString strFile =  hello.getStreamFile();
+    QString strFile = hello.getStreamFile();
     QString ctrIp = hello.getControllerIp();
     int cmdPort = hello.getCommandsPort();
     int strPort = hello.getStreamPort();
@@ -149,7 +136,8 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     DroneModule *drone = receivedHelloFrom(ip);
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision);
+        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
+        drone->setPersistenceController(persistenceController);
         drone = configureDrone(drone);
     }
 

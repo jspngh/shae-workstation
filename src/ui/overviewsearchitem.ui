@@ -52,22 +52,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="searchAreaLabel">
-       <property name="text">
-        <string>Searched area:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="searchAreaValue">
-       <property name="text">
-        <string>543 m²</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
+ <resources/>
+ <connections/>
 </ui>
