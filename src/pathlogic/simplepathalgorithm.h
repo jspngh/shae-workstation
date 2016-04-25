@@ -4,7 +4,10 @@
 #include "pathalgorithm.h"
 #include <QGeoRectangle>
 
-//! A simple path algoritm that extends PathAlgorithm
+/*! A simple path algoritm that extends PathAlgorithm
+ * \ingroup Pathlogic
+ * */
+
 class SimplePathAlgorithm : public PathAlgorithm
 {
 public:

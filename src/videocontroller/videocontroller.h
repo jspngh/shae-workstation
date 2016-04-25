@@ -19,7 +19,10 @@
 #include "models/drone.h"
 #include "models/videosequence.h"
 
-
+/*!
+ * \brief The VideoController class
+ * \ingroup Videocontroller
+ */
 class VideoController : public QObject
 {
     Q_OBJECT

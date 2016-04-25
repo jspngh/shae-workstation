@@ -8,6 +8,7 @@
 /*!
  * \brief The GeoPolygon class describes a convex polygon area.
  * It is derived from QGeoShape, the base class of QGeoRectangle.
+ * \ingroup Pathlogic
  */
 class GeoPolygon : public QGeoShape
 {

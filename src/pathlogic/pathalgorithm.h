@@ -14,7 +14,9 @@ enum Direction {
     EAST = 1, WEST = -1
 };
 
-//! PathAlgorithm is an abstract class which can be extended by implementations of an algorithm.
+/*! PathAlgorithm is an abstract class which can be extended by implementations of an algorithm.
+ * \ingroup Pathlogic
+ * */
 class PathAlgorithm: public QObject
 {
     Q_OBJECT

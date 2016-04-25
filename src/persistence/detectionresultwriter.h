@@ -4,7 +4,10 @@
 #include "models/detectionresult.h"
 #include <QList>
 #include <QString>
-
+/*!
+ * \brief The DetectionResultWriter class
+ * \ingroup Persistence
+ */
 class DetectionResultWriter
 {
 public:

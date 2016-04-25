@@ -12,6 +12,7 @@
 /*! \brief The StreamConnection class has as its goal to connect to port 5502 of the Solo.
  * This is necessary to be able to capture the stream, which is only started after this connection has been made.
  * By connecting on port 5502, we essentially emulate the Android application, which requires the stream to display.
+ * \ingroup Communication
 */
 class StreamConnection: public QObject
 {

@@ -7,6 +7,10 @@
 #include <QJsonArray>
 #include <QDebug>
 
+/*!
+ * \brief The HelloMessage class
+ * \ingroup Models
+ */
 class HelloMessage
 {
 public:

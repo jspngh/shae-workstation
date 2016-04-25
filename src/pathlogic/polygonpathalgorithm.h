@@ -7,6 +7,7 @@
 /*!
  * \brief The PolygonPathAlgorithm class can compute a path for drones inside a polygon.
  * Around edges it can be a little bit innacurate due to differentation of hulls.
+ * \ingroup Pathlogic
  */
 class PolygonPathAlgorithm : public PathAlgorithm
 {

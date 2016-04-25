@@ -10,6 +10,7 @@
 /**
  * \brief The DroneDAO class is responsible for loading and saving
  * drone models into the database.
+ * \ingroup Persistence
  */
 class DroneDAO : GeneralDAO
 {
