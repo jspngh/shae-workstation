@@ -1,21 +1,21 @@
 #!/bin/bash
 
-function connect {
-	nmcli dev wifi connect SoloLink_Shae password projectshae
-}
+# Get current ssid
 current_ssid=$(iwconfig wlan0 | grep 'ESSID:' | awk '{print $4}' | sed 's/ESSID://g' | sed 's/"//g')
 
-# TODO: Check of this is really the solo ssid
 solo_ssid="SoloLink_Shae"
+i=5
 
+# If not yet connected to solo network
 if [ "$solo_ssid" != "$current_ssid" ]
 then
 	echo "Connecting"
-	i=5
 	while [ $i -gt 0 ]
 	do
+		# Connect to solo network
 		output="$(nmcli dev wifi connect SoloLink_Shae password projectshae 2>&1)"
 
+		# Check for errors and retry if so (max 5 times)
 		if [[ $output =~ "Error:" ]]
 		then
 		        echo "${output}"
@@ -30,6 +30,7 @@ else
 	echo "Already connected"
 fi
 
+# If connection failed, print error
 if [ $i -eq 0 ]
 then
 	>&2 echo "Not connected"
