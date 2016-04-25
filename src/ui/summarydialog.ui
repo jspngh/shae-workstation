@@ -6,38 +6,110 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>405</height>
+    <width>784</width>
+    <height>196</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="closeAppBtn">
+  <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>370</y>
-     <width>121</width>
-     <height>25</height>
+     <x>0</x>
+     <y>150</y>
+     <width>781</width>
+     <height>41</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Close App</string>
-   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMaximumSize</enum>
+    </property>
+    <property name="leftMargin">
+     <number>15</number>
+    </property>
+    <property name="rightMargin">
+     <number>15</number>
+    </property>
+    <item>
+     <widget class="QPushButton" name="saveFootageBtn">
+      <property name="text">
+       <string>Save drone footage</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="saveSearchBtn">
+      <property name="text">
+       <string>Save search results</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="closeAppBtn">
+      <property name="text">
+       <string>Close App</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
-  <widget class="QPushButton" name="exportSearchBtn">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>360</x>
-     <y>370</y>
-     <width>141</width>
-     <height>25</height>
+     <x>-1</x>
+     <y>-1</y>
+     <width>781</width>
+     <height>151</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Export Search</string>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMaximumSize</enum>
+    </property>
+    <property name="leftMargin">
+     <number>15</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>67</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 15pt &quot;Ubuntu&quot;;</string>
+      </property>
+      <property name="text">
+       <string>The search mission is finished.</string>
+      </property>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignVCenter">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>By clicking on 'Save drone footage' the annotated drone footage can be saved to a predefined location.
+By clicking on 'Save search results' a summary of the search can be saved to a predefined location.
+'Close App' will close the application. The application needs to be restarted in order to perform another search.</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

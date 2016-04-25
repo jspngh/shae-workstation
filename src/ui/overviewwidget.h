@@ -14,6 +14,7 @@
 #include "core/mediator.h"
 #include "models/detectionresult.h"
 #include "models/search.h"
+#include "ui/summarydialog.h"
 
 namespace Ui {
 class OverviewWidget;
@@ -33,6 +34,7 @@ private:
     QMMapView *mapView;
     bool mapViewLoaded;
     OverviewSearchItem *searchDetails;
+    SummaryDialog *summaryDialog;
 
     Search *search;
     Mediator *mediator;
@@ -48,9 +50,6 @@ private slots:
     void updateDroneList(DroneStatus *s);
     void onMapLoaded();
     void onMapFailedToLoad();
-signals:
-    void  printDetectionResultXML(QString);
-    void  printDetectionResultTXT(QString);
 };
 
 #endif // OVERVIEWWIDGET_H
