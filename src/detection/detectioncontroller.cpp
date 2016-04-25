@@ -48,6 +48,7 @@ void DetectionController::run()
     do {
         while (iteratorFrames < numFrames) {
             try {
+                QThread::sleep(1);
                 this->sequence.set(CV_CAP_PROP_POS_FRAMES, iteratorFrames);
                 bool captured =  this->sequence.read(frame);
                 double timeFrame = (double)iteratorFrames / (double)fpsOriginal;
