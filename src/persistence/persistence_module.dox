@@ -1,0 +1,5 @@
+/*!
+  \defgroup Persistence
+  \ingroup Workstation
+  \brief This module contains all code that enables all data to be saved.
+*/

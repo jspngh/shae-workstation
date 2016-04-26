@@ -1,0 +1,5 @@
+/*!
+  \defgroup Ui
+  \ingroup Workstation
+  \brief This module contains all code of the ui.
+*/
