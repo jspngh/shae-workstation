@@ -36,23 +36,31 @@ public:
      */
     static QList<QGeoCoordinate> fromHull(QList<QGeoCoordinate> upper, QList<QGeoCoordinate> lower);
 
-    //! Constructs a new QGeoRectangle, of minimum size, containing all of the coordinates.
+    /*! \brief Constructs a new QGeoRectangle, of minimum size, containing all of the coordinates.
+     * \return the bounding QGeoRectangle.
+    */
     QGeoRectangle getBoundingQGeoRectangle();
 
     /*! \brief This functions calculates the z-component of the cross product to know if the points
         make a clock-wise turn or not, useful for checking if a hull is valid.
+        \param O is a QGeoCoordinate used in calculating the crossproduct of AOB.
+        \param A is a QGeoCoordinate used in calculating the crossproduct of AOB.
+        \param B is a QGeoCoordinate used in calculating the crossproduct of AOB.
         \return returns positive if OAB makes a counter-clockwise turn,
         negative if clockwise and zero if points are collinear. */
     static double crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordinate B);
 
-    //! Compares two coordinates, used to sort a list of coordinates in the constructor of the GeoPolygon.
+    /*! \brief Compares two coordinates, used to sort a list of coordinates in the constructor of the GeoPolygon.
+     * \return Returns 1 if left is more West than right. If they have the same longitude, return 1 if left is more South than right.
+    */
     static int compare(const QGeoCoordinate left, const QGeoCoordinate right);
 
-    //! Compares two coordinates, but sort first according to latitude.
+    /*! \brief Compares two coordinates, but sort first according to latitude.
+     * \return Returns 1 if left is more South than right. If they have the same latitude, returns 1 if left is mroe West than right.
+    */
     static int compareLatitude(const QGeoCoordinate left, const QGeoCoordinate right);
 
     //! Checks if the saved coordinates forms a valid convex polygon.
-    //! TODO: implement rest of checks.
     bool isValid() const;
 
     //! Makes a string of a polygon for debugging purposes.
