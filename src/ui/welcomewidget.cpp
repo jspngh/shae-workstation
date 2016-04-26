@@ -37,6 +37,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
         QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(i)));
         pictureLabel->setPixmap(pic.scaled(100,70,Qt::KeepAspectRatio));
         pictureLabel->setAlignment(Qt::AlignCenter);
+        pictureLabel->setMargin(8);
         connect(pictureLabel, SIGNAL(clicked(int)), this, SLOT(selectedImage(int)));
         vLayout->addWidget(pictureLabel);
     }
