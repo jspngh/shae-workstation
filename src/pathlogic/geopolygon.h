@@ -61,9 +61,11 @@ public:
     static int compareLatitude(const QGeoCoordinate left, const QGeoCoordinate right);
 
     //! Checks if the saved coordinates forms a valid convex polygon.
+    //! \return true if coordinates form a valid convex polygon.
     bool isValid() const;
 
     //! Makes a string of a polygon for debugging purposes.
+    //! \return readable QString containing coordinates of the polygon.
     QString toString();
 
     /***********
@@ -87,8 +89,15 @@ public:
      */
     QList<QGeoCoordinate> getLowerHull() const;
 
+    /*!
+     * \brief getMostWestCoordinate
+     * \return the most west cooridnate of the polygon
+     */
     QGeoCoordinate getMostWestCoordinate() const;
-
+    /*!
+     * \brief getMostEastCoordinate
+     * \return the most East coordinate of the polygon
+     */
     QGeoCoordinate getMostEastCoordinate() const;
 
 private:
@@ -102,6 +111,7 @@ private:
     QList<QGeoCoordinate> upperHull;
     //! contains all coordinates from the lower hull, including mostWest and mostEast, sorted from West to East.
     QList<QGeoCoordinate> lowerHull;
+
     QGeoCoordinate mostWestCoordinate;
     QGeoCoordinate mostEastCoordinate;
 };
