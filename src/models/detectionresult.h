@@ -10,14 +10,35 @@
 class DetectionResult
 {
 public:
-    //constructors
+    /*!
+     * \brief DetectionResult default constructor
+     * Creates a default detection result.
+     */
     DetectionResult();
+    /*!
+     * \brief DetectionResult copy constructor
+     */
     DetectionResult(const DetectionResult &d);
+    /*!
+     * \brief DetectionResult destructor
+     */
     ~DetectionResult();
-
+    /*!
+     * \brief default DetectionResult constructor
+     * \param location, the geocoordinate of the detection.
+     * \param score, the score of the detection (measure of accuracy).
+     */
     DetectionResult(QGeoCoordinate location, double score);
     //getters
+    /*!
+     * \brief getScore()
+     * \return the score of the DetectionResult
+     */
     double getScore();
+    /*!
+     * \brief getLocation()
+     * \return the location of the DetectionResult
+     */
     QGeoCoordinate getLocation();
 
 private:

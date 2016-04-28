@@ -41,7 +41,7 @@ public:
      * \param persistencecontroller, used by the DetectionController to save DetectionResults.
      */
     explicit DetectionController(Search *search, DroneModule *dronemodule, PersistenceController *persistencecontroller, QObject *parent = 0);
-    //! the destructor
+    //! DetectionController destructor
     ~DetectionController() {}
 
     //! a method to set the mediator in order to connect the signals and slots.
