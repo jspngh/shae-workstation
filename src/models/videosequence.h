@@ -6,22 +6,45 @@
 #include <QMetaType>
 
 /*!
- * \brief The VideoSequence class
+ * \brief The VideoSequence class is used as a wrapper around the video footage of the drone.
  * \ingroup Models
  */
 class VideoSequence
 {
 public:
-    //constructors
+    /*!
+     * \brief VideoSequence default constructor
+     * Creates a default VideoSequence.
+     */
     VideoSequence();
+    /*!
+     * \brief VideoSequence copy constructor
+     */
     VideoSequence(const VideoSequence &d);
+    /*!
+     * \brief VideoSequence destructor
+     */
     ~VideoSequence();
-
+    /*!
+     * \brief VideoSequence constructor
+     * \param videoId, the unique id of the VideoSequence.
+     */
     VideoSequence(QUuid videoId);
+    /*!
+     * \brief VideoSequence constructor
+     * \param videoId, the unique id of the VideoSequence.
+     * \param path, the path of the VideoSequence.
+     */
     VideoSequence(QString path, QUuid videoId);
+    /*!
+     * \brief VideoSequence constructor
+     * \param start, the start time of the VideoSequence.
+     * \param end, the path of the VideoSequence.
+     * \param frameCount, the number of frames of the VideoSequence.
+     * \param path, the path of the VideoSequence.
+     */
     VideoSequence(QUuid videoId, QTime start, QTime end, int frameCount, QString path);
 
-    //getters
     QUuid getVideoID();
     QTime getStart();
     QTime getEnd();

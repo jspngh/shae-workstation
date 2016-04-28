@@ -29,7 +29,6 @@ public:
      * \param score, the score of the detection (measure of accuracy).
      */
     DetectionResult(QGeoCoordinate location, double score);
-    //getters
     /*!
      * \brief getScore()
      * \return the score of the DetectionResult
