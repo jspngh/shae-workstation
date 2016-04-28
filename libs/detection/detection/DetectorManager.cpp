@@ -1,8 +1,13 @@
 #include "DetectorManager.h"
 
 
-DetectorManager::DetectorManager(int fps, int processWidth, int processHeight, int resolutionWidth, int resolutionHeight)
+DetectorManager::DetectorManager(int fps,
+                                 int processWidth,
+                                 int processHeight,
+                                 int resolutionWidth,
+                                 int resolutionHeight)
 {
+
     this->detector = new ACFDetector(std::string("dependencies/INRIA_ACF.xml"));
     // this->detector = new HOGDetector();
     // TODO: remove hardcoding of values

@@ -11,6 +11,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QDir>
+#include <QResource>
 #include "communication/dronemodule.h"
 #include "core/mediator.h"
 #include "detection/DetectorManager.h"

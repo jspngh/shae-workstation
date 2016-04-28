@@ -8,6 +8,14 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
       persistenceController(pc),
       droneModule(dm)
 {
+
+    QFileInfo fileInfo(":/detection/models/acf.xml");
+
+    qDebug() << "absoluteFilePath: " << fileInfo.absoluteFilePath();
+    qDebug() << "baseName: " << fileInfo.baseName();
+    qDebug() << "completeBaseName: " << fileInfo.completeBaseName();
+    qDebug() << "canonicalFilePath: " << fileInfo.canonicalFilePath();
+
     int droneHeight = this->search->getHeight();
     int cameraAngle = this->search->getGimbalAngle();
     parseConfiguration(droneHeight, cameraAngle);
