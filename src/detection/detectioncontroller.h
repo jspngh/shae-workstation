@@ -22,7 +22,9 @@
 #include "persistence/persistencecontroller.h"
 
 /*!
- * \brief The DetectionController class
+ * \brief The DetectionController class is the component that is used by a DroneModule
+ * to analyze the drone footage for human detection. The DetectionController works on a separate thread.
+ * The DetectionController is started and stopped by the DroneModule.
  * \ingroup Detection
  */
 class DetectionController : public QThread
@@ -30,34 +32,39 @@ class DetectionController : public QThread
     Q_OBJECT
 
 public:
-    //! DetectionController is a class, implemented as a thread, that parses a video sequence and emits the detection results as a signal
-    explicit DetectionController(Search *search, DroneModule *dm, PersistenceController *pc, QObject *parent = 0);
+    /*!
+     * \brief DetectionController constructor that is used by the DroneModule
+     * \param search, a Search object that defines the search for which the DetectionController is used.
+     * Contains parameters that are required for the DetectionController.
+     * \param dronemodule, the DroneModule object in which the DetectionController is contained.
+     * Contains parameters that are required for the DetectionController.
+     * \param persistencecontroller, used by the DetectionController to save DetectionResults.
+     */
+    explicit DetectionController(Search *search, DroneModule *dronemodule, PersistenceController *persistencecontroller, QObject *parent = 0);
+    //! the destructor
     ~DetectionController() {}
 
+    //! a method to set the mediator in order to connect the signals and slots.
     void setMediator(Mediator *mediator);
 
     /*!
      * \brief streamFinished() can be called when the stream is finished (and no videocontent will thus be provided anymore).
-     * The DetectionController component will continue to process the remaining frames, and when all are processed, will stop the thread.
+     * The DetectionController component will continue to process the remaining frames, and when all are processed, the DetectionController will automatically close.
      */
     void streamFinished();
     /*!
      * \brief run() starts the DetectionController component
-     * This function has no coordinates, but needs to be configured with the correct parameters.
-     * \param fps contains the fps at which the stream will be parsed
-     * \param sequence is an OpenCV VideoCapture. The VideoCapture is the videocapture of the stream. It is required
-     * to pass a VideoCapture, as the OpenCV Library does not allow to open videocaptures from threads different from the main thread.
-     * \return signals containing detection results
      */
     void run() Q_DECL_OVERRIDE;
     /*!
-     * \brief getNrDetections() allows to easily retrieve the number of detections that have already been retrieved.
+     * \brief allows to easily retrieve the number of detections that have already occured.
      */
     int getNrDetections();
-
+    //! method to obtain the VideoCapture
     cv::VideoCapture getSequence() const;
+    //! method to set the VideoCapture
     void setSequence(const cv::VideoCapture &value);
-
+    //! method to set the video path
     void setPath(const QString &value);
 
 signals:
@@ -66,7 +73,7 @@ signals:
      */
     void newDetection(QUuid droneId, DetectionResult* result);
     /*!
-     * \brief the signal that is emitted when the detectionController is finished. This requires the function streamFinished() to be
+     * \brief the signal that is emitted when the DetectionController is finished. This requires the function streamFinished() to be
      * called beforehand.
      */
     void detectionFinished();
@@ -85,13 +92,17 @@ private:
     QString path;
     PersistenceController *persistenceController;
     /*!
-     * \brief a private method that allows to parse the configuration file of the detectioncontroller
-     * this file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
-     * in the frame
+     * \brief allows to parse the configuration file of the DetectionController.
+     * This file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
+     * in the frame.
+     * \param height, height of drone during the search
+     * \param gimbalAngle, gimbalAngle of the drone camera.
      */
     void parseConfiguration(int height, int gimbalAngle);
     /*!
-     * \brief xLUT and yLUT are lookuptables that are required for position calculation
+     * \brief analyzes a frame, associated with a given timestamp
+     * \param frame, the frame that needs to be analyzed
+     * \param time, the timestamp associated with the frame
      */
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
     int processHeight;
