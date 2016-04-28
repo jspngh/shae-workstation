@@ -1,0 +1,5 @@
+/*!
+  \defgroup Pathlogic
+  \ingroup Workstation
+  \brief This module contains all code regarding the calculation of paths for drones based on an area that needs to be searched.
+*/

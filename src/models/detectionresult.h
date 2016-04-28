@@ -3,7 +3,10 @@
 #include <QGeoCoordinate>
 #include "models/videosequence.h"
 
-
+/*!
+ * \brief The DetectionResult class
+ * \ingroup Models
+ */
 class DetectionResult
 {
 public:

@@ -8,6 +8,7 @@
 /**
  * \brief The SearchDAO class is responsible for loading and saving
  * search models into the database.
+ * \ingroup Persistence
  */
 
 class SearchDAO : GeneralDAO

@@ -24,6 +24,7 @@ class Controller;
 }
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
+ * \ingroup Core
  */
 
 class Controller: public QObject

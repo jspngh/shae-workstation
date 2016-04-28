@@ -11,6 +11,10 @@
 
 class DroneModule;
 
+/*!
+ * \brief The Dronestatus class
+ * \ingroup Models
+ */
 class DroneStatus
 {
 public:

@@ -21,6 +21,10 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "persistence/persistencecontroller.h"
 
+/*!
+ * \brief The DetectionController class
+ * \ingroup Detection
+ */
 class DetectionController : public QThread
 {
     Q_OBJECT

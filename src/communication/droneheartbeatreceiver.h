@@ -7,7 +7,10 @@
 #include <QtNetwork>
 #include <QHostAddress>
 
-
+/*!
+ * \brief The DroneHeartBeatReceiver class
+ * \ingroup Communication
+ */
 
 
 class DroneHeartBeatReceiver: public QObject

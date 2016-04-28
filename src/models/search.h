@@ -6,6 +6,10 @@
 #include <QGeoRectangle>
 #include "communication/dronemodule.h"
 
+/*!
+ * \brief The Search class
+ * \ingroup Models
+ */
 class Search
 {
 public:

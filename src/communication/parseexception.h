@@ -5,6 +5,7 @@
 
 /*!
  * \brief The ParseException class, which is trown if something went wrong during parsing of Json string.
+ * \ingroup Communication
  */
 class ParseException: public std::exception
 {

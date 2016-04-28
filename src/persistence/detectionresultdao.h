@@ -8,6 +8,7 @@
 /**
  * \brief The DetectionResultDAO class is responsible for loading and saving
  * detectionresult models into the database.
+ * \ingroup Persistence
  */
 
 class DetectionResultDAO : GeneralDAO

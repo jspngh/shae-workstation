@@ -5,7 +5,10 @@
 #include <QUuid>
 #include <QMetaType>
 
-
+/*!
+ * \brief The VideoSequence class
+ * \ingroup Models
+ */
 class VideoSequence
 {
 public:
