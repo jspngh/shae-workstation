@@ -25,8 +25,8 @@ public:
     ~DetectionResult();
     /*!
      * \brief default DetectionResult constructor
-     * \param location, the geocoordinate of the detection.
-     * \param score, the score of the detection (measure of accuracy).
+     * \param location is the geocoordinate of the detection.
+     * \param score is the score of the detection (measure of accuracy).
      */
     DetectionResult(QGeoCoordinate location, double score);
     /*!

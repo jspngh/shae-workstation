@@ -29,23 +29,23 @@ public:
     ~Drone();
     /*!
      * \brief default Drone constructor
-     * \param dronePort, the port to interface with the drone.
-     * \param streamPort, the port to interface with the stream of the drone.
-     * \param droneIp, the ip to interface with the drone
-     * \param controllerIp, the ip to interface with the controller.
-     * \param streamPath, the configuration file of the drone stream
-     * \param visionWidth, the vision width of the drone
+     * \param dronePort is the port to interface with the drone.
+     * \param streamPort is the port to interface with the stream of the drone.
+     * \param droneIp is ip to interface with the drone
+     * \param controllerIp is ip to interface with the controller.
+     * \param streamPath is configuration file of the drone stream
+     * \param visionWidth is vision width of the drone
      */
     Drone(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
     /*!
      * \brief default Drone constructor
-     * \param droneID, the id of the drone.
-     * \param dronePort, the port to interface with the drone.
-     * \param streamPort, the port to interface with the stream of the drone.
-     * \param droneIp, the ip to interface with the drone
-     * \param controllerIp, the ip to interface with the controller.
-     * \param streamPath, the configuration file of the drone stream
-     * \param visionWidth, the vision width of the drone
+     * \param droneID is the id of the drone.
+     * \param dronePort is the port to interface with the drone.
+     * \param streamPort is the port to interface with the stream of the drone.
+     * \param droneIp is the ip to interface with the drone
+     * \param controllerIp is the ip to interface with the controller.
+     * \param streamPath is the configuration file of the drone stream
+     * \param visionWidth is the vision width of the drone
      */
     Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
     /*!

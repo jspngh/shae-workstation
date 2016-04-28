@@ -34,11 +34,11 @@ class DetectionController : public QThread
 public:
     /*!
      * \brief DetectionController constructor that is used by the DroneModule
-     * \param search, a Search object that defines the search for which the DetectionController is used.
+     * \param search is a Search object that defines the search for which the DetectionController is used.
      * Contains parameters that are required for the DetectionController.
-     * \param dronemodule, the DroneModule object in which the DetectionController is contained.
+     * \param dronemodule is the DroneModule object in which the DetectionController is contained.
      * Contains parameters that are required for the DetectionController.
-     * \param persistencecontroller, used by the DetectionController to save DetectionResults.
+     * \param persistencecontroller is used by the DetectionController to save DetectionResults.
      */
     explicit DetectionController(Search *search, DroneModule *dronemodule, PersistenceController *persistencecontroller, QObject *parent = 0);
     //! DetectionController destructor
@@ -95,14 +95,14 @@ private:
      * \brief allows to parse the configuration file of the DetectionController.
      * This file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
      * in the frame.
-     * \param height, height of drone during the search
-     * \param gimbalAngle, gimbalAngle of the drone camera.
+     * \param height is the height of drone during the search
+     * \param gimbalAngle is the gimbalAngle of the drone camera.
      */
     void parseConfiguration(int height, int gimbalAngle);
     /*!
      * \brief analyzes a frame, associated with a given timestamp
-     * \param frame, the frame that needs to be analyzed
-     * \param time, the timestamp associated with the frame
+     * \param frame is the frame that needs to be analyzed
+     * \param time is the timestamp associated with the frame
      */
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
     int processHeight;

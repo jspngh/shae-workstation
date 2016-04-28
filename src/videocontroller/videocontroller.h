@@ -47,12 +47,12 @@ public slots:
      * \brief onStartStream() is a slot that listens to a signal to start the stream. The inputfile is used to start the stream.
      * This string can either contain an rtp address (formatted as rtp://XXX.XXX.XXX.XXX) or as an sdp file (formatted as xxx.sdp)
      * As this slot is non-blocking, the VideoSequence is both emitted and returned
-     * \param drone, the drone is passed as an argument, in order save the stream with a different name for each drone stream.
+     * \param drone is the drone is passed as an argument, in order save the stream with a different name for each drone stream.
      */
     VideoSequence* onStartStream(Drone *drone);
     /*!
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
-     * \param drone, the drone is passed as an argument, in order save the stream with a different name for each drone stream.
+     * \param drone is the drone is passed as an argument, in order save the stream with a different name for each drone stream.
     */
     void onStopStream(Drone *drone);
 
