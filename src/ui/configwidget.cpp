@@ -18,6 +18,8 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     ui->droneTable->setColumnWidth(TYPE, 100);
     ui->droneTable->setColumnWidth(BATTERY, 100);
     ui->droneTable->setColumnWidth(IP_PORT, 150);
+    ui->droneTable->horizontalHeader()->setStretchLastSection(true);
+
     ui->droneTable->verticalHeader()->hide();
 
     //setup connections
@@ -216,20 +218,37 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
 
     // set type
     if (s->getType().isEmpty())
-        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(QString("Not available")));
+    {
+        QTableWidgetItem* item = new QTableWidgetItem(QString("Not available"));
+        item->setTextAlignment(Qt::AlignCenter);
+        ui->droneTable->setItem(currentRow, TYPE, item);
+    }
     else
-        ui->droneTable->setItem(currentRow, TYPE, new QTableWidgetItem(s->getType()));
+    {
+        QTableWidgetItem* item = new QTableWidgetItem(s->getType());
+        item->setTextAlignment(Qt::AlignCenter);
+        ui->droneTable->setItem(currentRow, TYPE, item);
+    }
 
     // set battery
     if (s->getBatteryLevel() == -1)
-        ui->droneTable->setItem(currentRow, BATTERY, new QTableWidgetItem(QString("Not available")));
+    {
+        QTableWidgetItem* item = new QTableWidgetItem(QString("Not available"));
+        item->setTextAlignment(Qt::AlignCenter);
+        ui->droneTable->setItem(currentRow, BATTERY, item);
+    }
     else
-        ui->droneTable->setItem(currentRow, BATTERY,
-                                new QTableWidgetItem(QString::number(s->getBatteryLevel()) + " %"));
+    {
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(s->getBatteryLevel()) + " %");
+        item->setTextAlignment(Qt::AlignCenter);
+        ui->droneTable->setItem(currentRow, BATTERY, item);
+    }
 
     // set ip and port
     QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
-    ui->droneTable->setItem(currentRow, IP_PORT, new QTableWidgetItem(ip_port));
+    QTableWidgetItem* item = new QTableWidgetItem(ip_port);
+    item->setTextAlignment(Qt::AlignCenter);
+    ui->droneTable->setItem(currentRow, IP_PORT, item);
 
     dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));
 }

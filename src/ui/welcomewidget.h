@@ -9,6 +9,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
+#include <QHBoxLayout>
+#include <QTimer>
 
 #include "core/mediator.h"
 #include "models/dronestatus.h"
@@ -35,10 +37,19 @@ private:
 private slots:   
     void on_configSearchButton_clicked();
     void droneDetected(DroneStatus* s);
+    void pictureTimer();
+    void selectedImage(int);
 
 private:
     Ui::WelcomeWidget *ui;
     Mediator *mediator;
+    int status;
+    bool droneConnected;
+    int pictureTimerCounter;
+    QTimer* timer;
+    QStringList pictures;
+    QHBoxLayout * vLayout;
+    QWidget * mainScrollWidget;
 };
 
 #endif // WELCOMEWIDGET_H
