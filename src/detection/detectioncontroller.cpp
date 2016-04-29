@@ -9,12 +9,7 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
       droneModule(dm)
 {
 
-    QFileInfo fileInfo(":/detection/models/acf.xml");
 
-    qDebug() << "absoluteFilePath: " << fileInfo.absoluteFilePath();
-    qDebug() << "baseName: " << fileInfo.baseName();
-    qDebug() << "completeBaseName: " << fileInfo.completeBaseName();
-    qDebug() << "canonicalFilePath: " << fileInfo.canonicalFilePath();
 
     int droneHeight = this->search->getHeight();
     int cameraAngle = this->search->getGimbalAngle();
@@ -213,3 +208,45 @@ void DetectionController::parseConfiguration(int height, int gimbalAngle)
         }
     }
 }
+
+void DetectionController::initFile()
+{
+
+    QFile modelFile(modelLocation());
+
+    // if the file already exists nothing needs to be done anymore
+    // in general this function only needs to copy the file once, the first the time the application runs
+    if (modelFile.exists()) return;
+
+
+    QFile srcFile(":/detection/dependencies/acf.xml");
+    srcFile.open(QIODevice::ReadOnly);
+    QTextStream in(&srcFile);
+
+    QFile dstFile(modelLocation());
+    dstFile.open(QIODevice::WriteOnly);
+
+    QTextStream out(&dstFile);
+
+    out << in.readAll();
+
+    /* Close the files */
+    dstFile.close();
+    srcFile.close();
+}
+
+QString DetectionController::modelLocation()
+{
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString name = "acf.xml";
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
+
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+
+    return folder.append(name);
+}
+

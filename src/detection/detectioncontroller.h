@@ -95,6 +95,19 @@ private:
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
+
+    /*!
+     * \brief modelLocation will return the location (path) were the application stores its data.
+     * On ubuntu LTS system this path is ~/.local/share/name-app/
+     * \return path were the model is stored if it exists
+     */
+    QString modelLocation();
+
+    /*!
+     * \brief initFile will copy the acf model (acf.xml) from resources to the path obtained via the method modelLocation.
+     */
+    void initFile();
+
     int processHeight;
     int processWidth;
     int resolutionHeight;

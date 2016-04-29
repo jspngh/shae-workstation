@@ -33,7 +33,8 @@
         <file alias="screen8.png">ui/img/overviewscreenexport.png</file>
         <file alias="screen9.png">ui/img/overviewscreenmap.png</file>
     </qresource>
-    <qresource prefix="/detection/models">
-        <file alias="acf.xml">detection/models/INRIA_ACF.xml</file>
+    <qresource prefix="/detection/dependencies">
+        <file>detection/dependencies/gopro_3m_65deg.cfg</file>
+        <file alias="acf.xml">detection/dependencies/INRIA_ACF.xml</file>
     </qresource>
 </RCC>

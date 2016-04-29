@@ -18,6 +18,9 @@
 #include "core/mediator.h"
 #include "models/drone.h"
 #include "models/videosequence.h"
+#include <QDir>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 
 class VideoController : public QObject
@@ -42,6 +45,9 @@ public slots:
      * \brief onStopStream() is a slot that listens to a signal to stop the stream. This slot allows that the stream is correctly closed.
      */
     void onStopStream(Drone *drone);
+
+private:
+    QString streamLocation();
 
 signals:
     /*!

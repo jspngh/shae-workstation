@@ -25,12 +25,27 @@ void VideoController::setMediator(Mediator *m)
 
 VideoSequence* VideoController::onStartStream(Drone *drone)
 {
-    QFile::remove(QString("dependencies/drone_stream.mpg"));
-    QFile::remove(QString("dependencies/drone_stream.avi"));
+
+    QString streamFilePath = streamLocation();
+    // Make sure the file exists
+    QFile checkFile(streamFilePath);
+    if (checkFile.exists()){
+        qDebug() << "file exists1";
+        checkFile.remove();
+    }
+
+    // QFile::remove(QString("dependencies/drone_stream.avi"));
     qDebug() << "starting to save the stream";
-    const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
+    qDebug() << "path stream file: " << streamFilePath;
+    // const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
+
+    QString params = (QString("--sout=file://")).append(streamFilePath);
+    qDebug() << "params: " << params;
+
+    // const char *vlc_args[] = NULL; //{ params.toStdString().c_str() };
     // Launch VLC
-    inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+    // inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+    inst = libvlc_new(0, NULL);
     /* Create a new item */
     qDebug(drone->getStreamPath().toStdString().c_str());
     int bufferSize = 0;
@@ -64,7 +79,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     //buffer maximally 60 seconds
     int maxBuffertime = 60;
     int buffertime = 0;
-    QFile droneFile("dependencies/drone_stream.mpg");
+    QFile droneFile(streamFilePath);
     if (droneFile.open(QIODevice::ReadOnly)) {
         size = droneFile.size();  //when file does open.
         while (size < bufferSize && buffertime < maxBuffertime) {
@@ -78,7 +93,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     qDebug() << "Videocontroller: File has been created by vlc.";
     qDebug() << "Videocontroller: File has a size of " << size;
 
-    VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, QString("dependencies/drone_stream.mpg"));
+    VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, streamFilePath);
     this->sequence_path = sequence->getPath();
     emit this->streamStarted(drone->getGuid(), sequence);
     return sequence;
@@ -103,4 +118,19 @@ void VideoController::onStopStream(Drone *drone)
     }
 
     emit this->streamStopped();
+}
+
+
+QString VideoController::streamLocation()
+{
+    QString name = "drone_stream.mpg";
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
+
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+    return folder.append(name);
 }
