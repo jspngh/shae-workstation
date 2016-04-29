@@ -29,23 +29,23 @@ public:
     ~Search();
     /*!
      * \brief default Search constructor
-     * \param searchID, unique id of the search.
-     * \param start, the starttime of the search.
-     * \param area, the searcharea.
-     * \param height, height of the drone in the search.
-     * \param gimbalAngle, gimbal angle of the drone in the search
-     * \param fpsProcessing, fps at which the drone stream is processed
+     * \param searchID is the unique id of the search.
+     * \param start is the starttime of the search.
+     * \param area is the searcharea.
+     * \param height is the height of the drone in the search.
+     * \param gimbalAngle is the gimbal angle of the drone in the search
+     * \param fpsProcessing is the fps at which the drone stream is processed
      */
     Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing);
     /*!
      * \brief default Search constructor
-     * \param searchID, unique id of the search.
-     * \param start, the starttime of the search.
-     * \param area, the searcharea.
-     * \param height, height of the drone in the search.
-     * \param speed, speed of the drone in the search.
-     * \param gimbalAngle, gimbal angle of the drone in the search
-     * \param fpsProcessing, fps at which the drone stream is processed
+     * \param searchID is the unique id of the search.
+     * \param start is the starttime of the search.
+     * \param area is the searcharea.
+     * \param height is the height of the drone in the search.
+     * \param speed is the speed of the drone in the search.
+     * \param gimbalAngle is the gimbal angle of the drone in the search
+     * \param fpsProcessing is the fps at which the drone stream is processed
      */
     Search(QUuid searchID, QTime start, QGeoRectangle area, int height, double speed, int gimbalAngle, int fpsProcessing);
 

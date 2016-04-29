@@ -27,21 +27,21 @@ public:
     ~VideoSequence();
     /*!
      * \brief VideoSequence constructor
-     * \param videoId, the unique id of the VideoSequence.
+     * \param videoId is the unique id of the VideoSequence.
      */
     VideoSequence(QUuid videoId);
     /*!
      * \brief VideoSequence constructor
-     * \param videoId, the unique id of the VideoSequence.
-     * \param path, the path of the VideoSequence.
+     * \param videoId is the unique id of the VideoSequence.
+     * \param path is the path of the VideoSequence.
      */
     VideoSequence(QString path, QUuid videoId);
     /*!
      * \brief VideoSequence constructor
-     * \param start, the start time of the VideoSequence.
-     * \param end, the path of the VideoSequence.
-     * \param frameCount, the number of frames of the VideoSequence.
-     * \param path, the path of the VideoSequence.
+     * \param start is the start time of the VideoSequence.
+     * \param end is the end time of the VideoSequence.
+     * \param frameCount is the number of frames of the VideoSequence.
+     * \param path is the path of the VideoSequence.
      */
     VideoSequence(QUuid videoId, QTime start, QTime end, int frameCount, QString path);
 
