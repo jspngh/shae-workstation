@@ -165,25 +165,29 @@ void ConfigWidget::locateButtonPush()
 
 void ConfigWidget::setSignalSlots()
 {
+    qDebug() << "adding slots";
     mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
     mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
-    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
 }
 
 
 void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
 {
-    if (!mapView->hasLoaded()) return;
+    if (mapView == nullptr || !mapView->hasLoaded()) return;
 
     // position drone on map
-    QGeoCoordinate center = heartbeat->getCurrentLocation();
     QString id = heartbeat->getDrone()->getGuid().toString();
-    if (mapView->hasMarker(id)) {
+
+    // only move the center of the map if the drone has moved a large enough distance
+    if (mapView->hasMarker(id) && mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
+        center = heartbeat->getCurrentLocation();
         QMMarker &marker = mapView->getMarker(id);
         marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.moveTo(center);
     } else {
+        center = heartbeat->getCurrentLocation();
         QMMarker &marker = mapView->addMarker(id, center);
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
@@ -194,7 +198,7 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
     // only center the map once
     if (!mapCentered) {
         mapView->setCenter(center);
-        mapView->setZoomLevel(11);
+        mapView->setZoomLevel(20);
         mapCentered = true;
     }
 }
@@ -202,8 +206,6 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
 
 void ConfigWidget::updateDroneTable(DroneStatus* s)
 {
-    qDebug() << "updateDroneTable";
-
     DroneModule *d = s->getDrone();
     int currentRow = getDroneInTableIndex(d);
 

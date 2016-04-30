@@ -95,7 +95,7 @@ void DroneModule::setMediator(Mediator *med)
 
 void DroneModule::addSignalSlot()
 {
-
+    qDebug() << "adding slots drone";
     mediator->addSignal(this, (char *) SIGNAL(landed(DroneModule *)), QString("landed(DroneModule*)"));
     mediator->addSignal(this, (char *) SIGNAL(startStreamWorkstation(DroneModule *)), QString("startStreamWorkstation(DroneModule*)"));
     mediator->addSignal(this, (char *) SIGNAL(droneStatusReceived(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));

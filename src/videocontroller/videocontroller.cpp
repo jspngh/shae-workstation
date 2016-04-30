@@ -3,6 +3,7 @@
 VideoController::VideoController(QObject *parent): QObject(parent)
 {
     initSdpFile();
+    removeExistingVideoFiles();
 }
 
 QString VideoController::getSequencePath()
@@ -25,28 +26,25 @@ void VideoController::setMediator(Mediator *m)
 
 VideoSequence* VideoController::onStartStream(Drone *drone)
 {
-
-    removeExistingVideoFiles();
-
-    QString params = QString("--sout=file/ps:") + streamMpgLocation();
-    const char *vlc_args[] = {  params.toLocal8Bit().data() };
+    // all the param steps are required, they can not be combined into one statement
+    QString params1 = QString("--sout=file/ps:") + streamMpgLocation();
+    QByteArray params2 = params1.toLocal8Bit();
+    char *params3 = params2.data();
+    const char *vlc_args[] = {  params3 };
 
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
 
     /* Create a new item */
-    qDebug(drone->getStreamPath().toStdString().c_str());
-    int bufferSize = 0;
+    int bufferSize = 8 * 1024 * 1024;
     if (drone->getStreamPath().contains(QString("rtp"))) {
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
-        bufferSize = 8 * 1024 * 1024;
     } else if(drone->getStreamPath().contains(QString("sdp"))) {
         qDebug("started stream from sdp file");
         m = libvlc_media_new_path(inst, streamSdpLocation().toStdString().c_str());
-        bufferSize = 2 * 1024 * 1024;
-    } else
-    {
+        bufferSize /= 2;
+    } else {
         qDebug("started stream from video file");
         VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
         this->sequence_path = sequence->getPath();
@@ -108,10 +106,8 @@ void VideoController::onStopStream(Drone *drone)
     emit this->streamStopped();
 }
 
-
-QString VideoController::streamMpgLocation()
+QString VideoController::standardDataFolder()
 {
-    QString name = "drone_stream.mpg";
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
     //create folder if not available
@@ -120,6 +116,14 @@ QString VideoController::streamMpgLocation()
     if (!folder.endsWith(QDir::separator()))
         folder.append(QDir::separator());
 
+    return folder;
+}
+
+
+QString VideoController::streamMpgLocation()
+{
+    QString name = "drone_stream.mpg";
+    QString folder = standardDataFolder();
     return folder.append(name);
 }
 
@@ -127,28 +131,14 @@ QString VideoController::streamMpgLocation()
 QString VideoController::streamAviLocation()
 {
     QString name = "drone_stream.avi";
-    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-
-    //create folder if not available
-    QDir(QDir::root()).mkpath(folder);
-
-    if (!folder.endsWith(QDir::separator()))
-        folder.append(QDir::separator());
-
+    QString folder = standardDataFolder();
     return folder.append(name);
 }
 
 QString VideoController::streamSdpLocation()
 {
     QString name = "sololink.sdp";
-    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-
-    //create folder if not available
-    QDir(QDir::root()).mkpath(folder);
-
-    if (!folder.endsWith(QDir::separator()))
-        folder.append(QDir::separator());
-
+    QString folder = standardDataFolder();
     return folder.append(name);
 }
 

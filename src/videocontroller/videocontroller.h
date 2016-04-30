@@ -48,6 +48,7 @@ public slots:
     void onStopStream(Drone *drone);
 
 private:
+    QString standardDataFolder();
     QString streamMpgLocation();
     QString streamAviLocation();
     QString streamSdpLocation();

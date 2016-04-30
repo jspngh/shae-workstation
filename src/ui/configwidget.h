@@ -50,9 +50,10 @@ private slots:
 
 private:
     Ui::ConfigWidget *ui;
-    QMMapView *mapView;
+    QMMapView *mapView = nullptr;
     Mediator *mediator;
 
+    QGeoCoordinate center;
     bool areaWasSelected = false;
     bool mapCentered = false;
 
