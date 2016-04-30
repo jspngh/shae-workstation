@@ -179,13 +179,13 @@ signals:
     //! Is connected to the mediator.
     void droneHeartBeatReceived(DroneStatus *status);
 
-    //!TODO: what is this?
+    //!TODO: add comment
     void startStream(Drone *drone);
 
-    //!TODO: what is this?
+    //!TODO: add comment
     void stopStream(Drone *drone);
 
-    //!TODO: what is this?
+    //!TODO: add comment
     void startStreamWorkstation(DroneModule *dm);
 
     /*********************
@@ -217,20 +217,24 @@ public slots:
     void stopStream();
     //! After buffering the stream for a while, the detection component can be started to analyse the footage.
     void initDetection();
-
+    //! TODO: add comment
     void onSearchEmitted(Search *s);
 
 
     //! Sends a Json message to the drone to start the flight.
+    //! \return QJSonDocument that is sent to the drone, for debugging purposes.
     QJsonDocument startFlight();
 
     //! Sends a Json message to the drone to stop the flight.
+    //! \return QJSonDocument that is sent to the drone, for debugging purposes.
     QJsonDocument stopFlight();
 
     //! Sends a Json message to the drone to make an emergency landing.
+    //! \return QJSonDocument that is sent to the drone, for debugging purposes.
     QJsonDocument emergencyLanding();
 
     //! Sends a Json message to the drone to return to home.
+    //! \return QJSonDocument that is sent to the drone, for debugging purposes.
     QJsonDocument returnToHome();
 
 private slots:
@@ -241,6 +245,7 @@ private slots:
     void onDroneResponse(const QString &response);
     //! Connected directly with droneconnection.
     void onDroneResponseError(int socketError, const QString &message);
+    //! connected directly with
     void onDroneStatusReceived(DroneStatus *s);
 
 private:
@@ -248,25 +253,25 @@ private:
     void initHeartbeat(); //!< Helper function to initialise the heartbeat connection
 
 private:
-    DroneStatus lastReceivedDroneStatus;
+    DroneStatus lastReceivedDroneStatus; //!< the last received DroneStatus object
     Drone *drone; //!< model containing the data of a drone that will be stored in the database
-    Mediator *mediator;
-    QString workstationIp;
-    QThread *videoThread;
-    VideoController *videoController;
-    DetectionController *detectionController;
-    PersistenceController *persistenceController;
-    DroneHeartBeatReceiver *heartbeatReceiver = nullptr;
-    Search* search;
-    QThread *connectionThread;
-    DroneConnection *droneConnection;
-    QThread *streamThread;
-    StreamConnection *streamConnection;
+    Mediator *mediator; //!< a pointer to the mediator used for connecting the signals and the slots
+    QString workstationIp; //!< the IP addres of the workstation
+    QThread *videoThread; //!< a pointer to the videothread
+    VideoController *videoController; //!< a pointer to the videocontroller
+    DetectionController *detectionController; //!< a pointer to the detectionController
+    PersistenceController *persistenceController; //!< a pointer to the persistenceController
+    DroneHeartBeatReceiver *heartbeatReceiver = nullptr; //!< a pointer to the heartbeatReceiver
+    Search* search; //!< a pointer to the search object this DroneModule object belongs to
+    QThread *connectionThread; //!< a pointer to the connectionThread
+    DroneConnection *droneConnection; //!< a pointer to the droneConnection object, used for receiving and sending messages to the drone.
+    QThread *streamThread; //!< a pointer to the streamThread
+    StreamConnection *streamConnection; //!< a pointer to the streamConnection, used to send the video data from drone to workstation.
     QList<QGeoCoordinate> *waypoints; //!< Keeps the list of waypoints the drone needs to fly.
-    bool videoProcessing;
+    bool videoProcessing; //!< a bool that is true when the processing of the video is started.
     bool videoActive;
     bool videoInactive;
-    QGeoCoordinate homeLocation;
+    QGeoCoordinate homeLocation; //!< The coordinate of the location the drone started its flight.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
 
