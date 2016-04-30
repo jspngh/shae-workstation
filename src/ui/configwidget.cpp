@@ -105,16 +105,12 @@ void ConfigWidget::startButtonPush()
         QGeoRectangle area = mapView->selectedArea();
         this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());
     }
-    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA) {
-         QMessageBox::warning(this, "Warning!","The selected area is too big to be searched!", "OK");
 
+    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA)
+         QMessageBox::warning(this, "Warning!", "The selected area is too big to be searched!", "OK");
 
-    }
-    if(areaWasSelected && areaOfArea < MIN_AREA_OF_AREA){
-         QMessageBox::warning(this, "Warning!","Please select a bigger area", "OK");
-
-
-    }
+    if(areaWasSelected && areaOfArea < MIN_AREA_OF_AREA)
+         QMessageBox::warning(this, "Warning!", "Please select a bigger area", "OK");
     qDebug() << "Selected area has size of :" << this->areaOfArea;
 
     if(areaWasSelected && areaOfArea <= MAX_AREA_OF_AREA && areaOfArea > MIN_AREA_OF_AREA) {
@@ -216,28 +212,22 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
     ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
 
     // set type
-    if (s->getType().isEmpty())
-    {
+    if (s->getType().isEmpty()) {
         QTableWidgetItem* item = new QTableWidgetItem(QString("Not available"));
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, TYPE, item);
-    }
-    else
-    {
+    } else {
         QTableWidgetItem* item = new QTableWidgetItem(s->getType());
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, TYPE, item);
     }
 
     // set battery
-    if (s->getBatteryLevel() == -1)
-    {
+    if (s->getBatteryLevel() == -1) {
         QTableWidgetItem* item = new QTableWidgetItem(QString("Not available"));
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, BATTERY, item);
-    }
-    else
-    {
+    } else {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(s->getBatteryLevel()) + " %");
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, BATTERY, item);

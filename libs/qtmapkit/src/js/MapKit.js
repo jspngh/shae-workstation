@@ -204,6 +204,7 @@
                 break;
             case "square":
                 this.mapSelection = new SquareMapSelection(this.map);
+                break;
             default:
                 this.mapSelection = null;
         }
