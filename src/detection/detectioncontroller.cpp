@@ -19,6 +19,7 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
     initAcfModelFile();
 
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    qDebug() << folder;
     if (!folder.endsWith(QDir::separator()))
         folder.append(QDir::separator());
 
