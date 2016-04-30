@@ -18,22 +18,29 @@
 #include "models/drone.h"
 #include "videocontroller/videocontroller.h"
 
-
+//forward declarations
 class Search;
 class Controller;
 class DetectionController;
 class PersistenceController;
 
-
+/*!
+ * \brief The RequestedDroneStatus enum is used to easily request a certain status from the drone.
+ * \ingroup Communication
+ */
 enum RequestedDroneStatus {
     Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution, GPS_Count
 };
+/*!
+ * \brief The RequestedDroneSetting enum is used to easily set a certain setting on the drone.
+ * \ingroup Communication
+ */
 enum RequestedDroneSetting {
     Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
 };
 
 /*! \brief DroneModule class contains a drone model and all the logic belonging to a drone.
- * The model (a instance of the class Drone) contains the data of a drone (ip, port, id, ...)
+ * The model (an instance of the class Drone) contains the data of a drone (ip, port, id, ...)
  * This class (DroneModule) adds the logic to this drone model.
  * \ingroup Communication
 */
@@ -55,8 +62,17 @@ public:
     //! streamPort to 5502
     explicit DroneModule();
 
-    //! Constructor that sets all important attributes of the drone object
-    //! This is the constructor that should be used
+    /*! \brief Constructor that sets all important attributes of the drone object
+    This is the constructor that should be used.
+    \param dronePort is the port of the drone that can be used to connect to it.
+    \param streamPort is the port of the workstation used for receiving the videostream.
+    \param droneIP is the IPadress of the drone.
+    \param controllerIP is the IPadress of the controller of the drone.
+    \param workstationIP is the IPadress of the workstation.
+    \param streamPath \TODO
+    \param visionWidth is a double that describes how wide the drone can see in decimal degrees.
+    \param video \TODO
+    */
     explicit DroneModule(int dronePort,
                          int streamPort,
                          QString droneIp,
@@ -117,24 +133,28 @@ public:
     /***********************
     Navigation message methods
     ************************/
-    //! Sends a Json message to the drone that contains all waypoints.
+    //! Sends a Json message to the drone that contains all waypoints he has to fly (stored in attribute)
+    //! \return QJsonDocument for debugging purposes
     QJsonDocument sendWaypoints();
 
     /**************************
     Setting messages methods
     **************************/
     /*! \brief This method sends a message to let the drone know the workstation ip and port.
+     * \return QJsonDocument for debugging purposes
     */
     QJsonDocument setWorkstationConfiguration(QString ipAdress, int port);
 
     /*! \brief Sends a Json message to set a certain setting to a certain value.
      *  See RequestedDroneStatus enum to see which settings can be set.
-     * This method actually uses the method to set mulitple settings, namely setSettings().
+     * This method actually uses the method to set multiple settings, namely setSettings().
+     * \return QJsonDocument for debugging purposes
     */
     QJsonDocument setSetting(RequestedDroneSetting setting, int value);
 
     /*! \brief Sends a Json message to set certain settings to a certain values.
      * See RequestedDroneStatus enum to see which settings can be set.
+     * \return QJsonDocument for debugging purposes
     */
     QJsonDocument setSettings(QList<RequestedDroneSetting> settings, QList<int> values);
 
@@ -144,44 +164,51 @@ public:
     *******************/
 
 signals:
-    //! A signal generated to let droneconnection know that something needs to be sent.
+    //! \brief A signal generated to let droneconnection know that something needs to be sent.
     //! is connected to droneconnection directly in the constructor of drone.
     void droneRequest(QString message);
 
-    //! A signal generated to start the stream on the physical drone
+    //! \brief A signal generated to start the stream on the physical drone
     void streamRequest();
 
-    //! A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
+    //! \brief A signal that is fired when a reply from a request is received and parsed to a DroneStatus object.
     //! Is connected to the mediator
     void droneStatusReceived(DroneStatus *status);
 
-    //! A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
+    //!  \brief A signal that is fired when a heartbeat is received and parsed to a DroneStatus object.
     //! Is connected to the mediator.
     void droneHeartBeatReceived(DroneStatus *status);
 
+    //!TODO: what is this?
     void startStream(Drone *drone);
 
+    //!TODO: what is this?
     void stopStream(Drone *drone);
 
+    //!TODO: what is this?
     void startStreamWorkstation(DroneModule *dm);
 
     /*********************
      Slots
      *********************/
 public slots:
-    //! Sends a Json messages to the drone that requests all statusses,
-    //  possibly more than specified in the RequestedDroneStatus enum.
+    //! \brief Sends a Json messages to the drone that requests all statusses,
+    //!  possibly more than specified in the RequestedDroneStatus enum.
+    //! \return QJSonDocument that is sent to the drone, for debugging purposes.
     QJsonDocument requestStatus();
 
     /*! \brief Sends a Json message to the drone to request a certain status.
      *  See RequestedDroneStatus enum to see which statuses can be requested.
-     * This method actually uses the method to request multiple statuses, namely requestStatuses(). */
+     * This method actually uses the method to request multiple statuses, namely requestStatuses().
+    \return QJSonDocument that is sent to the drone, for debugging purposes.*/
     QJsonDocument requestStatus(RequestedDroneStatus status);
     /*! \brief Sends a Json message to the drone to request certain multiple statuses.
-     *  See RequestedDroneStatus enum to see which statuses can be requested. */
+     *  See RequestedDroneStatus enum to see which statuses can be requested.
+    \return QJSonDocument that is sent to the drone, for debugging purposes.*/
     QJsonDocument requestStatuses(QList<RequestedDroneStatus> statuses);
 
     //! Sends a Json message that asks for the heartbeat.
+    //! \return QJSonDocument that is sent to the drone, for debugging purposes.
     QJsonDocument requestHeartbeat();
 
     //! Allows to start the stream for a given drone, linked to a search and persistence component.
