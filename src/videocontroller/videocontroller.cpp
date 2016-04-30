@@ -26,13 +26,7 @@ void VideoController::setMediator(Mediator *m)
 VideoSequence* VideoController::onStartStream(Drone *drone)
 {
 
-    QString streamFilePath = streamLocation();
-    // Make sure the file exists
-    QFile checkFile(streamFilePath);
-    if (checkFile.exists()){
-        qDebug() << "file exists1";
-        checkFile.remove();
-    }
+
 
     // QFile::remove(QString("dependencies/drone_stream.avi"));
     qDebug() << "starting to save the stream";
@@ -121,7 +115,7 @@ void VideoController::onStopStream(Drone *drone)
 }
 
 
-QString VideoController::streamLocation()
+QString VideoController::streamMpgLocation()
 {
     QString name = "drone_stream.mpg";
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
@@ -133,4 +127,30 @@ QString VideoController::streamLocation()
         folder.append(QDir::separator());
 
     return folder.append(name);
+}
+
+
+QString VideoController::streamAviLocation()
+{
+    QString name = "drone_stream.avi";
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
+
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+    return folder.append(name);
+}
+
+void VideoController::removeExistingVideoFiles()
+{
+    QFile mpgFile(streamMpgLocation());
+    if (mpgFile.exists())
+        mpgFile.remove();
+
+    QFile aviFile(streamAviLocation());
+    if (aviFile.exists())
+        aviFile.remove();
 }

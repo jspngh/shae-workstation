@@ -47,7 +47,9 @@ public slots:
     void onStopStream(Drone *drone);
 
 private:
-    QString streamLocation();
+    QString streamMpgLocation();
+    QString streamAviLocation();
+    void removeExistingVideoFiles();
 
 signals:
     /*!
