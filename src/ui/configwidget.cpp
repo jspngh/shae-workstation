@@ -97,55 +97,72 @@ void ConfigWidget::setMediator(Mediator *mediator)
 
 void ConfigWidget::startButtonPush()
 {
+    bool areaCorrectSize = false;
+    bool droneSelected = false;
+    bool areaNotTooFar = false;
     if(!areaWasSelected){
         QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
 
     }
     else{
         QGeoRectangle area = mapView->selectedArea();
+        qDebug() << "Selected area has size of :" << this->areaOfArea;
         this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());
+
+        if(areaOfArea > MAX_AREA_OF_AREA){
+             QMessageBox::warning(this, "Warning!","The selected area is too big to be searched!", "OK");
+        }
+        else if(areaOfArea < MIN_AREA_OF_AREA){
+             QMessageBox::warning(this, "Warning!","Please select a bigger area", "OK");
+        }
+        else
+            areaCorrectSize = true;
     }
-    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA){
-         QMessageBox::warning(this, "Warning!","The selected area is too big to be searched!", "OK");
+    QList<DroneModule *> dronesInSearch;
+
+    if(areaCorrectSize){
 
 
-    }
-    if(areaWasSelected && areaOfArea < MIN_AREA_OF_AREA){
-         QMessageBox::warning(this, "Warning!","Please select a bigger area", "OK");
-
-
-    }
-    qDebug() << "Selected area has size of :" << this->areaOfArea;
-
-    if(areaWasSelected && areaOfArea <= MAX_AREA_OF_AREA && areaOfArea > MIN_AREA_OF_AREA){
-        QList<DroneModule *> dronesInSearch;
         for (int i = 0; i < dronesInTable.size(); i++) {
             QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
-            if (cb->isChecked())
+            if (cb->isChecked()){
                 dronesInSearch.append(dronesInTable[i].second);
+                droneSelected = true;
+            }
         }
-        if(dronesInSearch.size() == 0){
+        if(!droneSelected){
             QMessageBox::warning(this, "Not too fast...!","Please select a drone before starting the search", "OK");
         }
-        else if (mediator) {
-            Search *s = new Search();
-            s->setArea(mapView->selectedArea());
-
-
-            s->setHeight(ui->heightDoubleSpinBox->value());
-            s->setFpsProcessing(ui->fpsSpinBox->value());
-            s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
-            s->setSpeed(ui->speedDoubleSpinBox->value());
-
-
-            qDebug() << dronesInSearch.size();
-            s->setDroneList(dronesInSearch);
-
-            qDebug() << "emit ConfigWidget::startSearch(Search *s)";
-            emit startSearch(s);
-
-            ((QStackedWidget *) this->parent())->setCurrentIndex(2);
+        else{
+            double distanceToArea = mapView->selectedArea().center().distanceTo(dronesInSearch.front()->getLastReceivedDroneStatus().getCurrentLocation());
+            qDebug() << "Center of selected area is: " << mapView->selectedArea().center();
+            qDebug() << "Drone's home location is: " << dronesInSearch.front()->getLastReceivedDroneStatus().getCurrentLocation();
+            qDebug() << "Distance to selected area is: " << distanceToArea;
+            if(distanceToArea > MAX_DISTANCE)
+                QMessageBox::warning(this, "Warning!","The area selected is too far away for the drone to fly to", "OK");
+            else
+                areaNotTooFar = true;
         }
+    }
+
+    //check everything
+    if(mediator && areaWasSelected && areaCorrectSize && droneSelected && areaNotTooFar){
+        Search *s = new Search();
+        s->setArea(mapView->selectedArea());
+        s->setHeight(ui->heightDoubleSpinBox->value());
+        s->setFpsProcessing(ui->fpsSpinBox->value());
+        s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
+        s->setSpeed(ui->speedDoubleSpinBox->value());
+
+
+        qDebug() << dronesInSearch.size();
+        s->setDroneList(dronesInSearch);
+
+        qDebug() << "emit ConfigWidget::startSearch(Search *s)";
+        emit startSearch(s);
+
+        ((QStackedWidget *) this->parent())->setCurrentIndex(2);
+
 
     }
 

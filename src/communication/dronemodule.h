@@ -124,6 +124,12 @@ public:
 
     void addWaypoint(const QGeoCoordinate &waypoint);
 
+
+    QGeoCoordinate getHomeLocation() const;
+
+
+    DroneStatus getLastReceivedDroneStatus() const;
+
     VideoController *getVideoController() const;
     void setVideoController(VideoController *value);
     DetectionController *getDetectionController() const;
@@ -162,6 +168,7 @@ public:
     /*******************
     Signals
     *******************/
+
 
 signals:
     //! \brief A signal generated to let droneconnection know that something needs to be sent.

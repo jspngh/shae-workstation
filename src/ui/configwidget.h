@@ -63,6 +63,7 @@ private:
     double areaOfArea = 0.0;
     constexpr static double MAX_AREA_OF_AREA = 10000.0;
     constexpr static double MIN_AREA_OF_AREA = 1.0;
+    constexpr static double MAX_DISTANCE = 500.0;
 
     void writeConfigToFile();
     void initializeMap();
