@@ -8,6 +8,7 @@
 /**
  * \brief The DroneSearchDAO class is responsible for loading and saving
  * paths into the database.
+ * \ingroup Persistence
  */
 class DroneSearchDAO : GeneralDAO
 {

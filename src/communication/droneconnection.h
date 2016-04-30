@@ -6,6 +6,11 @@
 #include <QWaitCondition>
 #include "core/mediator.h"
 
+/*!
+ * \brief The DroneConnection class allows sending messages over TCP to the drone, and getting an answer from the drone.
+ * \ingroup Communication
+ */
+
 class DroneConnection: public QObject
 {
     Q_OBJECT

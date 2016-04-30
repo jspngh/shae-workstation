@@ -7,6 +7,7 @@
 /**
  * \brief The GeneralDAO class is the overlapping class for the other DAOS
  * this class contains overlapping methods.
+ * \ingroup Persistence
  */
 
 class GeneralDAO

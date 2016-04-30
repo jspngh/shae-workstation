@@ -21,6 +21,10 @@ namespace Ui {
 class ConfigWidget;
 }
 
+/*!
+ * \brief The ConfigWidget class
+ * \ingroup Ui
+ */
 class ConfigWidget : public QWidget
 {
     Q_OBJECT

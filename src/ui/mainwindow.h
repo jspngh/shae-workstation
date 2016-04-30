@@ -8,7 +8,10 @@
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
-
+/*!
+ * \brief The MainWindow class
+ * \ingroup Ui
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

@@ -359,6 +359,7 @@ QMMarker &QMMapView::addMarker(const QString markerId, const QGeoCoordinate &poi
                  .arg(point.latitude(),0,'f',15).arg(point.longitude(),0,'f',15);
     d->evaluateJavaScript(js);
     d->markers[markerId] = new QMMarker(markerId, point, d->frame(), this);
+
     return getMarker(markerId);
 }
 

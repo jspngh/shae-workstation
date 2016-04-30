@@ -1,0 +1,5 @@
+/*!
+  \defgroup Core
+  \ingroup Workstation
+  \brief This module contains core components that link the individual components to each other
+*/

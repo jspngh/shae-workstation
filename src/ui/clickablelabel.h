@@ -3,7 +3,10 @@
 #ifndef CLICKABLELABEL_H
 #define CLICKABLELABEL_H
 
-
+/*!
+ * \brief The ClickableLabel class
+ * \ingroup Ui
+ */
 class ClickableLabel : public QLabel
 {
 Q_OBJECT

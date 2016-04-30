@@ -1,0 +1,5 @@
+/*!
+  \defgroup Videocontroller
+  \ingroup Workstation
+  \brief This module contains all code needed to process the videostream of the drone.
+*/

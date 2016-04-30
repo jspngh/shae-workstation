@@ -9,6 +9,7 @@
 /**
  * \brief The videosequenceDAO class is responsible for loading and saving
  * videosequence models into the database.
+ * \ingroup Persistence
  */
 
 class VideoSequenceDAO : GeneralDAO

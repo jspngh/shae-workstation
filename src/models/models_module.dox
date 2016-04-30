@@ -1,0 +1,6 @@
+/*!
+  \defgroup Models
+  \ingroup Workstation
+  \brief This module contains all (data) models of objects used.
+
+*/
