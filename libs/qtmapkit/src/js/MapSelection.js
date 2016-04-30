@@ -76,8 +76,8 @@ MapSelection.prototype = {
     },
 
     /* Returns the selected area
-     * @return {object} An object literal, containing north, south, east &
-     * west properties.
+     * @return {Object} An object literal, containing the identifying
+     *                  properties of the area.
      */
     getSelectedArea: function() {
         throw "Error: method <getSelectedArea> not implemented by subclass.";

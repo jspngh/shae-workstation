@@ -5,14 +5,15 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QList>
-#include <QtMath>
-#include <QMessageBox>
 #include <QMMapView.h>
+#include <QMSelectionType.h>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QPair>
 #include <QStackedWidget>
 #include <QUuid>
 #include <QWidget>
+#include <QtMath>
 #include "models/search.h"
 #include "core/mediator.h"
 

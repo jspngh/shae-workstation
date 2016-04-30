@@ -3,7 +3,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 
 TARGET = qtmapkit
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG += staticlib c++11
 
 DEFINES += QTMAPKIT_LIBRARY
 
@@ -23,6 +23,7 @@ HEADERS += \
     $$PWD/src/qtmapkit_global.h \
     $$PWD/src/QMMapView.h \
     $$PWD/src/QMMarker.h \
+    $$PWD/src/QMSelectionType.h \
     $$PWD/src/EmptyAreaException.h
 
 RESOURCES += \

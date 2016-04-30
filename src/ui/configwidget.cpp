@@ -38,7 +38,7 @@ ConfigWidget::~ConfigWidget()
 
 void ConfigWidget::initializeMap()
 {
-    mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11, true);
+    mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11);
     connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
     connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)), this, SLOT(areaSelected(QGeoRectangle)));
@@ -46,6 +46,7 @@ void ConfigWidget::initializeMap()
 
 void ConfigWidget::onMapLoaded()
 {
+    mapView->setSelectionType(QMSelectionType::Square);
     ui->searchArea->replaceWidget(ui->searchAreaLoadingLabel, mapView);
     ui->searchAreaLoadingLabel->hide();
 }
@@ -97,15 +98,14 @@ void ConfigWidget::setMediator(Mediator *mediator)
 
 void ConfigWidget::startButtonPush()
 {
-    if(!areaWasSelected){
+    if(!areaWasSelected) {
         QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
 
-    }
-    else{
+    } else {
         QGeoRectangle area = mapView->selectedArea();
         this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());
     }
-    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA){
+    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA) {
          QMessageBox::warning(this, "Warning!","The selected area is too big to be searched!", "OK");
 
 
@@ -117,7 +117,7 @@ void ConfigWidget::startButtonPush()
     }
     qDebug() << "Selected area has size of :" << this->areaOfArea;
 
-    if(areaWasSelected && areaOfArea <= MAX_AREA_OF_AREA && areaOfArea > MIN_AREA_OF_AREA){
+    if(areaWasSelected && areaOfArea <= MAX_AREA_OF_AREA && areaOfArea > MIN_AREA_OF_AREA) {
         QList<DroneModule *> dronesInSearch;
         for (int i = 0; i < dronesInTable.size(); i++) {
             QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
@@ -126,8 +126,7 @@ void ConfigWidget::startButtonPush()
         }
         if(dronesInSearch.size() == 0){
             QMessageBox::warning(this, "Not too fast...!","Please select a drone before starting the search", "OK");
-        }
-        else if (mediator) {
+        } else if (mediator) {
             Search *s = new Search();
             s->setArea(mapView->selectedArea());
 

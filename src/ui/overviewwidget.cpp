@@ -109,8 +109,7 @@ void OverviewWidget::onSearchStarted(Search *s)
     // Initialize map
     mapView = new QMMapView(QMMapView::Satellite,
                             s->getArea().center(),
-                            11,
-                            false);
+                            11);
 
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
@@ -142,6 +141,7 @@ void OverviewWidget::fillDroneList()
 
 void OverviewWidget::onMapLoaded()
 {
+    mapView->setSelectionType(QMSelectionType::None);
     mapView->fitRegion(search->getArea());
     mapViewLoaded = true;
 
