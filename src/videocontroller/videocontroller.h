@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <mutex>
+#include <QTextStream>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
@@ -49,6 +50,13 @@ public slots:
 private:
     QString streamMpgLocation();
     QString streamAviLocation();
+    QString streamSdpLocation();
+
+    /**
+     * \brief initSdpFile will copy the sololink.sdp file from the qt resources to a writeable and accessable location
+     * This only needs to happens once (first the the application needs the file.
+     */
+    void initSdpFile();
     void removeExistingVideoFiles();
 
 signals:

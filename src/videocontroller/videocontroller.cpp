@@ -2,7 +2,7 @@
 
 VideoController::VideoController(QObject *parent): QObject(parent)
 {
-
+    initSdpFile();
 }
 
 QString VideoController::getSequencePath()
@@ -26,30 +26,30 @@ void VideoController::setMediator(Mediator *m)
 VideoSequence* VideoController::onStartStream(Drone *drone)
 {
 
+    removeExistingVideoFiles();
 
+    //@QString myString = "BlaBla"
+    //char* myChar = myString.toStdString().c_str();
+    const char *vlc_args[] = { "--sout=file/ps:/home/vincent/.local/share/frontend/drone_stream.mpg" };
 
-    // QFile::remove(QString("dependencies/drone_stream.avi"));
-    qDebug() << "starting to save the stream";
-    qDebug() << "path stream file: " << streamFilePath;
-    // const char *vlc_args[] = { "--sout=file/ps:dependencies/drone_stream.mpg" };
+    //QString params = QString("--sout=file/ps:").append(streamMpgLocation());
+    //qDebug() << params;
 
-    QString params = (QString("--sout=file://")).append(streamFilePath);
-    qDebug() << "params: " << params;
+    //const char *vlc_args[] = {  params.toStdString().c_str() };
 
-    // const char *vlc_args[] = NULL; //{ params.toStdString().c_str() };
     // Launch VLC
-    // inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
-    inst = libvlc_new(0, NULL);
+    inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+
     /* Create a new item */
     qDebug(drone->getStreamPath().toStdString().c_str());
     int bufferSize = 0;
-    if (drone->getStreamPath().contains(QString("rtp://"))) {
+    if (drone->getStreamPath().contains(QString("rtp"))) {
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
         bufferSize = 8 * 1024 * 1024;
-    } else if(drone->getStreamPath().contains(QString(".sdp"))) {
+    } else if(drone->getStreamPath().contains(QString("sdp"))) {
         qDebug("started stream from sdp file");
-        m = libvlc_media_new_path(inst, drone->getStreamPath().toStdString().c_str());
+        m = libvlc_media_new_path(inst, streamSdpLocation().toStdString().c_str());
         bufferSize = 2 * 1024 * 1024;
     } else
     {
@@ -73,7 +73,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     //buffer maximally 60 seconds
     int maxBuffertime = 60;
     int buffertime = 0;
-    QFile droneFile(streamFilePath);
+    QFile droneFile(streamMpgLocation());
     if (droneFile.open(QIODevice::ReadOnly)) {
         size = droneFile.size();  //when file does open.
         while (size < bufferSize && buffertime < maxBuffertime) {
@@ -87,7 +87,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     qDebug() << "Videocontroller: File has been created by vlc.";
     qDebug() << "Videocontroller: File has a size of " << size;
 
-    VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, streamFilePath);
+    VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, streamMpgLocation());
     this->sequence_path = sequence->getPath();
     emit this->streamStarted(drone->getGuid(), sequence);
     return sequence;
@@ -144,6 +144,20 @@ QString VideoController::streamAviLocation()
     return folder.append(name);
 }
 
+QString VideoController::streamSdpLocation()
+{
+    QString name = "sololink.sdp";
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
+
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+    return folder.append(name);
+}
+
 void VideoController::removeExistingVideoFiles()
 {
     QFile mpgFile(streamMpgLocation());
@@ -153,4 +167,30 @@ void VideoController::removeExistingVideoFiles()
     QFile aviFile(streamAviLocation());
     if (aviFile.exists())
         aviFile.remove();
+}
+
+void VideoController::initSdpFile()
+{
+
+    QFile sdpResFile(streamSdpLocation());
+
+    // if the file already exists nothing needs to be done anymore
+    // in general this function only needs to copy the file once, the first the time the application runs
+    if (sdpResFile.exists()) return;
+
+
+    QFile srcFile(":/video/sololink.sdp");
+    srcFile.open(QIODevice::ReadOnly);
+    QTextStream in(&srcFile);
+
+    QFile dstFile(streamSdpLocation());
+    dstFile.open(QIODevice::WriteOnly);
+
+    QTextStream out(&dstFile);
+
+    out << in.readAll();
+
+    /* Close the files */
+    dstFile.close();
+    srcFile.close();
 }

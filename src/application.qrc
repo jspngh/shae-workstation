@@ -37,4 +37,7 @@
         <file alias="gopro_3m_65deg.cfg">detection/dependencies/gopro_3m_65deg.cfg</file>
         <file alias="acf.xml">detection/dependencies/INRIA_ACF.xml</file>
     </qresource>
+    <qresource prefix="/video">
+        <file alias="sololink.sdp">videocontroller/sololink.sdp</file>
+    </qresource>
 </RCC>
