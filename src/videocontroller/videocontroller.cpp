@@ -28,14 +28,8 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
 
     removeExistingVideoFiles();
 
-    //@QString myString = "BlaBla"
-    //char* myChar = myString.toStdString().c_str();
-    const char *vlc_args[] = { "--sout=file/ps:/home/vincent/.local/share/frontend/drone_stream.mpg" };
-
-    //QString params = QString("--sout=file/ps:").append(streamMpgLocation());
-    //qDebug() << params;
-
-    //const char *vlc_args[] = {  params.toStdString().c_str() };
+    QString params = QString("--sout=file/ps:") + streamMpgLocation();
+    const char *vlc_args[] = {  params.toLocal8Bit().data() };
 
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
