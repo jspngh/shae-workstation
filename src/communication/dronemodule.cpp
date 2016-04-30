@@ -222,20 +222,20 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
 
     if( waypoints != nullptr &&
         status->getPreviousWaypointOrder() == waypoints->size() &&
-        status->getCurrentLocation().distanceTo(homeLocation) < 1){
-        // the drone is has finished it search and is back to its homelocation
+        status->getCurrentLocation().distanceTo(homeLocation) < 0.5){
+        // the drone has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
-        returnToHome();
+        emergencyLanding();
     }
 
-    if (status->getPreviousWaypointOrder() == 2 && videoProcessing && !videoActive) {
+    if (status->getPreviousWaypointOrder() == 1 && videoProcessing && !videoActive) {
         qDebug() << "In first waypoint, starting stream";
         initStream();
         videoActive = true;
     }
 
     if (waypoints != nullptr) {
-        if (status->getPreviousWaypointOrder() == waypoints->size() && videoProcessing && videoActive) {
+        if (status->getPreviousWaypointOrder() == waypoints->size() - 1 && videoProcessing && videoActive) {
             videoActive = false;
             qDebug() << "In last waypoint, stopping stream";
             stopStream();

@@ -198,7 +198,7 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
     // only center the map once
     if (!mapCentered) {
         mapView->setCenter(center);
-        mapView->setZoomLevel(20);
+        mapView->setZoomLevel(18);
         mapCentered = true;
     }
 }

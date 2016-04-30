@@ -3,7 +3,11 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QFile>
+#include <QStandardPaths>
+#include <QDebug>
 #include <QDir>
+#include <QMessageBox>
 #include "core/mediator.h"
 
 namespace Ui {
@@ -19,6 +23,9 @@ public:
     ~SummaryDialog();
 
     void setMediator(Mediator *mediator);
+
+private:
+    QString streamLocation();
 
 private slots:
     void onSaveFootageClicked();

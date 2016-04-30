@@ -28,7 +28,15 @@ void SummaryDialog::setMediator(Mediator *mediator)
 
 void SummaryDialog::onSaveFootageClicked()
 {
-
+    QFile stream(streamLocation());
+    if (stream.exists()) {
+        QString filter = "Video (*.avi)";
+        QString saveLocation = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
+        qDebug() << saveLocation;
+        stream.copy(saveLocation);
+    } else {
+        QMessageBox::warning(this, "Warning!","The stream has not been created. It is not possible to save it.", "OK");
+    }
 }
 
 void SummaryDialog::onSaveSearchClicked()
@@ -46,3 +54,18 @@ void SummaryDialog::onCloseAppClicked()
 {
     QCoreApplication::quit();
 }
+
+QString SummaryDialog::streamLocation()
+{
+    QString name = "drone_stream.avi";
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
+
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+    return folder.append(name);
+}
+
