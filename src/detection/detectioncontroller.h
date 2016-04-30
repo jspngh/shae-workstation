@@ -7,6 +7,7 @@
 #include <QString>
 #include <QThread>
 #include <cstdlib>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -14,6 +15,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QtCore>
 #include <QDir>
 #include <QResource>
 #include "communication/dronemodule.h"
@@ -90,7 +92,9 @@ private:
      * this file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
      * in the frame
      */
-    void parseConfiguration(int height, int gimbalAngle);
+    void parseConfiguration(QFile& file);
+
+    void parseLut(QTextStream& in, int length, std::vector<vector<double>>& lut);
     /*!
      * \brief xLUT and yLUT are lookuptables that are required for position calculation
      */
@@ -106,7 +110,12 @@ private:
     /*!
      * \brief initFile will copy the acf model (acf.xml) from resources to the path obtained via the method modelLocation.
      */
-    void initFile();
+    void initAcfModelFile();
+
+    /*!
+     * \brief initSearchConfigFile will open the configuration file which resides in the resources and then call parseConfiguration
+     */
+    void initSearchConfigFile(int height, int gimbalAngle);
 
     int processHeight;
     int processWidth;
