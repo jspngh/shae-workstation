@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # Get current ssid
-current_ssid=$(iwconfig wlan0 | grep 'ESSID:' | awk '{print $4}' | sed 's/ESSID://g' | sed 's/"//g')
-
+output="$(nmcli con status)"
 solo_ssid="SoloLink_Shae"
 i=5
 
-# If not yet connected to solo network
-if [ "$solo_ssid" != "$current_ssid" ]
+# Check if already connected to solo network
+if [[ $output =~ "$solo_ssid" ]]
 then
+	echo "Already connected"
+else
 	echo "Connecting"
 	while [ $i -gt 0 ]
 	do
@@ -19,6 +20,13 @@ then
 		if [[ $output =~ "Error:" ]]
 		then
 		        echo "${output}"
+
+			if [[ $output =~ "No network with SSID 'SoloLink_Shae' found." ]]
+			then
+				echo "Sleep 5 seconds"
+				sleep 5
+			fi
+
 			echo "Retry..."
 			i=$((i-1))
 		else
@@ -26,8 +34,6 @@ then
 			break
 		fi
 	done
-else
-	echo "Already connected"
 fi
 
 # If connection failed, print error
