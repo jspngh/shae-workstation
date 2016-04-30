@@ -12,20 +12,64 @@
 class DroneModule;
 
 /*!
- * \brief The Dronestatus class
+ * \brief The Dronestatus class is used for both heartbeat messages and status messages that
+ * are exchanged between the drone and the workstation. The heartbeat message contains less data
+ * and is exchanged more frequently. The status message contains all possible information
+ * that the drone can provide.
  * \ingroup Models
  */
 class DroneStatus
 {
 public:
+    /*!
+     * \brief DroneStatus default constructor
+     * Creates a default drone status.
+     */
     DroneStatus();
+    /*!
+     * \brief DroneStatus copy constructor
+     */
     DroneStatus(const DroneStatus &d);
+    /*!
+     * \brief DroneStatus destructor
+     */
     ~DroneStatus();
-
+    /*!
+     * \brief default DroneStatus constructor of a heartbeat
+     * \param timestampDrone is the timestamp of the drone, when the status message is generated.
+     * \param timestampReceiveWorkstation is the timestamp of the workstation when the status message was received.
+     * \param location is the location of the drone at the time of sending.
+     * \param orientation is the orientation of the drone at the time of sending.
+     * \param cameraAngle is the camera angle of the drone at the time of sending.
+     * \param speed is the speed of the drone at the time of sending.
+     * \param batteryLevel is the battery level of the drone at the time of sending.
+     * \param droneState is the drone state at the time of sending (not used as for now).
+    */
     DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate location,
                 double orientation, double cameraAngle, double speed, double batteryLevel, int droneState);
-
-    DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate currentlocation,
+    /*!
+     * \brief default DroneStatus constructor of a full status message
+     * \param timestampDrone is the timestamp of the drone, when the status message is generated.
+     * \param timestampReceiveWorkstation is the timestamp of the workstation when the status message was received.
+     * \param location is the location of the drone at the time of sending.
+     * \param orientation is the orientation of the drone at the time of sending.
+     * \param cameraAngle is the camera angle of the drone at the time of sending.
+     * \param selectedSpeed is the speed selected by the user.
+     * \param selectedHeight is the height selected by the user.
+     * \param height is the height of the drone at the time of sending.
+     * \param batteryLevel is the battery level of the drone at the time of sending.
+     * \param fps is the fps of the drone footage selected by the user.
+     * \param resolution is the resolution of the drone footage selected by the user.
+     * \param heartbeat is the boolean that indicates if the status message is a heartbeat.
+     * \param manufacturer is the manufacturer of the drone.
+     * \param type is the type of the drone.
+     * \param nextWaypoint is the integer that indicates the waypoint to which the user is flying.
+     * \param previousWaypointOrder is the last waypoint that the drone has reached.
+     * \param nextWaypoints is the list of waypoints that the drone still has to fly to.
+     * \param speed is the battery level of the drone at the time of sending.
+     * \param droneState is the drone state at the time of sending (not used as for now).
+    */
+    DroneStatus(QDateTime timestampDrone, QDateTime timestampReceiveWorkstation, QGeoCoordinate location,
                 double orientation, double cameraAngle, double speed, double selectedSpeed, double height,
                 double selectedHeight, double batteryLevel, int fps, int resolution, bool heartbeat,
                 int droneState, QString manufacturer, QString type, QGeoCoordinate nextWaypoint,
