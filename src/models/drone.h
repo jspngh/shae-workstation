@@ -14,36 +14,76 @@
 class Drone
 {
 public:
-    //! default constructor that sets everything to a certain default value
+    /*!
+     * \brief Drone default constructor
+     * Creates a default Drone.
+     */
     Drone();
-
-    //! Copy constructor
+    /*!
+     * \brief Drone copy constructor
+     */
     Drone(const Drone &d);
-    //! destructor
+    /*!
+     * \brief Drone destructor
+     */
     ~Drone();
-
-    //! Constructor given all arguments, generates a unique QUuid
+    /*!
+     * \brief default Drone constructor
+     * \param dronePort is the port to interface with the drone.
+     * \param streamPort is the port to interface with the stream of the drone.
+     * \param droneIp is ip to interface with the drone
+     * \param controllerIp is ip to interface with the controller.
+     * \param streamPath is configuration file of the drone stream
+     * \param visionWidth is vision width of the drone
+     */
     Drone(int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
-
-    //! Constructor to set QUuid en everything else manually
+    /*!
+     * \brief default Drone constructor
+     * \param droneID is the id of the drone.
+     * \param dronePort is the port to interface with the drone.
+     * \param streamPort is the port to interface with the stream of the drone.
+     * \param droneIp is the ip to interface with the drone
+     * \param controllerIp is the ip to interface with the controller.
+     * \param streamPath is the configuration file of the drone stream
+     * \param visionWidth is the vision width of the drone
+     */
     Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
-
+    /*!
+     * \brief getGuid()
+     * \return the Guid of the drone
+     */
     QUuid getGuid() const;
-
+    /*!
+     * \brief getDronePort()
+     * \return the port of the drone
+     */
     int getDronePort();
-
+    /*!
+     * \brief getStreamPort()
+     * \return the port of the stream
+     */
     int getStreamPort();
-
+    /*!
+     * \brief getDroneIp()
+     * \return the ip of the drone
+     */
     QString getDroneIp();
-
+    /*!
+     * \brief getControllerIp()
+     * \return the ip of the controller
+     */
     QString getControllerIp();
-
+    /*!
+     * \brief getVisionWidth()
+     * \return the vision width of the drone
+     */
     double getVisionWidth() const;
-
     void setVisionWidth(double visionWidth);
-
+    /*!
+     * \brief getStreamPath()
+     * \return the stream path
+     */
     QString getStreamPath() const;
-
     void setStreamPath(const QString &value);
 
 private:
