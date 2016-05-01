@@ -5,6 +5,11 @@
 #include <QDir>
 #include <QPixmap>
 #include <QTimer>
+#include <QProcess>
+#include <QStandardPaths>
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+
 
 WelcomeWidget::WelcomeWidget(QWidget *parent) :
     QWidget(parent),
@@ -105,7 +110,34 @@ void WelcomeWidget::on_configSearchButton_clicked()
 {
     if(status == 0)
     {
+        QThread pbct;
+        ProgressBarController *pbc = new ProgressBarController();
+        pbc->setProgressBar(ui->progressBar);
+        pbc->moveToThread(&pbct);
+        QObject::connect(this, SIGNAL(updateProgressBar(int, int)), pbc, SLOT(update(int, int)));
+        pbct.start();
+
+        QString message = "Connecting to Solo wifi";
+        ui->statusLabel->setText(message);
+
+        QFuture<QString> result = QtConcurrent::run(this, &WelcomeWidget::connect_to_solo_wifi);
+        emit updateProgressBar(50, 10);
+
+        QString output = result.result();
+        pbc->aborted = true;
+        pbct.wait(2);
+        emit updateProgressBar(50, 1);
+
+        if (output.contains(QRegExp("Not connected:")))
+        {
+            message = output.split(QRegExp("Not connected:"), QString::SkipEmptyParts).last();
+        } else {
+            message = "Connected to Solo wifi";
+        }
+        ui->statusLabel->setText(message);
+
         ui->configSearchButton->setText("Configure Search");
+
         if(!droneConnected)
             ui->configSearchButton->setEnabled(false);
         status ++;
@@ -140,3 +172,30 @@ void WelcomeWidget::pictureTimer()
     timer->start(10000);
     }
 }
+
+QString WelcomeWidget::connect_to_solo_wifi()
+{
+    QProcess *process = new QProcess();
+    //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
+    process->setWorkingDirectory("../../src/scripts");
+    process->start("./connect_to_solo_network.sh");
+    process->waitForFinished(-1);
+    QString output(process->readAll());
+    QString result = output.split(QRegExp("[\r\n]"), QString::SkipEmptyParts).last();
+    return result;
+}
+
+//void WelcomeWidget::updateProgressBar(int stopPercentage, int time)
+//{
+//    int current = ui->progressBar->value();
+//    int difference = stopPercentage - current;
+//    if (difference > 0)
+//    {
+//        long interval = (float) time / (float) difference * 1000;
+//        while (ui->progressBar->value() < stopPercentage)
+//        {
+//            ui->progressBar->setValue(ui->progressBar->value() + 1);
+//            QThread::msleep(interval);
+//        }
+//    }
+//}

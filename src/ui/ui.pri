@@ -8,7 +8,8 @@ SOURCES += \
     $$PWD/overviewwidget.cpp \
     $$PWD/overviewsearchitem.cpp \
     $$PWD/overviewdroneitem.cpp \
-    $$PWD/clickablelabel.cpp
+    $$PWD/clickablelabel.cpp \
+    $$PWD/progressbarcontroller.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -17,7 +18,8 @@ HEADERS += \
     $$PWD/overviewwidget.h \
     $$PWD/overviewsearchitem.h \
     $$PWD/overviewdroneitem.h \
-    $$PWD/clickablelabel.h
+    $$PWD/clickablelabel.h \
+    $$PWD/progressbarcontroller.h
 
 FORMS += \
     $$PWD/mainwindow.ui \

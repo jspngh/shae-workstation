@@ -24,7 +24,7 @@ else
 			if [[ $output =~ "No network with SSID 'SoloLink_Shae' found." ]]
 			then
 				echo "Sleep 5 seconds"
-				sleep 5
+#				sleep 5
 			fi
 
 			echo "Retry..."
@@ -39,6 +39,6 @@ fi
 # If connection failed, print error
 if [ $i -eq 0 ]
 then
-	>&2 echo "Not connected"
+	echo "Not connected: $output"
 fi
 

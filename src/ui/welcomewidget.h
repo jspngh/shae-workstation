@@ -14,6 +14,7 @@
 
 #include "core/mediator.h"
 #include "models/dronestatus.h"
+#include "progressbarcontroller.h"
 
 namespace Ui {
 class WelcomeWidget;
@@ -33,12 +34,16 @@ private:
     void setSignalSlots();
 
     void setupReady();
+    QString connect_to_solo_wifi();
 
 private slots:   
     void on_configSearchButton_clicked();
     void droneDetected(DroneStatus* s);
     void pictureTimer();
     void selectedImage(int);
+
+signals:
+    void updateProgressBar(int percentage, int time);
 
 private:
     Ui::WelcomeWidget *ui;

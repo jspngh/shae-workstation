@@ -33,4 +33,9 @@
         <file alias="screen8.png">ui/img/overviewscreenexport.png</file>
         <file alias="screen9.png">ui/img/overviewscreenmap.png</file>
     </qresource>
+    <qresource prefix="/scripts">
+	<file alias="connect_wifi">scripts/connect_to_solo_network.sh</file>
+	<file alias="set_gateway">scripts/set_gateway.sh</file>
+	<file alias="test">scripts/test.sh</file>
+    </qresource>
 </RCC>
