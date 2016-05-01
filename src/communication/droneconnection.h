@@ -7,9 +7,8 @@
 #include "core/mediator.h"
 
 /*!
- * \brief The DroneConnection class
+ * \brief The DroneConnection class allows sending messages over TCP to the drone, and getting an answer from the drone.
  * \ingroup Communication
- * This class allows sending messages over TCP to the drone, and getting an answer from the drone.
  */
 
 class DroneConnection: public QObject
