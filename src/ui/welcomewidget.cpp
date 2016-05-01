@@ -110,6 +110,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
 {
     if(status == 0)
     {
+        // Create and init progressBarController
         QThread pbct;
         ProgressBarController *pbc = new ProgressBarController();
         pbc->setProgressBar(ui->progressBar);
@@ -117,25 +118,33 @@ void WelcomeWidget::on_configSearchButton_clicked()
         QObject::connect(this, SIGNAL(updateProgressBar(int, int)), pbc, SLOT(update(int, int)));
         pbct.start();
 
+        // Set statusLabel
         QString message = "Connecting to Solo wifi";
         ui->statusLabel->setText(message);
 
+        // Connect to solo network and update processBar
         QFuture<QString> result = QtConcurrent::run(this, &WelcomeWidget::connect_to_solo_wifi);
         emit updateProgressBar(50, 10);
 
+        // Get result and end process
         QString output = result.result();
         pbc->aborted = true;
         pbct.wait(2);
         emit updateProgressBar(50, 1);
 
+        // Set statusLabel
+        bool connected;
         if (output.contains(QRegExp("Not connected:")))
         {
             message = output.split(QRegExp("Not connected:"), QString::SkipEmptyParts).last();
+            connected = false;
         } else {
             message = "Connected to Solo wifi";
+            connected = true;
         }
         ui->statusLabel->setText(message);
 
+        y
         ui->configSearchButton->setText("Configure Search");
 
         if(!droneConnected)
@@ -185,17 +194,14 @@ QString WelcomeWidget::connect_to_solo_wifi()
     return result;
 }
 
-//void WelcomeWidget::updateProgressBar(int stopPercentage, int time)
-//{
-//    int current = ui->progressBar->value();
-//    int difference = stopPercentage - current;
-//    if (difference > 0)
-//    {
-//        long interval = (float) time / (float) difference * 1000;
-//        while (ui->progressBar->value() < stopPercentage)
-//        {
-//            ui->progressBar->setValue(ui->progressBar->value() + 1);
-//            QThread::msleep(interval);
-//        }
-//    }
-//}
+QString WelcomeWidget::set_gateway(QString ssid, QString password)
+{
+    QProcess *process = new QProcess();
+    //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
+    process->setWorkingDirectory("../../src/scripts");
+    process->start("./set_gateway.sh " + ssid + " " + password);
+    process->waitForFinished(-1);
+    QString output(process->readAll());
+    QString result = output.split(QRegExp("[\r\n]"), QString::SkipEmptyParts).last();
+    return result;
+}
