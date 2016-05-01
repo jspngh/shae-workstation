@@ -4,6 +4,7 @@
 #include <QString>
 #include <QUuid>
 #include <QMetaType>
+#include <QDebug>
 
 /**
  * \brief The Drone class holds the data belonging to a drone.
@@ -22,7 +23,7 @@ public:
 
     Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
 
-    QUuid getGuid() const;
+    QUuid getGuid();
 
     int getDronePort();
 

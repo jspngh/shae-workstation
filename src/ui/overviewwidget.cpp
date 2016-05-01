@@ -38,7 +38,7 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 
     if (!mapViewLoaded) return;
 
-    QUuid uuid = heartbeat->getDrone()->getGuid().toString();
+    QUuid uuid = heartbeat->getDrone()->getGuid("OverviewWidget::onHeartBeatReceived").toString();
 
     // Update bottom text
     ui->heartBeat->setText(heartbeat->toString());
@@ -101,7 +101,7 @@ void OverviewWidget::exportSearchButtonPush()
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {
-    const QUuid droneId = s->getDrone()->getGuid();
+    const QUuid droneId = s->getDrone()->getGuid("OverviewWidget::updateDroneList");
     if(mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(*s);
 }
@@ -138,7 +138,7 @@ void OverviewWidget::fillDroneList()
         ui->droneList->addItem(item);
 
         OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
-        mapIdListItem[drone->getGuid()] = droneItem;
+        mapIdListItem[drone->getGuid("OverviewWidget::fillDroneList")] = droneItem;
         ui->droneList->setItemWidget(item, droneItem);
         i++;
     }

@@ -161,9 +161,12 @@ void DroneModule::setDrone(Drone *value)
 }
 
 
-QUuid DroneModule::getGuid() const
+QUuid DroneModule::getGuid(QString s)
 {
-    return drone->getGuid();
+    qDebug() << "Asking drone GUID 1" << s;
+    QUuid id = drone->getGuid();
+    qDebug() << "Asking drone GUID 2" << s;
+    return id;
 }
 
 int DroneModule::getDronePort()
@@ -257,7 +260,7 @@ void DroneModule::onPathCalculated(Search *s)
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
     for (int i = 0; i < s->getDroneList().size() && !droneInList; i++)    {
-        if (s->getDroneList().at(i)->getGuid() == drone->getGuid())
+        if (s->getDroneList().at(i)->getGuid("DroneModule::onPathCalculated1") == drone->getGuid())
             droneInList = true;
     }
     if (droneInList) {
@@ -294,20 +297,21 @@ void DroneModule::onPathCalculated(Search *s)
 
 void DroneModule::onDroneResponse(const QString &response)
 {
-    //qDebug() << "In processResponse";
     QJsonDocument jsondoc = QJsonDocument::fromJson(response.toUtf8());
-    if (jsondoc.isObject()) {
-        DroneStatus status = DroneStatus::fromJsonString(response);
-        status.setDrone(this);
 
-        if (status.getHeartbeat()) {
-            emit droneHeartBeatReceived(&status);
-        } else {
-            emit droneStatusReceived(&status);
-        }
-
-    } else
+    if (!jsondoc.isObject()) {
         qDebug() << "Not a status or hearbeat :" << response;
+        return;
+    }
+
+    DroneStatus status = DroneStatus::fromJsonString(response);
+    status.setDrone(this);
+    DroneStatus *status2 = new DroneStatus(status);
+
+    if (status.getHeartbeat())
+        emit droneHeartBeatReceived(status2);
+    else
+        emit droneStatusReceived(status2);
 }
 
 void DroneModule::onDroneResponseError(int socketError, const QString &message)

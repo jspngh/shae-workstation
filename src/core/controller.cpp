@@ -127,7 +127,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
     QString ip = hello.getDroneIp();
-    QString strFile = hello.getStreamFile();
+    QString strFile = "./dependencies/drone_stream1.mpg";//hello.getStreamFile();
     QString ctrIp = hello.getControllerIp();
     int cmdPort = hello.getCommandsPort();
     int strPort = hello.getStreamPort();
@@ -139,6 +139,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
         drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
+        qDebug() << "created new  drone with ID: " << drone->getGuid("Controller").toString();
         drone->setPersistenceController(persistenceController);
         drone = configureDrone(drone);
     }

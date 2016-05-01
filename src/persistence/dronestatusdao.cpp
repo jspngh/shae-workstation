@@ -30,7 +30,7 @@ DroneStatus* DroneStatusDAO::dbSaveDroneStatus(DroneStatus *droneStatus)
                   ":heartbeat, :droneState, :manufacturer, :droneType, "
                   ":nextWaypointLongitude, :nextWaypointLatitude, :previousWaypointOrder,"
                   ":nextWaypoints) ");
-    query.bindValue(":droneID", droneStatus->getDrone()->getGuid());
+    query.bindValue(":droneID", droneStatus->getDrone()->getGuid("DroneStatusDAO"));
     query.bindValue(":timestampDrone", droneStatus->getTimestampDrone());
     query.bindValue(":timestampReceivedWorkstation", droneStatus->getTimestampReceivedWorkstation());
     QGeoCoordinate location = droneStatus->getCurrentLocation();

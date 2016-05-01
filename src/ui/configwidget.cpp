@@ -92,7 +92,6 @@ void ConfigWidget::setMediator(Mediator *mediator)
     this->mediator = mediator;
 
     setSignalSlots();
-    emit requestDronesStatus();
 }
 
 void ConfigWidget::startButtonPush()
@@ -178,7 +177,9 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
     if (mapView == nullptr || !mapView->hasLoaded()) return;
 
     // position drone on map
-    QString id = heartbeat->getDrone()->getGuid().toString();
+    qDebug() << "asking droneId in configWidget";
+    QString id = heartbeat->getDrone()->getGuid("ConfigWidget::updateMapCenter").toString();
+    qDebug() << "received the id in updateMapCenter " << id;
 
     // only move the center of the map if the drone has moved a large enough distance
     if (mapView->hasMarker(id) && mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
@@ -257,9 +258,11 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
 
 int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 {
-    for (int i = 0; i < dronesInTable.size(); i++)
-        if (dronesInTable[i].second->getGuid() == d->getGuid())
+    for (int i = 0; i < dronesInTable.size(); i++){
+        qDebug() << "asking drone uid in getDroneInTableIndex";
+        if (dronesInTable[i].second->getGuid("ConfigWidget::getDroneInTableIndex1") == d->getGuid("ConfigWidget::getDroneInTableIndex2"))
             return i;
+    }
 
     return -1;
 }

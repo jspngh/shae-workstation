@@ -83,7 +83,7 @@ public:
     PersistenceController *getPersistenceController() const;
     void setPersistenceController(PersistenceController *value);
 
-    QUuid getGuid() const;
+    QUuid getGuid(QString s);
 
     int getDronePort();
 
