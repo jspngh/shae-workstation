@@ -1,9 +1,6 @@
 #include "configwidget.h"
 #include "ui_configwidget.h"
-#include <QGeoRectangle>
 #include <QDebug>
-#include <QCheckBox>
-
 
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
@@ -25,6 +22,8 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     //setup connections
     connect(ui->locateButton, SIGNAL(clicked()), this, SLOT(locateButtonPush()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
+    connect(ui->choosePolygonButton, SIGNAL(toggled(bool)), this, SLOT(choosePolygon(bool)));
+    connect(ui->chooseSquareButton, SIGNAL(toggled(bool)), this, SLOT(chooseSquare(bool)));
     //connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
     initializeMap();
@@ -61,8 +60,6 @@ void ConfigWidget::onMapFailedToLoad()
 void ConfigWidget::areaSelected(QGeoRectangle area)
 {
     this->areaWasSelected = true;
-
-    //ui->startButton->setDisabled(false);
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)
@@ -86,6 +83,24 @@ void ConfigWidget::keyReleaseEvent(QKeyEvent *event)
 void ConfigWidget::sliderChanged(int value)
 {
     //ui->PrecisionValueLabel->setText(QString::number(value).toStdString().append("%").c_str());
+}
+
+void ConfigWidget::chooseSquare(bool checked)
+{
+    qDebug() << "chooseSquare " << checked;
+    if(!mapView->hasLoaded()) return;
+
+    if(checked)
+        mapView->setSelectionType(QMSelectionType::Square);
+}
+
+void ConfigWidget::choosePolygon(bool checked)
+{
+    qDebug() << "choosePolygon " << checked;
+    if(!mapView->hasLoaded()) return;
+
+    if(checked)
+        mapView->setSelectionType(QMSelectionType::Polygon);
 }
 
 void ConfigWidget::setMediator(Mediator *mediator)
@@ -120,18 +135,16 @@ void ConfigWidget::startButtonPush()
             if (cb->isChecked())
                 dronesInSearch.append(dronesInTable[i].second);
         }
-        if(dronesInSearch.size() == 0){
-            QMessageBox::warning(this, "Not too fast...!","Please select a drone before starting the search", "OK");
+        if(dronesInSearch.size() == 0) {
+            QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
         } else if (mediator) {
             Search *s = new Search();
             s->setArea(mapView->selectedArea());
-
 
             s->setHeight(ui->heightDoubleSpinBox->value());
             s->setFpsProcessing(ui->fpsSpinBox->value());
             s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
             s->setSpeed(ui->speedDoubleSpinBox->value());
-
 
             qDebug() << dronesInSearch.size();
             s->setDroneList(dronesInSearch);

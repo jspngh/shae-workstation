@@ -81,18 +81,25 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QComboBox" name="shapeComboBox">
+        <layout class="QVBoxLayout" name="shapeForm">
          <item>
-          <property name="text">
-           <string>Rectangle</string>
-          </property>
+           <widget class="QRadioButton" name="chooseSquareButton">
+           <property name="text">
+            <string>Rectangle</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
-          <property name="text">
-           <string>Polygon</string>
-          </property>
+          <widget class="QRadioButton" name="choosePolygonButton">
+           <property name="text">
+            <string>Polygon</string>
+           </property>
+          </widget>
          </item>
-        </widget>
+        </layout>
        </item>
        <item row="3" column="0" colspan="2">
         <spacer name="verticalSpacer">
