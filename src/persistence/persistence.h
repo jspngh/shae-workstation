@@ -19,6 +19,10 @@
 #include "videosequencedao.h"
 #include "detectionresultwriter.h"
 
+/*!
+ * \brief The Persistence class
+ * \ingroup Persistence
+ */
 class Persistence : public QObject
 {
 

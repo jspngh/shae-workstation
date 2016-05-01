@@ -81,7 +81,7 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
     QMMarker& marker = mapView->addMarker(markerId, result->getLocation());
 
     marker.setIcon("qrc:///ui/icons/human");
-    marker.scale(0.1, 0.1);
+    marker.scale(0.1*result->getScore()/100, 0.1*result->getScore()/100);
     marker.show();
 }
 

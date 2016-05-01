@@ -6,6 +6,10 @@
 #include "persistence.h"
 #include "detectionresultwriter.h"
 
+/*!
+ * \brief The PersistenceController class
+ * \ingroup Persistence
+ */
 class PersistenceController : public QObject
 {
     Q_OBJECT

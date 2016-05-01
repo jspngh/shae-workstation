@@ -9,6 +9,7 @@
 
 /*! \brief The mediator connects all components to each other.
  * Add signals and slots using the methods \ref Mediator::addSignal() and \ref Mediator::addSlot() respectivily.
+ * \ingroup Core
  */
 class Mediator: public QObject
 {
