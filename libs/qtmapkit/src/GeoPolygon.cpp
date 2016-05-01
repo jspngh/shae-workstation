@@ -61,6 +61,16 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
 
 }
 
+GeoPolygon::GeoPolygon(const GeoPolygon& other)
+    : QGeoShape()
+{
+    this->coordinates = other.coordinates;
+    this->upperHull = other.upperHull;
+    this->lowerHull = other.lowerHull;
+    this->mostWestCoordinate = other.mostWestCoordinate;
+    this->mostEastCoordinate = other.mostEastCoordinate;
+}
+
 QList<QGeoCoordinate> GeoPolygon::fromHull(QList<QGeoCoordinate> upper, QList<QGeoCoordinate> lower)
 {
     QList<QGeoCoordinate> list = QList<QGeoCoordinate>(upper);

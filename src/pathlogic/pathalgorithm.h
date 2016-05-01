@@ -69,8 +69,8 @@ public:
      */
     static QGeoCoordinate goDirectionBetween(QGeoCoordinate start, QGeoCoordinate coordinate1, QGeoCoordinate coordinate2, double distance, Direction direction);
 
-private slots:
-    void onStartSearch(Search *s);
+public slots:
+    void startSearch(Search *s);
 
 signals:
     void pathCalculated(Search *s);

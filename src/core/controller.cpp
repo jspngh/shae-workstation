@@ -15,7 +15,6 @@ Controller::Controller(MainWindow *window, QObject *p)
     drones = new QList<DroneModule *>();
 
     // create controllers
-    pathLogicController = new SimplePathAlgorithm();
     persistenceController = new PersistenceController();
 
     startListeningForDrones();
@@ -47,7 +46,6 @@ Controller::~Controller()
 void Controller::init()
 {
     // configure every component with the mediator
-    pathLogicController->setMediator(mediator);
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
     mainWindow->getWelcomeWidget()->setMediator(mediator);
@@ -55,7 +53,6 @@ void Controller::init()
 
     // place every component in a different thread
     persistenceController->moveToThread(&persistenceThread);
-    pathLogicController->moveToThread(&pathLogicThread);
 
     // start all the threads
     persistenceThread.start();
@@ -82,6 +79,14 @@ void Controller::retrieveWorkstationIpAndBroadcast()
 void Controller::onSearchEmitted(Search *s)
 {
     search = s;
+    if(s->getArea().type() == QGeoShape::RectangleType)
+        pathLogicController = new SimplePathAlgorithm();
+    else
+        pathLogicController = new PolygonPathAlgorithm();
+
+    pathLogicController->moveToThread(&pathLogicThread);
+    pathLogicController->setMediator(mediator);
+    pathLogicController->startSearch(s);
 }
 
 int Controller::numDronesConnected()

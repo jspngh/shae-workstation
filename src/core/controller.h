@@ -14,6 +14,7 @@
 #include "detection/detectioncontroller.h"
 #include "mediator.h"
 #include "pathlogic/simplepathalgorithm.h"
+#include "pathlogic/polygonpathalgorithm.h"
 #include "persistence/persistencecontroller.h"
 #include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"

@@ -1,9 +1,7 @@
 #include "searchdao.h"
 #include <QDebug>
-#include <sstream>
-#include <string>
-#include <iostream>
-
+#include <QGeoRectangle>
+#include <GeoPolygon.h>
 
 SearchDAO::SearchDAO()
 {
@@ -20,12 +18,18 @@ Search* SearchDAO::dbSaveSearch(Search *search)
     query.prepare("INSERT INTO searches (searchID, startTime, area, height, gimballAngle, fpsProcessing) "
                   "VALUES (:searchID, :startTime, :area, :height, :gimballAngle, :fpsProcessing)");
 
-    std::ostringstream os;
+    QString pathString;
 
-    os << search->getArea().topLeft().latitude() << "-" << search->getArea().topLeft().longitude() << ":";
-    os << search->getArea().bottomRight().latitude() << "-" << search->getArea().bottomRight().longitude() << ":";
-
-    QString pathString = QString(os.str().c_str());
+    if(search->getArea().type() == QGeoShape::RectangleType) {
+        QGeoRectangle area = static_cast<QGeoRectangle>(search->getArea());
+        QString format = QString("%1-%2:%3-%4:");
+        pathString = format.arg(area.topLeft().latitude())
+                           .arg(area.topLeft().longitude())
+                           .arg(area.bottomRight().latitude())
+                           .arg(area.bottomRight().longitude());
+    } else {
+        //TODO
+    }
 
     query.bindValue(":searchID", search->getSearchID());
     query.bindValue(":startTime", search->getStartTime());

@@ -115,7 +115,6 @@ void ConfigWidget::startButtonPush()
 {
     if(!areaWasSelected) {
         QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
-
     } else {
         QGeoRectangle area = mapView->selectedArea();
         this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());

@@ -30,7 +30,6 @@ void PathAlgorithm::setMediator(Mediator *mediator)
     qDebug() << "adding PathAlgorithm signal/slots";
     this->mediator = mediator;
     mediator->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    mediator->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direction, double distance)
@@ -55,7 +54,7 @@ QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoord
     return newpoint;
 }
 
-void PathAlgorithm::onStartSearch(Search *s)
+void PathAlgorithm::startSearch(Search *s)
 {
     qDebug() << "PathAlgorithm::onStartSearch(Search *s)";
     setWaypointsForDrones(s->getArea(), s->getDroneList());
