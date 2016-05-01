@@ -93,7 +93,7 @@ private:
     QString droneIp; /*!< The IP address of the actual drone, this will be 10.1.1.10 */
     QString controllerIp; /*!< The IP address of the controller, this will be 10.1.1.1 */
     QString streamPath;
-    double visionWidth;
+    double visionWidth; //!< double that says how wide the drone can see in decimal degrees longitude
 
 public:
     static constexpr double MIN_VISIONWIDTH = 0.00000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.

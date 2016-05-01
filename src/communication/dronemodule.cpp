@@ -73,7 +73,6 @@ DroneModule::~DroneModule()
     if (detectionController != nullptr) {
         delete detectionController;
     }
-    //TODO: delete heartbeatReceiver;
     if (heartbeatReceiver != nullptr)
         heartbeatReceiver->deleteLater();
     //TODO: delete waypoints fails if no waypoints assigned
