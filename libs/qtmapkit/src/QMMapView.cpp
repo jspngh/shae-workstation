@@ -20,6 +20,7 @@
 #include <QHBoxLayout>
 #include <QHash>
 #include <QMap>
+#include <QSequentialIterable>
 #include <QString>
 #include <QtDebug>
 #include <QVariantMap>
@@ -207,7 +208,7 @@ QGeoShape QMMapView::selectedArea() const
         return jsonObjectToQGeoRectangle(result);
     } else {
         if(selectionType() == QMSelectionType::Polygon) {
-            return jsonObjectToQGeoRectangle(result);
+            return jsonObjectToGeoPolygon(result);
         } else {
             throw new EmptyAreaException();
         }
@@ -220,6 +221,7 @@ QGeoRectangle QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) cons
         throw new EmptyAreaException();
 
     QVariantMap objectMap = jsObject.toMap();
+
     if (!(objectMap.contains("north") && objectMap.contains("south")
             && objectMap.contains("east") && objectMap.contains("west")))
         throw new EmptyAreaException();
@@ -228,6 +230,23 @@ QGeoRectangle QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) cons
                                         objectMap.value("west").toReal()),
                          QGeoCoordinate(objectMap.value("south").toReal(),
                                         objectMap.value("east").toReal()));
+}
+
+GeoPolygon QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
+{
+    if (jsObject.isNull() || !jsObject.isValid() || !jsObject.canConvert(QVariant::List))
+        throw new EmptyAreaException();
+
+    QList<QGeoCoordinate> coordinates;
+    QList<QVariant> cornerList = jsObject.toList();
+    for(QVariant jsCoord: cornerList) {
+        QVariantMap coordLiteral = jsCoord.toMap();
+        QGeoCoordinate point(coordLiteral["lat"].toDouble(),
+                             coordLiteral["lng"].toDouble());
+        coordinates.append(point);
+    }
+
+    return GeoPolygon(coordinates);
 }
 
 void QMMapView::setMapType(const MapType type)

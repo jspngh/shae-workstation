@@ -1,12 +1,12 @@
 #ifndef PATHALGORITHM_H
 #define PATHALGORITHM_H
 
+#include <GeoPolygon.h>
 #include <QGeoCoordinate>
 #include <QGeoRectangle>
 #include <QObject>
 #include "communication/dronemodule.h"
 #include "core/mediator.h"
-#include "geopolygon.h"
 #include "models/drone.h"
 #include "models/search.h"
 

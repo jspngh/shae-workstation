@@ -1,4 +1,4 @@
-#include "geopolygon.h"
+#include "GeoPolygon.h"
 #include <algorithm>
 #include <QtDebug>
 
@@ -203,3 +203,4 @@ QGeoCoordinate GeoPolygon::getMostEastCoordinate() const
 {
     return mostEastCoordinate;
 }
+

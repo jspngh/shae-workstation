@@ -11,7 +11,7 @@ function PolygonMapSelection(map) {
     /* --------- */
     /* VARIABLES */
     /* --------- */
-    this.paths = [];
+    this.corners = [];
     this.selectedArea = new google.maps.Polygon({
         map: this.map,
         clickable: false,
@@ -19,7 +19,7 @@ function PolygonMapSelection(map) {
         strokeOpacity: 0.8,
         fillColor: "#FF0000",
         fillOpacity: 0.25,
-        paths: this.paths
+        paths: this.corners
     });
 
     /* --------- */
@@ -51,17 +51,22 @@ function PolygonMapSelection(map) {
     };
 
     this.extendSelectedArea = function(latLng) {
-        this.paths.push(latLng);
-        this.selectedArea.setPaths(this.paths);
+        this.corners.push(latLng);
+        this.selectedArea.setPaths(this.corners);
     };
 
     this.removeSelectedArea = function() {
-        this.paths = [];
-        this.selectedArea.setPaths(this.paths);
+        this.corners = [];
+        this.selectedArea.setPaths(this.corners);
     };
 
     this.getSelectedArea = function() {
-        return this.paths;
+        // QVariants can only retrieve fields, not process methods.
+        var result = [];
+        this.corners.foreach(function(latLng) {
+            result.push(latLng.toJSON());
+        });
+        return result;
     };
 };
 

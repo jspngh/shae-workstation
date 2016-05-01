@@ -24,6 +24,7 @@
 #include <QGeoShape>
 #include <QGeoRectangle>
 #include "EmptyAreaException.h"
+#include "GeoPolygon.h"
 #include "QMMarker.h"
 #include "QMSelectionType.h"
 #include "QtMapKit.h"
@@ -115,7 +116,8 @@ public:
     void shiftKeyPressed(bool down);
 
 private:
-    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject);
+    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject) const;
+    GeoPolygon jsonObjectToGeoPolygon(const QVariant jsObject) const;
 
 public slots:
     /*!
@@ -191,9 +193,6 @@ public slots:
 protected:
     void resizeEvent(QResizeEvent *);
 
-private:
-    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject) const;
-
 signals:
     void mapLoaded();
     void mapFailedToLoad();
@@ -216,8 +215,8 @@ signals:
     void cursorEntered(QGeoCoordinate coordinate);
     void cursorLeaved(QGeoCoordinate coordinate);
     // Selected area signals
-    void selectedAreaCreated(QGeoRectangle region);
-    void selectedAreaChanged(QGeoRectangle region);
+    void selectedAreaCreated(QGeoShape region);
+    void selectedAreaChanged(QGeoShape region);
     void selectedAreaDeleted();
 
 protected slots:

@@ -15,6 +15,7 @@ UI_DIR = $$PWD/build/
 
 SOURCES += \
     $$PWD/src/QMMapView.cpp \
+    $$PWD/src/GeoPolygon.cpp \
     $$PWD/src/QMMarker.cpp \
     $$PWD/src/EmptyAreaException.cpp
 
@@ -22,6 +23,7 @@ HEADERS += \
     $$PWD/src/QtMapKit.h \
     $$PWD/src/qtmapkit_global.h \
     $$PWD/src/QMMapView.h \
+    $$PWD/src/GeoPolygon.h \
     $$PWD/src/QMMarker.h \
     $$PWD/src/QMSelectionType.h \
     $$PWD/src/EmptyAreaException.h

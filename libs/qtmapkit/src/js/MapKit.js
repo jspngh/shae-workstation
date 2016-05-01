@@ -193,9 +193,8 @@
     /* SELECTION */
     /* --------- */
     MapKit.prototype.setSelectable = function(selectionType) {
-        if(this.mapSelection) {
+        if(this.mapSelection && this.mapSelection.selectedArea) {
             this.mapSelection.removeSelectedArea();
-            this.mapSelection = null;
         }
 
         switch(selectionType) {
