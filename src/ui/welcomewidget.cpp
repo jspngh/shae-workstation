@@ -61,12 +61,12 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     // Create and init configScriptCOntroller
     csc = new ConfigScriptsController();
     csc->moveToThread(&csct);
-    connect(this, SIGNAL(connect_to_solo_network()), csc, SLOT(connect_to_solo_network()));
-    connect(csc, SIGNAL(connected_to_solo_network()), this, SLOT(connected_to_solo_network()));
-    connect(csc, SIGNAL(not_connected_to_solo_network(QString)), this, SLOT(not_connected_to_solo_network(QString)));
-    connect(this, SIGNAL(set_gateway(QString, QString)), csc, SLOT(set_gateway(QString, QString)));
-    connect(csc, SIGNAL(gateway_setted()), this, SLOT(gateway_setted()));
-    connect(csc, SIGNAL(gateway_not_setted(QString)), this, SLOT(gateway_not_setted(QString)));
+    connect(this, SIGNAL(connectToSoloNetwork()), csc, SLOT(connectToSoloNetwork()));
+    connect(csc, SIGNAL(connectedToSoloNetwork()), this, SLOT(connectedToSoloNetwork()));
+    connect(csc, SIGNAL(notConnectedToSoloNetwork(QString)), this, SLOT(notConnectedToSoloNetwork(QString)));
+    connect(this, SIGNAL(setGateway(QString, QString)), csc, SLOT(setGateway(QString, QString)));
+    connect(csc, SIGNAL(gatewaySetted()), this, SLOT(gatewaySetted()));
+    connect(csc, SIGNAL(gatewayNotSetted(QString)), this, SLOT(gatewayNotSetted(QString)));
     csct.start();
 
     // Create and init progressBarController
@@ -132,7 +132,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
         ui->statusLabel->setText("Connecting to Solo wifi");
 
         // Start connecting to solo network
-        emit connect_to_solo_network();
+        emit connectToSoloNetwork();
         emit updateProgressBar(50, 30);
     } else {
         ((QStackedWidget *) this->parent())->setCurrentIndex(1);
@@ -167,7 +167,7 @@ void WelcomeWidget::pictureTimer()
 }
 
 
-void WelcomeWidget::connected_to_solo_network()
+void WelcomeWidget::connectedToSoloNetwork()
 {
     // Set processBar to 50%
     pbc->aborted = true;
@@ -179,63 +179,28 @@ void WelcomeWidget::connected_to_solo_network()
     ui->statusLabel->setText("Connected to Solo wifi");
 
     gd = new GatewayDialog();
-    connect(gd->getButtonBox(), SIGNAL(accepted()), this, SLOT(start_set_gateway()));
+    connect(gd->getButtonBox(), SIGNAL(accepted()), this, SLOT(startSetGateway()));
     gd->open();
 }
 
-void WelcomeWidget::not_connected_to_solo_network(QString error)
+void WelcomeWidget::notConnectedToSoloNetwork(QString error)
 {
      ui->statusLabel->setText(error);
      pbc->aborted = true;
      pbct.wait(2);
 }
 
-void WelcomeWidget::start_set_gateway()
+void WelcomeWidget::startSetGateway()
 {
     ui->statusLabel->setText("Connecting to gateway");
 
     QString ssid = gd->getSSID();
     QString password = gd->getPassword();
-    emit set_gateway(ssid, password);
+    emit setGateway(ssid, password);
     emit updateProgressBar(100, 81);
-
-//    // Connect to solo network and update processBar
-//    QFuture<QString> result = QtConcurrent::run(this, &WelcomeWidget::set_gateway, ssid, password);
-//    emit updateProgressBar(100, 10);
-
-//    // Get result and end process
-//    QString output = result.result();
-//    pbc->aborted = true;
-//    pbct.wait(2);
-//    emit updateProgressBar(100, 1);
-//    pbct.wait(1000);
-
-//    // Set statusLabel
-//    bool internet_connection;
-//    if (output.contains(QRegExp("Not connected:")))
-//    {
-//        message = output.split(QRegExp("Not connected:"), QString::SkipEmptyParts).last();
-//        connected = false;
-//    } else {
-//        message = "Connected to Solo wifi";
-//        connected = true;
-//    }
-//    ui->statusLabel->setText(message);
-//}
-
-//QString WelcomeWidget::set_gateway(QString ssid, QString password)
-//{
-//    QProcess *process = new QProcess();
-//    //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
-//    process->setWorkingDirectory("../../src/scripts");
-//    process->start("./set_gateway.sh " + ssid + " " + password);
-//    process->waitForFinished(20000);
-//    QString output(process->readAll());
-//    QString result = output.split(QRegExp("[\r\n]"), QString::SkipEmptyParts).last();
-//    return result;
 }
 
-void WelcomeWidget::gateway_setted()
+void WelcomeWidget::gatewaySetted()
 {
     // Set processBar to 50%
     pbc->aborted = true;
@@ -255,7 +220,7 @@ void WelcomeWidget::gateway_setted()
     status ++;
 }
 
-void WelcomeWidget::gateway_not_setted(QString error)
+void WelcomeWidget::gatewayNotSetted(QString error)
 {
     ui->statusLabel->setText(error);
     pbc->aborted = true;

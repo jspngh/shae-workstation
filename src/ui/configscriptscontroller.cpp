@@ -5,7 +5,7 @@ ConfigScriptsController::ConfigScriptsController(QObject *parent) : QObject(pare
 
 }
 
-void ConfigScriptsController::connect_to_solo_network()
+void ConfigScriptsController::connectToSoloNetwork()
 {
     QProcess *process = new QProcess();
     //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
@@ -18,13 +18,13 @@ void ConfigScriptsController::connect_to_solo_network()
     if (output.contains(QRegExp("Not connected:")))
     {
         QString error = output.split(QRegExp("Not connected:"), QString::SkipEmptyParts).last();
-        emit not_connected_to_solo_network(error);
+        emit notConnectedToSoloNetwork(error);
     } else {
-        emit connected_to_solo_network();
+        emit connectedToSoloNetwork();
     }
 }
 
-void ConfigScriptsController::set_gateway(QString ssid, QString password)
+void ConfigScriptsController::setGateway(QString ssid, QString password)
 {
     QProcess *process = new QProcess();
     //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
@@ -36,8 +36,8 @@ void ConfigScriptsController::set_gateway(QString ssid, QString password)
 
     if (result.contains(QRegExp("Error:")))
     {
-        emit gateway_not_setted(result);
+        emit gatewayNotSetted(result);
     } else {
-        emit gateway_setted();
+        emit gatewaySetted();
     }
 }

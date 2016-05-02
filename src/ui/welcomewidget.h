@@ -45,17 +45,17 @@ private slots:
     void droneDetected(DroneStatus* s);
     void pictureTimer();
     void selectedImage(int);
-    void connected_to_solo_network();
-    void not_connected_to_solo_network(QString);
-    void start_set_gateway();
-    void gateway_setted();
-    void gateway_not_setted(QString);
+    void connectedToSoloNetwork();
+    void notConnectedToSoloNetwork(QString);
+    void startSetGateway();
+    void gatewaySetted();
+    void gatewayNotSetted(QString);
     void incrementProcessBar();
 
 signals:
     void updateProgressBar(int percentage, int time);
-    void connect_to_solo_network();
-    void set_gateway(QString ssid, QString password);
+    void connectToSoloNetwork();
+    void setGateway(QString ssid, QString password);
 
 private:
     Ui::WelcomeWidget *ui;
