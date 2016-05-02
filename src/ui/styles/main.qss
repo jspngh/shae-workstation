@@ -260,6 +260,30 @@ QRadioButton:hover, QCheckBox:hover {
     background-color: #78808c;
 }
 
+QCheckBox::indicator:checked {
+    image: url(:/ui/icons/checkbox_checked);
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:/ui/icons/checkbox_unchecked);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/ui/icons/checkbox_unchecked_hover);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/ui/icons/checkbox_unchecked_pressed);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/ui/icons/checkbox_checked_hover);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/ui/icons/checkbox_checked_pressed);
+}
+
 QDialogButtonBox {
     button-layout: 0;
 }

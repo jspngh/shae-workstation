@@ -6,6 +6,12 @@
     <qresource prefix="/ui/icons">
         <file alias="battery">ui/img/battery-icon.jpg</file>
         <file alias="checkbox">ui/img/checkbox.png</file>
+        <file alias="checkbox_checked">ui/img/checkbox_checked.png</file>
+        <file alias="checkbox_checked_hover">ui/img/checkbox_checked_hover.png</file>
+        <file alias="checkbox_checked_pressed">ui/img/checkbox_checked_pressed.png</file>
+        <file alias="checkbox_unchecked">ui/img/checkbox_unchecked.png</file>
+        <file alias="checkbox_unchecked_hover">ui/img/checkbox_unchecked_hover.png</file>
+        <file alias="checkbox_unchecked_pressed">ui/img/checkbox_unchecked_pressed.png</file>
         <file alias="down_arrow">ui/img/down_arrow.png</file>
         <file alias="drone">ui/img/drone-icon.png</file>
         <file alias="emergency">ui/img/exclamation-icon.png</file>
