@@ -17,34 +17,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->stackedWidget->setCurrentIndex(0);
 
-//    qApp->setStyle(QStyleFactory::create("Fusion"));
-    qApp->setStyle("Fusion");
-
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
-    darkPalette.setColor(QPalette::WindowText, Qt::white);
-    darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-    darkPalette.setColor(QPalette::Text, Qt::white);
-    darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
-    darkPalette.setColor(QPalette::ButtonText, Qt::white);
-    darkPalette.setColor(QPalette::BrightText, Qt::red);
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-
     qApp->setStyle("Fusion");
     QFile file(":/ui/styles/main");
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qApp->setStyleSheet(file.readAll());
         file.close();
     }
-
-    connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(ui->connectAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 
 MainWindow::~MainWindow()
@@ -53,6 +33,16 @@ MainWindow::~MainWindow()
     delete configWidget;
     delete overviewWidget;
     delete ui;
+}
+
+void MainWindow::setMediator(Mediator* mediator)
+{
+    this->mediator = mediator;
+    mediator->addSignal(ui->resetAction, SLOT(triggered()), QString("resetServices()"));
+
+    configWidget->setMediator(mediator);
+    welcomeWidget->setMediator(mediator);
+    overviewWidget->setMediator(mediator);
 }
 
 WelcomeWidget *MainWindow::getWelcomeWidget()
@@ -69,4 +59,3 @@ OverviewWidget *MainWindow::getOverviewWidget()
 {
     return overviewWidget;
 }
-

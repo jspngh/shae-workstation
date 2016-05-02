@@ -33,10 +33,12 @@ private:
     void setSignalSlots();
 
     void setupReady();
+    void setupFailed();
 
 private slots:   
     void on_configSearchButton_clicked();
-    void droneDetected(DroneStatus* s);
+    void droneReadyDetected(DroneStatus* s);
+    void droneFailureDetected();
     void pictureTimer();
     void selectedImage(int);
 

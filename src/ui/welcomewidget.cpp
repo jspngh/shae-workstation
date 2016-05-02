@@ -22,7 +22,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     status = 0;
     droneConnected = false;
     pictureTimerCounter = 0;
-    pictures = QDir( ":/ui/screens" ).entryList();
+    pictures = QDir(":/ui/screens").entryList();
 
     //scroll area setup
 
@@ -75,18 +75,27 @@ void WelcomeWidget::setMediator(Mediator *mediator)
 
 void WelcomeWidget::setSignalSlots()
 {
-    mediator->addSlot(this, SLOT(droneDetected(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(droneReadyDetected(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(droneFailureDetected()), QString("droneSetupFailed()"));
 }
 
 void WelcomeWidget::setupReady()
 {
-     if(status > 0)
+     if(status > 0) {
          ui->configSearchButton->setEnabled(true);
-     else
+     } else {
          droneConnected = true;
-
+     }
 }
 
+void WelcomeWidget::setupFailed()
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("An error occured");
+    msgBox.setText("There was a problem while setting up the drone.");
+    msgBox.setDetailedText("Please restart the application and the services on the drone.");
+    msgBox.exec();
+}
 /***
  * Connecting on controller's Wifi (make sure controller is turned on).
  * \nSetting up gateway on the controller.
@@ -106,17 +115,23 @@ void WelcomeWidget::on_configSearchButton_clicked()
     if(status == 0)
     {
         ui->configSearchButton->setText("Configure Search");
-        if(!droneConnected)
+        if(!droneConnected) {
             ui->configSearchButton->setEnabled(false);
+        }
         status ++;
     } else {
         ((QStackedWidget *) this->parent())->setCurrentIndex(1);
     }
 }
 
-void WelcomeWidget::droneDetected(DroneStatus* s)
+void WelcomeWidget::droneReadyDetected(DroneStatus* s)
 {
     setupReady();
+}
+
+void WelcomeWidget::droneFailureDetected()
+{
+    setupFailed();
 }
 
 void WelcomeWidget::selectedImage(int file)

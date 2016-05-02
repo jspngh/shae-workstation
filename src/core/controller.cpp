@@ -22,6 +22,7 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
+    mediator->addSignal(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 }
 
 Controller::~Controller()
@@ -48,9 +49,7 @@ void Controller::init()
 {
     // configure every component with the mediator
     pathLogicController->setMediator(mediator);
-    mainWindow->getConfigWidget()->setMediator(mediator);
-    mainWindow->getOverviewWidget()->setMediator(mediator);
-    mainWindow->getWelcomeWidget()->setMediator(mediator);
+    mainWindow->setMediator(mediator);
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread
@@ -126,22 +125,28 @@ void Controller::readPendingDatagrams()
 void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
+    // first check if we received an empty HelloMessage
+    // this indicates failure at the side of the drone
     QString ip = hello.getDroneIp();
-    QString strFile = hello.getStreamFile();
-    QString ctrIp = hello.getControllerIp();
-    int cmdPort = hello.getCommandsPort();
-    int strPort = hello.getStreamPort();
-    double vision = hello.getVisionWidth();
+    if (ip.isEmpty() or ip.isNull()) {
+        emit(droneSetupFailed()); // emit signal indicating failure
+    } else {
+        QString strFile = hello.getStreamFile();
+        QString ctrIp = hello.getControllerIp();
+        int cmdPort = hello.getCommandsPort();
+        int strPort = hello.getStreamPort();
+        double vision = hello.getVisionWidth();
 
-    DroneModule *drone = receivedHelloFrom(ip);
-    if (drone == nullptr) {
-        // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
-        drone->setPersistenceController(persistenceController);
-        drone = configureDrone(drone);
+        DroneModule *drone = receivedHelloFrom(ip);
+        if (drone == nullptr) {
+            // first time that the drone with this IP has sent a Hello message
+            drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
+            drone->setPersistenceController(persistenceController);
+            drone = configureDrone(drone);
+        }
+
+        drone->requestStatus();
     }
-
-    drone->requestStatus();
 }
 
 DroneModule *Controller::configureDrone(DroneModule *drone)
@@ -168,7 +173,6 @@ DroneModule *Controller::receivedHelloFrom(QString ip)
     }
     return nullptr;
 }
-
 
 /*****************
  *    Getters
