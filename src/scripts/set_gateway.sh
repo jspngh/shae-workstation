@@ -4,7 +4,16 @@ if [ $# -ne 2 ]
 then
 	echo "Error: This command needs two arguments: ssid and password"
 else
-	echo "Start"
+	# Check internet connection
+        output="$(timeout 10 ping www.google.com 2>&1)"
+
+        # Print echo
+        if [[ $output =~ "ttl=" ]]
+        then
+                echo "Gateway was already setted"
+		exit
+        fi
+
 	# Set gateway with a timeout of x seconds
 	timeout 60 solo wifi --name=$1 --password=$2 2>&1
 

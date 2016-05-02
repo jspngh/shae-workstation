@@ -14,6 +14,7 @@ public:
     void setProgressBar(QProgressBar *pb);
     bool aborted;
 signals:
+    void incrementProcessBarr();
 
 public slots:
     void update(int percentage, int time);

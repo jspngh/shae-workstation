@@ -10,7 +10,8 @@ SOURCES += \
     $$PWD/overviewdroneitem.cpp \
     $$PWD/clickablelabel.cpp \
     $$PWD/progressbarcontroller.cpp \
-    $$PWD/gatewaydialog.cpp
+    $$PWD/gatewaydialog.cpp \
+    $$PWD/configscriptscontroller.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -21,7 +22,8 @@ HEADERS += \
     $$PWD/overviewdroneitem.h \
     $$PWD/clickablelabel.h \
     $$PWD/progressbarcontroller.h \
-    $$PWD/gatewaydialog.h
+    $$PWD/gatewaydialog.h \
+    $$PWD/configscriptscontroller.h
 
 FORMS += \
     $$PWD/mainwindow.ui \

@@ -15,6 +15,7 @@
 
 #include "core/mediator.h"
 #include "models/dronestatus.h"
+#include "configscriptscontroller.h"
 #include "progressbarcontroller.h"
 #include "gatewaydialog.h"
 
@@ -36,8 +37,6 @@ private:
     void setSignalSlots();
 
     void setupReady();
-    QString connect_to_solo_wifi();
-    QString set_gateway(QString ssid, QString password);
 
     GatewayDialog *gd;
 
@@ -46,10 +45,17 @@ private slots:
     void droneDetected(DroneStatus* s);
     void pictureTimer();
     void selectedImage(int);
+    void connected_to_solo_network();
+    void not_connected_to_solo_network(QString);
     void start_set_gateway();
+    void gateway_setted();
+    void gateway_not_setted(QString);
+    void incrementProcessBar();
 
 signals:
     void updateProgressBar(int percentage, int time);
+    void connect_to_solo_network();
+    void set_gateway(QString ssid, QString password);
 
 private:
     Ui::WelcomeWidget *ui;
@@ -61,6 +67,8 @@ private:
     QStringList pictures;
     QHBoxLayout * vLayout;
     QWidget * mainScrollWidget;
+    QThread csct;
+    ConfigScriptsController *csc;
     QThread pbct;
     ProgressBarController *pbc;
 };

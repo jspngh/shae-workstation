@@ -58,6 +58,24 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(pictureTimer()));
     timer->start(1);
 
+    // Create and init configScriptCOntroller
+    csc = new ConfigScriptsController();
+    csc->moveToThread(&csct);
+    connect(this, SIGNAL(connect_to_solo_network()), csc, SLOT(connect_to_solo_network()));
+    connect(csc, SIGNAL(connected_to_solo_network()), this, SLOT(connected_to_solo_network()));
+    connect(csc, SIGNAL(not_connected_to_solo_network(QString)), this, SLOT(not_connected_to_solo_network(QString)));
+    connect(this, SIGNAL(set_gateway(QString, QString)), csc, SLOT(set_gateway(QString, QString)));
+    connect(csc, SIGNAL(gateway_setted()), this, SLOT(gateway_setted()));
+    connect(csc, SIGNAL(gateway_not_setted(QString)), this, SLOT(gateway_not_setted(QString)));
+    csct.start();
+
+    // Create and init progressBarController
+    pbc = new ProgressBarController();
+    pbc->setProgressBar(ui->progressBar);
+    pbc->moveToThread(&pbct);
+    connect(this, SIGNAL(updateProgressBar(int, int)), pbc, SLOT(update(int, int)));
+    connect(pbc, SIGNAL(incrementProcessBarr()), this, SLOT(incrementProcessBar()));
+    pbct.start();
 }
 
 WelcomeWidget::~WelcomeWidget()
@@ -110,58 +128,12 @@ void WelcomeWidget::on_configSearchButton_clicked()
 {
     if(status == 0)
     {
-        // Create and init progressBarController
-        pbc = new ProgressBarController();
-        pbc->setProgressBar(ui->progressBar);
-        pbc->moveToThread(&pbct);
-        connect(this, SIGNAL(updateProgressBar(int, int)), pbc, SLOT(update(int, int)));
-        pbct.start();
-
         // Set statusLabel
-        QString message = "Connecting to Solo wifi";
-        ui->statusLabel->setText(message);
+        ui->statusLabel->setText("Connecting to Solo wifi");
 
-        // Connect to solo network and update processBar
-        QFuture<QString> result = QtConcurrent::run(this, &WelcomeWidget::connect_to_solo_wifi);
-        emit updateProgressBar(50, 10);
-
-        // Get result and end process
-        QString output = result.result();
-        pbc->aborted = true;
-        pbct.wait(2);
-        emit updateProgressBar(50, 1);
-        pbct.wait(1000);
-
-        // Set statusLabel
-        bool connected;
-        if (output.contains(QRegExp("Not connected:")))
-        {
-            message = output.split(QRegExp("Not connected:"), QString::SkipEmptyParts).last();
-            connected = false;
-        } else {
-            message = "Connected to Solo wifi";
-            connected = true;
-        }
-        ui->statusLabel->setText(message);
-
-        // DEBUG
-        connected = true;
-
-        if (connected)
-        {
-            gd = new GatewayDialog();
-            connect(gd->getButtonBox(), SIGNAL(accepted()), this, SLOT(start_set_gateway()));
-            gd->open();
-
-
-            ui->configSearchButton->setText("Configure Search");
-        } else {
-            // ERROR, NOT CONNECTED
-        }
-
-        if(!droneConnected)
-            ui->configSearchButton->setEnabled(false);
-        status ++;
+        // Start connecting to solo network
+        emit connect_to_solo_network();
+        emit updateProgressBar(50, 30);
     } else {
         ((QStackedWidget *) this->parent())->setCurrentIndex(1);
     }
@@ -194,30 +166,45 @@ void WelcomeWidget::pictureTimer()
     }
 }
 
-QString WelcomeWidget::connect_to_solo_wifi()
+
+void WelcomeWidget::connected_to_solo_network()
 {
-    QProcess *process = new QProcess();
-    //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
-    process->setWorkingDirectory("../../src/scripts");
-    process->start("./connect_to_solo_network.sh");
-    process->waitForFinished(-1);
-    QString output(process->readAll());
-    QString result = output.split(QRegExp("[\r\n]"), QString::SkipEmptyParts).last();
-    return result;
+    // Set processBar to 50%
+    pbc->aborted = true;
+    pbct.wait(2);
+    emit updateProgressBar(50, 1);
+    pbct.wait(1000);
+
+    // Set statusLabel
+    ui->statusLabel->setText("Connected to Solo wifi");
+
+    gd = new GatewayDialog();
+    connect(gd->getButtonBox(), SIGNAL(accepted()), this, SLOT(start_set_gateway()));
+    gd->open();
+}
+
+void WelcomeWidget::not_connected_to_solo_network(QString error)
+{
+     ui->statusLabel->setText(error);
+     pbc->aborted = true;
+     pbct.wait(2);
 }
 
 void WelcomeWidget::start_set_gateway()
 {
+    ui->statusLabel->setText("Connecting to gateway");
+
     QString ssid = gd->getSSID();
     QString password = gd->getPassword();
-    set_gateway(ssid, password);
+    emit set_gateway(ssid, password);
+    emit updateProgressBar(100, 81);
 
-    // Connect to solo network and update processBar
-    QFuture<QString> result = QtConcurrent::run(this, &WelcomeWidget::set_gateway, ssid, password);
+//    // Connect to solo network and update processBar
+//    QFuture<QString> result = QtConcurrent::run(this, &WelcomeWidget::set_gateway, ssid, password);
 //    emit updateProgressBar(100, 10);
 
-    // Get result and end process
-    QString output = result.result();
+//    // Get result and end process
+//    QString output = result.result();
 //    pbc->aborted = true;
 //    pbct.wait(2);
 //    emit updateProgressBar(100, 1);
@@ -234,16 +221,49 @@ void WelcomeWidget::start_set_gateway()
 //        connected = true;
 //    }
 //    ui->statusLabel->setText(message);
+//}
+
+//QString WelcomeWidget::set_gateway(QString ssid, QString password)
+//{
+//    QProcess *process = new QProcess();
+//    //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
+//    process->setWorkingDirectory("../../src/scripts");
+//    process->start("./set_gateway.sh " + ssid + " " + password);
+//    process->waitForFinished(20000);
+//    QString output(process->readAll());
+//    QString result = output.split(QRegExp("[\r\n]"), QString::SkipEmptyParts).last();
+//    return result;
 }
 
-QString WelcomeWidget::set_gateway(QString ssid, QString password)
+void WelcomeWidget::gateway_setted()
 {
-    QProcess *process = new QProcess();
-    //process->start("/bin/bash", QStringList() << "qrc:/scripts/test");
-    process->setWorkingDirectory("../../src/scripts");
-    process->start("./set_gateway.sh " + ssid + " " + password);
-    process->waitForFinished(20000);
-    QString output(process->readAll());
-    QString result = output.split(QRegExp("[\r\n]"), QString::SkipEmptyParts).last();
-    return result;
+    // Set processBar to 50%
+    pbc->aborted = true;
+    pbct.wait(2);
+    emit updateProgressBar(100, 1);
+    pbct.wait(1000);
+
+    // Set statusLabel
+    ui->statusLabel->setText("Connected to gateway");
+
+    if(!droneConnected)
+    {
+        ui->configSearchButton->setEnabled(false);
+    }
+
+    ui->configSearchButton->setText("Configure search");
+    status ++;
+}
+
+void WelcomeWidget::gateway_not_setted(QString error)
+{
+    ui->statusLabel->setText(error);
+    pbc->aborted = true;
+    pbct.wait(2);
+}
+
+void WelcomeWidget::incrementProcessBar()
+{
+    int value = ui->progressBar->value();
+    ui->progressBar->setValue(value + 1);
 }
