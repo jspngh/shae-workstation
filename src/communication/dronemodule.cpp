@@ -73,7 +73,6 @@ DroneModule::~DroneModule()
     if (detectionController != nullptr) {
         delete detectionController;
     }
-    //TODO: delete heartbeatReceiver;
     if (heartbeatReceiver != nullptr)
         heartbeatReceiver->deleteLater();
     //TODO: delete waypoints fails if no waypoints assigned
@@ -102,7 +101,6 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(requestStatus(RequestedDroneStatus)), QString("requestStatus(RequestedDroneStatus)"));
     mediator->addSlot(this, (char *) SLOT(requestStatuses(QList<RequestedDroneStatus>)), QString("requestStatus(QList<RequestedDroneStatus>)"));
     mediator->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
-    mediator->addSlot(this, (char *) SLOT(onPathCalculated(Search *)), QString("pathCalculated(Search*)"));
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 
     connect(this, SIGNAL(droneStatusReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
@@ -119,6 +117,16 @@ void DroneModule::initHeartbeat()
             this, SLOT(onDroneResponseError(int, QString)));
 
     setWorkstationConfiguration(workstationIp, heartbeatReceiver->getWorkstationHeartbeatPort());
+}
+
+DroneStatus DroneModule::getLastReceivedDroneStatus() const
+{
+    return lastReceivedDroneStatus;
+}
+
+QGeoCoordinate DroneModule::getHomeLocation() const
+{
+    return homeLocation;
 }
 
 PersistenceController *DroneModule::getPersistenceController() const
@@ -256,13 +264,11 @@ void DroneModule::onPathCalculated(Search *s)
         settings.push_back(Height_To_Set);
         settings.push_back(Speed_To_Set);
         settings.push_back(Camera_Angle_To_Set);
-        settings.push_back(FPS_To_Set);
 
         QList<int> values = QList<int>();
         values.push_back(s->getHeight());
         values.push_back(s->getSpeed());
         values.push_back(s->getGimbalAngle());
-        values.push_back(s->getFpsProcessing());
 
 
         setSettings(settings, values);

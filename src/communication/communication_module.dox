@@ -1,0 +1,7 @@
+/*!
+  \defgroup Communication
+  \ingroup Workstation
+  \brief This module contains all code regarding the communication with the drone.
+  
+  It contains the classes responsible for the connections and the classes responsible for the creation and parsing of messages according to the interface
+*/
