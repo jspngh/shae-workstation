@@ -1,3 +1,4 @@
+#include <QProcess>
 #include "controller.h"
 
 Controller::Controller(MainWindow *window, QObject *p)
@@ -22,7 +23,8 @@ Controller::Controller(MainWindow *window, QObject *p)
 
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
-    mediator->addSignal(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
+    mediator->addSignal(this, SIGNAL(droneSetupFailed()), QString("droneSetupFailed()"));
+    mediator->addSignal(this, SIGNAL(onResetServicesClicked()), QString("resetServicesClicked()"));
 }
 
 Controller::~Controller()
@@ -77,6 +79,14 @@ void Controller::retrieveWorkstationIpAndBroadcast()
     }
 }
 
+void Controller::onResetServicesClicked()
+{
+    QProcess *process = new QProcess();
+    process->setWorkingDirectory("../../src/scripts");
+    process->start("./reset_services.sh");
+    process->waitForFinished(-1);
+    process->close();
+}
 
 void Controller::onSearchEmitted(Search *s)
 {

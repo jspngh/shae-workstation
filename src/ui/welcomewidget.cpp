@@ -1,10 +1,12 @@
-#include "welcomewidget.h"
-#include "ui_welcomewidget.h"
-#include "clickablelabel.h"
 #include <QDebug>
+#include <QMessageBox>
 #include <QDir>
 #include <QPixmap>
 #include <QTimer>
+#include <QMessageBox>
+#include "welcomewidget.h"
+#include "ui_welcomewidget.h"
+#include "clickablelabel.h"
 
 WelcomeWidget::WelcomeWidget(QWidget *parent) :
     QWidget(parent),
@@ -75,8 +77,8 @@ void WelcomeWidget::setMediator(Mediator *mediator)
 
 void WelcomeWidget::setSignalSlots()
 {
-    mediator->addSlot(this, SLOT(droneReadyDetected(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
-    mediator->addSlot(this, SLOT(droneFailureDetected()), QString("droneSetupFailed()"));
+    mediator->addSlot(this, SLOT(onDroneStatusReceived(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(onDroneSetupFailure()), QString("droneSetupFailed()"));
 }
 
 void WelcomeWidget::setupReady()
@@ -90,11 +92,15 @@ void WelcomeWidget::setupReady()
 
 void WelcomeWidget::setupFailed()
 {
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("An error occured");
-    msgBox.setText("There was a problem while setting up the drone.");
-    msgBox.setDetailedText("Please restart the application and the services on the drone.");
-    msgBox.exec();
+    if (this->status >= 0)
+    {
+        this->status = -1;
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("An error occured");
+        msgBox.setText("There was a problem while setting up the drone.");
+        msgBox.setDetailedText("Please restart the application and the services on the drone.");
+        msgBox.exec();
+    }
 }
 /***
  * Connecting on controller's Wifi (make sure controller is turned on).
@@ -124,12 +130,12 @@ void WelcomeWidget::on_configSearchButton_clicked()
     }
 }
 
-void WelcomeWidget::droneReadyDetected(DroneStatus* s)
+void WelcomeWidget::onDroneStatusReceived(DroneStatus* s)
 {
     setupReady();
 }
 
-void WelcomeWidget::droneFailureDetected()
+void WelcomeWidget::onDroneSetupFailure()
 {
     setupFailed();
 }

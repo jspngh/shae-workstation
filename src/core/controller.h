@@ -69,7 +69,11 @@ private:
     //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
     DroneModule *configureDrone(DroneModule *drone);
 
+signals:
+    void droneSetupFailed();
+
 public slots:
+    void onResetServicesClicked();
     void onSearchEmitted(Search *s);
     void readPendingDatagrams();
 
