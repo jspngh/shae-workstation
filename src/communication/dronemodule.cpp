@@ -224,10 +224,10 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
 
     if( waypoints != nullptr &&
         status->getPreviousWaypointOrder() == waypoints->size() &&
-        status->getCurrentLocation().distanceTo(homeLocation) < 0.5){
+        status->getCurrentLocation().distanceTo(homeLocation) < 1){
         // the drone has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
-        emergencyLanding();
+        returnToHome();
     }
 
     if (status->getPreviousWaypointOrder() == 1 && videoProcessing && !videoActive) {

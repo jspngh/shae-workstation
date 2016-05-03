@@ -11,9 +11,6 @@ OverviewWidget::OverviewWidget(QWidget *parent) :
     mapViewLoaded = false;
     summaryDialog = new SummaryDialog();
     summaryDialog->setWindowTitle("Search Summary");
-
-    //lowerbuttons:
-    connect(ui->exportSearchButton, SIGNAL(clicked()), this, SLOT(exportSearchButtonPush()));
 }
 
 OverviewWidget::~OverviewWidget()
@@ -85,19 +82,6 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
     marker.show();
 }
 
-void OverviewWidget::exportSearchButtonPush()
-{
-    summaryDialog->show();
-
-//    QString filter = "XML sheet (*.xml);;Text File (*.txt)";
-//    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
-//    if(filter == QString("Text File (*.txt)"))
-//    {
-//        emit printDetectionResultTXT(saveFileName.append(".txt"));
-//    } else {
-//        emit printDetectionResultXML(saveFileName.append(".xml"));
-//    }
-}
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {

@@ -159,7 +159,6 @@ void OverviewDroneItem::initTimers()
 void OverviewDroneItem::addSignalSlots()
 {
     connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
-    connect(ui->haltButton, SIGNAL(clicked()), drone, SLOT(stopFlight()));
     connect(ui->returnHomeButton, SIGNAL(clicked()), drone, SLOT(returnToHome()));
     connect(drone, SIGNAL(landed(DroneModule*)), this, SLOT(onDroneLanded(DroneModule*)));
 }

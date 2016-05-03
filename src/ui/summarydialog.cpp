@@ -30,10 +30,10 @@ void SummaryDialog::onSaveFootageClicked()
 {
     QFile stream(streamLocation());
     if (stream.exists()) {
-        QString filter = "Video (*.avi)";
+        QString filter = "Video (*.avi);";
         QString saveLocation = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
         qDebug() << saveLocation;
-        stream.copy(saveLocation);
+        stream.copy(saveLocation.append(".avi"));
     } else {
         QMessageBox::warning(this, "Warning!","The stream has not been created. It is not possible to save it.", "OK");
     }

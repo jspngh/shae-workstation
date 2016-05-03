@@ -38,12 +38,11 @@ void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
-    //if(this->path.isNull()) {
-      //  exit(EXIT_FAILURE); // if we get here, mistakes were made
-    //}
+    if(this->path.isNull()) {
+        exit(EXIT_FAILURE); // if we get here, mistakes were made
+    }
 
-   // this->sequence = cv::VideoCapture(path.toStdString());
-    this->sequence = cv::VideoCapture("./dependencies/drone_stream1.mpg");
+    this->sequence = cv::VideoCapture(path.toStdString());
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() << (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
@@ -76,7 +75,6 @@ void DetectionController::run()
                                                           this->processWidth, this->processHeight));
                     extractDetectionsFromFrame(croppedFrame, time);
                     int nMilliseconds = Timer.elapsed();
-                    QThread::sleep(1);
                     qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
                 }
             } catch (cv::Exception e) {
