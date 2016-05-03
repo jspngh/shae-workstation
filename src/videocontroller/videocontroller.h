@@ -60,7 +60,8 @@ public slots:
     */
     void onStopStream(Drone *drone);
 
-private:
+// made public for testing purposes
+public:
     QString standardDataFolder();
     QString streamMpgLocation();
     QString streamAviLocation();
