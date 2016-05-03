@@ -109,14 +109,16 @@ void ConfigWidget::startButtonPush()
         return;
     }
 
-    if(mapView->selectedArea().type() == QGeoShape::RectangleType) {
-        QGeoRectangle area = mapView->selectedArea();
-        this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());
+    if(mapView->selectedArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle area = *(mapView->selectedArea());
+        this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight())
+                            * area.bottomLeft().distanceTo(area.topLeft());
     } else {
-        QGeoShape area = mapView->selectedArea();
-        GeoPolygon *polygon = static_cast<GeoPolygon*>(&area);
-        this->areaOfArea = polygon->area();
+        GeoPolygon *polygon = static_cast<GeoPolygon*>(mapView->selectedArea());
+        this->areaOfArea = polygon->getArea();
+        delete polygon;
     }
+    qDebug() << "Selected area has size of :" << this->areaOfArea;
 
     if(areaOfArea > MAX_AREA_OF_AREA) {
          QMessageBox::warning(this, "Warning!", "The selected area is too big to be searched!", "OK");
@@ -127,7 +129,6 @@ void ConfigWidget::startButtonPush()
          QMessageBox::warning(this, "Warning!", "Please select a bigger area", "OK");
          return;
     }
-    qDebug() << "Selected area has size of :" << this->areaOfArea;
 
     QList<DroneModule *> dronesInSearch;
     for (int i = 0; i < dronesInTable.size(); i++) {
@@ -139,7 +140,7 @@ void ConfigWidget::startButtonPush()
         QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
     } else if (mediator) {
         Search *s = new Search();
-        s->setArea(mapView->selectedArea());
+        s->setArea(*(mapView->selectedArea()));
         s->setHeight(ui->heightDoubleSpinBox->value());
         s->setFpsProcessing(ui->fpsSpinBox->value());
         s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());

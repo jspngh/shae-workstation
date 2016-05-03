@@ -111,7 +111,8 @@ public:
      * \brief Returns the polygon's area
      * \return The area in m²
      */
-    double area() const;
+    double getArea() const;
+    void setArea(const double area);
 
 private:
     //! The list of coordinates contained by the polygon.
@@ -125,6 +126,8 @@ private:
 
     QGeoCoordinate mostWestCoordinate;
     QGeoCoordinate mostEastCoordinate;
+
+    double area;
 };
 
 #endif // GEOPOLYGON_H

@@ -212,26 +212,13 @@ QGeoCoordinate GeoPolygon::getMostEastCoordinate() const
     return mostEastCoordinate;
 }
 
-double GeoPolygon::area() const
+double GeoPolygon::getArea() const
 {
-    // For the formula, see
-    // https://en.wikipedia.org/wiki/Polygon#Area_and_centroid
-    double sum = 0.0;
-    QGeoCoordinate current, next;
-    for(int i = 0; i < coordinates.size() - 1; i++) {
-        current = coordinates[i];
-        next = coordinates[i+1];
+    return this->area;
+}
 
-        sum += current.longitude() * next.latitude()
-                   - next.longitude() * current.latitude();
-    }
-
-    // Don't forget last 2
-    current = coordinates[coordinates.size() - 1];
-    next = coordinates[0];
-    sum += current.longitude() * next.latitude()
-               - next.longitude() * current.latitude();
-
-    return 0.5 * sum;
+void GeoPolygon::setArea(const double area)
+{
+    this->area = area;
 }
 

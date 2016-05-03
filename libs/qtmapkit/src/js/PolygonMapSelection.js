@@ -61,10 +61,13 @@ function PolygonMapSelection(map) {
     };
 
     this.getSelectedArea = function() {
+        var result = {
+            area: google.maps.geometry.spherical.computeArea(this.corners),
+            corners: []
+        };
         // QVariants can only retrieve fields, not process methods.
-        var result = [];
         for(var i = 0; i < this.corners.length; i++)
-            result.push(this.corners[i].toJSON());
+            result.corners.push(this.corners[i].toJSON());
         return result;
     };
 };

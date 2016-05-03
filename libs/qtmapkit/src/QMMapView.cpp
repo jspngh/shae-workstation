@@ -175,7 +175,10 @@ QMMapView::MapType QMMapView::mapType() const
 QGeoRectangle QMMapView::region() const
 {
     QVariant result = d_ptr->evaluateJavaScript("mapKit.getMapBounds();");
-    return jsonObjectToQGeoRectangle(result);
+    QGeoRectangle* bounds = jsonObjectToQGeoRectangle(result);
+    QGeoRectangle retValue = *bounds;
+    delete bounds;
+    return retValue;
 }
 
 QGeoCoordinate QMMapView::center() const
@@ -200,7 +203,7 @@ qreal QMMapView::tilt() const
     return d_ptr->evaluateJavaScript("mapKit.map.getTilt();").toReal();
 }
 
-QGeoShape QMMapView::selectedArea() const
+QGeoShape* QMMapView::selectedArea() const
 {
     QString script = QString("mapKit.mapSelection.getSelectedArea();");
     QVariant result = d_ptr->evaluateJavaScript(script);
@@ -213,7 +216,7 @@ QGeoShape QMMapView::selectedArea() const
     throw new EmptyAreaException();
 }
 
-QGeoRectangle QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
+QGeoRectangle* QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
 {
     if (jsObject.isNull() || !jsObject.isValid())
         qDebug() << "Herpaderp square";
@@ -224,19 +227,26 @@ QGeoRectangle QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) cons
             && objectMap.contains("east") && objectMap.contains("west")))
         throw new EmptyAreaException();
 
-    return QGeoRectangle(QGeoCoordinate(objectMap.value("north").toReal(),
-                                        objectMap.value("west").toReal()),
-                         QGeoCoordinate(objectMap.value("south").toReal(),
-                                        objectMap.value("east").toReal()));
+    QGeoCoordinate topLeft(objectMap.value("north").toReal(),
+                           objectMap.value("west").toReal());
+    QGeoCoordinate bottomRight(objectMap.value("south").toReal(),
+                               objectMap.value("east").toReal());
+    return new QGeoRectangle(topLeft, bottomRight);
 }
 
-GeoPolygon QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
+GeoPolygon* QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
 {
-    if (jsObject.isNull() || !jsObject.isValid() || !jsObject.canConvert(QVariant::List))
+    if (jsObject.isNull() || !jsObject.isValid())
+        throw new EmptyAreaException();
+
+    QVariantMap jsMap = jsObject.toMap();
+    QVariant cornersObj = jsMap["corners"];
+
+    if(!cornersObj.canConvert(QVariant::List))
         throw new EmptyAreaException();
 
     QList<QGeoCoordinate> coordinates;
-    QList<QVariant> cornerList = jsObject.toList();
+    QList<QVariant> cornerList = cornersObj.toList();
     for(QVariant jsCoord: cornerList) {
         QVariantMap coordLiteral = jsCoord.toMap();
         QGeoCoordinate point(coordLiteral["lat"].toDouble(),
@@ -244,7 +254,9 @@ GeoPolygon QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
         coordinates.append(point);
     }
 
-    return GeoPolygon(coordinates);
+    GeoPolygon* result = new GeoPolygon(coordinates);
+    result->setArea(jsMap["area"].toDouble());
+    return result;
 }
 
 void QMMapView::setMapType(const MapType type)

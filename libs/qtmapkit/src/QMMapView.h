@@ -98,7 +98,7 @@ public:
      * \throws EmptyAreaException if there was no area selected.
      * \returns The selected area on the map, or null if there is none.
      */
-    QGeoShape selectedArea() const;
+    QGeoShape* selectedArea() const;
 
     /*!
      * \brief Returns what kind of area can be selected on the map.
@@ -116,8 +116,8 @@ public:
     void shiftKeyPressed(bool down);
 
 private:
-    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject) const;
-    GeoPolygon jsonObjectToGeoPolygon(const QVariant jsObject) const;
+    QGeoRectangle* jsonObjectToQGeoRectangle(const QVariant jsObject) const;
+    GeoPolygon* jsonObjectToGeoPolygon(const QVariant jsObject) const;
 
 public slots:
     /*!
