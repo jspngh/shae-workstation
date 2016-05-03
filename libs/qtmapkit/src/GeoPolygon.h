@@ -107,6 +107,12 @@ public:
      */
     QGeoCoordinate getMostEastCoordinate() const;
 
+    /*!
+     * \brief Returns the polygon's area
+     * \return The area in m²
+     */
+    double area() const;
+
 private:
     //! The list of coordinates contained by the polygon.
     QList<QGeoCoordinate> coordinates;

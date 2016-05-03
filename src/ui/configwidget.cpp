@@ -22,7 +22,6 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     //setup connections
     connect(ui->locateButton, SIGNAL(clicked()), this, SLOT(locateButtonPush()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startButtonPush()));
-    connect(ui->choosePolygonButton, SIGNAL(toggled(bool)), this, SLOT(choosePolygon(bool)));
     connect(ui->chooseSquareButton, SIGNAL(toggled(bool)), this, SLOT(chooseSquare(bool)));
     //connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
@@ -40,7 +39,7 @@ void ConfigWidget::initializeMap()
     mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11);
     connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
-    connect(mapView, SIGNAL(selectedAreaCreated(QGeoRectangle)), this, SLOT(areaSelected(QGeoRectangle)));
+    connect(mapView, SIGNAL(selectedAreaCreated(QGeoShape)), this, SLOT(areaSelected(QGeoShape)));
 }
 
 void ConfigWidget::onMapLoaded()
@@ -57,7 +56,7 @@ void ConfigWidget::onMapFailedToLoad()
                                         ));
 }
 
-void ConfigWidget::areaSelected(QGeoRectangle area)
+void ConfigWidget::areaSelected(QGeoShape area)
 {
     this->areaWasSelected = true;
 }
@@ -87,19 +86,11 @@ void ConfigWidget::sliderChanged(int value)
 
 void ConfigWidget::chooseSquare(bool checked)
 {
-    qDebug() << "chooseSquare " << checked;
     if(!mapView->hasLoaded()) return;
 
     if(checked)
         mapView->setSelectionType(QMSelectionType::Square);
-}
-
-void ConfigWidget::choosePolygon(bool checked)
-{
-    qDebug() << "choosePolygon " << checked;
-    if(!mapView->hasLoaded()) return;
-
-    if(checked)
+    else
         mapView->setSelectionType(QMSelectionType::Polygon);
 }
 
@@ -115,47 +106,51 @@ void ConfigWidget::startButtonPush()
 {
     if(!areaWasSelected) {
         QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
-    } else {
+        return;
+    }
+
+    if(mapView->selectedArea().type() == QGeoShape::RectangleType) {
         QGeoRectangle area = mapView->selectedArea();
         this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight()) * area.bottomLeft().distanceTo(area.topLeft());
+    } else {
+        QGeoShape area = mapView->selectedArea();
+        GeoPolygon *polygon = static_cast<GeoPolygon*>(&area);
+        this->areaOfArea = polygon->area();
     }
 
-    if(areaWasSelected && areaOfArea > MAX_AREA_OF_AREA)
+    if(areaOfArea > MAX_AREA_OF_AREA) {
          QMessageBox::warning(this, "Warning!", "The selected area is too big to be searched!", "OK");
+         return;
+    }
 
-    if(areaWasSelected && areaOfArea < MIN_AREA_OF_AREA)
+    if(areaOfArea < MIN_AREA_OF_AREA) {
          QMessageBox::warning(this, "Warning!", "Please select a bigger area", "OK");
+         return;
+    }
     qDebug() << "Selected area has size of :" << this->areaOfArea;
 
-    if(areaWasSelected && areaOfArea <= MAX_AREA_OF_AREA && areaOfArea > MIN_AREA_OF_AREA) {
-        QList<DroneModule *> dronesInSearch;
-        for (int i = 0; i < dronesInTable.size(); i++) {
-            QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
-            if (cb->isChecked())
-                dronesInSearch.append(dronesInTable[i].second);
-        }
-        if(dronesInSearch.size() == 0) {
-            QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
-        } else if (mediator) {
-            Search *s = new Search();
-            s->setArea(mapView->selectedArea());
-
-            s->setHeight(ui->heightDoubleSpinBox->value());
-            s->setFpsProcessing(ui->fpsSpinBox->value());
-            s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
-            s->setSpeed(ui->speedDoubleSpinBox->value());
-
-            qDebug() << dronesInSearch.size();
-            s->setDroneList(dronesInSearch);
-
-            qDebug() << "emit ConfigWidget::startSearch(Search *s)";
-            emit startSearch(s);
-
-            ((QStackedWidget *) this->parent())->setCurrentIndex(2);
-        }
-
+    QList<DroneModule *> dronesInSearch;
+    for (int i = 0; i < dronesInTable.size(); i++) {
+        QCheckBox *cb = (QCheckBox *)ui->droneTable->cellWidget(dronesInTable[i].first, CHECK);
+        if (cb->isChecked())
+            dronesInSearch.append(dronesInTable[i].second);
     }
+    if(dronesInSearch.size() == 0) {
+        QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
+    } else if (mediator) {
+        Search *s = new Search();
+        s->setArea(mapView->selectedArea());
+        s->setHeight(ui->heightDoubleSpinBox->value());
+        s->setFpsProcessing(ui->fpsSpinBox->value());
+        s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
+        s->setSpeed(ui->speedDoubleSpinBox->value());
+        s->setDroneList(dronesInSearch);
 
+        qDebug() << "emit ConfigWidget::startSearch(Search *s)";
+        emit startSearch(s);
+
+        ((QStackedWidget *) this->parent())->setCurrentIndex(2);
+    }
 }
 
 void ConfigWidget::locateButtonPush()
@@ -177,7 +172,6 @@ void ConfigWidget::setSignalSlots()
     mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
 }
-
 
 void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
 {
@@ -205,7 +199,6 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
         mapCentered = true;
     }
 }
-
 
 void ConfigWidget::updateDroneTable(DroneStatus* s)
 {

@@ -63,9 +63,8 @@ function PolygonMapSelection(map) {
     this.getSelectedArea = function() {
         // QVariants can only retrieve fields, not process methods.
         var result = [];
-        this.corners.foreach(function(latLng) {
-            result.push(latLng.toJSON());
-        });
+        for(var i = 0; i < this.corners.length; i++)
+            result.push(this.corners[i].toJSON());
         return result;
     };
 };

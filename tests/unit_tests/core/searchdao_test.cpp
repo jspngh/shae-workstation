@@ -4,6 +4,7 @@
 #include <QUuid>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>
+#include <QGeoRectangle>
 #include "persistence/searchdao.h"
 #include "models/search.h"
 
@@ -54,8 +55,10 @@ void SearchDAO_Test::testSimpleSearchDAO()
 
     QVERIFY(sback->getSearchID() == s->getSearchID());
     QVERIFY(s->getStartTime() == sback->getStartTime());
-    QVERIFY(s->getArea().topLeft() == sback->getArea().topLeft());
-    QVERIFY(s->getArea().bottomRight() == sback->getArea().bottomRight());
+    QVERIFY(s->getArea().type() == sback->getArea().type());
+    QGeoRectangle sArea = s->getArea(), sBackArea = sback->getArea();
+    QVERIFY(sArea.topLeft() == sBackArea.topLeft());
+    QVERIFY(sArea.bottomRight() == sBackArea.bottomRight());
     QVERIFY(s->getHeight() == sback->getHeight());
     QVERIFY(s->getGimbalAngle() == sback->getGimbalAngle());
     QVERIFY(s->getFpsProcessing() == sback->getFpsProcessing());

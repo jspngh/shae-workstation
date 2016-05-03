@@ -1,5 +1,5 @@
 #include "geopolygon_test.h"
-#include "pathlogic/geopolygon.h"
+#include <GeoPolygon.h>
 #include <QString>
 #include <QtWidgets/QtWidgets>
 #include <QtTest/QtTest>

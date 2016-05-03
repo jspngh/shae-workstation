@@ -204,21 +204,19 @@ QGeoShape QMMapView::selectedArea() const
 {
     QString script = QString("mapKit.mapSelection.getSelectedArea();");
     QVariant result = d_ptr->evaluateJavaScript(script);
-    if(selectionType() == QMSelectionType::Square) {
+    if(selectionType() == QMSelectionType::Square)
         return jsonObjectToQGeoRectangle(result);
-    } else {
-        if(selectionType() == QMSelectionType::Polygon) {
-            return jsonObjectToGeoPolygon(result);
-        } else {
-            throw new EmptyAreaException();
-        }
-    }
+
+    if(selectionType() == QMSelectionType::Polygon)
+        return jsonObjectToGeoPolygon(result);
+
+    throw new EmptyAreaException();
 }
 
 QGeoRectangle QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
 {
     if (jsObject.isNull() || !jsObject.isValid())
-        throw new EmptyAreaException();
+        qDebug() << "Herpaderp square";
 
     QVariantMap objectMap = jsObject.toMap();
 
@@ -304,7 +302,7 @@ void QMMapView::fitRegion(const QGeoRectangle &region)
 bool QMMapView::selectable() const
 {
     Q_D(const QMMapView);
-    return d->selectionType == QMSelectionType::None;
+    return d->selectionType != QMSelectionType::None;
 }
 
 QMSelectionType QMMapView::selectionType() const
@@ -333,6 +331,7 @@ void QMMapView::setSelectionType(const QMSelectionType selectionType)
 
     QString js = format.arg(typeName);
     d->evaluateJavaScript(js);
+    d->selectionType = selectionType;
 }
 
 void QMMapView::shiftKeyPressed(bool down)
