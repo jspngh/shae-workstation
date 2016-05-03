@@ -29,6 +29,8 @@ public:
     ~OverviewWidget();
     void setMediator(Mediator *mediator);
 
+    SummaryDialog *getSummaryDialog() const;
+
 private:
     Ui::OverviewWidget *ui;
     QMMapView *mapView;

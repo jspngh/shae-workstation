@@ -56,7 +56,7 @@ void DetectionController::run()
     if (!(this->frameHop > 0 && this->frameHop < 30)) {
         this->frameHop = 30;
     }
-    droneId = this->droneModule->getGuid("DetectionController::run");
+    droneId = this->droneModule->getGuid();
     QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID())->getStart();
     cv::Mat frame;
     do {

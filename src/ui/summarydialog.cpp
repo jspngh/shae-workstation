@@ -29,20 +29,32 @@ void SummaryDialog::setMediator(Mediator *mediator)
 void SummaryDialog::onSaveFootageClicked()
 {
     QFile stream(streamLocation());
-    if (stream.exists()) {
-        QString filter = "Video (*.avi);";
-        QString saveLocation = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
-        qDebug() << saveLocation;
-        stream.copy(saveLocation.append(".avi"));
-    } else {
+
+    if(!stream.exists()){
         QMessageBox::warning(this, "Warning!","The stream has not been created. It is not possible to save it.", "OK");
+        return;
     }
+
+
+    QString filter = "Video (*.avi);";
+    QString saveLocation = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
+
+    if(saveLocation.isNull() || saveLocation.isEmpty()) {
+        QMessageBox::warning(this, "Warning!","Please specify a valid path", "OK");
+        return;
+    }
+
+    // all checks have passed, now copy the file to the predifined location
+    stream.copy(saveLocation.append(".avi"));
 }
 
 void SummaryDialog::onSaveSearchClicked()
 {
     QString filter = "XML sheet (*.xml);;Text File (*.txt)";
     QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
+
+    if (saveFileName.isNull() || saveFileName.isEmpty() )
+        return;
 
     if(filter == QString("Text File (*.txt)"))
         emit printDetectionResultTXT(saveFileName.append(".txt"));

@@ -56,7 +56,6 @@ Getters/Setters
 
 QUuid Drone::getGuid()
 {
-    qDebug() << "the uuid in the drone class is: " << this->guid.toString();
     return this->guid;
 }
 

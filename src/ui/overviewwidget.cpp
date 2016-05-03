@@ -30,12 +30,17 @@ void OverviewWidget::setMediator(Mediator *mediator)
 
 }
 
+SummaryDialog *OverviewWidget::getSummaryDialog() const
+{
+    return summaryDialog;
+}
+
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 {
 
     if (!mapViewLoaded) return;
 
-    QUuid uuid = heartbeat->getDrone()->getGuid("OverviewWidget::onHeartBeatReceived").toString();
+    QUuid uuid = heartbeat->getDrone()->getGuid().toString();
 
     // Update bottom text
     ui->heartBeat->setText(heartbeat->toString());
@@ -85,7 +90,7 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {
-    const QUuid droneId = s->getDrone()->getGuid("OverviewWidget::updateDroneList");
+    const QUuid droneId = s->getDrone()->getGuid();
     if(mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(*s);
 }
@@ -122,7 +127,7 @@ void OverviewWidget::fillDroneList()
         ui->droneList->addItem(item);
 
         OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
-        mapIdListItem[drone->getGuid("OverviewWidget::fillDroneList")] = droneItem;
+        mapIdListItem[drone->getGuid()] = droneItem;
         ui->droneList->setItemWidget(item, droneItem);
         i++;
     }

@@ -160,11 +160,9 @@ void DroneModule::setDrone(Drone *value)
 }
 
 
-QUuid DroneModule::getGuid(QString s)
+QUuid DroneModule::getGuid()
 {
-    qDebug() << "Asking drone GUID 1" << s;
     QUuid id = drone->getGuid();
-    qDebug() << "Asking drone GUID 2" << s;
     return id;
 }
 
@@ -259,7 +257,7 @@ void DroneModule::onPathCalculated(Search *s)
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
     for (int i = 0; i < s->getDroneList().size() && !droneInList; i++)    {
-        if (s->getDroneList().at(i)->getGuid("DroneModule::onPathCalculated1") == drone->getGuid())
+        if (s->getDroneList().at(i)->getGuid() == drone->getGuid())
             droneInList = true;
     }
     if (droneInList) {
