@@ -60,7 +60,6 @@ void Controller::init()
     droneThread.start();
 }
 
-
 void Controller::retrieveWorkstationIpAndBroadcast()
 {
     foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
@@ -75,11 +74,10 @@ void Controller::retrieveWorkstationIpAndBroadcast()
     }
 }
 
-
 void Controller::onSearchEmitted(Search *s)
 {
     search = s;
-    if(s->getArea().type() == QGeoShape::RectangleType)
+    if(s->getArea()->type() == QGeoShape::RectangleType)
         pathLogicController = new SimplePathAlgorithm();
     else
         pathLogicController = new PolygonPathAlgorithm();
@@ -164,7 +162,6 @@ DroneModule *Controller::configureDrone(DroneModule *drone)
     return drone;
 }
 
-
 DroneModule *Controller::receivedHelloFrom(QString ip)
 {
     for (int i = 0; i < drones->size(); i++) {
@@ -188,7 +185,6 @@ QList<DroneModule *> *Controller::getDrones()
 {
     return drones;
 }
-
 
 void Controller::setDrones(QList<DroneModule *> *list)
 {

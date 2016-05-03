@@ -45,8 +45,8 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
         return start;
         break;
     }
-
 }
+
 QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoordinate coordinate1, QGeoCoordinate coordinate2, double distance, Direction direction)
 {
     double rico = (coordinate2.latitude() - coordinate1.latitude()) / (coordinate2.longitude() - coordinate1.longitude());
@@ -57,7 +57,13 @@ QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoord
 void PathAlgorithm::startSearch(Search *s)
 {
     qDebug() << "PathAlgorithm::onStartSearch(Search *s)";
-    setWaypointsForDrones(s->getArea(), s->getDroneList());
+    if(s->getArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle* area = static_cast<QGeoRectangle*>(s->getArea());
+        setWaypointsForDrones(*area, s->getDroneList());
+    } else {
+        GeoPolygon* area = static_cast<GeoPolygon*>(s->getArea());
+        setWaypointsForDrones(*area, s->getDroneList());
+    }
     emit pathCalculated(s);
     qDebug() << "emit PathAlgorithm::pathCalculated(Search *s)";
 }

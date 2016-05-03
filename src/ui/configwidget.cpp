@@ -110,9 +110,9 @@ void ConfigWidget::startButtonPush()
     }
 
     if(mapView->selectedArea()->type() == QGeoShape::RectangleType) {
-        QGeoRectangle area = *(mapView->selectedArea());
-        this->areaOfArea = area.bottomLeft().distanceTo(area.bottomRight())
-                            * area.bottomLeft().distanceTo(area.topLeft());
+        QGeoRectangle* area = static_cast<QGeoRectangle*>(mapView->selectedArea());
+        this->areaOfArea = area->bottomLeft().distanceTo(area->bottomRight())
+                            * area->bottomLeft().distanceTo(area->topLeft());
     } else {
         GeoPolygon *polygon = static_cast<GeoPolygon*>(mapView->selectedArea());
         this->areaOfArea = polygon->getArea();
@@ -140,7 +140,7 @@ void ConfigWidget::startButtonPush()
         QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
     } else if (mediator) {
         Search *s = new Search();
-        s->setArea(*(mapView->selectedArea()));
+        s->setArea(mapView->selectedArea());
         s->setHeight(ui->heightDoubleSpinBox->value());
         s->setFpsProcessing(ui->fpsSpinBox->value());
         s->setGimbalAngle(ui->cameraAngleDoubleSpinBox->value());
