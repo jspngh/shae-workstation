@@ -222,3 +222,26 @@ void GeoPolygon::setArea(const double area)
     this->area = area;
 }
 
+QGeoCoordinate GeoPolygon::center() const
+{
+    return boundingBox().center();
+}
+
+QGeoRectangle GeoPolygon::boundingBox() const
+{
+    double topLat = -180, bottomLat = 180;
+    for(QGeoCoordinate coord: coordinates) {
+        if(coord.latitude() > topLat) {
+            topLat = coord.latitude();
+        } else if (coord.latitude() < bottomLat) {
+            bottomLat = coord.latitude();
+        }
+    }
+
+    QGeoRectangle boundingBox(
+            QGeoCoordinate(topLat, mostWestCoordinate.longitude()),
+            QGeoCoordinate(bottomLat, mostWestCoordinate.longitude())
+    );
+    return boundingBox;
+}
+

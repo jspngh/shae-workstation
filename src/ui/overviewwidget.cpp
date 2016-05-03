@@ -108,8 +108,7 @@ void OverviewWidget::onSearchStarted(Search *s)
 
     // Initialize map
     mapView = new QMMapView(QMMapView::Satellite,
-            QGeoCoordinate(51.02, 3.73),
-                            /* s->getArea()->center(), */
+                            s->getArea()->center(),
                             11);
 
     connect(mapView, SIGNAL(mapFailedToLoad()),
@@ -143,7 +142,12 @@ void OverviewWidget::fillDroneList()
 void OverviewWidget::onMapLoaded()
 {
     mapView->setSelectionType(QMSelectionType::None);
- //   mapView->fitRegion(*(search->getArea()));
+    if(search->getArea()->type() == QGeoShape::RectangleType) {
+        mapView->fitRegion(*(search->getArea()));
+    } else {
+        GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
+        mapView->fitRegion(area->boundingBox());
+    }
     mapViewLoaded = true;
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);

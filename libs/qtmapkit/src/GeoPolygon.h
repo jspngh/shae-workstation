@@ -114,6 +114,9 @@ public:
     double getArea() const;
     void setArea(const double area);
 
+    QGeoCoordinate center() const;
+    QGeoRectangle boundingBox() const;
+
 private:
     //! The list of coordinates contained by the polygon.
     QList<QGeoCoordinate> coordinates;
