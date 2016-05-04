@@ -4,6 +4,7 @@
 #include <QString>
 #include <QUuid>
 #include <QMetaType>
+#include <QDebug>
 
 /**
  * \brief The Drone class holds the data belonging to a drone.
@@ -48,11 +49,12 @@ public:
      * \param visionWidth is the vision width of the drone
      */
     Drone(QUuid droneID, int dronePort, int streamPort, QString droneIp, QString controllerIp, QString streamPath , double visionWidth);
+
     /*!
      * \brief getGuid()
      * \return the Guid of the drone
      */
-    QUuid getGuid() const;
+    QUuid getGuid();
     /*!
      * \brief getDronePort()
      * \return the port of the drone

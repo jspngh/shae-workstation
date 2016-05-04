@@ -13,6 +13,7 @@ Drone::Drone()
 
 Drone::Drone(const Drone &d)
 {
+    qDebug() << "copy contructor of drone is used";
     guid = d.guid;
     dronePort = d.dronePort;
     streamPort = d.streamPort;
@@ -53,8 +54,9 @@ Drone::~Drone()
 Getters/Setters
 ************************/
 
-QUuid Drone::getGuid() const
+QUuid Drone::getGuid()
 {
+    qDebug() << "the uuid in the drone class is: " << this->guid.toString();
     return this->guid;
 }
 

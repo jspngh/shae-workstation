@@ -60,7 +60,7 @@ void DroneStatusDAO_Test::testSimpleDroneStatusDAO()
     sd.dbSaveDroneStatus(four);
     sd.dbSaveDroneStatus(three);
 
-    QUuid droneID = dm->getGuid();
+    QUuid droneID = dm->getGuid("DroneStatusDAO_Test");
 
     QList<DroneStatus*>* sbackone = sd.dbRetrieveDroneStatus(droneID, QDateTime(QDate(2016 , 5, 6), QTime(6, 6, 6)), QDateTime(QDate(2016 , 5, 6), QTime(8, 8, 8)));
 

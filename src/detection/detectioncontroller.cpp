@@ -8,16 +8,29 @@ DetectionController::DetectionController(Search *search, DroneModule *dm, Persis
       persistenceController(pc),
       droneModule(dm)
 {
+
     int droneHeight = this->search->getHeight();
     int cameraAngle = this->search->getGimbalAngle();
-    parseConfiguration(droneHeight, cameraAngle);
+
+    // get the search configuration (specialised for the flying heigt and gimbal/camera angle from the resources
+    initSearchConfigFile(droneHeight, cameraAngle);
+
+    // get the acf model from the resources
+    initAcfModelFile();
+
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    qDebug() << folder;
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
     this->streaming = true;
     this->path = QString();
     this->manager = new DetectorManager(this->search->getFpsProcessing(),
                                         this->processWidth,
                                         this->processHeight,
                                         this->resolutionWidth,
-                                        this->resolutionHeight);
+                                        this->resolutionHeight,
+                                        folder.toStdString());
     this->nrDetections = 0;
 }
 
@@ -25,10 +38,12 @@ void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
-    if(this->path.isNull()) {
-        exit(EXIT_FAILURE); // if we get here, mistakes were made
-    }
-    this->sequence = cv::VideoCapture(path.toStdString());
+    //if(this->path.isNull()) {
+      //  exit(EXIT_FAILURE); // if we get here, mistakes were made
+    //}
+
+   // this->sequence = cv::VideoCapture(path.toStdString());
+    this->sequence = cv::VideoCapture("./dependencies/drone_stream1.mpg");
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() << (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
@@ -42,7 +57,7 @@ void DetectionController::run()
     if (!(this->frameHop > 0 && this->frameHop < 30)) {
         this->frameHop = 30;
     }
-    droneId = this->droneModule->getGuid();
+    droneId = this->droneModule->getGuid("DetectionController::run");
     QTime sequenceStartTime = this->persistenceController->retrieveVideoSequence(droneId, this->search->getSearchID())->getStart();
     cv::Mat frame;
     do {
@@ -61,6 +76,7 @@ void DetectionController::run()
                                                           this->processWidth, this->processHeight));
                     extractDetectionsFromFrame(croppedFrame, time);
                     int nMilliseconds = Timer.elapsed();
+                    QThread::sleep(1);
                     qDebug() << "processed frame " << iteratorFrames << "of " << numFrames << " in " << nMilliseconds;
                 }
             } catch (cv::Exception e) {
@@ -137,71 +153,122 @@ void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime ti
     }
 }
 
-void DetectionController::parseConfiguration(int height, int gimbalAngle)
+void DetectionController::initSearchConfigFile(int height, int gimbalAngle)
 {
-    string line;
-    string path = "dependencies/gopro_" + to_string(height) + "m" + "_" + to_string(gimbalAngle) + "deg.cfg";
-    std::size_t location;
-    ifstream file;
-    file.open(path);
-    // if the file does not exist, fall back to the original configuration
-    // might result in faulty detections
-    if (!file.is_open()) {
-        path = "dependencies/gopro_3m_65deg.cfg";
-        file.open(path);
-    }
-    if (file.is_open()) {
-        // first seven lines are currently not used
-        // TODO: parse first seven lines for checks
-        for (int i = 0; i < 7; i++)
-         {
-            getline(file, line);
-            if(i == 2) {
-                std::size_t resolutionStart = line.find_last_of('=');
-                std::string resolution =  line.substr(resolutionStart + 1);
-                std::size_t xMarkPosition = resolution.find_last_of('x');
-                this->resolutionWidth = std::atoi(resolution.substr(xMarkPosition).c_str());
-                this->resolutionHeight = std::atoi(resolution.substr(xMarkPosition + 1).c_str());
-            }
-            if(i == 4) {
-                location = line.find_last_of('=');
-                this->processWidth = std::atoi(line.substr(location + 1).c_str());
-            }
-            if(i == 5) {
-                location = line.find_last_of('=');
-                this->processHeight = std::atoi(line.substr(location + 1).c_str());
-            }
-        }
-        getline(file, line);
-        // next lines are used for the xLUT and yLUT
-        location = line.find_last_of("=");
-        int xLUTsize = atoi(line.substr(location + 1).c_str());
-        for (int i = 0; i < xLUTsize; i++) {
-            getline(file, line);
-            char firstComma, secondComma, leftBrace, rightBrace;
-            int pixelWidth, realWidth, pixelY;
-            istringstream iss(line);
-            iss >> leftBrace  >> pixelY >> firstComma >> pixelWidth >> secondComma  >> realWidth >> rightBrace;
-            vector<double> temp;
-            temp.push_back(pixelY);
-            temp.push_back(pixelWidth);
-            temp.push_back(realWidth);
-            this->xLUT.push_back(temp);
-        }
+    // create path for search configuration,
+    // the file and path depends on the saerch configuration (the flying height of the drone and the gimbalAngle)
+    QString configPrefix = QString(":/detection/dependencies/");
+    QString configForSearchPath = configPrefix
+                                    .append("gopro_")
+                                    .append(QString::number(height))
+                                    .append(QString("m_"))
+                                    .append(QString::number(gimbalAngle))
+                                    .append(QString("deg.cfg"));
 
-        getline(file, line);
-        location = line.find_last_of("=");
-        int yLUTsize = atoi(line.substr(location + 1).c_str());
-        for (int i = 0; i < yLUTsize; i++) {
-            getline(file, line);
-            char comma, leftBrace, rightBrace;
-            int pixelY, realY;
-            istringstream iss(line);
-            iss >> leftBrace  >> pixelY >> comma >> realY >> rightBrace;
-            vector<double> temp;
-            temp.push_back(pixelY);
-            temp.push_back(realY);
-            this->yLUT.push_back(temp);
-        }
+    // if the congiguration file for the search options doesn't exists, take the default
+    QFileInfo check(configForSearchPath);
+    if (!(check.exists() && check.isFile()))
+        configForSearchPath = QString(":/detection/dependencies/gopro_3m_65deg.cfg");
+
+
+
+    QFile qFile(configForSearchPath);
+
+    qFile.open(QIODevice::ReadOnly);
+    parseConfiguration(qFile);
+    qFile.close();
+}
+
+void DetectionController::parseConfiguration(QFile& file)
+{
+    QTextStream in(&file);
+    QString line;
+    QStringList option;
+    QString key;
+    QString value;
+    while (!in.atEnd()) {
+        line = in.readLine();
+        option = line.split("=");
+        key = option[0];
+        value = option[1];
+
+        if (key == "resolution-width")
+            resolutionWidth = value.toInt();
+
+        if (key == "resolution-height")
+            resolutionHeight = value.toInt();
+
+        if (key == "pix-right")
+            processWidth = value.toInt();
+
+        if (key == "pix-upper")
+            processHeight = value.toInt();
+
+        if (key == "x-values")
+            parseLut(in, value.toInt(), xLUT);
+
+        if (key == "y-values")
+            parseLut(in, value.toInt(), yLUT);
+
+        // not every configuration option is parsed (e.g. height, gimbal, pix-left, ...
     }
 }
+
+void DetectionController::parseLut(QTextStream& in, int length, std::vector<vector<double>>& lut)
+{
+    QString line;
+    QStringList values;
+    for (int i = 0; i < length; i++) {
+        line = in.readLine();
+        values = line.split(",");
+
+        vector<double> temp;
+        for (int j = 0; j < values.length(); j++)
+            temp.push_back(values[j].toDouble());
+
+        lut.push_back(temp);
+    }
+}
+
+void DetectionController::initAcfModelFile()
+{
+
+    QFile modelFile(modelLocation());
+
+    // if the file already exists nothing needs to be done anymore
+    // in general this function only needs to copy the file once, the first the time the application runs
+    if (modelFile.exists()) return;
+
+
+    QFile srcFile(":/detection/dependencies/acf.xml");
+    srcFile.open(QIODevice::ReadOnly);
+    QTextStream in(&srcFile);
+
+    QFile dstFile(modelLocation());
+    dstFile.open(QIODevice::WriteOnly);
+
+    QTextStream out(&dstFile);
+
+    out << in.readAll();
+
+    /* Close the files */
+    dstFile.close();
+    srcFile.close();
+}
+
+QString DetectionController::modelLocation()
+{
+    QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString name = "acf.xml";
+
+    //create folder if not available
+    QDir(QDir::root()).mkpath(folder);
+
+    if (!folder.endsWith(QDir::separator()))
+        folder.append(QDir::separator());
+
+
+    return folder.append(name);
+}
+
+

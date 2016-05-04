@@ -9,6 +9,8 @@ OverviewWidget::OverviewWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     mapViewLoaded = false;
+    summaryDialog = new SummaryDialog();
+    summaryDialog->setWindowTitle("Search Summary");
 
     //lowerbuttons:
     connect(ui->exportSearchButton, SIGNAL(clicked()), this, SLOT(exportSearchButtonPush()));
@@ -22,12 +24,12 @@ OverviewWidget::~OverviewWidget()
 void OverviewWidget::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
+    summaryDialog->setMediator(mediator);
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
-    mediator->addSignal(this, SIGNAL(printDetectionResultXML(QString)), QString("printDetectionResultXML(QString)"));
-    mediator->addSignal(this, SIGNAL(printDetectionResultTXT(QString)), QString("printDetectionResultTXT(QString)"));
     mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
+    mediator->addSlot(this, SLOT(onDroneLanded(DroneModule *)), QString("landed(DroneModule*)"));
 
 }
 
@@ -36,7 +38,7 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 
     if (!mapViewLoaded) return;
 
-    QUuid uuid = heartbeat->getDrone()->getGuid().toString();
+    QUuid uuid = heartbeat->getDrone()->getGuid("OverviewWidget::onHeartBeatReceived").toString();
 
     // Update bottom text
     ui->heartBeat->setText(heartbeat->toString());
@@ -85,19 +87,21 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
 
 void OverviewWidget::exportSearchButtonPush()
 {
-    QString filter = "XML sheet (*.xml);;Text File (*.txt)";
-    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
-    if(filter == QString("Text File (*.txt)"))
-    {
-        emit printDetectionResultTXT(saveFileName.append(".txt"));
-    } else {
-        emit printDetectionResultXML(saveFileName.append(".xml"));
-    }
+    summaryDialog->show();
+
+//    QString filter = "XML sheet (*.xml);;Text File (*.txt)";
+//    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
+//    if(filter == QString("Text File (*.txt)"))
+//    {
+//        emit printDetectionResultTXT(saveFileName.append(".txt"));
+//    } else {
+//        emit printDetectionResultXML(saveFileName.append(".xml"));
+//    }
 }
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {
-    const QUuid droneId = s->getDrone()->getGuid();
+    const QUuid droneId = s->getDrone()->getGuid("OverviewWidget::updateDroneList");
     if(mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(*s);
 }
@@ -134,7 +138,7 @@ void OverviewWidget::fillDroneList()
         ui->droneList->addItem(item);
 
         OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
-        mapIdListItem[drone->getGuid()] = droneItem;
+        mapIdListItem[drone->getGuid("OverviewWidget::fillDroneList")] = droneItem;
         ui->droneList->setItemWidget(item, droneItem);
         i++;
     }
@@ -154,5 +158,11 @@ void OverviewWidget::onMapFailedToLoad()
     ui->mapLoadingLabel->setText(QString(
                                      "Error loading map.\nPlease check your internet connection."
                                  ));
+}
+
+void OverviewWidget::onDroneLanded(DroneModule *drone)
+{
+    // TODO check if all the drones are landed, then show the summary dialog
+    summaryDialog->show();
 }
 

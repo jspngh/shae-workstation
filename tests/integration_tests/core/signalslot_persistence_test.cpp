@@ -51,8 +51,8 @@ void SignalSlotPersistenceTest::testSaveSearch()
         //QVERIFY(receivedSearch.getDroneList().contains(dm1));
         foreach (DroneModule *dm2, receivedSearch->getDroneList())
         {
-            qDebug() << "dm2" << dm2->getGuid();
-            if (dm1->getGuid() == dm2->getGuid())
+            qDebug() << "dm2" << dm2->getGuid("SignalSlotPersistenceTest");
+            if (dm1->getGuid("SignalSlotPersistenceTest") == dm2->getGuid("SignalSlotPersistenceTest"))
             {
                 Drone *d2 = dm2->getDrone();
                 QVERIFY(d->getControllerIp() == d2->getControllerIp());
@@ -63,8 +63,8 @@ void SignalSlotPersistenceTest::testSaveSearch()
                 QVERIFY(d->getStreamPort() == d2->getStreamPort());
                 QVERIFY(d->getVisionWidth() == d2->getVisionWidth());
             } else {
-                qDebug() << dm1->getGuid();
-                qDebug() << dm2->getGuid();
+                qDebug() << dm1->getGuid("SignalSlotPersistenceTest");
+                qDebug() << dm2->getGuid("SignalSlotPersistenceTest");
             }
         }
     }

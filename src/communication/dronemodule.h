@@ -100,7 +100,7 @@ public:
     PersistenceController *getPersistenceController() const;
     void setPersistenceController(PersistenceController *value);
 
-    QUuid getGuid() const;
+    QUuid getGuid(QString s);
 
     int getDronePort();
 
@@ -195,6 +195,8 @@ signals:
     //!TODO: add comment
     void startStreamWorkstation(DroneModule *dm);
 
+    void landed(DroneModule *dm);
+
     /*********************
      Slots
      *********************/
@@ -278,6 +280,7 @@ private:
     bool videoProcessing; //!< a bool that is true when the processing of the video is started.
     bool videoActive;
     bool videoInactive;
+    bool isFlying;
     QGeoCoordinate homeLocation; //!< The coordinate of the location the drone started its flight.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
