@@ -2,6 +2,7 @@
   \defgroup Pathlogic
   \ingroup Workstation
   \brief The PathLogic component is responsible for calculating the paths of the drones.
+  
   At the moment, two implementations of PathLogic algorithms are implemented, one for a rectangle search area, and one for a polygon area.
   The PathLogic component supports multiple drones and can easily be expanded to other algorithms.
 */

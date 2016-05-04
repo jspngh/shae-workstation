@@ -3,5 +3,5 @@
   \ingroup Workstation
   \brief This module contains core components that link the individual components to each other.
   The Mediator class is responsible for the communication between the different components.
-  The Controller component is responsible for starting the different components, and launching the DroneModule.
+  The Controller component is responsible for starting the different components.
 */
