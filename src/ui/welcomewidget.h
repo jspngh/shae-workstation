@@ -42,16 +42,16 @@ private:
 
 private slots:   
     void on_configSearchButton_clicked();
+    void on_startSetupButton_clicked();
     void droneDetected(DroneStatus* s);
     void pictureTimer();
     void selectedImage(int);
     void connectedToSoloNetwork();
     void notConnectedToSoloNetwork(QString);
     void startSetGateway();
-    void gatewaySetted();
-    void gatewayNotSetted(QString);
+    void gatewaySet();
+    void gatewayNotSet(QString);
     void incrementProcessBar();
-
 signals:
     void updateProgressBar(int percentage, int time);
     void connectToSoloNetwork();

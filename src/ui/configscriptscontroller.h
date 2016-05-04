@@ -14,8 +14,8 @@ public:
 signals:
     void connectedToSoloNetwork();
     void notConnectedToSoloNetwork(QString);
-    void gatewaySetted();
-    void gatewayNotSetted(QString);
+    void gatewaySet();
+    void gatewayNotSet(QString);
 
 public slots:
     void connectToSoloNetwork();

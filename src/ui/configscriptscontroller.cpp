@@ -36,8 +36,8 @@ void ConfigScriptsController::setGateway(QString ssid, QString password)
 
     if (result.contains(QRegExp("Error:")))
     {
-        emit gatewayNotSetted(result);
+        emit gatewayNotSet(result);
     } else {
-        emit gatewaySetted();
+        emit gatewaySet();
     }
 }

@@ -20,7 +20,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     //Bottem layout setup
 
     ui->progressBar->setValue(0);
-    ui->configSearchButton->setText("Start Setup");
+    ui->configSearchButton->setEnabled(false);
 
     //non ui fields setup
 
@@ -65,8 +65,8 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     connect(csc, SIGNAL(connectedToSoloNetwork()), this, SLOT(connectedToSoloNetwork()));
     connect(csc, SIGNAL(notConnectedToSoloNetwork(QString)), this, SLOT(notConnectedToSoloNetwork(QString)));
     connect(this, SIGNAL(setGateway(QString, QString)), csc, SLOT(setGateway(QString, QString)));
-    connect(csc, SIGNAL(gatewaySetted()), this, SLOT(gatewaySetted()));
-    connect(csc, SIGNAL(gatewayNotSetted(QString)), this, SLOT(gatewayNotSetted(QString)));
+    connect(csc, SIGNAL(gatewaySet()), this, SLOT(gatewaySet()));
+    connect(csc, SIGNAL(gatewayNotSet(QString)), this, SLOT(gatewayNotSet(QString)));
     csct.start();
 
     // Create and init progressBarController
@@ -103,10 +103,8 @@ void WelcomeWidget::setSignalSlots()
 
 void WelcomeWidget::setupReady()
 {
-     if(status > 0)
-         ui->configSearchButton->setEnabled(true);
-     else
-         droneConnected = true;
+     ui->configSearchButton->setEnabled(true);
+     droneConnected = true;
 
 }
 
@@ -124,19 +122,20 @@ void WelcomeWidget::setupReady()
  *  SLOTS
  * **********/
 
+void WelcomeWidget::on_startSetupButton_clicked()
+{
+    // Set statusLabel
+    ui->progressBar->setValue(0);
+    ui->statusLabel->setText("Connecting to Solo wifi");
+
+    // Start connecting to solo network
+    emit connectToSoloNetwork();
+    emit updateProgressBar(50, 30);
+}
+
 void WelcomeWidget::on_configSearchButton_clicked()
 {
-    if(status == 0)
-    {
-        // Set statusLabel
-        ui->statusLabel->setText("Connecting to Solo wifi");
-
-        // Start connecting to solo network
-        emit connectToSoloNetwork();
-        emit updateProgressBar(50, 30);
-    } else {
-        ((QStackedWidget *) this->parent())->setCurrentIndex(1);
-    }
+    ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
 void WelcomeWidget::droneDetected(DroneStatus* s)
@@ -200,7 +199,7 @@ void WelcomeWidget::startSetGateway()
     emit updateProgressBar(100, 81);
 }
 
-void WelcomeWidget::gatewaySetted()
+void WelcomeWidget::gatewaySet()
 {
     // Set processBar to 50%
     pbc->aborted = true;
@@ -220,7 +219,7 @@ void WelcomeWidget::gatewaySetted()
     status ++;
 }
 
-void WelcomeWidget::gatewayNotSetted(QString error)
+void WelcomeWidget::gatewayNotSet(QString error)
 {
     ui->statusLabel->setText(error);
     pbc->aborted = true;
