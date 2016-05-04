@@ -86,18 +86,18 @@ signals:
     void detectionFinished();
 
 private:
-    DetectorManager* manager;
-    cv::VideoCapture sequence;
+    DetectorManager* manager; //!< a class that provides access to the detectionlibrary. The detectormanager is used to apply the detection modules on a frame and calculate the locations of results.
+    cv::VideoCapture sequence; //!< the videosequence of the drone footage
     Mediator *mediator;
-    double fps;
-    double frameHop;
-    int nrDetections;
-    volatile bool streaming;
-    Search *search;
-    DroneModule *droneModule;
-    QUuid droneId;
-    QString path;
-    PersistenceController *persistenceController;
+    double fps; //!< the fps at which the drone footage needs to be processed
+    double frameHop; //!< the number of frames that are skipped whenever a frame is processed.
+    int nrDetections; //!< the number of detections that occured
+    volatile bool streaming; //!< a boolean that tracks if the drone footage is still being saved or not.
+    Search *search; //!< a search object containing a number of configuration settings.
+    DroneModule *droneModule; //!< droneModule from where the dronefootage is originating.
+    QUuid droneId; //!< id of the droneModule (saved locally to avoid polling the db continuously)
+    QString path; //!< path where the drone footage is saved.
+    PersistenceController *persistenceController; //!< persistenceController, required to obtain the statusmessage closest to the frame's physical location (of the stream).
     /*!
      * \brief allows to parse the configuration file of the DetectionController.
      * This file contains the parameters that are required to calculate the position of a detection, based on the location of the frame, and the position
