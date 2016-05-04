@@ -72,20 +72,14 @@ function SquareMapSelection(map, formatting) {
             bounds: bounds
         });
 
-        qMapView.jsSelectedAreaCreated(
-            bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
-            bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
-        );
+        qMapView.selectedAreaCreated();
     };
 
     this.extendSelectedArea = function(latLng) {
         var bounds = this.selectedArea.getBounds();
         bounds.extend(latLng);
         this.selectedArea.setBounds(bounds);
-        qMapView.jsSelectedAreaChanged(
-            bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
-            bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
-        );
+        qMapView.jsSelectedAreaChanged();
     };
 
     this.removeSelectedArea = function() {

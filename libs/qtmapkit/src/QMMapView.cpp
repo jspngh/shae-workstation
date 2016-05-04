@@ -508,24 +508,14 @@ void QMMapView::jsMouseLeftAt(qreal latitude, qreal longitude)
     emit cursorLeaved(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
-                                      qreal bottomRightLat, qreal bottomRightLong)
+void QMMapView::jsSelectedAreaCreated()
 {
-    QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
-    emit selectedAreaCreated(selectedArea);
+    emit selectedAreaCreated();
 }
 
-void QMMapView::jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
-                                      qreal bottomRightLat, qreal bottomRightLong)
+void QMMapView::jsSelectedAreaChanged()
 {
-    QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
-    emit selectedAreaChanged(selectedArea);
+    emit selectedAreaChanged();
 }
 
 void QMMapView::jsSelectedAreaDeleted()

@@ -28,7 +28,10 @@ function PolygonMapSelection(map, formatting) {
     this.onMouseClicked = function(point) {
         if(!this.shiftPressed) return;
 
-        this.extendSelectedArea(point);
+        if(this.corners.length < 1)
+            this.createSelectedArea([point.toJSON()]);
+        else
+            this.extendSelectedArea(point);
     };
 
     this.onShiftPressed = function() {
@@ -52,6 +55,8 @@ function PolygonMapSelection(map, formatting) {
             var corner = new google.maps.LatLng(cornerLiterals[i].lat, cornerLiterals[i].lng);
             this.extendSelectedArea(corner);
         }
+
+        qMapView.jsSelectedAreaCreated();
     };
 
     this.extendSelectedArea = function(latLng) {
@@ -62,6 +67,7 @@ function PolygonMapSelection(map, formatting) {
     this.removeSelectedArea = function() {
         this.corners = [];
         this.selectedArea.setPaths(this.corners);
+        qMapView.jsSelectedAreaDeleted();
     };
 
     this.getSelectedArea = function() {

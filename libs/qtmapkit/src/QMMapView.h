@@ -23,6 +23,8 @@
 #include <QGeoCoordinate>
 #include <QGeoShape>
 #include <QGeoRectangle>
+#include <QList>
+#include <QVariant>
 #include "EmptyAreaException.h"
 #include "GeoPolygon.h"
 #include "QMMarker.h"
@@ -224,8 +226,8 @@ signals:
     void cursorEntered(QGeoCoordinate coordinate);
     void cursorLeaved(QGeoCoordinate coordinate);
     // Selected area signals
-    void selectedAreaCreated(QGeoShape region);
-    void selectedAreaChanged(QGeoShape region);
+    void selectedAreaCreated();
+    void selectedAreaChanged();
     void selectedAreaDeleted();
 
 protected slots:
@@ -240,10 +242,8 @@ protected slots:
     void jsMouseMovedTo(qreal latitude, qreal longitude);
     void jsMouseEnteredAt(qreal latitude, qreal longitude);
     void jsMouseLeftAt(qreal latitude, qreal longitude);
-    void jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
-                               qreal bottomRightLat, qreal bottomRightLong);
-    void jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
-                               qreal bottomRightLat, qreal bottomRightLong);
+    void jsSelectedAreaCreated();
+    void jsSelectedAreaChanged();
     void jsSelectedAreaDeleted();
 
 private:

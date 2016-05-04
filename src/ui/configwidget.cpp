@@ -39,7 +39,8 @@ void ConfigWidget::initializeMap()
     mapView = new QMMapView(QMMapView::Satellite, QGeoCoordinate(51.02, 3.73), 11);
     connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
-    connect(mapView, SIGNAL(selectedAreaCreated(QGeoShape)), this, SLOT(areaSelected(QGeoShape)));
+    connect(mapView, SIGNAL(selectedAreaCreated()), this, SLOT(areaSelected()));
+    connect(mapView, SIGNAL(selectedAreaDeleted()), this, SLOT(areaRemoved()));
 }
 
 void ConfigWidget::onMapLoaded()
@@ -56,9 +57,14 @@ void ConfigWidget::onMapFailedToLoad()
                                         ));
 }
 
-void ConfigWidget::areaSelected(QGeoShape area)
+void ConfigWidget::areaSelected()
 {
     this->areaWasSelected = true;
+}
+
+void ConfigWidget::areaDeleted()
+{
+    this->areaWasSelected = false;
 }
 
 void ConfigWidget::keyPressEvent(QKeyEvent *event)
