@@ -45,6 +45,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(ui->connectAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(ui->exportResultsButton, SIGNAL(triggered()), this, SLOT(onSaveSearchClicked()));
+    connect(ui->exportFootageButton, SIGNAL(triggered()), this, SLOT(onSaveFootageClicked()));
+
+    ui->exportFootageButton->setEnabled(true);
+    ui->exportFootageButton->setEnabled(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -70,3 +76,13 @@ OverviewWidget *MainWindow::getOverviewWidget()
     return overviewWidget;
 }
 
+
+void MainWindow::onSaveSearchClicked()
+{
+    overviewWidget->getSummaryDialog()->onSaveSearchClicked();
+}
+
+void MainWindow::onSaveFootageClicked()
+{
+    overviewWidget->getSummaryDialog()->onSaveFootageClicked();
+}

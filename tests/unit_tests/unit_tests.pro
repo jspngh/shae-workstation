@@ -80,5 +80,4 @@ QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
 QMAKE
 
-RESOURCES += \
-    testApplication.qrc
+RESOURCES = ../application_test.qrc

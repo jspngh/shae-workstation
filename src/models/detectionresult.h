@@ -6,6 +6,7 @@
 /*!
  * \brief The DetectionResult class
  * \ingroup Models
+ This class contains the detections score (probability of human presence) and its location.
  */
 class DetectionResult
 {
@@ -41,8 +42,8 @@ public:
     QGeoCoordinate getLocation();
 
 private:
-    QGeoCoordinate location;
-    double score;
+    QGeoCoordinate location; //!< the location of the score
+    double score; //! the score is a double between 0 and 100
 };
 
 Q_DECLARE_METATYPE(DetectionResult)

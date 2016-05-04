@@ -49,6 +49,6 @@ QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 include(../../src/ui/ui.pri)
 include(../../src/core/core.pri)
 
-RESOURCES += \
-    integrationtestapplication.qrc
+
+RESOURCES = ../application_test.qrc
 

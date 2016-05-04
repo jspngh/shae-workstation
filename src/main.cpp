@@ -2,6 +2,10 @@
 #include <QDebug>
 #include "core/controller.h"
 #include "mainwindow.h"
+#include <QFile>
+#include <QString>
+
+QString modelLocation();
 
 int main(int argc, char *argv[])
 {
@@ -19,4 +23,3 @@ int main(int argc, char *argv[])
     controller.init();
     return a.exec();
 }
-
