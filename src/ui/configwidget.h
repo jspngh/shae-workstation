@@ -58,15 +58,17 @@ private slots:
 
 private:
     Ui::ConfigWidget *ui;
-    QMMapView *mapView;
+    QMMapView *mapView = nullptr;
     Mediator *mediator;
 
+    QGeoCoordinate center;
     bool areaWasSelected = false;
     bool mapCentered = false;
 
     double areaOfArea = 0.0;
     constexpr static double MAX_AREA_OF_AREA = 10000.0;
     constexpr static double MIN_AREA_OF_AREA = 1.0;
+    constexpr static double MAX_DISTANCE = 500.0;
 
     void writeConfigToFile();
     void initializeMap();

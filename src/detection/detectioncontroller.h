@@ -7,10 +7,17 @@
 #include <QString>
 #include <QThread>
 #include <cstdlib>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QtCore>
+#include <QDir>
+#include <QResource>
 #include "communication/dronemodule.h"
 #include "core/mediator.h"
 #include "detection/DetectorManager.h"
@@ -98,13 +105,33 @@ private:
      * \param height is the height of drone during the search
      * \param gimbalAngle is the gimbalAngle of the drone camera.
      */
-    void parseConfiguration(int height, int gimbalAngle);
+    void parseConfiguration(QFile& file);
+
+    void parseLut(QTextStream& in, int length, std::vector<vector<double>>& lut);
     /*!
      * \brief analyzes a frame, associated with a given timestamp
      * \param frame is the frame that needs to be analyzed
      * \param time is the timestamp associated with the frame
      */
     void extractDetectionsFromFrame(cv::Mat frame, QDateTime time);
+
+    /*!
+     * \brief modelLocation will return the location (path) were the application stores its data.
+     * On ubuntu LTS system this path is ~/.local/share/name-app/
+     * \return path were the model is stored if it exists
+     */
+    QString modelLocation();
+
+    /*!
+     * \brief initFile will copy the acf model (acf.xml) from resources to the path obtained via the method modelLocation.
+     */
+    void initAcfModelFile();
+
+    /*!
+     * \brief initSearchConfigFile will open the configuration file which resides in the resources and then call parseConfiguration
+     */
+    void initSearchConfigFile(int height, int gimbalAngle);
+
     int processHeight;
     int processWidth;
     int resolutionHeight;

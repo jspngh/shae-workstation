@@ -99,26 +99,27 @@ void ConfigWidget::setMediator(Mediator *mediator)
     this->mediator = mediator;
 
     setSignalSlots();
-    emit requestDronesStatus();
 }
 
 void ConfigWidget::startButtonPush()
 {
-    if(!areaWasSelected) {
+    if(!areaWasSelected){
         QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
         return;
     }
 
+    QGeoCoordinate center;
     if(mapView->selectedArea()->type() == QGeoShape::RectangleType) {
         QGeoRectangle* area = static_cast<QGeoRectangle*>(mapView->selectedArea());
         this->areaOfArea = area->bottomLeft().distanceTo(area->bottomRight())
                             * area->bottomLeft().distanceTo(area->topLeft());
+        center = area->center();
     } else {
         GeoPolygon *polygon = static_cast<GeoPolygon*>(mapView->selectedArea());
         this->areaOfArea = polygon->getArea();
+        center = polygon->center();
         delete polygon;
     }
-    qDebug() << "Selected area has size of :" << this->areaOfArea;
 
     if(areaOfArea > MAX_AREA_OF_AREA) {
          QMessageBox::warning(this, "Warning!", "The selected area is too big to be searched!", "OK");
@@ -136,9 +137,23 @@ void ConfigWidget::startButtonPush()
         if (cb->isChecked())
             dronesInSearch.append(dronesInTable[i].second);
     }
+
     if(dronesInSearch.size() == 0) {
         QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
-    } else if (mediator) {
+        return;
+    }
+
+    double distanceToArea = center.distanceTo(dronesInSearch.front()->getLastReceivedDroneStatus().getCurrentLocation());
+    if(distanceToArea > MAX_DISTANCE) {
+        QMessageBox::warning(this, "Warning!","The area selected is too far away for the drone to fly to", "OK");
+        return;
+    }
+
+    qDebug() << "Selected area has size of :" << this->areaOfArea;
+    qDebug() << "Center of selected area is: " << center;
+    qDebug() << "Drone's home location is: " << dronesInSearch.front()->getLastReceivedDroneStatus().getCurrentLocation();
+    qDebug() << "Distance to selected area is: " << distanceToArea;
+    if (mediator) {
         Search *s = new Search();
         s->setArea(mapView->selectedArea());
         s->setHeight(ui->heightDoubleSpinBox->value());
@@ -168,24 +183,28 @@ void ConfigWidget::locateButtonPush()
 
 void ConfigWidget::setSignalSlots()
 {
+    qDebug() << "adding slots";
     mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
     mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
-    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
 }
 
 void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
 {
-    if (!mapView->hasLoaded()) return;
+    if (mapView == nullptr || !mapView->hasLoaded()) return;
 
     // position drone on map
-    QGeoCoordinate center = heartbeat->getCurrentLocation();
     QString id = heartbeat->getDrone()->getGuid().toString();
-    if (mapView->hasMarker(id)) {
+
+    // only move the center of the map if the drone has moved a large enough distance
+    if (mapView->hasMarker(id) && mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
+        center = heartbeat->getCurrentLocation();
         QMMarker &marker = mapView->getMarker(id);
         marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
         marker.moveTo(center);
     } else {
+        center = heartbeat->getCurrentLocation();
         QMMarker &marker = mapView->addMarker(id, center);
         marker.setIcon("qrc:///ui/icons/drone");
         marker.scale(0.1, 0.1);
@@ -196,15 +215,13 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
     // only center the map once
     if (!mapCentered) {
         mapView->setCenter(center);
-        mapView->setZoomLevel(11);
+        mapView->setZoomLevel(18);
         mapCentered = true;
     }
 }
 
 void ConfigWidget::updateDroneTable(DroneStatus* s)
 {
-    qDebug() << "updateDroneTable";
-
     DroneModule *d = s->getDrone();
     int currentRow = getDroneInTableIndex(d);
 
@@ -250,9 +267,10 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
 
 int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 {
-    for (int i = 0; i < dronesInTable.size(); i++)
+    for (int i = 0; i < dronesInTable.size(); i++){
         if (dronesInTable[i].second->getGuid() == d->getGuid())
             return i;
+    }
 
     return -1;
 }

@@ -140,6 +140,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     if (drone == nullptr) {
         // first time that the drone with this IP has sent a Hello message
         drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
+        qDebug() << "created new  drone with ID: " << drone->getGuid().toString();
         drone->setPersistenceController(persistenceController);
         drone = configureDrone(drone);
     }

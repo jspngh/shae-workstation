@@ -27,7 +27,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="locatedPeopleLabel">
        <property name="text">
-        <string>Located people:</string>
+        <string>Hits:</string>
        </property>
       </widget>
      </item>

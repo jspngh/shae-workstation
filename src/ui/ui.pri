@@ -8,7 +8,8 @@ SOURCES += \
     $$PWD/overviewwidget.cpp \
     $$PWD/overviewsearchitem.cpp \
     $$PWD/overviewdroneitem.cpp \
-    $$PWD/clickablelabel.cpp
+    $$PWD/clickablelabel.cpp \
+    $$PWD/summarydialog.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -17,7 +18,8 @@ HEADERS += \
     $$PWD/overviewwidget.h \
     $$PWD/overviewsearchitem.h \
     $$PWD/overviewdroneitem.h \
-    $$PWD/clickablelabel.h
+    $$PWD/clickablelabel.h \
+    $$PWD/summarydialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -25,5 +27,6 @@ FORMS += \
     $$PWD/configwidget.ui \
     $$PWD/overviewwidget.ui \
     $$PWD/overviewsearchitem.ui \
-    $$PWD/overviewdroneitem.ui
+    $$PWD/overviewdroneitem.ui \
+    $$PWD/summarydialog.ui
 

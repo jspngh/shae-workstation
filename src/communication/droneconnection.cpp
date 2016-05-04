@@ -71,7 +71,7 @@ void DroneConnection::onDroneRequest(QString m)
 
         QByteArray raw;
         in >> raw;
-        qDebug() << raw;
+        // qDebug() << raw;
         QString response = QTextCodec::codecForMib(1016)->toUnicode(raw);
 
         emit droneResponse(response);

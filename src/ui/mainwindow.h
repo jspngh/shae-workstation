@@ -23,6 +23,10 @@ public:
     ConfigWidget *getConfigWidget();
     OverviewWidget *getOverviewWidget();
 
+private slots:
+    void onSaveSearchClicked();
+    void onSaveFootageClicked();
+
 private:
     Ui::MainWindow *ui;
     WelcomeWidget *welcomeWidget;

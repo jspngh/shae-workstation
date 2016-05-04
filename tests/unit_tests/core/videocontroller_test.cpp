@@ -55,7 +55,7 @@ void VideoController_Test::testCreateFile()
     QThread::sleep(10);
     qDebug("testing if stream was successfully captured");
     emit this->stopStream(drone);
-    QFile droneFile("dependencies/drone_stream.mpg");
+    QFile droneFile((this->vc).streamMpgLocation());
     if (droneFile.open(QIODevice::ReadOnly)) {
         int size = droneFile.size();  //when file does open.
         if (size > 10) {
@@ -64,7 +64,9 @@ void VideoController_Test::testCreateFile()
         droneFile.close();
     }
 
-    QVERIFY(fileExists && this->started && this->stopped);
+    QVERIFY(fileExists);
+    QVERIFY(this->started);
+    QVERIFY(this->stopped);
 }
 
 void VideoController_Test::onStreamStarted()
@@ -86,6 +88,4 @@ void VideoController_Test::cleanupTestCase()
     delete streamConnection;
     delete streamThread;
 }
-
-
 

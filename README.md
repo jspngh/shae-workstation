@@ -76,7 +76,6 @@ After this, you have several possibilities:
   ```
 * To create the documentation
   ```bash
-  doxygen Doxyfile
+  cd ..
+  doxygen docs/Doxyfile
   ```
-
-
