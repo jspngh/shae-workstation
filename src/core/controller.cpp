@@ -50,14 +50,11 @@ void Controller::init()
 {
     // configure every component with the mediator
 
-    //<<<<<<< HEAD
     //pathLogicController->setMediator(mediator);
     mainWindow->setMediator(mediator);
-//=======
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
     mainWindow->getWelcomeWidget()->setMediator(mediator);
-//>>>>>>> feature/polygon
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread

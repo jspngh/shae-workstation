@@ -36,7 +36,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
 
     /* Create a new item */
-    int bufferSize = 8 * 1024 * 1024;
+    qint64 bufferSize = 8 * 1024 * 1024;
     if (drone->getStreamPath().contains(QString("rtp"))) {
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
@@ -61,7 +61,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     libvlc_media_player_play(mp);
     //allow vlc some time to create the file
     QThread::sleep(1);
-    int size = 0;
+    qint64 size = 0;
     //buffer maximally 60 seconds
     int maxBuffertime = 60;
     int buffertime = 0;
