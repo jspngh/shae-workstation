@@ -36,5 +36,4 @@ FORMS += \
     $$PWD/overviewdroneitem.ui \
     $$PWD/gatewaydialog.ui \
     $$PWD/summarydialog.ui \
->>>>>>> develop
 
