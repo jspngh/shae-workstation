@@ -209,16 +209,16 @@
     };
 
     MapKit.prototype.selectAreaOnMap = function(coordinates) {
-        if(coordinates.length = 2) {
+        if(coordinates.length == 2) {
             this.setSelectable("square", true);
+            var topLeft = coordinates[0];
+            var bottomRight = coordinates[1];
             this.mapSelection.createSelectedArea(
-                new google.maps.LatLngBounds(
-                    { lat: topLeftLat, lng: topLeftLong },
-                    { lat: bottomRightLat, lng: bottomRightLong }
-                )
+                new google.maps.LatLngBounds(coordinates[0], coordinates[1])
             );
         } else if(coordinates.length > 2) {
             this.setSelectable("polygon", true);
+            this.mapSelection.createSelectedArea(coordinates);
         }
     };
 

@@ -384,7 +384,6 @@ void QMMapView::selectArea(QGeoShape* area)
         this->setSelectionType(QMSelectionType::None);
     }
     QString js = format.arg(coordinates.join(","));
-    qDebug() << "Evaluating <" << js << ">";
     d->evaluateJavaScript(js);
 }
 
