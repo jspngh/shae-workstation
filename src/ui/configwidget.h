@@ -1,18 +1,21 @@
 #ifndef CONFIGWIDGET_H
 #define CONFIGWIDGET_H
 
+#include <QCheckBox>
 #include <QFile>
+#include <QGeoRectangle>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QList>
-#include <QtMath>
-#include <QMessageBox>
 #include <QMMapView.h>
+#include <QMSelectionType.h>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QPair>
 #include <QStackedWidget>
 #include <QUuid>
 #include <QWidget>
+#include <QtMath>
 #include "models/search.h"
 #include "core/mediator.h"
 
@@ -47,7 +50,8 @@ private slots:
     void startButtonPush();
     void locateButtonPush();
     void sliderChanged(int);
-    void areaSelected(QGeoRectangle area);
+    void chooseSquare(bool checked);
+    void areaSelected(QGeoShape area);
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
     void updateDroneTable(DroneStatus* s);
     void updateMapCenter(DroneStatus* s);

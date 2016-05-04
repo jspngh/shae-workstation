@@ -21,9 +21,12 @@
 
 #include <QWidget>
 #include <QGeoCoordinate>
+#include <QGeoShape>
 #include <QGeoRectangle>
 #include "EmptyAreaException.h"
+#include "GeoPolygon.h"
 #include "QMMarker.h"
+#include "QMSelectionType.h"
 #include "QtMapKit.h"
 
 class QMMapViewPrivate;
@@ -49,7 +52,7 @@ public:
     };
 
     QMMapView(MapType mapType, QGeoCoordinate center, uint zoomLevel,
-              bool selectable, QWidget *parent = 0);
+              QWidget *parent = 0);
 
     /*!
      * Returns whether the map has loaded and is safe to perform functions on.
@@ -95,12 +98,17 @@ public:
      * \throws EmptyAreaException if there was no area selected.
      * \returns The selected area on the map, or null if there is none.
      */
-    QGeoRectangle selectedArea() const;
+    QGeoShape* selectedArea() const;
+
+    /*!
+     * \brief Returns what kind of area can be selected on the map.
+     */
+    QMSelectionType selectionType() const;
 
     /*!
      * \brief Returns whether an area can be selected on the map.
      */
-    bool isSelectable() const;
+    bool selectable() const;
 
     /*!
      * \brief Call this when the shift key is pressed
@@ -108,7 +116,8 @@ public:
     void shiftKeyPressed(bool down);
 
 private:
-    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject);
+    QGeoRectangle* jsonObjectToQGeoRectangle(const QVariant jsObject) const;
+    GeoPolygon* jsonObjectToGeoPolygon(const QVariant jsObject) const;
 
 public slots:
     /*!
@@ -141,6 +150,11 @@ public slots:
      * \brief Fits the map area to the given region.
      */
     void fitRegion(const QGeoRectangle &region);
+
+    /*!
+     * \brief Sets the type of area that can be selected on the map.
+     */
+    void setSelectionType(const QMSelectionType selectionType);
 
     /*!
      * \brief Selects an area from topLeft to bottomRight on the map.
@@ -179,9 +193,6 @@ public slots:
 protected:
     void resizeEvent(QResizeEvent *);
 
-private:
-    QGeoRectangle jsonObjectToQGeoRectangle(const QVariant jsObject) const;
-
 signals:
     void mapLoaded();
     void mapFailedToLoad();
@@ -204,8 +215,8 @@ signals:
     void cursorEntered(QGeoCoordinate coordinate);
     void cursorLeaved(QGeoCoordinate coordinate);
     // Selected area signals
-    void selectedAreaCreated(QGeoRectangle region);
-    void selectedAreaChanged(QGeoRectangle region);
+    void selectedAreaCreated(QGeoShape region);
+    void selectedAreaChanged(QGeoShape region);
     void selectedAreaDeleted();
 
 protected slots:

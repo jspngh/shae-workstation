@@ -3,7 +3,7 @@
 #include <QUuid>
 #include <QTime>
 #include <QList>
-#include <QGeoRectangle>
+#include <QGeoShape>
 #include "communication/dronemodule.h"
 
 /*!
@@ -36,7 +36,7 @@ public:
      * \param gimbalAngle is the gimbal angle of the drone in the search
      * \param fpsProcessing is the fps at which the drone stream is processed
      */
-    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, int gimbalAngle, int fpsProcessing);
+    Search(QUuid searchID, QTime start, QGeoShape* area, int height, int gimbalAngle, int fpsProcessing);
     /*!
      * \brief default Search constructor
      * \param searchID is the unique id of the search.
@@ -47,10 +47,10 @@ public:
      * \param gimbalAngle is the gimbal angle of the drone in the search
      * \param fpsProcessing is the fps at which the drone stream is processed
      */
-    Search(QUuid searchID, QTime start, QGeoRectangle area, int height, double speed, int gimbalAngle, int fpsProcessing);
+    Search(QUuid searchID, QTime start, QGeoShape* area, int height, double speed, int gimbalAngle, int fpsProcessing);
 
-    QGeoRectangle getArea() const;
-    void setArea(const QGeoRectangle &value);
+    QGeoShape* getArea() const;
+    void setArea(QGeoShape *value);
 
     QList<DroneModule *> getDroneList() const;
     void setDroneList(QList<DroneModule *> value);
@@ -77,7 +77,7 @@ public:
 private:
     QUuid searchID;
     QTime startTime;
-    QGeoRectangle area;
+    QGeoShape* area;
     int height;
     int gimbalAngle;
     QList<DroneModule *> droneList;

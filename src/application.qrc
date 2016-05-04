@@ -25,7 +25,6 @@
     </qresource>
     <qresource prefix="/db">
         <file alias="createTables.sql">../scripts/createDB.sql</file>
-        <file alias="createTables.sql">../scripts/createDB.sql</file>
     </qresource>
     <qresource prefix="/ui/screens">
         <file alias="screen0.png">ui/img/logo.png</file>

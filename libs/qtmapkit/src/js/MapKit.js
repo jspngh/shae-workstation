@@ -11,7 +11,7 @@
     function MapKit(lng, lat, type, zoom) {
         this.map = this.initializeMap(lng, lat, type, zoom);
         this.geocoder = new google.maps.Geocoder();
-        this.mapSelection = new MapSelection(this.map);
+        this.mapSelection = null;
         this.markers = {};
 
         this.addEventListeners();
@@ -47,6 +47,7 @@
         });
         google.maps.event.addListener(self.map, "click", function(e) {
             var p = e.latLng;
+            if(self.mapSelection) self.mapSelection.onMouseClicked(p);
             qMapView.jsMouseClickedAt(p.lat(), p.lng());
         });
         google.maps.event.addListener(self.map, "dblclick", function(e) {
@@ -78,25 +79,13 @@
         google.maps.event.addListener(self.map, "mousemove", function(e) {
             var p = e.latLng;
             qMapView.jsMouseMovedTo(p.lat(), p.lng());
-
-            if(self.mapSelection.keysPressed() && self.mapSelection.isSelecting) {
-                self.mapSelection.extendSelectedArea(p);
-            }
+            if(self.mapSelection) self.mapSelection.onMouseMoved(p);
         });
         google.maps.event.addListener(self.map, "mousedown", function(e) {
-            self.mapSelection.mouseDown = true;
-            if(self.mapSelection.keysPressed()) {
-                self.map.setOptions({draggable: false});
-                var bounds = new google.maps.LatLngBounds();
-                bounds.extend(e.latLng);
-                self.mapSelection.createSelectedArea(bounds);
-                self.mapSelection.isSelecting = true;
-            }
+            if(self.mapSelection) self.mapSelection.onMouseDown(e.latLng);
         });
         google.maps.event.addListener(self.map, "mouseup", function(e) {
-            self.mapSelection.mouseDown = false;
-            self.mapSelection.isSelecting = false;
-            self.map.setOptions({draggable: true});
+            if(self.mapSelection) self.mapSelection.onMouseUp(e.latLng);
         });
         google.maps.event.addListener(self.map, "mouseover", function(e) {
             var p = e.latLng;
@@ -200,7 +189,29 @@
         });
     };
 
+    /* --------- */
+    /* SELECTION */
+    /* --------- */
+    MapKit.prototype.setSelectable = function(selectionType) {
+        if(this.mapSelection && this.mapSelection.selectedArea) {
+            this.mapSelection.removeSelectedArea();
+        }
+
+        switch(selectionType) {
+            case "polygon":
+                this.mapSelection = new PolygonMapSelection(this.map);
+                break;
+            case "square":
+                this.mapSelection = new SquareMapSelection(this.map);
+                break;
+            default:
+                this.mapSelection = null;
+        }
+    };
+
     MapKit.prototype.selectAreaOnMap = function(topLeftLat, topLeftLong, bottomRightLat, bottomRightLong) {
+        if(!this.mapSelection) return;
+
         this.mapSelection.createSelectedArea(
             new google.maps.LatLngBounds(
                 { lat: topLeftLat, lng: topLeftLong },
@@ -210,13 +221,20 @@
     };
 
     MapKit.prototype.shiftKeyDown = function() {
-        this.mapSelection.shiftPressed = true;
+        if(!this.mapSelection) return;
+
+        this.mapSelection.onShiftPressed();
     };
 
     MapKit.prototype.shiftKeyUp = function() {
-        this.mapSelection.shiftPressed = false;
+        if(!this.mapSelection) return;
+
+        this.mapSelection.onShiftReleased();
     };
 
+    /* --------- */
+    /*  MARKERS  */
+    /* --------- */
     MapKit.prototype.addMarker = function(id, locationLat, locationLng) {
         this.markers[id] = new Marker(this.map, locationLat, locationLng);
     }

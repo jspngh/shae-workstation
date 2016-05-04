@@ -16,7 +16,6 @@ Controller::Controller(MainWindow *window, QObject *p)
     drones = new QList<DroneModule *>();
 
     // create controllers
-    pathLogicController = new SimplePathAlgorithm();
     persistenceController = new PersistenceController();
 
     startListeningForDrones();
@@ -50,20 +49,25 @@ Controller::~Controller()
 void Controller::init()
 {
     // configure every component with the mediator
-    pathLogicController->setMediator(mediator);
-    mainWindow->setMediator(mediator);
+
+    //<<<<<<< HEAD
+    //pathLogicController->setMediator(mediator);
+    //mainWindow->setMediator(mediator);
+//=======
+    mainWindow->getConfigWidget()->setMediator(mediator);
+    mainWindow->getOverviewWidget()->setMediator(mediator);
+    mainWindow->getWelcomeWidget()->setMediator(mediator);
+//>>>>>>> feature/polygon
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread
     persistenceController->moveToThread(&persistenceThread);
-    pathLogicController->moveToThread(&pathLogicThread);
 
     // start all the threads
     persistenceThread.start();
     pathLogicThread.start();
     droneThread.start();
 }
-
 
 void Controller::retrieveWorkstationIpAndBroadcast()
 {
@@ -91,12 +95,19 @@ void Controller::onResetServicesClicked()
 void Controller::onSearchEmitted(Search *s)
 {
     search = s;
+    if(s->getArea()->type() == QGeoShape::RectangleType)
+        pathLogicController = new SimplePathAlgorithm();
+    else
+        pathLogicController = new PolygonPathAlgorithm();
+
+    pathLogicController->moveToThread(&pathLogicThread);
+    pathLogicController->setMediator(mediator);
+    pathLogicController->startSearch(s);
 }
 
 int Controller::numDronesConnected()
 {
     return drones->size();
-
 }
 
 void Controller::startListeningForDrones()
@@ -138,7 +149,7 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     // first check if we received an empty HelloMessage
     // this indicates failure at the side of the drone
     QString ip = hello.getDroneIp();
-    if (ip.isEmpty() or ip.isNull()) {
+    if (ip.isEmpty() || ip.isNull()) {
         emit(droneSetupFailed()); // emit signal indicating failure
     } else {
         QString strFile = hello.getStreamFile();
@@ -174,7 +185,6 @@ DroneModule *Controller::configureDrone(DroneModule *drone)
     return drone;
 }
 
-
 DroneModule *Controller::receivedHelloFrom(QString ip)
 {
     for (int i = 0; i < drones->size(); i++) {
@@ -197,7 +207,6 @@ QList<DroneModule *> *Controller::getDrones()
 {
     return drones;
 }
-
 
 void Controller::setDrones(QList<DroneModule *> *list)
 {
