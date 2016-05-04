@@ -192,10 +192,9 @@
     /* --------- */
     /* SELECTION */
     /* --------- */
-    MapKit.prototype.setSelectable = function(selectionType) {
-        if(this.mapSelection && this.mapSelection.selectedArea) {
-            this.mapSelection.removeSelectedArea();
-        }
+    MapKit.prototype.setSelectable = function(selectionType, removePrevious) {
+        if(removePrevious)
+            this.removeAllSelections();
 
         switch(selectionType) {
             case "polygon":
@@ -209,15 +208,24 @@
         }
     };
 
-    MapKit.prototype.selectAreaOnMap = function(topLeftLat, topLeftLong, bottomRightLat, bottomRightLong) {
-        if(!this.mapSelection) return;
+    MapKit.prototype.selectAreaOnMap = function(coordinates) {
+        if(coordinates.length = 2) {
+            this.setSelectable("square", true);
+            this.mapSelection.createSelectedArea(
+                new google.maps.LatLngBounds(
+                    { lat: topLeftLat, lng: topLeftLong },
+                    { lat: bottomRightLat, lng: bottomRightLong }
+                )
+            );
+        } else if(coordinates.length > 2) {
+            this.setSelectable("polygon", true);
+        }
+    };
 
-        this.mapSelection.createSelectedArea(
-            new google.maps.LatLngBounds(
-                { lat: topLeftLat, lng: topLeftLong },
-                { lat: bottomRightLat, lng: bottomRightLong }
-            )
-        );
+    MapKit.prototype.removeAllSelections = function(topLeftLat, topLeftLong, bottomRightLat, bottomRightLong) {
+        if(this.mapSelection && this.mapSelection.selectedArea) {
+            this.mapSelection.removeSelectedArea();
+        }
     };
 
     MapKit.prototype.shiftKeyDown = function() {

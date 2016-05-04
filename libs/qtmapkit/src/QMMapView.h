@@ -159,7 +159,12 @@ public slots:
     /*!
      * \brief Selects an area from topLeft to bottomRight on the map.
      */
-    void selectArea(const QGeoRectangle &area);
+    void selectArea(QGeoShape *area);
+
+    /*!
+     * \brief Removes all selected areas from the map.
+     */
+    void removeAllSelections();
 
     /*!
      * \brief Adds a marker on a given location.
