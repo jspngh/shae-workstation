@@ -45,4 +45,8 @@
     <qresource prefix="/video">
         <file alias="sololink.sdp">videocontroller/sololink.sdp</file>
     </qresource>
+    <qresource prefix="/scripts">
+        <file alias="reset_services.sh">scripts/reset_services.sh</file>
+        <file alias="shae_rsa">scripts/shae_rsa</file>
+    </qresource>
 </RCC>

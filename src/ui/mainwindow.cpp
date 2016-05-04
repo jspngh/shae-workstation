@@ -43,11 +43,11 @@ MainWindow::~MainWindow()
 void MainWindow::setMediator(Mediator* mediator)
 {
     this->mediator = mediator;
-    mediator->addSignal(ui->resetAction, SLOT(triggered()), QString("resetServicesClicked()"));
+    mediator->addSignal(ui->resetAction, SIGNAL(triggered()), QString("resetServicesClicked()"));
 
-    configWidget->setMediator(mediator);
-    welcomeWidget->setMediator(mediator);
-    overviewWidget->setMediator(mediator);
+//    configWidget->setMediator(mediator);
+//    welcomeWidget->setMediator(mediator);
+//    overviewWidget->setMediator(mediator);
 }
 
 WelcomeWidget *MainWindow::getWelcomeWidget()

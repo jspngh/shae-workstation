@@ -23,7 +23,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
     mediator->addSignal(this, SIGNAL(droneSetupFailed()), QString("droneSetupFailed()"));
-    mediator->addSignal(this, SIGNAL(onResetServicesClicked()), QString("resetServicesClicked()"));
+    mediator->addSlot(this, SLOT(onResetServicesClicked()), QString("resetServicesClicked()"));
 }
 
 Controller::~Controller()
@@ -52,7 +52,7 @@ void Controller::init()
 
     //<<<<<<< HEAD
     //pathLogicController->setMediator(mediator);
-    //mainWindow->setMediator(mediator);
+    mainWindow->setMediator(mediator);
 //=======
     mainWindow->getConfigWidget()->setMediator(mediator);
     mainWindow->getOverviewWidget()->setMediator(mediator);
@@ -85,11 +85,24 @@ void Controller::retrieveWorkstationIpAndBroadcast()
 
 void Controller::onResetServicesClicked()
 {
-    QProcess *process = new QProcess();
-    process->setWorkingDirectory("../../src/scripts");
-    process->start("./reset_services.sh");
-    process->waitForFinished(-1);
-    process->close();
+
+    QProcess *proc = new QProcess;
+    QString name = "/bin/bash";
+    QStringList arg;
+    arg << "-c" ;
+
+    QFile file(":/scripts/reset_services.sh");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "script file not found / failed to load";
+        return;
+    } else {
+        qDebug() << "hellooooooo";
+    }
+
+    arg << file.readAll();
+    proc->start(name, arg);
+    proc->waitForFinished(-1);
+    proc->close();
 }
 
 void Controller::onSearchEmitted(Search *s)
@@ -222,3 +235,5 @@ QString Controller::getWorkstationIP() const
 {
     return workstationIp;
 }
+
+
