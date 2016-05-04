@@ -125,6 +125,11 @@ void ConfigWidget::startButtonPush()
         GeoPolygon *polygon = static_cast<GeoPolygon*>(mapView->selectedArea());
         this->areaOfArea = polygon->getArea();
         center = polygon->center();
+        if(!polygon->isValid()) {
+            QMessageBox::warning(this, "Warning!", "The selected polygon is not convex!", "OK");
+            delete polygon;
+            return;
+        }
         delete polygon;
     }
 
