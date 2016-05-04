@@ -4,30 +4,32 @@
 OverviewDroneItem::OverviewDroneItem(DroneModule *drone, uint number, QWidget *parent)
     : QWidget(parent),
       ui(new Ui::OverviewDroneItem),
+      drone(drone),
       locatedPeople(0),
       searchedArea(0.0),
       receivedStatus(false),
       visionWidthMeters(0.0),
       visionWidthDegrees(drone->getVisionWidth()),
-      timer(new QTimer())
+      timerConnectivity(new QTimer())
 {
     ui->setupUi(this);
 
     setDroneNr(number);
+    setStatus("Taking off");
 
-    // init timer
-    timer->setInterval(1000);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateConnectivity()));
-    timer->start();
-
-    connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
-    connect(ui->haltButton, SIGNAL(clicked()), drone, SLOT(stopFlight()));
-    connect(ui->returnHomeButton, SIGNAL(clicked()), drone, SLOT(returnToHome()));
+    // init timers
+    initTimers();
+    addSignalSlots();
 }
 
 OverviewDroneItem::~OverviewDroneItem()
 {
     delete ui;
+}
+
+void OverviewDroneItem::setStatus(QString status)
+{
+    ui->statusValue->setText(status);
 }
 
 void OverviewDroneItem::setDroneNr(uint number)
@@ -58,6 +60,7 @@ void OverviewDroneItem::setConnectivity(QString level)
 
 void OverviewDroneItem::updateStatus(DroneStatus status)
 {
+    updateStatus();
     double batteryLevel = status.getBatteryLevel();
     if (batteryLevel != -1)
         setBatteryLevel(batteryLevel);
@@ -90,19 +93,39 @@ void OverviewDroneItem::incrementPeopleLocated()
 
 void OverviewDroneItem::updateConnectivity()
 {
-    if (receivedStatus) {
-        QDateTime lastTimestamp = lastStatus.getTimestampReceivedWorkstation();
-        double delta = (lastTimestamp.time().msecsTo(QDateTime::currentDateTime().time())) / 1000.0;
+    // if the overview didn't received a status yet, nothing can be done
+    if (!receivedStatus) return;
 
-        if (delta < 2.0)
-            setConnectivity("good");
-        else if (delta < 5.0)
-            setConnectivity("poor");
-        else if (delta < 20.0)
-            setConnectivity("bad");
-        else
-            setConnectivity("no signal");
-    }
+    QDateTime lastTimestamp = lastStatus.getTimestampReceivedWorkstation();
+    double delta = (lastTimestamp.time().msecsTo(QDateTime::currentDateTime().time())) / 1000.0;
+
+    if (delta < 2.0)
+        setConnectivity("good");
+    else if (delta < 5.0)
+        setConnectivity("poor");
+    else if (delta < 20.0)
+        setConnectivity("bad");
+    else
+        setConnectivity("no signal");
+
+}
+
+void OverviewDroneItem::updateStatus()
+{
+    // if the overview didn't received a status yet, nothing can be done
+    if (!receivedStatus) return;
+
+    if (lastStatus.getHeight() > 2)
+        setStatus("Flying");
+
+    if (ui->statusValue->text() == "Flying" && lastStatus.getHeight() < 2)
+        setStatus("Landing");
+
+}
+
+void OverviewDroneItem::onDroneLanded(DroneModule *)
+{
+    setStatus("Landed");
 }
 
 /******************************
@@ -123,4 +146,19 @@ void OverviewDroneItem::calculateVisionWidthMeters()
     double newLongitude = lastLocation.longitude() + visionWidthDegrees;
     QGeoCoordinate referenceCoordinate(lastLocation.latitude(), newLongitude);
     visionWidthMeters = referenceCoordinate.distanceTo(lastLocation);
+}
+
+void OverviewDroneItem::initTimers()
+{
+    // connectivity
+    timerConnectivity->setInterval(1000);
+    connect(timerConnectivity, SIGNAL(timeout()), this, SLOT(updateConnectivity()));
+    timerConnectivity->start();
+}
+
+void OverviewDroneItem::addSignalSlots()
+{
+    connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
+    connect(ui->returnHomeButton, SIGNAL(clicked()), drone, SLOT(returnToHome()));
+    connect(drone, SIGNAL(landed(DroneModule*)), this, SLOT(onDroneLanded(DroneModule*)));
 }

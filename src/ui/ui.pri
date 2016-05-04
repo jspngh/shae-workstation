@@ -11,7 +11,8 @@ SOURCES += \
     $$PWD/clickablelabel.cpp \
     $$PWD/progressbarcontroller.cpp \
     $$PWD/gatewaydialog.cpp \
-    $$PWD/configscriptscontroller.cpp
+    $$PWD/configscriptscontroller.cpp \
+    $$PWD/summarydialog.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -23,7 +24,8 @@ HEADERS += \
     $$PWD/clickablelabel.h \
     $$PWD/progressbarcontroller.h \
     $$PWD/gatewaydialog.h \
-    $$PWD/configscriptscontroller.h
+    $$PWD/configscriptscontroller.h \
+    $$PWD/summarydialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -32,5 +34,7 @@ FORMS += \
     $$PWD/overviewwidget.ui \
     $$PWD/overviewsearchitem.ui \
     $$PWD/overviewdroneitem.ui \
-    $$PWD/gatewaydialog.ui
+    $$PWD/gatewaydialog.ui \
+    $$PWD/summarydialog.ui \
+>>>>>>> develop
 

@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/db">
+        <file alias="createTables.sql">createDB.sql</file>
+    </qresource>
+    <qresource prefix="/detection/dependencies">
+        <file alias="gopro_3m_65deg.cfg">gopro_3m_65deg.cfg</file>
+        <file alias="acf.xml">INRIA_ACF.xml</file>
+    </qresource>
+    <qresource prefix="/video">
+        <file alias="sololink.sdp">sololink.sdp</file>
+    </qresource>
+</RCC>
