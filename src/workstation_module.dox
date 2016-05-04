@@ -1,4 +1,12 @@
 /*!
   \defgroup Workstation
   \brief This module contains all the workstation code.
+  The logic and computation is distributed among different components in the workstation.
+  In order to avoid that the communication between these components may become to complex, the workstation is designed according to the mediator pattern .
+  The Mediator component defines how a set of objects interact. Objects no longer communicate directly with each other, but instead communicate through the mediator.
+  This reduces the dependencies between communicating objects, thereby lowering the coupling.
+  The Qt-framework provides an elegant mechanism for communication between components, signals and slots.
+  The signals and slots mechanism is a central feature of Qt and probably the part that differs most from the features provided by other frameworks.
+  Using the signals and slots methodology allows to develop multiple components with a minimal number of dependencies (as the signals and slots are the only way of interacting with each other.).
+  As stated earlier, the workstation subsystem is implemented in a modular way, and would technically allow for controlling multiple drones.
   */
