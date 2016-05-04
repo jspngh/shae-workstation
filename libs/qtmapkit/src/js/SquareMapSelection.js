@@ -61,7 +61,6 @@ function SquareMapSelection(map, formatting) {
 
     this.createSelectedArea = function(bounds) {
         if(this.selectedArea != null) this.removeSelectedArea();
-        console.log(JSON.stringify(this.formatting));
 
         this.selectedArea = new google.maps.Rectangle({
             map: this.map,
