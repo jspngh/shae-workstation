@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <mutex>
+#include <QTextStream>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
@@ -18,6 +19,9 @@
 #include "core/mediator.h"
 #include "models/drone.h"
 #include "models/videosequence.h"
+#include <QDir>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 /*!
  * \brief The VideoController class can save the stream of the drone given a configuration file or a network address.
@@ -55,6 +59,20 @@ public slots:
      * \param drone is the drone is passed as an argument, in order save the stream with a different name for each drone stream.
     */
     void onStopStream(Drone *drone);
+
+// made public for testing purposes
+public:
+    QString standardDataFolder();
+    QString streamMpgLocation();
+    QString streamAviLocation();
+    QString streamSdpLocation();
+
+    /**
+     * \brief initSdpFile will copy the sololink.sdp file from the qt resources to a writeable and accessable location
+     * This only needs to happens once (first the the application needs the file.
+     */
+    void initSdpFile();
+    void removeExistingVideoFiles();
 
 signals:
     /*!

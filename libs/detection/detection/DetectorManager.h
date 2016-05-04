@@ -25,7 +25,7 @@ public:
      * No-args (default) constructor
      * \brief Initialises a default DetectorManager
      * */
-    DetectorManager(int fps, int processWidth, int processHeight, int resolutionWidth, int resolutionHeight);
+    DetectorManager(int fps, int processWidth, int processHeight, int resolutionWidth, int resolutionHeight, std::string path);
 
     /*!
      * Constructor
