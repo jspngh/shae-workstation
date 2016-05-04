@@ -88,6 +88,7 @@ void ConfigWidget::chooseSquare(bool checked)
 {
     if(!mapView->hasLoaded()) return;
 
+    mapView->removeAllSelections();
     if(checked)
         mapView->setSelectionType(QMSelectionType::Square);
     else

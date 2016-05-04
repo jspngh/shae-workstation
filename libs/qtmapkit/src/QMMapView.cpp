@@ -360,25 +360,39 @@ void QMMapView::shiftKeyPressed(bool down)
     }
 }
 
-void QMMapView::selectArea(const QGeoRectangle &area)
+void QMMapView::selectArea(QGeoShape* area)
 {
     Q_D(QMMapView);
-    QString format = QString("mapKit.selectAreaOnMap(%1, %2, %3, %4);");
-    QString js = format
-                 .arg(area.topLeft().latitude()).arg(area.topLeft().latitude())
-                 .arg(area.bottomRight().longitude()).arg(area.bottomRight().longitude());
+    QString format = QString("mapKit.selectAreaOnMap([%1]);");
+
+    QStringList coordinates;
+    QString coordinateFormat = QString("{lat: %1, lng: %2}");
+    if(area->type() == QGeoShape::RectangleType) {
+        this->setSelectionType(QMSelectionType::Square);
+        QGeoRectangle *rectangle = static_cast<QGeoRectangle*>(area);
+        coordinates << coordinateFormat.arg(rectangle->topLeft().latitude())
+                                       .arg(rectangle->topLeft().longitude());
+        coordinates << coordinateFormat.arg(rectangle->bottomRight().latitude())
+                                       .arg(rectangle->bottomRight().longitude());
+        this->setSelectionType(QMSelectionType::None);
+    } else {
+        this->setSelectionType(QMSelectionType::Polygon);
+        GeoPolygon *polygon = static_cast<GeoPolygon*>(area);
+        for(QGeoCoordinate coord: polygon->getCoordinates())
+            coordinates << coordinateFormat.arg(coord.latitude())
+                                           .arg(coord.longitude());
+        this->setSelectionType(QMSelectionType::None);
+    }
+    QString js = format.arg(coordinates.join(","));
     d->evaluateJavaScript(js);
 }
 
-/* void QMMapView::selectArea(const QGeoRectangle &area) */
-/* { */
-/*     Q_D(QMMapView); */
-/*     QString format = QString("mapKit.selectAreaOnMap(%1, %2, %3, %4);"); */
-/*     QString js = format */
-/*                  .arg(area.topLeft().latitude()).arg(area.topLeft().latitude()) */
-/*                  .arg(area.bottomRight().longitude()).arg(area.bottomRight().longitude()); */
-/*     d->evaluateJavaScript(js); */
-/* } */
+void QMMapView::removeAllSelections()
+{
+    Q_D(QMMapView);
+    QString js = QString("mapKit.removeAllSelections();");
+    d->evaluateJavaScript(js);
+}
 
 QMMarker &QMMapView::addMarker(const QString markerId, const QGeoCoordinate &point)
 {

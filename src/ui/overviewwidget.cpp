@@ -146,6 +146,9 @@ void OverviewWidget::onMapLoaded()
         GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
         mapView->fitRegion(area->boundingBox());
     }
+
+    mapView->selectArea(search->getArea());
+
     mapViewLoaded = true;
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);

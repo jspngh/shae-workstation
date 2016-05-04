@@ -47,7 +47,11 @@ function PolygonMapSelection(map) {
     this.onMouseDown = function(point) {};
     this.onMouseUp = function(point) {};
 
-    this.createSelectedArea = function(bounds) {
+    this.createSelectedArea = function(cornerLiterals) {
+        for(var i = 0; i < cornerLiterals.length; i++) {
+            var corner = new google.maps.LatLng(cornerLiterals[i].lat, cornerLiterals[i].lng);
+            this.extendSelectedArea(corner);
+        }
     };
 
     this.extendSelectedArea = function(latLng) {
