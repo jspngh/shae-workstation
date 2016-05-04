@@ -5,8 +5,8 @@
  * @constructor
  * @param {google.maps.Map} map The map
  */
-function SquareMapSelection(map) {
-    MapSelection.call(this, map);
+function SquareMapSelection(map, formatting) {
+    MapSelection.call(this, map, formatting);
 
     /* --------- */
     /* VARIABLES */
@@ -61,14 +61,15 @@ function SquareMapSelection(map) {
 
     this.createSelectedArea = function(bounds) {
         if(this.selectedArea != null) this.removeSelectedArea();
+        console.log(JSON.stringify(this.formatting));
 
         this.selectedArea = new google.maps.Rectangle({
             map: this.map,
             clickable: false,
-            strokeColor: "#FF0000",
-            strokeOpacity: 0.8,
-            fillColor: "#FF0000",
-            fillOpacity: 0.25,
+            strokeColor: this.formatting.strokeColor,
+            strokeOpacity: this.formatting.strokeOpacity,
+            fillColor: this.formatting.fillColor,
+            fillOpacity: this.formatting.fillOpacity,
             bounds: bounds
         });
 

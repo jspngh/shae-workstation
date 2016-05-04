@@ -7,11 +7,12 @@
  * @constructor
  * @param {google.maps.Map} map The map
  */
-function MapSelection(map) {
+function MapSelection(map, formatting) {
     this.map = map;
     this.selectedArea = null;
     this.isSelecting = false;
     this.shiftPressed = false;
+    this.formatting = formatting;
 };
 
 MapSelection.prototype = {

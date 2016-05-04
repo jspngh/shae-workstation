@@ -161,6 +161,10 @@ public slots:
      */
     void selectArea(QGeoShape *area);
 
+    void setSelectionStrokeColor(const QColor color);
+
+    void setSelectionFillColor(const QColor color);
+
     /*!
      * \brief Removes all selected areas from the map.
      */

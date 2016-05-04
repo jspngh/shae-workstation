@@ -5,8 +5,8 @@
  * @constructor
  * @param {google.maps.Map} map The map
  */
-function PolygonMapSelection(map) {
-    MapSelection.call(this, map);
+function PolygonMapSelection(map, formatting) {
+    MapSelection.call(this, map, formatting);
 
     /* --------- */
     /* VARIABLES */
@@ -15,10 +15,10 @@ function PolygonMapSelection(map) {
     this.selectedArea = new google.maps.Polygon({
         map: this.map,
         clickable: false,
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.8,
-        fillColor: "#FF0000",
-        fillOpacity: 0.25,
+        strokeColor: this.formatting.strokeColor,
+        strokeOpacity: this.formatting.strokeOpacity,
+        fillColor: this.formatting.fillColor,
+        fillOpacity: this.formatting.fillOpacity,
         paths: this.corners
     });
 

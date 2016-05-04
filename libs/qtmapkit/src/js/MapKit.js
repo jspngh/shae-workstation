@@ -14,6 +14,14 @@
         this.mapSelection = null;
         this.markers = {};
 
+        // Formatting options with defaults
+        this.selectionFormatting = {
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            fillColor: "#FF0000",
+            fillOpacity: 0.25
+        };
+
         this.addEventListeners();
     };
 
@@ -198,10 +206,10 @@
 
         switch(selectionType) {
             case "polygon":
-                this.mapSelection = new PolygonMapSelection(this.map);
+                this.mapSelection = new PolygonMapSelection(this.map, this.selectionFormatting);
                 break;
             case "square":
-                this.mapSelection = new SquareMapSelection(this.map);
+                this.mapSelection = new SquareMapSelection(this.map, this.selectionFormatting);
                 break;
             default:
                 this.mapSelection = null;
@@ -254,6 +262,12 @@
     MapKit.prototype.removeMarker = function(id) {
         this.getMarker(id).removeFromMap();
         delete this.markers[id];
+    }
+
+    MapKit.prototype.setFormattingOption = function(option, value) {
+        this.selectionFormatting[option] = value;
+        if(this.mapSelection)
+            this.mapSelection.formatting = this.selectionFormatting;
     }
 
     window.MapKit = MapKit;

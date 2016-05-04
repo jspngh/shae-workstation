@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include "QMMapView.h"
+#include <QColor>
 #include <QHBoxLayout>
 #include <QHash>
 #include <QMap>
@@ -384,6 +385,34 @@ void QMMapView::selectArea(QGeoShape* area)
         this->setSelectionType(QMSelectionType::None);
     }
     QString js = format.arg(coordinates.join(","));
+    d->evaluateJavaScript(js);
+}
+
+void QMMapView::setSelectionStrokeColor(const QColor color)
+{
+    Q_D(QMMapView);
+    // Color
+    QString format = QString("mapKit.setFormattingOption(\"strokeColor\", \"%1\");");
+    QString js = format.arg(color.name());
+    d->evaluateJavaScript(js);
+
+    // Opacity
+    format = QString("mapKit.setFormattingOption(\"strokeOpacity\", %1);");
+    js = format.arg(color.alphaF());
+    d->evaluateJavaScript(js);
+}
+
+void QMMapView::setSelectionFillColor(const QColor color)
+{
+    Q_D(QMMapView);
+    // Color
+    QString format = QString("mapKit.setFormattingOption(\"fillColor\", \"%1\");");
+    QString js = format.arg(color.name());
+    d->evaluateJavaScript(js);
+
+    // Opacity
+    format = QString("mapKit.setFormattingOption(\"fillOpacity\", %1);");
+    js = format.arg(color.alphaF());
     d->evaluateJavaScript(js);
 }
 
