@@ -219,7 +219,7 @@ QGeoShape* QMMapView::selectedArea() const
 QGeoRectangle* QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
 {
     if (jsObject.isNull() || !jsObject.isValid())
-        qDebug() << "Herpaderp square";
+        throw new EmptyAreaException();
 
     QVariantMap objectMap = jsObject.toMap();
 

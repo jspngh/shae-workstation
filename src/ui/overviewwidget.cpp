@@ -28,12 +28,10 @@ void OverviewWidget::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
-
 }
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 {
-
     if (!mapViewLoaded) return;
 
     QUuid uuid = heartbeat->getDrone()->getGuid().toString();
@@ -77,7 +75,6 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
     // Update map
     QString markerId = droneId.toString() + "-" + QString::number(droneItem->getPeopleLocated());
     QMMarker& marker = mapView->addMarker(markerId, result->getLocation());
-
     marker.setIcon("qrc:///ui/icons/human");
     marker.scale(0.1*result->getScore()/100, 0.1*result->getScore()/100);
     marker.show();
@@ -87,8 +84,7 @@ void OverviewWidget::exportSearchButtonPush()
 {
     QString filter = "XML sheet (*.xml);;Text File (*.txt)";
     QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
-    if(filter == QString("Text File (*.txt)"))
-    {
+    if(filter == QString("Text File (*.txt)")) {
         emit printDetectionResultTXT(saveFileName.append(".txt"));
     } else {
         emit printDetectionResultXML(saveFileName.append(".xml"));
@@ -106,9 +102,17 @@ void OverviewWidget::onSearchStarted(Search *s)
 {
     this->search = s;
 
+    QGeoCoordinate center;
+    if(search->getArea()->type() == QGeoShape::RectangleType) {
+        center = s->getArea()->center();
+    } else {
+        GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
+        center = area->center();
+    }
+
     // Initialize map
     mapView = new QMMapView(QMMapView::Satellite,
-                            s->getArea()->center(),
+                            center,
                             11);
 
     connect(mapView, SIGNAL(mapFailedToLoad()),
