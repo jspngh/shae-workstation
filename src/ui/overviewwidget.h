@@ -29,6 +29,8 @@ public:
     ~OverviewWidget();
     void setMediator(Mediator *mediator);
 
+    SummaryDialog *getSummaryDialog() const;
+
 private:
     Ui::OverviewWidget *ui;
     QMMapView *mapView;
@@ -42,7 +44,6 @@ private:
 
 private slots:
     void onDroneLanded(DroneModule *drone);
-    void exportSearchButtonPush();
     void onSearchStarted(Search *s);
     void onHeartBeatReceived(DroneStatus *heartbeat);
     void onNewDetection(QUuid droneId, DetectionResult* result);

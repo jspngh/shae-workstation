@@ -27,7 +27,7 @@ public:
 private:
     QString streamLocation();
 
-private slots:
+public slots:
     void onSaveFootageClicked();
     void onSaveSearchClicked();
     void onCloseAppClicked();

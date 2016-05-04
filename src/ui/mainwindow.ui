@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1366</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -38,7 +38,15 @@
     <addaction name="resetAction"/>
     <addaction name="exitAction"/>
    </widget>
+   <widget class="QMenu" name="menuSearch">
+    <property name="title">
+     <string>Search</string>
+    </property>
+    <addaction name="exportFootageButton"/>
+    <addaction name="exportResultsButton"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuSearch"/>
   </widget>
   <action name="exitAction">
    <property name="text">
@@ -56,6 +64,16 @@
    </property>
    <property name="toolTip">
     <string>Reset the services on the drone</string>
+    </property>
+   </action>
+  <action name="exportFootageButton">
+   <property name="text">
+    <string>Export Footage</string>
+   </property>
+  </action>
+  <action name="exportResultsButton">
+   <property name="text">
+    <string>Export Results</string>
    </property>
   </action>
  </widget>

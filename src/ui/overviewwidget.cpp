@@ -11,9 +11,6 @@ OverviewWidget::OverviewWidget(QWidget *parent) :
     mapViewLoaded = false;
     summaryDialog = new SummaryDialog();
     summaryDialog->setWindowTitle("Search Summary");
-
-    //lowerbuttons:
-    connect(ui->exportSearchButton, SIGNAL(clicked()), this, SLOT(exportSearchButtonPush()));
 }
 
 OverviewWidget::~OverviewWidget()
@@ -33,12 +30,17 @@ void OverviewWidget::setMediator(Mediator *mediator)
 
 }
 
+SummaryDialog *OverviewWidget::getSummaryDialog() const
+{
+    return summaryDialog;
+}
+
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 {
 
     if (!mapViewLoaded) return;
 
-    QUuid uuid = heartbeat->getDrone()->getGuid("OverviewWidget::onHeartBeatReceived").toString();
+    QUuid uuid = heartbeat->getDrone()->getGuid().toString();
 
     // Update bottom text
     ui->heartBeat->setText(heartbeat->toString());
@@ -85,23 +87,10 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
     marker.show();
 }
 
-void OverviewWidget::exportSearchButtonPush()
-{
-    summaryDialog->show();
-
-//    QString filter = "XML sheet (*.xml);;Text File (*.txt)";
-//    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
-//    if(filter == QString("Text File (*.txt)"))
-//    {
-//        emit printDetectionResultTXT(saveFileName.append(".txt"));
-//    } else {
-//        emit printDetectionResultXML(saveFileName.append(".xml"));
-//    }
-}
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {
-    const QUuid droneId = s->getDrone()->getGuid("OverviewWidget::updateDroneList");
+    const QUuid droneId = s->getDrone()->getGuid();
     if(mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(*s);
 }
@@ -138,7 +127,7 @@ void OverviewWidget::fillDroneList()
         ui->droneList->addItem(item);
 
         OverviewDroneItem *droneItem = new OverviewDroneItem(drone, i);
-        mapIdListItem[drone->getGuid("OverviewWidget::fillDroneList")] = droneItem;
+        mapIdListItem[drone->getGuid()] = droneItem;
         ui->droneList->setItemWidget(item, droneItem);
         i++;
     }

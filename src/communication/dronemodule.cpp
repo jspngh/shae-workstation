@@ -169,11 +169,9 @@ void DroneModule::setDrone(Drone *value)
 }
 
 
-QUuid DroneModule::getGuid(QString s)
+QUuid DroneModule::getGuid()
 {
-    qDebug() << "Asking drone GUID 1" << s;
     QUuid id = drone->getGuid();
-    qDebug() << "Asking drone GUID 2" << s;
     return id;
 }
 
@@ -233,10 +231,10 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
 
     if( waypoints != nullptr &&
         status->getPreviousWaypointOrder() == waypoints->size() &&
-        status->getCurrentLocation().distanceTo(homeLocation) < 0.5){
+        status->getCurrentLocation().distanceTo(homeLocation) < 1){
         // the drone has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
-        emergencyLanding();
+        returnToHome();
     }
 
     if (status->getPreviousWaypointOrder() == 1 && videoProcessing && !videoActive) {
@@ -268,7 +266,7 @@ void DroneModule::onPathCalculated(Search *s)
     // if the drone is indeed selected we continue, if not, nothing will happen
     // Note: once the drone is found in the list, no need to continue searching (hence the '&& !droneSelected')
     for (int i = 0; i < s->getDroneList().size() && !droneInList; i++)    {
-        if (s->getDroneList().at(i)->getGuid("DroneModule::onPathCalculated1") == drone->getGuid())
+        if (s->getDroneList().at(i)->getGuid() == drone->getGuid())
             droneInList = true;
     }
     if (droneInList) {

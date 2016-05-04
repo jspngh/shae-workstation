@@ -141,19 +141,17 @@ void Controller::processHelloMessage(QByteArray helloRaw)
     if (ip.isEmpty() or ip.isNull()) {
         emit(droneSetupFailed()); // emit signal indicating failure
     } else {
-        QString strFile = "./dependencies/drone_stream1.mpg";//hello.getStreamFile();
+        QString strFile = hello.getStreamFile();
         QString ctrIp = hello.getControllerIp();
         int cmdPort = hello.getCommandsPort();
         int strPort = hello.getStreamPort();
         double vision = hello.getVisionWidth();
 
-        qDebug() << "streamfile: " << strFile;
-
         DroneModule *drone = receivedHelloFrom(ip);
         if (drone == nullptr) {
             // first time that the drone with this IP has sent a Hello message
             drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
-            qDebug() << "created new  drone with ID: " << drone->getGuid("Controller").toString();
+            qDebug() << "created new  drone with ID: " << drone->getGuid().toString();
             drone->setPersistenceController(persistenceController);
             drone = configureDrone(drone);
         }

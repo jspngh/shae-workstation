@@ -19,16 +19,12 @@
      <item>
       <layout class="QVBoxLayout" name="sidebar">
        <item>
-        <widget class="QListWidget" name="droneList"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="exportSearchButton">
-         <property name="text">
-          <string>Export search</string>
+        <widget class="QListWidget" name="droneList">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
          </property>
-         <property name="icon">
-          <iconset resource="../application.qrc">
-           <normaloff>:/ui/icons/export</normaloff>:/ui/icons/export</iconset>
+         <property name="resizeMode">
+          <enum>QListView::Adjust</enum>
          </property>
         </widget>
        </item>
@@ -73,4 +69,6 @@
    </item>
   </layout>
  </widget>
+ <resources/>
+ <connections/>
 </ui>
