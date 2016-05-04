@@ -132,12 +132,12 @@ private:
      */
     void initSearchConfigFile(int height, int gimbalAngle);
 
-    int processHeight;
-    int processWidth;
-    int resolutionHeight;
-    int resolutionWidth;
-    std::vector<vector<double>> xLUT;
-    std::vector<vector<double>> yLUT;
+    int processHeight; //!< the height in pixels at which the drone footage will be processed (<=resolutionHeight)
+    int processWidth; //!< the width in pixels at which the drone footage will be processed (<=resolutionWidth)
+    int resolutionHeight; //!< the height in pixels of the drone footage
+    int resolutionWidth; //!< the width in pixel of the drone footage
+    std::vector<vector<double>> xLUT; //!< a lookuptable that maps x pixel values to horizontal distances
+    std::vector<vector<double>> yLUT; //!< a lookuptable that maps y pixel values to vertical distances
 };
 
 #endif // DETECTIONCONTROLLER_H

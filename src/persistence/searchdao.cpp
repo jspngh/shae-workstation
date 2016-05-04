@@ -22,14 +22,20 @@ Search* SearchDAO::dbSaveSearch(Search *search)
 
     if(search->getArea()->type() == QGeoShape::RectangleType) {
         QGeoRectangle* area = static_cast<QGeoRectangle*>(search->getArea());
-        QString format = QString("%1-%2:%3-%4:");
+        QString format = QString("r:%1-%2:%3-%4:");
         pathString = format.arg(area->topLeft().latitude())
                            .arg(area->topLeft().longitude())
                            .arg(area->bottomRight().latitude())
                            .arg(area->bottomRight().longitude());
     } else {
         GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
-        //TODO
+        QString format = QString("p:");
+        foreach(QGeoCoordinate coordinate, area->getCoordinates())
+        {
+            QString coordinateFormat = QString("%1-%2:");
+            format.append(coordinateFormat.arg(coordinate.latitude()).arg(coordinate.longitude()));
+        }
+        pathString = format;
     }
 
     query.bindValue(":searchID", search->getSearchID());
@@ -54,14 +60,22 @@ Search* SearchDAO::dbRetrieveSearch(QUuid searchId)
     query.bindValue(":searchID", searchId);
     if (query.exec()) {
         if (query.next()) {
-            QList<QGeoCoordinate> coordinates = *uncypherPathString(query.value(2).toString());
+
+            QList<QGeoCoordinate> coordinates = *uncypherPathString(query.value(2).toString().remove(0,1));
+            if(query.value(2).toString().at(0)=='r')
+            {
             QGeoRectangle* area = new QGeoRectangle(coordinates.at(0), coordinates.at(1));
             search = new Search(searchId, query.value(1).toTime(), area,
                             query.value(3).toInt(), query.value(4).toInt(), query.value(5).toInt());
+            }else if (query.value(2).toString().at(0)=='p')
+            {
+            GeoPolygon* area = new GeoPolygon(coordinates);
+            search = new Search(searchId, query.value(1).toTime(), area,
+                            query.value(3).toInt(), query.value(4).toInt(), query.value(5).toInt());
+            }
         }
-
     } else {
-        qDebug() << "addPerson error:  "
+        qDebug() << "addSearch error:  "
                  << query.lastError();
     }
     return search;
