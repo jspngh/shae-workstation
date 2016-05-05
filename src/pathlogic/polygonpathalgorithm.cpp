@@ -40,13 +40,17 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
     double d2 = start.distanceTo(area.getMostWestCoordinate());
     Direction direction;
     double min = std::min(d1, d2);
-    if (min == d1) {
+    if (fabs(min - d1) < 0.000001) {
         direction = WEST;
         list->push_back(area.getMostEastCoordinate());
+
+
     } else {
         direction = EAST;
         list->push_back(area.getMostWestCoordinate());
+
     }
+     qDebug() << "distance to east" << d1 <<"distance to west" << d2;
     //qDebug() << list->back();
 
     //while going from wesst to East or vice versa (incrementing by visionWidth)
