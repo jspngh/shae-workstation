@@ -52,9 +52,6 @@ void Controller::init()
 
     //pathLogicController->setMediator(mediator);
     mainWindow->setMediator(mediator);
-    mainWindow->getConfigWidget()->setMediator(mediator);
-    mainWindow->getOverviewWidget()->setMediator(mediator);
-    mainWindow->getWelcomeWidget()->setMediator(mediator);
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread
@@ -82,21 +79,48 @@ void Controller::retrieveWorkstationIpAndBroadcast()
 
 void Controller::onResetServicesClicked()
 {
+    QString configFolder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString fileName = "shae_rsa";
+
+    // create folder if not available
+    QDir(QDir::root()).mkpath(configFolder);
+
+    if (!configFolder.endsWith(QDir::separator()))
+        configFolder.append(QDir::separator());
+
+    QString keyPath = folder.append(fileName);
+    QFile rsaKey(keyPath);
+
+    // if the file already exists nothing needs to be done anymore
+    // in general this function only needs to copy the file once, the first the time the application runs
+    if (rsaKey.exists()) {
+        return;
+    }
+
+    QFile srcFile(":/scripts/shae_rsa");
+    srcFile.open(QIODevice::ReadOnly);
+    QTextStream in(&srcFile);
+    rsaKey.open(QIODevice::WriteOnly);
+    QTextStream out(&rsaKey);
+    out << in.readAll();
+
+    /* Close the files */
+    rsaKey.close();
+    srcFile.close();
+
+
+    QFile resetScript(":/scripts/reset_services.sh");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "script file not found / failed to load";
+        return;
+    }
 
     QProcess *proc = new QProcess;
     QString name = "/bin/bash";
     QStringList arg;
     arg << "-c" ;
-
-    QFile file(":/scripts/reset_services.sh");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "script file not found / failed to load";
-        return;
-    } else {
-        qDebug() << "hellooooooo";
-    }
-
-    arg << file.readAll();
+    arg << resetScript.readAll();
+    arg << keyPath;
     proc->start(name, arg);
     proc->waitForFinished(-1);
     proc->close();
@@ -232,5 +256,3 @@ QString Controller::getWorkstationIP() const
 {
     return workstationIp;
 }
-
-
