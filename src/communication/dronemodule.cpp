@@ -251,7 +251,7 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
         }
     }
 
-    if (isFlying && status->getHeight() < 0.1) {
+    if (isFlying && status->getHeight() < h0 + 0.8) {
         isFlying = false;
         qDebug() << "drone has landed";
         emit landed(this);
@@ -374,7 +374,9 @@ Navigation message methods
 
 QJsonDocument DroneModule::startFlight()
 {
+    h0 = lastReceivedDroneStatus.getHeight();
     isFlying = true;
+    qDebug() << "height on take off: " << QString::number(h0);
     // Create json message to start the flight conform the interface of the wiki
     QJsonObject json = QJsonObject();
 

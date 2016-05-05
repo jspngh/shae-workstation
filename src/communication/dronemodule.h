@@ -281,6 +281,7 @@ private:
     bool videoActive;
     bool videoInactive;
     bool isFlying;
+    double h0; //!< stores the altidude on which the drone was positioned when taking off
     QGeoCoordinate homeLocation; //!< The coordinate of the location the drone started its flight.
     static constexpr double MIN_VISIONWIDTH = 0.00000000001; //!< This is a lower bound to the visionwidth, since visionWidth cannot be zero.
 };
