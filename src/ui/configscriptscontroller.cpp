@@ -42,7 +42,7 @@ void ConfigScriptsController::connectToSoloNetwork()
             qDebug() << line;
             if(line.contains(QRegExp("Not connected:"))||line.contains(QRegExp("Error")))
             {
-                emit notConnectedToSoloNetwork(error);
+                emit notConnectedToSoloNetwork(line);
             }else
             {
                 emit connectedToSoloNetwork();
