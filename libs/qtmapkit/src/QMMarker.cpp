@@ -72,9 +72,7 @@ void QMMarker::moveTo(const QGeoCoordinate &to)
 void QMMarker::rotate(const double degrees)
 {
     Q_D(QMMarker);
-    d->evaluateMethod(QString("rotate(%1)")
-                      .arg(degrees)
-                     );
+    d->evaluateMethod(QString("rotate(%1)").arg(degrees));
     d->orientation += degrees;
 }
 
@@ -93,6 +91,14 @@ void QMMarker::scale(const double width, const double height)
                       .arg(width)
                       .arg(height)
                      );
+}
+
+void QMMarker::setOpacity(const double alpha)
+{
+    Q_D(QMMarker);
+    QString format = QString("setOpacity(%1)");
+    QString js = format.arg(alpha);
+    d->evaluateMethod(js);
 }
 
 void QMMarker::setIcon(const QString resource)
