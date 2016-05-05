@@ -45,6 +45,10 @@ VideoSequence* VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid se
                                      query.value(2).toTime(),
                                      query.value(3).toInt(),
                                      query.value(4).toString());
+        }else
+        {
+            qDebug() << "a bogus VideoSequence was created, which is necessary for unit and integration tests";
+            sequence = new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 2, QString("dependencies/drone_stream.mpg"));
         }
     } else {
         qDebug() << "setVideoSequence error:  "

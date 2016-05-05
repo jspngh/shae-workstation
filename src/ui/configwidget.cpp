@@ -40,7 +40,7 @@ void ConfigWidget::initializeMap()
     connect(mapView, SIGNAL(mapFailedToLoad()), this, SLOT(onMapFailedToLoad()));
     connect(mapView, SIGNAL(mapLoaded()), this, SLOT(onMapLoaded()));
     connect(mapView, SIGNAL(selectedAreaCreated()), this, SLOT(areaSelected()));
-    connect(mapView, SIGNAL(selectedAreaDeleted()), this, SLOT(areaRemoved()));
+    connect(mapView, SIGNAL(selectedAreaDeleted()), this, SLOT(areaDeleted()));
 }
 
 void ConfigWidget::onMapLoaded()
