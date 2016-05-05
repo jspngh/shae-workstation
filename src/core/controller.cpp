@@ -93,21 +93,21 @@ void Controller::onResetServicesClicked()
 
     // if the file already exists nothing needs to be done anymore
     // in general this function only needs to copy the file once, the first the time the application runs
-    if (rsaKey.exists()) {
-        return;
+    if (!rsaKey.exists()) {
+        QFile srcFile(":/scripts/shae_rsa");
+        srcFile.open(QIODevice::ReadOnly);
+        QTextStream in(&srcFile);
+        rsaKey.open(QIODevice::WriteOnly);
+        QTextStream out(&rsaKey);
+        out << in.readAll();
+
+        /* Close the files */
+        rsaKey.close();
+        srcFile.close();
+
+        /* Set correct permissions */
+        rsaKey.setPermissions(QFile::ReadOwner);
     }
-
-    QFile srcFile(":/scripts/shae_rsa");
-    srcFile.open(QIODevice::ReadOnly);
-    QTextStream in(&srcFile);
-    rsaKey.open(QIODevice::WriteOnly);
-    QTextStream out(&rsaKey);
-    out << in.readAll();
-
-    /* Close the files */
-    rsaKey.close();
-    srcFile.close();
-
 
     QFile resetScript(":/scripts/reset_services.sh");
     if (!resetScript.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -121,6 +121,8 @@ void Controller::onResetServicesClicked()
     arg << "-c" ;
     arg << resetScript.readAll();
     arg << keyPath;
+    qDebug() << keyPath;
+    qDebug() << arg;
     proc->start(name, arg);
     proc->waitForFinished(-1);
     proc->close();
