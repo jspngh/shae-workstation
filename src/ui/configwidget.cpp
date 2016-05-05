@@ -209,12 +209,14 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
     // position drone on map
     QString id = heartbeat->getDrone()->getGuid().toString();
 
-    // only move the center of the map if the drone has moved a large enough distance
-    if (mapView->hasMarker(id) && mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
-        center = heartbeat->getCurrentLocation();
-        QMMarker &marker = mapView->getMarker(id);
-        marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
-        marker.moveTo(center);
+    if (mapView->hasMarker(id)) {
+        // only move the center of the map if the drone has moved a large enough distance
+        if(mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
+            center = heartbeat->getCurrentLocation();
+            QMMarker &marker = mapView->getMarker(id);
+            marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
+            marker.moveTo(center);
+        }
     } else {
         center = heartbeat->getCurrentLocation();
         QMMarker &marker = mapView->addMarker(id, center);
