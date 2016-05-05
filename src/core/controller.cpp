@@ -80,7 +80,8 @@ void Controller::retrieveWorkstationIpAndBroadcast()
 void Controller::onResetServicesClicked()
 {
     QString configFolder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    QString fileName = "shae_rsa";
+    QString rsaFileName = "shae_rsa";
+    QString scriptFileName = "reset_services.sh";
 
     // create folder if not available
     QDir(QDir::root()).mkpath(configFolder);
@@ -88,8 +89,10 @@ void Controller::onResetServicesClicked()
     if (!configFolder.endsWith(QDir::separator()))
         configFolder.append(QDir::separator());
 
-    QString keyPath = configFolder.append(fileName);
+    QString keyPath = configFolder + rsaFileName;
+    QString scriptPath = configFolder + scriptFileName;
     QFile rsaKey(keyPath);
+    QFile resetScript(scriptPath);
 
     // if the file already exists nothing needs to be done anymore
     // in general this function only needs to copy the file once, the first the time the application runs
@@ -108,22 +111,26 @@ void Controller::onResetServicesClicked()
         /* Set correct permissions */
         rsaKey.setPermissions(QFile::ReadOwner);
     }
+    if (!resetScript.exists()) {
+        QFile scriptSrcFile(":/scripts/reset_services.sh");
+        scriptSrcFile.open(QIODevice::ReadOnly);
+        QTextStream in(&scriptSrcFile);
+        resetScript.open(QIODevice::WriteOnly);
+        QTextStream out(&resetScript);
+        out << in.readAll();
 
-    QFile resetScript(":/scripts/reset_services.sh");
-    if (!resetScript.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "script file not found / failed to load";
-        return;
+        /* Close the files */
+        resetScript.close();
+        scriptSrcFile.close();
+
+        /* Set correct permissions */
+        resetScript.setPermissions(QFile::ExeOwner | QFile::ReadOwner | QFile::WriteOwner);
     }
 
-    QProcess *proc = new QProcess;
-    QString name = "/bin/bash";
+    QProcess *proc = new QProcess();
     QStringList arg;
-    arg << "-c" ;
-    arg << resetScript.readAll();
     arg << keyPath;
-    qDebug() << keyPath;
-    qDebug() << arg;
-    proc->start(name, arg);
+    proc->start(scriptPath, arg);
     proc->waitForFinished(-1);
     proc->close();
 }
