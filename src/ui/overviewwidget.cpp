@@ -1,5 +1,6 @@
 #include "overviewwidget.h"
 #include "ui_overviewwidget.h"
+#include <QColor>
 #include <QDebug>
 #include <QFileDialog>
 
@@ -147,6 +148,8 @@ void OverviewWidget::onMapLoaded()
         mapView->fitRegion(area->boundingBox());
     }
 
+    mapView->setSelectionStrokeColor(QColor(255, 255, 255));
+    mapView->setSelectionFillColor(QColor(255, 255, 255, 30));
     mapView->selectArea(search->getArea());
 
     mapViewLoaded = true;

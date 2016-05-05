@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include "QMMapView.h"
+#include <QColor>
 #include <QHBoxLayout>
 #include <QHash>
 #include <QMap>
@@ -387,6 +388,34 @@ void QMMapView::selectArea(QGeoShape* area)
     d->evaluateJavaScript(js);
 }
 
+void QMMapView::setSelectionStrokeColor(const QColor color)
+{
+    Q_D(QMMapView);
+    // Color
+    QString format = QString("mapKit.setFormattingOption(\"strokeColor\", \"%1\");");
+    QString js = format.arg(color.name());
+    d->evaluateJavaScript(js);
+
+    // Opacity
+    format = QString("mapKit.setFormattingOption(\"strokeOpacity\", %1);");
+    js = format.arg(color.alphaF());
+    d->evaluateJavaScript(js);
+}
+
+void QMMapView::setSelectionFillColor(const QColor color)
+{
+    Q_D(QMMapView);
+    // Color
+    QString format = QString("mapKit.setFormattingOption(\"fillColor\", \"%1\");");
+    QString js = format.arg(color.name());
+    d->evaluateJavaScript(js);
+
+    // Opacity
+    format = QString("mapKit.setFormattingOption(\"fillOpacity\", %1);");
+    js = format.arg(color.alphaF());
+    d->evaluateJavaScript(js);
+}
+
 void QMMapView::removeAllSelections()
 {
     Q_D(QMMapView);
@@ -479,24 +508,14 @@ void QMMapView::jsMouseLeftAt(qreal latitude, qreal longitude)
     emit cursorLeaved(QGeoCoordinate(latitude, longitude));
 }
 
-void QMMapView::jsSelectedAreaCreated(qreal topLeftLat, qreal topLeftLong,
-                                      qreal bottomRightLat, qreal bottomRightLong)
+void QMMapView::jsSelectedAreaCreated()
 {
-    QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
-    emit selectedAreaCreated(selectedArea);
+    emit selectedAreaCreated();
 }
 
-void QMMapView::jsSelectedAreaChanged(qreal topLeftLat, qreal topLeftLong,
-                                      qreal bottomRightLat, qreal bottomRightLong)
+void QMMapView::jsSelectedAreaChanged()
 {
-    QGeoRectangle selectedArea = QGeoRectangle(
-                                     QGeoCoordinate(topLeftLat, topLeftLong),
-                                     QGeoCoordinate(bottomRightLat, bottomRightLong)
-                                 );
-    emit selectedAreaChanged(selectedArea);
+    emit selectedAreaChanged();
 }
 
 void QMMapView::jsSelectedAreaDeleted()

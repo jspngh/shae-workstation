@@ -5,8 +5,8 @@
  * @constructor
  * @param {google.maps.Map} map The map
  */
-function SquareMapSelection(map) {
-    MapSelection.call(this, map);
+function SquareMapSelection(map, formatting) {
+    MapSelection.call(this, map, formatting);
 
     /* --------- */
     /* VARIABLES */
@@ -65,27 +65,21 @@ function SquareMapSelection(map) {
         this.selectedArea = new google.maps.Rectangle({
             map: this.map,
             clickable: false,
-            strokeColor: "#FF0000",
-            strokeOpacity: 0.8,
-            fillColor: "#FF0000",
-            fillOpacity: 0.25,
+            strokeColor: this.formatting.strokeColor,
+            strokeOpacity: this.formatting.strokeOpacity,
+            fillColor: this.formatting.fillColor,
+            fillOpacity: this.formatting.fillOpacity,
             bounds: bounds
         });
 
-        qMapView.jsSelectedAreaCreated(
-            bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
-            bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
-        );
+        qMapView.selectedAreaCreated();
     };
 
     this.extendSelectedArea = function(latLng) {
         var bounds = this.selectedArea.getBounds();
         bounds.extend(latLng);
         this.selectedArea.setBounds(bounds);
-        qMapView.jsSelectedAreaChanged(
-            bounds.getNorthEast().lat(), bounds.getSouthWest().lng(),
-            bounds.getSouthWest().lat(), bounds.getNorthEast().lng()
-        );
+        qMapView.jsSelectedAreaChanged();
     };
 
     this.removeSelectedArea = function() {

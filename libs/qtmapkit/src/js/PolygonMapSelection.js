@@ -5,8 +5,8 @@
  * @constructor
  * @param {google.maps.Map} map The map
  */
-function PolygonMapSelection(map) {
-    MapSelection.call(this, map);
+function PolygonMapSelection(map, formatting) {
+    MapSelection.call(this, map, formatting);
 
     /* --------- */
     /* VARIABLES */
@@ -15,10 +15,10 @@ function PolygonMapSelection(map) {
     this.selectedArea = new google.maps.Polygon({
         map: this.map,
         clickable: false,
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.8,
-        fillColor: "#FF0000",
-        fillOpacity: 0.25,
+        strokeColor: this.formatting.strokeColor,
+        strokeOpacity: this.formatting.strokeOpacity,
+        fillColor: this.formatting.fillColor,
+        fillOpacity: this.formatting.fillOpacity,
         paths: this.corners
     });
 
@@ -28,7 +28,10 @@ function PolygonMapSelection(map) {
     this.onMouseClicked = function(point) {
         if(!this.shiftPressed) return;
 
-        this.extendSelectedArea(point);
+        if(this.corners.length < 1)
+            this.createSelectedArea([point.toJSON()]);
+        else
+            this.extendSelectedArea(point);
     };
 
     this.onShiftPressed = function() {
@@ -52,6 +55,8 @@ function PolygonMapSelection(map) {
             var corner = new google.maps.LatLng(cornerLiterals[i].lat, cornerLiterals[i].lng);
             this.extendSelectedArea(corner);
         }
+
+        qMapView.jsSelectedAreaCreated();
     };
 
     this.extendSelectedArea = function(latLng) {
@@ -62,6 +67,7 @@ function PolygonMapSelection(map) {
     this.removeSelectedArea = function() {
         this.corners = [];
         this.selectedArea.setPaths(this.corners);
+        qMapView.jsSelectedAreaDeleted();
     };
 
     this.getSelectedArea = function() {

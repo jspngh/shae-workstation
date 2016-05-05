@@ -51,7 +51,8 @@ private slots:
     void locateButtonPush();
     void sliderChanged(int);
     void chooseSquare(bool checked);
-    void areaSelected(QGeoShape area);
+    void areaSelected();
+    void areaDeleted();
     //! \brief slot will listen to incoming DroneStatuses and then update the dronetable
     void updateDroneTable(DroneStatus* s);
     void updateMapCenter(DroneStatus* s);
