@@ -7,6 +7,11 @@
 #include "welcomewidget.h"
 #include "ui_welcomewidget.h"
 #include "clickablelabel.h"
+#include <QProcess>
+#include <QStandardPaths>
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+
 
 WelcomeWidget::WelcomeWidget(QWidget *parent) :
     QWidget(parent),
@@ -17,7 +22,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     //Bottem layout setup
 
     ui->progressBar->setValue(0);
-    ui->configSearchButton->setText("Start Setup");
+    ui->configSearchButton->setEnabled(false);
 
     //non ui fields setup
 
@@ -55,6 +60,24 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(pictureTimer()));
     timer->start(1);
 
+    // Create and init configScriptCOntroller
+    csc = new ConfigScriptsController();
+    csc->moveToThread(&csct);
+    connect(this, SIGNAL(connectToSoloNetwork()), csc, SLOT(connectToSoloNetwork()));
+    connect(csc, SIGNAL(connectedToSoloNetwork()), this, SLOT(connectedToSoloNetwork()));
+    connect(csc, SIGNAL(notConnectedToSoloNetwork(QString)), this, SLOT(notConnectedToSoloNetwork(QString)));
+    connect(this, SIGNAL(setGateway(QString, QString)), csc, SLOT(setGateway(QString, QString)));
+    connect(csc, SIGNAL(gatewaySet()), this, SLOT(gatewaySet()));
+    connect(csc, SIGNAL(gatewayNotSet(QString)), this, SLOT(gatewayNotSet(QString)));
+    csct.start();
+
+    // Create and init progressBarController
+    pbc = new ProgressBarController();
+    pbc->setProgressBar(ui->progressBar);
+    pbc->moveToThread(&pbct);
+    connect(this, SIGNAL(updateProgressBar(int, int)), pbc, SLOT(update(int, int)));
+    connect(pbc, SIGNAL(incrementProcessBarr()), this, SLOT(incrementProcessBar()));
+    pbct.start();
 }
 
 WelcomeWidget::~WelcomeWidget()
@@ -83,11 +106,8 @@ void WelcomeWidget::setSignalSlots()
 
 void WelcomeWidget::setupReady()
 {
-     if(status > 0) {
-         ui->configSearchButton->setEnabled(true);
-     } else {
-         droneConnected = true;
-     }
+     ui->configSearchButton->setEnabled(true);
+     droneConnected = true;
 }
 
 void WelcomeWidget::setupFailed()
@@ -116,18 +136,20 @@ void WelcomeWidget::setupFailed()
  *  SLOTS
  * **********/
 
+void WelcomeWidget::on_startSetupButton_clicked()
+{
+    // Set statusLabel
+    ui->progressBar->setValue(0);
+    ui->statusLabel->setText("Connecting to Solo wifi");
+
+    // Start connecting to solo network
+    emit connectToSoloNetwork();
+    emit updateProgressBar(50, 30);
+}
+
 void WelcomeWidget::on_configSearchButton_clicked()
 {
-    if(status == 0)
-    {
-        ui->configSearchButton->setText("Configure Search");
-        if(!droneConnected) {
-            ui->configSearchButton->setEnabled(false);
-        }
-        status ++;
-    } else {
-        ((QStackedWidget *) this->parent())->setCurrentIndex(1);
-    }
+    ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
 void WelcomeWidget::onDroneStatusReceived(DroneStatus* s)
@@ -160,4 +182,71 @@ void WelcomeWidget::pictureTimer()
     pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
     timer->start(10000);
     }
+}
+
+
+void WelcomeWidget::connectedToSoloNetwork()
+{
+    // Set processBar to 50%
+    pbc->aborted = true;
+    pbct.wait(2);
+    emit updateProgressBar(50, 1);
+    pbct.wait(1000);
+
+    // Set statusLabel
+    ui->statusLabel->setText("Connected to Solo wifi");
+
+    gd = new GatewayDialog();
+    connect(gd->getButtonBox(), SIGNAL(accepted()), this, SLOT(startSetGateway()));
+    gd->open();
+}
+
+void WelcomeWidget::notConnectedToSoloNetwork(QString error)
+{
+     ui->statusLabel->setText(error);
+     pbc->aborted = true;
+     pbct.wait(2);
+}
+
+void WelcomeWidget::startSetGateway()
+{
+    ui->statusLabel->setText("Connecting to gateway");
+
+    QString ssid = gd->getSSID();
+    QString password = gd->getPassword();
+    emit setGateway(ssid, password);
+    emit updateProgressBar(100, 81);
+}
+
+void WelcomeWidget::gatewaySet()
+{
+    // Set processBar to 50%
+    pbc->aborted = true;
+    pbct.wait(2);
+    emit updateProgressBar(100, 1);
+    pbct.wait(1000);
+
+    // Set statusLabel
+    ui->statusLabel->setText("Connected to gateway");
+
+    if(!droneConnected)
+    {
+        ui->configSearchButton->setEnabled(false);
+    }
+
+    ui->configSearchButton->setText("Configure search");
+    status ++;
+}
+
+void WelcomeWidget::gatewayNotSet(QString error)
+{
+    ui->statusLabel->setText(error);
+    pbc->aborted = true;
+    pbct.wait(2);
+}
+
+void WelcomeWidget::incrementProcessBar()
+{
+    int value = ui->progressBar->value();
+    ui->progressBar->setValue(value + 1);
 }

@@ -1,4 +1,5 @@
 QT += sql
+QT += concurrent
 
 # QT constraints
 # QT  += core gui network webkit positioning

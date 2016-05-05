@@ -38,15 +38,17 @@
         <file alias="screen8.png">ui/img/overviewscreenexport.png</file>
         <file alias="screen9.png">ui/img/overviewscreenmap.png</file>
     </qresource>
+    <qresource prefix="/scripts">
+        <file alias="connect_wifi">scripts/connect_to_solo_network.sh</file>
+        <file alias="set_gateway">scripts/set_gateway.sh</file>
+        <file alias="reset_services.sh">scripts/reset_services.sh</file>
+        <file alias="shae_rsa">scripts/shae_rsa</file>
+    </qresource>
     <qresource prefix="/detection/dependencies">
         <file alias="gopro_3m_65deg.cfg">detection/dependencies/gopro_3m_65deg.cfg</file>
         <file alias="acf.xml">detection/dependencies/INRIA_ACF.xml</file>
     </qresource>
     <qresource prefix="/video">
         <file alias="sololink.sdp">videocontroller/sololink.sdp</file>
-    </qresource>
-    <qresource prefix="/scripts">
-        <file alias="reset_services.sh">scripts/reset_services.sh</file>
-        <file alias="shae_rsa">scripts/shae_rsa</file>
     </qresource>
 </RCC>
