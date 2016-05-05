@@ -88,7 +88,7 @@ void Controller::onResetServicesClicked()
     if (!configFolder.endsWith(QDir::separator()))
         configFolder.append(QDir::separator());
 
-    QString keyPath = folder.append(fileName);
+    QString keyPath = configFolder.append(fileName);
     QFile rsaKey(keyPath);
 
     // if the file already exists nothing needs to be done anymore
@@ -110,7 +110,7 @@ void Controller::onResetServicesClicked()
 
 
     QFile resetScript(":/scripts/reset_services.sh");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!resetScript.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "script file not found / failed to load";
         return;
     }
