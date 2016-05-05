@@ -1,6 +1,7 @@
 /*!
   \defgroup Detection
   \ingroup Workstation
-  \brief This module contains all code regarding the detection of humans in the video recorded by the drone.
-  
+  \brief This module contains all logic regarding the detection of humans in the video recorded by the drone.
+  The results are save in the model DetectionResult
+
 */

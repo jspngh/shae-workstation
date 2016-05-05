@@ -29,14 +29,32 @@ class PersistenceController;
  * \ingroup Communication
  */
 enum RequestedDroneStatus {
-    Battery_Level, Location, Drone_Type, Waypoint_Order, Next_Waypoint, Next_Waypoints, Speed, Selected_Speed, Height, Selected_Height, Camera_Angle, FPS, Resolution, GPS_Count
+    Battery_Level //!< the battery level
+    , Location //!< the current location
+    , Drone_Type//!< the type of the drone, e.g. 'Solo;
+    , Waypoint_Order//!< the number of the waypoint last reached
+    , Next_Waypoint//!< the coordidnates of the next waypoint
+    , Next_Waypoints//!< the coordinates of all the folowing waypoints
+    , Speed //!< the speed at which the drone is flying
+    , Selected_Speed //!< the speed at which the drone should fly
+    , Height //!<the current height of the drone
+    , Selected_Height //!<the height the drone should fly
+    , Camera_Angle //!< the angle of the camera, in degrees between 0 and 90
+    , FPS //!< the fps that the drone is recording
+    , Resolution //!< the resulution the drone is recording, specified by the height in pixels, e.g. 720
+    , GPS_Count //!< the number of gps sattelites visible to the drone
 };
+
 /*!
  * \brief The RequestedDroneSetting enum is used to easily set a certain setting on the drone.
  * \ingroup Communication
  */
 enum RequestedDroneSetting {
-    Height_To_Set, Speed_To_Set, Camera_Angle_To_Set, FPS_To_Set, Resolution_To_Set
+    Height_To_Set//!< used to specify the height in m that you want the drone to fly
+    , Speed_To_Set //!< used to specify the speed in m/s you want the drone to fly
+    , Camera_Angle_To_Set //!< used to specify the camera angle you want to set
+    , FPS_To_Set //!< used to specify the fps at which the drone should recording, e.g. 30, 60, 90, 120.
+    , Resolution_To_Set //!< used to specify the resulution in pixel height the drone should record, e.g. 720
 };
 
 /*! \brief DroneModule class contains a drone model and all the logic belonging to a drone.
