@@ -93,7 +93,7 @@ void Controller::onResetServicesClicked()
         qDebug() << "script file not found / failed to load";
         return;
     } else {
-        qDebug() << "hellooooooo";
+        qDebug() << "resetting services";
     }
 
     arg << file.readAll();
