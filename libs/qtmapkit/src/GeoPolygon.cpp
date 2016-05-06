@@ -111,7 +111,7 @@ double GeoPolygon::crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordina
 bool GeoPolygon::isValid() const
 {
     //check if mostEast en mostWest are correct
-    qDebug() << "isvalid";
+    //qDebug() << "isvalid";
 
     foreach (QGeoCoordinate coordinate, coordinates) {
         if (coordinate.longitude() < mostWestCoordinate.longitude()){
