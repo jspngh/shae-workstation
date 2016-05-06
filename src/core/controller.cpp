@@ -130,9 +130,16 @@ void Controller::onResetServicesClicked()
     QProcess *proc = new QProcess();
     QStringList arg;
     arg << keyPath;
+    QMessageBox msgBox;
+    msgBox.setText("The drone services are resetting.");
     proc->start(scriptPath, arg);
+    qDebug() << "resetting services";
+    msgBox.showMaximized();
+    msgBox.exec();
     proc->waitForFinished(-1);
     proc->close();
+    msgBox.close();
+
 }
 
 void Controller::onSearchEmitted(Search *s)

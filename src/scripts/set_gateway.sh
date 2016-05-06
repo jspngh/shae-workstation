@@ -21,7 +21,7 @@ else
 	./connect_to_solo_network.sh
 
 	# Check internet connection
-	output="$(timeout 10 ping www.google.com 2>&1)"
+        output="$(timeout 10 ping www.google.com 2>&1)"
 
 	# Print echo
 	if [[ $output =~ "ttl=" ]]
