@@ -31,9 +31,10 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     QByteArray params2 = params1.toLocal8Bit();
     char *params3 = params2.data();
     const char *vlc_args[] = {  params3 };
-
+    qDebug() << "setting params";
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+    qDebug() << "launched vlc";
 
     /* Create a new item */
     qint64 bufferSize = 8 * 1024 * 1024;
