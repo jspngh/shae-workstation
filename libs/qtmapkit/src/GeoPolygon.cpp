@@ -111,46 +111,67 @@ double GeoPolygon::crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordina
 bool GeoPolygon::isValid() const
 {
     //check if mostEast en mostWest are correct
+    qDebug() << "isvalid";
+
     foreach (QGeoCoordinate coordinate, coordinates) {
-        if (coordinate.longitude() < mostWestCoordinate.longitude())
+        if (coordinate.longitude() < mostWestCoordinate.longitude()){
+            qDebug() << "1";
             return false;
-        if (coordinate.longitude() > mostEastCoordinate.longitude())
+        }
+        if (coordinate.longitude() > mostEastCoordinate.longitude()){
+            qDebug() << "2";
             return false;
+        }
     }
 
 
     //mostleft and most right should be in both hulls at resp. front and back
-    if (upperHull.front() != mostWestCoordinate)
+    if (upperHull.front() != mostWestCoordinate){
+        qDebug() << "6";
         return false;
-    if (lowerHull.front() != mostWestCoordinate)
+    }
+    if (lowerHull.front() != mostWestCoordinate){
+        qDebug() << "7";
         return false;
-    if (upperHull.back() != mostEastCoordinate || lowerHull.back() != mostEastCoordinate)
+    }
+    if (upperHull.back() != mostEastCoordinate || lowerHull.back() != mostEastCoordinate){
+        qDebug() << "8";
         return false;
+    }
 
     //check if upperhull curves clockwise
     for (int i = 2; i < upperHull.size(); i++) {
-        if (crossProduct(upperHull[i - 2], upperHull[i - 1], upperHull[i]) >= 0.0)
+        if (crossProduct(upperHull[i - 2], upperHull[i - 1], upperHull[i]) > 0.0){
+            qDebug() << "3";
             return false;
+        }
     }
 
     //check if lowerhull curves counter-clockwise
     for (int i = 2; i < lowerHull.size(); i++) {
-        if (crossProduct(lowerHull[i - 2], lowerHull[i - 1], lowerHull[i]) <= 0.0)
+        if (crossProduct(lowerHull[i - 2], lowerHull[i - 1], lowerHull[i]) < 0.0){
+
+            qDebug() << "4";
             return false;
+        }
     }
 
-    //check if lowerhull is completely below upperhull.
-    QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
+    //check if lowerhull is completely below upperhull. THIS IS A WRONG CHECK!
+    /*
+     * QList<QGeoCoordinate> lower = QList<QGeoCoordinate>(lowerHull);
     lower.pop_back();
     lower.pop_front();
     if (!lower.isEmpty()) {
         std::sort(lower.begin(), lower.end(), compareLatitude);
         QGeoCoordinate highestOfLower = lower.back();
         foreach (QGeoCoordinate coordinate, upperHull) {
-            if (coordinate.latitude() < highestOfLower.latitude())
+            if (coordinate.latitude() < highestOfLower.latitude()){
+                qDebug() << "5";
                 return false;
+            }
         }
     }
+    */
 
     return true;
 }

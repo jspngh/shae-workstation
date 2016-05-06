@@ -51,7 +51,7 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
 
     }
      qDebug() << "distance to east" << d1 <<"distance to west" << d2;
-    //qDebug() << list->back();
+    qDebug() << list->back();
 
     //while going from wesst to East or vice versa (incrementing by visionWidth)
     do {
@@ -59,9 +59,9 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
 
         //1. Take a step along the upperHull.
         auto pair = getNeighbouringEdges(list->back(), area.getUpperHull());
-        list->push_back(PathAlgorithm::goDirectionBetween(list->back(), pair.first,
-                        pair.second, visionWidth, direction));
-        //qDebug() << list->back();
+        list->push_back(toInsidePolygon(PathAlgorithm::goDirectionBetween(list->back(), pair.first,
+                        pair.second, visionWidth, direction),area));
+        qDebug() << list->back();
         if (list->back().longitude() >= area.getMostEastCoordinate().longitude()
                 || list->back().longitude() <= area.getMostWestCoordinate().longitude())
             break;
@@ -71,21 +71,21 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
 
         //2. Go South
         pair = getNeighbouringEdges(list->back(), area.getLowerHull());
-        QGeoCoordinate south = PathAlgorithm::goDirectionBetween(pair.first, pair.first,
+        QGeoCoordinate south = toInsidePolygon(PathAlgorithm::goDirectionBetween(pair.first, pair.first,
                                pair.second,
                                list->back().longitude() - pair.first.longitude(),
-                               EAST);
+                               EAST),area);
         list->push_back(south);
-        //qDebug() << list->back();
+        qDebug() << list->back();
 
 
 
 
         //3. Take a step along the lowerHull
         pair = getNeighbouringEdges(list->back(), area.getLowerHull());
-        list->push_back(PathAlgorithm::goDirectionBetween(list->back(), pair.first,
-                        pair.second, visionWidth, direction));
-        //qDebug() << list->back();
+        list->push_back(toInsidePolygon(PathAlgorithm::goDirectionBetween(list->back(), pair.first,
+                        pair.second, visionWidth, direction), area));
+        qDebug() << list->back();
         if (list->back().longitude() >= area.getMostEastCoordinate().longitude()
                 || list->back().longitude() <= area.getMostWestCoordinate().longitude())
             break;
@@ -95,12 +95,12 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
 
         //4. Go North
         pair = getNeighbouringEdges(list->back(), area.getUpperHull());
-        QGeoCoordinate north = PathAlgorithm::goDirectionBetween(pair.first, pair.first,
+        QGeoCoordinate north = toInsidePolygon(PathAlgorithm::goDirectionBetween(pair.first, pair.first,
                                pair.second,
                                list->back().longitude() - pair.first.longitude(),
-                               EAST);
+                               EAST), area);
         list->push_back(north);
-        //qDebug() << list->back();
+        qDebug() << list->back();
 
 
 
@@ -199,5 +199,19 @@ void PolygonPathAlgorithm::setWaypointsForDrones(GeoPolygon area, QList<DroneMod
         drone->setWaypoints(calculateWaypoints(GeoPolygon(coordListPerDrone), visionPerDrone));
         border += widthPerDrone;
     }
+
+
+}
+
+QGeoCoordinate PolygonPathAlgorithm::toInsidePolygon(QGeoCoordinate coordinate, GeoPolygon area){
+    auto upperPair = getNeighbouringEdges(coordinate, area.getUpperHull());
+    auto lowerPair = getNeighbouringEdges(coordinate, area.getLowerHull());
+    if(upperPair.first.latitude() < coordinate.latitude() && upperPair.second.latitude() < coordinate.latitude()){
+        return QGeoCoordinate(std::max(upperPair.first.latitude(), upperPair.second.latitude()), coordinate.longitude());
+    }
+    else if(lowerPair.first.latitude() > coordinate.latitude() && lowerPair.second.latitude() > coordinate.latitude()){
+        return QGeoCoordinate(std::min(lowerPair.first.latitude(), lowerPair.second.latitude()), coordinate.longitude());
+    }
+    else return coordinate;
 }
 
