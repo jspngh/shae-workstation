@@ -43,6 +43,7 @@ void DetectionController::run()
     }
 
     this->sequence = cv::VideoCapture(path.toStdString());
+    qDebug() << CV_CAP_PROP_FPS;
     double fpsOriginal = (double) this->sequence.get(CV_CAP_PROP_FPS);
     qDebug() << (double) fpsOriginal;
     int numFrames = this->sequence.get(CV_CAP_PROP_FRAME_COUNT);
@@ -268,5 +269,3 @@ QString DetectionController::modelLocation()
 
     return folder.append(name);
 }
-
-
