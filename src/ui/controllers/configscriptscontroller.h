@@ -3,14 +3,19 @@
 
 #include <QObject>
 #include <QProcess>
+#include <QFile>
+#include <QStandardPaths>
 #include <QDebug>
+#include <QDir>
+
 
 class ConfigScriptsController : public QObject
 {
     Q_OBJECT
 public:
     explicit ConfigScriptsController(QObject *parent = 0);
-
+private:
+    QString standardDataFolder();
 signals:
     void connectedToSoloNetwork();
     void notConnectedToSoloNetwork(QString);

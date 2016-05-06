@@ -1,3 +1,4 @@
+#include <QProcess>
 #include "controller.h"
 
 Controller::Controller(MainWindow *window, QObject *p)
@@ -15,13 +16,14 @@ Controller::Controller(MainWindow *window, QObject *p)
     drones = new QList<DroneModule *>();
 
     // create controllers
-    pathLogicController = new SimplePathAlgorithm();
     persistenceController = new PersistenceController();
 
     startListeningForDrones();
 
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
+    mediator->addSignal(this, SIGNAL(droneSetupFailed()), QString("droneSetupFailed()"));
+    mediator->addSlot(this, SLOT(onResetServicesClicked()), QString("resetServicesClicked()"));
 }
 
 Controller::~Controller()
@@ -47,22 +49,19 @@ Controller::~Controller()
 void Controller::init()
 {
     // configure every component with the mediator
-    pathLogicController->setMediator(mediator);
-    mainWindow->getConfigWidget()->setMediator(mediator);
-    mainWindow->getOverviewWidget()->setMediator(mediator);
-    mainWindow->getWelcomeWidget()->setMediator(mediator);
+
+    //pathLogicController->setMediator(mediator);
+    mainWindow->setMediator(mediator);
     persistenceController->setMediator(mediator);
 
     // place every component in a different thread
     persistenceController->moveToThread(&persistenceThread);
-    pathLogicController->moveToThread(&pathLogicThread);
 
     // start all the threads
     persistenceThread.start();
     pathLogicThread.start();
     droneThread.start();
 }
-
 
 void Controller::retrieveWorkstationIpAndBroadcast()
 {
@@ -78,16 +77,87 @@ void Controller::retrieveWorkstationIpAndBroadcast()
     }
 }
 
+void Controller::onResetServicesClicked()
+{
+    QString configFolder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString rsaFileName = "shae_rsa";
+    QString scriptFileName = "reset_services.sh";
+
+    // create folder if not available
+    QDir(QDir::root()).mkpath(configFolder);
+
+    if (!configFolder.endsWith(QDir::separator()))
+        configFolder.append(QDir::separator());
+
+    QString keyPath = configFolder + rsaFileName;
+    QString scriptPath = configFolder + scriptFileName;
+    QFile rsaKey(keyPath);
+    QFile resetScript(scriptPath);
+
+    // if the file already exists nothing needs to be done anymore
+    // in general this function only needs to copy the file once, the first the time the application runs
+    if (!rsaKey.exists()) {
+        QFile srcFile(":/scripts/shae_rsa");
+        srcFile.open(QIODevice::ReadOnly);
+        QTextStream in(&srcFile);
+        rsaKey.open(QIODevice::WriteOnly);
+        QTextStream out(&rsaKey);
+        out << in.readAll();
+
+        /* Close the files */
+        rsaKey.close();
+        srcFile.close();
+
+        /* Set correct permissions */
+        rsaKey.setPermissions(QFile::ReadOwner);
+    }
+    if (!resetScript.exists()) {
+        QFile scriptSrcFile(":/scripts/reset_services.sh");
+        scriptSrcFile.open(QIODevice::ReadOnly);
+        QTextStream in(&scriptSrcFile);
+        resetScript.open(QIODevice::WriteOnly);
+        QTextStream out(&resetScript);
+        out << in.readAll();
+
+        /* Close the files */
+        resetScript.close();
+        scriptSrcFile.close();
+
+        /* Set correct permissions */
+        resetScript.setPermissions(QFile::ExeOwner | QFile::ReadOwner | QFile::WriteOwner);
+    }
+
+    QProcess *proc = new QProcess();
+    QStringList arg;
+    arg << keyPath;
+    QMessageBox msgBox;
+    msgBox.setText("The drone services are resetting.");
+    proc->start(scriptPath, arg);
+    qDebug() << "resetting services";
+    msgBox.showMaximized();
+    msgBox.exec();
+    proc->waitForFinished(-1);
+    proc->close();
+    msgBox.close();
+
+}
 
 void Controller::onSearchEmitted(Search *s)
 {
     search = s;
+    if(s->getArea()->type() == QGeoShape::RectangleType)
+        pathLogicController = new SimplePathAlgorithm();
+    else
+        pathLogicController = new PolygonPathAlgorithm();
+
+    pathLogicController->moveToThread(&pathLogicThread);
+    pathLogicController->setMediator(mediator);
+    pathLogicController->startSearch(s);
 }
 
 int Controller::numDronesConnected()
 {
     return drones->size();
-
 }
 
 void Controller::startListeningForDrones()
@@ -126,23 +196,28 @@ void Controller::readPendingDatagrams()
 void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);
+    // first check if we received an empty HelloMessage
+    // this indicates failure at the side of the drone
     QString ip = hello.getDroneIp();
-    QString strFile = hello.getStreamFile();
-    QString ctrIp = hello.getControllerIp();
-    int cmdPort = hello.getCommandsPort();
-    int strPort = hello.getStreamPort();
-    double vision = hello.getVisionWidth();
+    if (ip.isEmpty() || ip.isNull()) {
+        emit(droneSetupFailed()); // emit signal indicating failure
+    } else {
+        QString strFile = hello.getStreamFile();
+        QString ctrIp = hello.getControllerIp();
+        int cmdPort = hello.getCommandsPort();
+        int strPort = hello.getStreamPort();
+        double vision = hello.getVisionWidth();
 
-    DroneModule *drone = receivedHelloFrom(ip);
-    if (drone == nullptr) {
-        // first time that the drone with this IP has sent a Hello message
-        drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
-        qDebug() << "created new  drone with ID: " << drone->getGuid().toString();
-        drone->setPersistenceController(persistenceController);
-        drone = configureDrone(drone);
+        DroneModule *drone = receivedHelloFrom(ip);
+        if (drone == nullptr) {
+            // first time that the drone with this IP has sent a Hello message
+            drone = new DroneModule(cmdPort, strPort, ip, ctrIp, workstationIp, strFile, vision, true);
+            qDebug() << "created new  drone with ID: " << drone->getGuid().toString();
+            drone->setPersistenceController(persistenceController);
+            drone = configureDrone(drone);
+        }
+        drone->requestStatus();
     }
-
-    drone->requestStatus();
 }
 
 DroneModule *Controller::configureDrone(DroneModule *drone)
@@ -160,7 +235,6 @@ DroneModule *Controller::configureDrone(DroneModule *drone)
     return drone;
 }
 
-
 DroneModule *Controller::receivedHelloFrom(QString ip)
 {
     for (int i = 0; i < drones->size(); i++) {
@@ -169,7 +243,6 @@ DroneModule *Controller::receivedHelloFrom(QString ip)
     }
     return nullptr;
 }
-
 
 /*****************
  *    Getters
@@ -184,7 +257,6 @@ QList<DroneModule *> *Controller::getDrones()
 {
     return drones;
 }
-
 
 void Controller::setDrones(QList<DroneModule *> *list)
 {

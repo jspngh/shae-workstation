@@ -37,13 +37,15 @@ private:
     void setSignalSlots();
 
     void setupReady();
+    void setupFailed();
 
     GatewayDialog *gd;
 
 private slots:   
     void on_configSearchButton_clicked();
+    void onDroneStatusReceived(DroneStatus* s);
+    void onDroneSetupFailure();
     void on_startSetupButton_clicked();
-    void droneDetected(DroneStatus* s);
     void pictureTimer();
     void selectedImage(int);
     void connectedToSoloNetwork();

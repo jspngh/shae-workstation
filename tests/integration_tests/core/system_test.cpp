@@ -43,14 +43,13 @@ void System_Test::initTestCase()
     s->setHeight(3);
     s->setStartTime(QTime::currentTime());
     s->setSearchID(QUuid::createUuid());
-    s->setArea(QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022683, 3.709591)));
+    s->setArea(new QGeoRectangle(QGeoCoordinate(51.022883, 3.709591), QGeoCoordinate(51.022683, 3.709591)));
     s->setDroneList((*list));
 
     emit startSearch(s);
     QTest::qWait(1000 * 10);
     QTest::qWait(1000 * 60 * 4);
 }
-
 
 void System_Test::cleanupTestCase()
 {
@@ -68,5 +67,5 @@ void System_Test::cleanupTestCase()
 
 void System_Test::systemTest()
 {
-
 }
+

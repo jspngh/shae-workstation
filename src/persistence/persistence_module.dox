@@ -1,5 +1,7 @@
 /*!
   \defgroup Persistence
   \ingroup Workstation
-  \brief This module contains all code that enables all data to be saved.
+  \brief  The Persistence component is responsible for saving data generated in the application (videosequences, status messages of the drone, detection results, drone configuration, etc.).
+
+  The persistence component is based on the Qt SQLite module.
 */

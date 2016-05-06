@@ -6,6 +6,12 @@
     <qresource prefix="/ui/icons">
         <file alias="battery">ui/img/battery-icon.jpg</file>
         <file alias="checkbox">ui/img/checkbox.png</file>
+        <file alias="checkbox_checked">ui/img/checkbox_checked.png</file>
+        <file alias="checkbox_checked_hover">ui/img/checkbox_checked_hover.png</file>
+        <file alias="checkbox_checked_pressed">ui/img/checkbox_checked_pressed.png</file>
+        <file alias="checkbox_unchecked">ui/img/checkbox_unchecked.png</file>
+        <file alias="checkbox_unchecked_hover">ui/img/checkbox_unchecked_hover.png</file>
+        <file alias="checkbox_unchecked_pressed">ui/img/checkbox_unchecked_pressed.png</file>
         <file alias="down_arrow">ui/img/down_arrow.png</file>
         <file alias="drone">ui/img/drone-icon.png</file>
         <file alias="emergency">ui/img/exclamation-icon.png</file>
@@ -19,24 +25,21 @@
     </qresource>
     <qresource prefix="/db">
         <file alias="createTables.sql">../scripts/createDB.sql</file>
-        <file alias="createTables.sql">../scripts/createDB.sql</file>
     </qresource>
     <qresource prefix="/ui/screens">
-        <file alias="screen0.png">ui/img/logo.png</file>
-        <file alias="screen1.png">ui/img/customizeSearch.png</file>
-        <file alias="screen2.png">ui/img/droneSelect.png</file>
-        <file alias="screen3.png">ui/img/selectionField.png</file>
-        <file alias="screen4.png">ui/img/addresField.png</file>
-        <file alias="screen5.png">ui/img/positionField.png</file>
-        <file alias="screen6.png">ui/img/overviewscreentop.png</file>
-        <file alias="screen7.png">ui/img/overviewscreenmiddle.png</file>
-        <file alias="screen8.png">ui/img/overviewscreenexport.png</file>
-        <file alias="screen9.png">ui/img/overviewscreenmap.png</file>
+        <file alias="shot0.png">ui/img/screenshots_configuration_searchparams.png</file>
+        <file alias="shot6.png">ui/img/screenshot_end_search.png</file>
+        <file alias="shot2.png">ui/img/screenshots_configuration_selectarea.png</file>
+        <file alias="shot1.png">ui/img/screenshots_configuration_selectdrones.png</file>
+        <file alias="shot3.png">ui/img/screenshots_overview_droneinfo.png</file>
+        <file alias="shot4.png">ui/img/screenshots_overview_emergency.png</file>
+        <file alias="shot5.png">ui/img/screenshots_overview_rth.png</file>
     </qresource>
     <qresource prefix="/scripts">
-	<file alias="connect_wifi">scripts/connect_to_solo_network.sh</file>
-	<file alias="set_gateway">scripts/set_gateway.sh</file>
-	<file alias="test">scripts/test.sh</file>
+        <file alias="connect_to_solo_network.sh">scripts/connect_to_solo_network.sh</file>
+        <file alias="set_gateway.sh">scripts/set_gateway.sh</file>
+        <file alias="reset_services.sh">scripts/reset_services.sh</file>
+        <file alias="shae_rsa">scripts/shae_rsa</file>
     </qresource>
     <qresource prefix="/detection/dependencies">
         <file alias="gopro_3m_65deg.cfg">detection/dependencies/gopro_3m_65deg.cfg</file>

@@ -19,6 +19,7 @@ public:
      * Should not be used for serious purposes.
      */
     GeoPolygon();
+
     /*!
      * \brief GeoPolygon constructor that should be used
      * \param coordinates, a list containing coordinates that should be inside the polygon.
@@ -26,6 +27,12 @@ public:
      * in its area, but not necessarily contains all the coordinates on its border (saved in the coordinates attribute.
      */
     GeoPolygon(QList<QGeoCoordinate> coordinates);
+
+    /*!
+     * \brief GeoPolygon constructor that copies another GeoPolygon
+     * \param other The other GeoPolygon to copy.
+     */
+    GeoPolygon(const GeoPolygon& other);
 
     /*!
      * \brief fromHull returns the field coordinates if upperhull and lowerhull are already calculated.
@@ -100,9 +107,17 @@ public:
      */
     QGeoCoordinate getMostEastCoordinate() const;
 
+    /*!
+     * \brief Returns the polygon's area
+     * \return The area in m²
+     */
+    double getArea() const;
+    void setArea(const double area);
+
+    QGeoCoordinate center() const;
+    QGeoRectangle boundingBox() const;
+
 private:
-
-
     //! The list of coordinates contained by the polygon.
     QList<QGeoCoordinate> coordinates;
 
@@ -114,6 +129,8 @@ private:
 
     QGeoCoordinate mostWestCoordinate;
     QGeoCoordinate mostEastCoordinate;
+
+    double area;
 };
 
 #endif // GEOPOLYGON_H

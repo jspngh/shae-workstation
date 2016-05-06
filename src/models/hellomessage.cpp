@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "hellomessage.h"
 
 HelloMessage::HelloMessage(QString droneIp,
@@ -16,7 +17,13 @@ HelloMessage::HelloMessage(QString droneIp,
 
 }
 
-HelloMessage::HelloMessage()
+HelloMessage::HelloMessage():
+    visionWidth(-1),
+    streamFile(QString()),
+    droneIp(QString()),
+    controllerIp(QString()),
+    streamPort(-1),
+    commandsPort(-1)
 {
 
 }
@@ -45,16 +52,28 @@ HelloMessage HelloMessage::parse(QByteArray helloRaw)
     if (!jsondoc.isObject()) return HelloMessage();
 
     QJsonObject json = jsondoc.object();
+    QString messageType = json["message_type"].toString();
+    qDebug() << messageType;
+    if (QString::compare(messageType, "hello") == 0) {
+        // we received an actual hello message
 
-    // read date fields
-    QString ipDrone = json["ip_drone"].toString();
-    int portCommands = json["port_commands"].toInt();
-    int portStream = json["port_stream"].toInt();
-    QString streamFile = json["stream_file"].toString();
-    double visionWidth = json["vision_width"].toDouble();
-    QString controllerIp = json["ip_controller"].toString();
+        // read date fields
+        QString ipDrone = json["ip_drone"].toString();
+        qDebug() << ipDrone;
+        int portCommands = json["port_commands"].toInt();
+        int portStream = json["port_stream"].toInt();
+        QString streamFile = json["stream_file"].toString();
+        double visionWidth = json["vision_width"].toDouble();
+        QString controllerIp = json["ip_controller"].toString();
 
-    return HelloMessage(ipDrone, streamFile, controllerIp, portCommands, portStream, visionWidth);
+        return HelloMessage(ipDrone, streamFile, controllerIp, portCommands, portStream, visionWidth);
+
+    } else {
+        // we did not receive a hello message
+        // either the message_type was 'fail' or something else went wrong
+        qDebug() << "Did not get hello";
+        return HelloMessage();
+    }
 }
 
 // Getters

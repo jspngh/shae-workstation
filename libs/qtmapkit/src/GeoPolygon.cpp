@@ -1,4 +1,4 @@
-#include "geopolygon.h"
+#include "GeoPolygon.h"
 #include <algorithm>
 #include <QtDebug>
 
@@ -61,6 +61,16 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
 
 }
 
+GeoPolygon::GeoPolygon(const GeoPolygon& other)
+    : QGeoShape()
+{
+    this->coordinates = other.coordinates;
+    this->upperHull = other.upperHull;
+    this->lowerHull = other.lowerHull;
+    this->mostWestCoordinate = other.mostWestCoordinate;
+    this->mostEastCoordinate = other.mostEastCoordinate;
+}
+
 QList<QGeoCoordinate> GeoPolygon::fromHull(QList<QGeoCoordinate> upper, QList<QGeoCoordinate> lower)
 {
     QList<QGeoCoordinate> list = QList<QGeoCoordinate>(upper);
@@ -97,8 +107,6 @@ double GeoPolygon::crossProduct(QGeoCoordinate O, QGeoCoordinate A, QGeoCoordina
            - (A.latitude() - O.latitude())
            * (B.longitude() - O.longitude());
 }
-
-
 
 bool GeoPolygon::isValid() const
 {
@@ -203,3 +211,37 @@ QGeoCoordinate GeoPolygon::getMostEastCoordinate() const
 {
     return mostEastCoordinate;
 }
+
+double GeoPolygon::getArea() const
+{
+    return this->area;
+}
+
+void GeoPolygon::setArea(const double area)
+{
+    this->area = area;
+}
+
+QGeoCoordinate GeoPolygon::center() const
+{
+    return boundingBox().center();
+}
+
+QGeoRectangle GeoPolygon::boundingBox() const
+{
+    double topLat = -180, bottomLat = 180;
+    for(QGeoCoordinate coord: coordinates) {
+        if(coord.latitude() > topLat) {
+            topLat = coord.latitude();
+        } else if (coord.latitude() < bottomLat) {
+            bottomLat = coord.latitude();
+        }
+    }
+
+    QGeoRectangle boundingBox(
+            QGeoCoordinate(topLat, mostWestCoordinate.longitude()),
+            QGeoCoordinate(bottomLat, mostWestCoordinate.longitude())
+    );
+    return boundingBox;
+}
+

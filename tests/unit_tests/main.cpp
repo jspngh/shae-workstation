@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
     /********************
      * Testing jsonstuff
      * *****************/
+
     // sending using dronemodule (inside communication)
     tests.append(new Json_Messages_Test());
     // receiving using dronestatus (inside models)
@@ -60,13 +61,16 @@ int main(int argc, char *argv[])
     /************************
      * Testing communication
      * *********************/
+
     tests.append(new ParseException_Test());
     tests.append(new StreamConnection_Test());
     tests.append(new DroneHeartbeatReceiver_Test());
 
+
     /********************
      * Testing persistence
      * *****************/
+
     tests.append(new SearchDAO_Test());
 
     tests.append(new DetectionResultDAO_Test());
@@ -79,6 +83,7 @@ int main(int argc, char *argv[])
     /********************
      * Testing videostuff
      * *****************/
+
     tests.append(new VideoController_Test());
     tests.append(new DetectionController_Test());
 
@@ -89,7 +94,6 @@ int main(int argc, char *argv[])
      * *****************/
 
     tests.append(new XMLWriter_Test());
-
     tests.append(new Mediator_Test());
 
 

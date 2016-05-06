@@ -3,7 +3,7 @@
 #include <QtTest/QtTest>
 #include "pathlogic/pathalgorithm.h"
 #include "pathlogic/simplepathalgorithm.h"
-#include "pathlogic/geopolygon.h"
+#include <GeoPolygon.h>
 #include "models/drone.h"
 #include "simplepathalgorithm_test.h"
 

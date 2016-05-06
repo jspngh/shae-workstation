@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include "ui_mainwindow.h"
+#include "core/mediator.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
@@ -19,6 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void setMediator(Mediator *mediator);
     WelcomeWidget *getWelcomeWidget();
     ConfigWidget *getConfigWidget();
     OverviewWidget *getOverviewWidget();
@@ -28,6 +30,8 @@ private slots:
     void onSaveFootageClicked();
 
 private:
+    Mediator *mediator;
+
     Ui::MainWindow *ui;
     WelcomeWidget *welcomeWidget;
     ConfigWidget *configWidget;

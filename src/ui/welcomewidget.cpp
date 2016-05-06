@@ -1,10 +1,12 @@
-#include "welcomewidget.h"
-#include "ui_welcomewidget.h"
-#include "clickablelabel.h"
 #include <QDebug>
+#include <QMessageBox>
 #include <QDir>
 #include <QPixmap>
 #include <QTimer>
+#include <QMessageBox>
+#include "welcomewidget.h"
+#include "ui_welcomewidget.h"
+#include "clickablelabel.h"
 #include <QProcess>
 #include <QStandardPaths>
 #include <QFuture>
@@ -27,7 +29,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     status = 0;
     droneConnected = false;
     pictureTimerCounter = 0;
-    pictures = QDir( ":/ui/screens" ).entryList();
+    pictures = QDir(":/ui/screens").entryList();
 
     //scroll area setup
 
@@ -98,16 +100,28 @@ void WelcomeWidget::setMediator(Mediator *mediator)
 
 void WelcomeWidget::setSignalSlots()
 {
-    mediator->addSlot(this, SLOT(droneDetected(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(onDroneStatusReceived(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(onDroneSetupFailure()), QString("droneSetupFailed()"));
 }
 
 void WelcomeWidget::setupReady()
 {
      ui->configSearchButton->setEnabled(true);
      droneConnected = true;
-
 }
 
+void WelcomeWidget::setupFailed()
+{
+    if (this->status >= 0)
+    {
+        this->status = -1;
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("An error occured");
+        msgBox.setText("There was a problem while setting up the drone.");
+        msgBox.setDetailedText("Please restart the application and the services on the drone.");
+        msgBox.exec();
+    }
+}
 /***
  * Connecting on controller's Wifi (make sure controller is turned on).
  * \nSetting up gateway on the controller.
@@ -138,9 +152,14 @@ void WelcomeWidget::on_configSearchButton_clicked()
     ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
-void WelcomeWidget::droneDetected(DroneStatus* s)
+void WelcomeWidget::onDroneStatusReceived(DroneStatus* s)
 {
     setupReady();
+}
+
+void WelcomeWidget::onDroneSetupFailure()
+{
+    setupFailed();
 }
 
 void WelcomeWidget::selectedImage(int file)

@@ -30,7 +30,6 @@ void PathAlgorithm::setMediator(Mediator *mediator)
     qDebug() << "adding PathAlgorithm signal/slots";
     this->mediator = mediator;
     mediator->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
-    mediator->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
 }
 
 QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direction, double distance)
@@ -46,8 +45,8 @@ QGeoCoordinate PathAlgorithm::goDirection(QGeoCoordinate start, Direction direct
         return start;
         break;
     }
-
 }
+
 QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoordinate coordinate1, QGeoCoordinate coordinate2, double distance, Direction direction)
 {
     double rico = (coordinate2.latitude() - coordinate1.latitude()) / (coordinate2.longitude() - coordinate1.longitude());
@@ -55,10 +54,16 @@ QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoord
     return newpoint;
 }
 
-void PathAlgorithm::onStartSearch(Search *s)
+void PathAlgorithm::startSearch(Search *s)
 {
     qDebug() << "PathAlgorithm::onStartSearch(Search *s)";
-    setWaypointsForDrones(s->getArea(), s->getDroneList());
+    if(s->getArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle* area = static_cast<QGeoRectangle*>(s->getArea());
+        setWaypointsForDrones(*area, s->getDroneList());
+    } else {
+        GeoPolygon* area = static_cast<GeoPolygon*>(s->getArea());
+        setWaypointsForDrones(*area, s->getDroneList());
+    }
     emit pathCalculated(s);
     qDebug() << "emit PathAlgorithm::pathCalculated(Search *s)";
 }
