@@ -139,7 +139,6 @@ void Controller::onResetServicesClicked()
     proc->waitForFinished(-1);
     proc->close();
     msgBox.close();
-
 }
 
 void Controller::onSearchEmitted(Search *s)
