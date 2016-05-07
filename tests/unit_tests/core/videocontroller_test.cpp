@@ -11,6 +11,7 @@ void VideoController_Test::initTestCase()
     QString program = "python2";
     QStringList arguments;
     qDebug() << "opening simulator";
+
     arguments << "../../../drone/src/simulator/simulator.py";
     simulatorProcess = new QProcess(this);
     qDebug() << "simulator opened";

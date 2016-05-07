@@ -32,6 +32,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     char *params3 = params2.data();
     const char *vlc_args[] = {  params3 };
     qDebug() << "setting params";
+    qDebug() << params1;
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
     qDebug() << "launched vlc";
