@@ -47,7 +47,6 @@ QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
 
 include(../../src/ui/ui.pri)
-include(../../src/core/core.pri)
 
 
 RESOURCES = ../application_test.qrc

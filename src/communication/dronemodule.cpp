@@ -38,7 +38,7 @@ DroneModule::DroneModule(int dataPort,
     videoProcessing = video;
     videoActive = false;
     isFlying = false;
-
+    returningHome = false;
     detectionController = nullptr;
     connect(this, SIGNAL(droneRequest(QString)), droneConnection, SLOT(onDroneRequest(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(streamRequest()), streamConnection, SLOT(onStreamRequest()));
@@ -229,9 +229,9 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
 {
     lastReceivedDroneStatus = *status;
 
-    if( waypoints != nullptr &&
-        status->getPreviousWaypointOrder() == waypoints->size() &&
-        status->getCurrentLocation().distanceTo(homeLocation) < 1){
+    if( waypoints->size()!=0 &&
+        status->getPreviousWaypointOrder() >= waypoints->size()-1 &&
+        status->getCurrentLocation().distanceTo(homeLocation) < 1 && !returningHome){
         // the drone has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
         returnToHome();
@@ -243,7 +243,7 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
         videoActive = true;
     }
 
-    if (waypoints != nullptr) {
+    if (waypoints->size() != 0 && isFlying) {
         if (status->getPreviousWaypointOrder() == waypoints->size() - 1 && videoProcessing && videoActive) {
             videoActive = false;
             qDebug() << "In last waypoint, stopping stream";
@@ -251,7 +251,7 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
         }
     }
 
-    if (isFlying && status->getHeight() < h0 + 0.8) {
+    if (returningHome && isFlying && status->getHeight() < h0 + 0.8) {
         isFlying = false;
         qDebug() << "drone has landed";
         emit landed(this);
@@ -421,6 +421,7 @@ QJsonDocument DroneModule::returnToHome()
     QString message = jsondoc.toJson(QJsonDocument::Indented);
 
     emit droneRequest(message);
+    returningHome = true;
 
     return jsondoc;
 }

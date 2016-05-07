@@ -10,7 +10,8 @@
 /*!
  * \brief The DroneHeartBeatReceiver class
  * \ingroup Communication
- * This class is responsible for receiving the heartbeats sent by the drone, it uses the DroneStatus class to parse them en process them further.
+ This class is responsible for receiving the continous heartbeats sent by the drone. It passes on the heartbeat to the DroneModule.
+
  */
 
 
@@ -44,8 +45,11 @@ public slots:
     void receiveHeartbeat();
 
 signals:
+
     /*!  \brief emit droneHeartbeat after receiving a heartbeat message.
      *  This signal is comparable to DroneConnection::droneResponse.
+     This signal should also be connected to onDroneRespone of the drone class, which will eventually call droneStatusReceived(DroneStatus).
+     The connection is made in the drone constructor
     */
     void droneHeartBeat(const QString heartbeat);
 

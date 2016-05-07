@@ -99,7 +99,8 @@ void OverviewWidget::onSearchStarted(Search *s)
 
     QGeoCoordinate center;
     if(search->getArea()->type() == QGeoShape::RectangleType) {
-        center = s->getArea()->center();
+        QGeoRectangle* area = static_cast<QGeoRectangle*> (search->getArea());
+        center = area->center();
     } else {
         GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
         center = area->center();

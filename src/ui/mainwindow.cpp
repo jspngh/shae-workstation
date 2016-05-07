@@ -45,9 +45,9 @@ void MainWindow::setMediator(Mediator* mediator)
     this->mediator = mediator;
     mediator->addSignal(ui->resetAction, SIGNAL(triggered()), QString("resetServicesClicked()"));
 
-//    configWidget->setMediator(mediator);
-//    welcomeWidget->setMediator(mediator);
-//    overviewWidget->setMediator(mediator);
+    configWidget->setMediator(mediator);
+    welcomeWidget->setMediator(mediator);
+    overviewWidget->setMediator(mediator);
 }
 
 WelcomeWidget *MainWindow::getWelcomeWidget()

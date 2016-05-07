@@ -2,4 +2,7 @@
   \defgroup Ui
   \ingroup Workstation
   \brief This module contains all code of the ui.
+  The UI component is responsible for the user interface and the interaction with the user.
+  The UI is developed in the Qt-framework, yet the `mapview'(used in the overview and configuration screen) is based on a rewritten version of the \ref workstation/libs/qtmapkit/README.md library.
+  The rewritten version combines both C++ and Javascript code.
 */

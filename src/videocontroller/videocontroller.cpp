@@ -31,11 +31,11 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     QByteArray params2 = params1.toLocal8Bit();
     char *params3 = params2.data();
     const char *vlc_args[] = {  params3 };
-
+    qDebug() << "setting params";
+    qDebug() << params1;
     // Launch VLC
     inst = libvlc_new(sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
-
-    /* Create a new item */
+    qDebug() << "launched vlc";
     qint64 bufferSize = 8 * 1024 * 1024;
     if (drone->getStreamPath().contains(QString("rtp"))) {
         qDebug("started stream from rtp address");
@@ -52,7 +52,6 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
         emit this->streamStarted(drone->getGuid(), sequence);
         return sequence;
     }
-
     /* Create a media player playing environement */
     mp = libvlc_media_player_new_from_media(m);
 

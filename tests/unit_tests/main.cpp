@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
     /********************
      * Testing persistence
      * *****************/
+
     tests.append(new SearchDAO_Test());
 
     tests.append(new DetectionResultDAO_Test());
