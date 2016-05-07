@@ -1,5 +1,6 @@
 #include "overviewwidget.h"
 #include "ui_overviewwidget.h"
+#include <QColor>
 #include <QDebug>
 #include <QFileDialog>
 
@@ -37,7 +38,6 @@ SummaryDialog *OverviewWidget::getSummaryDialog() const
 
 void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
 {
-
     if (!mapViewLoaded) return;
 
     QUuid uuid = heartbeat->getDrone()->getGuid().toString();
@@ -81,12 +81,10 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
     // Update map
     QString markerId = droneId.toString() + "-" + QString::number(droneItem->getPeopleLocated());
     QMMarker& marker = mapView->addMarker(markerId, result->getLocation());
-
     marker.setIcon("qrc:///ui/icons/human");
     marker.scale(0.1*result->getScore()/100, 0.1*result->getScore()/100);
     marker.show();
 }
-
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {
@@ -99,11 +97,19 @@ void OverviewWidget::onSearchStarted(Search *s)
 {
     this->search = s;
 
+    QGeoCoordinate center;
+    if(search->getArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle* area = static_cast<QGeoRectangle*> (search->getArea());
+        center = area->center();
+    } else {
+        GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
+        center = area->center();
+    }
+
     // Initialize map
     mapView = new QMMapView(QMMapView::Satellite,
-                            s->getArea().center(),
-                            11,
-                            false);
+                            center,
+                            11);
 
     connect(mapView, SIGNAL(mapFailedToLoad()),
             this, SLOT(onMapFailedToLoad()));
@@ -135,7 +141,18 @@ void OverviewWidget::fillDroneList()
 
 void OverviewWidget::onMapLoaded()
 {
-    mapView->fitRegion(search->getArea());
+    mapView->setSelectionType(QMSelectionType::None);
+    if(search->getArea()->type() == QGeoShape::RectangleType) {
+        mapView->fitRegion(*(search->getArea()));
+    } else {
+        GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
+        mapView->fitRegion(area->boundingBox());
+    }
+
+    mapView->setSelectionStrokeColor(QColor(255, 255, 255));
+    mapView->setSelectionFillColor(QColor(255, 255, 255, 30));
+    mapView->selectArea(search->getArea());
+
     mapViewLoaded = true;
 
     ui->mainLayout->replaceWidget(ui->mapLoadingLabel, mapView);

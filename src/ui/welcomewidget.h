@@ -11,9 +11,13 @@
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QTimer>
+#include <QDialogButtonBox>
 
 #include "core/mediator.h"
 #include "models/dronestatus.h"
+#include "configscriptscontroller.h"
+#include "progressbarcontroller.h"
+#include "gatewaydialog.h"
 
 namespace Ui {
 class WelcomeWidget;
@@ -33,12 +37,27 @@ private:
     void setSignalSlots();
 
     void setupReady();
+    void setupFailed();
+
+    GatewayDialog *gd;
 
 private slots:   
     void on_configSearchButton_clicked();
-    void droneDetected(DroneStatus* s);
+    void onDroneStatusReceived(DroneStatus* s);
+    void onDroneSetupFailure();
+    void on_startSetupButton_clicked();
     void pictureTimer();
     void selectedImage(int);
+    void connectedToSoloNetwork();
+    void notConnectedToSoloNetwork(QString);
+    void startSetGateway();
+    void gatewaySet();
+    void gatewayNotSet(QString);
+    void incrementProcessBar();
+signals:
+    void updateProgressBar(int percentage, int time);
+    void connectToSoloNetwork();
+    void setGateway(QString ssid, QString password);
 
 private:
     Ui::WelcomeWidget *ui;
@@ -50,6 +69,10 @@ private:
     QStringList pictures;
     QHBoxLayout * vLayout;
     QWidget * mainScrollWidget;
+    QThread csct;
+    ConfigScriptsController *csc;
+    QThread pbct;
+    ProgressBarController *pbc;
 };
 
 #endif // WELCOMEWIDGET_H

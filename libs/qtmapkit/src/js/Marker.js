@@ -23,6 +23,7 @@
         this.image;
         this.imgLoadedPromise;
         this.rotation = 0;
+        this.alpha = 1;
 
         // Tracking stuff
         this.visitedPoints = [location];
@@ -92,6 +93,21 @@
             context.translate(context.canvas.width/2, context.canvas.height/2);
             context.rotate(self.rotation);
             context.scale(width, height);
+            context.globalAlpha = self.alpha;
+        });
+    };
+
+    /* Sets the opacity of the marker.
+     * @param {number} alpha The alpha value, a number between 0 (completely
+     *                       transparent) and 1 (no transparency, default).
+     */
+    Marker.prototype.setOpacity = function(alpha) {
+        if(!this.image) return;
+
+        var self = this;
+        this.addTransformation(function(context) {
+            context.globalAlpha = alpha;
+            self.alpha = alpha;
         });
     };
 
@@ -117,8 +133,7 @@
         });
     };
 
-    /*
-     * Add a transformation before drawing the image.
+    /* Add a transformation before drawing the image.
      * Private method
      * @param {function} transformCallback The callback which will perform the
      *                                     transformation.

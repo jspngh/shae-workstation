@@ -14,6 +14,7 @@
 #include "detection/detectioncontroller.h"
 #include "mediator.h"
 #include "pathlogic/simplepathalgorithm.h"
+#include "pathlogic/polygonpathalgorithm.h"
 #include "persistence/persistencecontroller.h"
 #include "ui/mainwindow.h"
 #include "videocontroller/videocontroller.h"
@@ -25,6 +26,9 @@ class Controller;
 
 /*! \brief The Controller creates all components and puts them in their own thread if necessary.
  * \ingroup Core
+ The Controller component is responsible for starting the different components, and launching the DroneModule.
+ In order to limit the interaction required by the user, the workstation and drones on the network will dynamically connect with each other through broadcasting identification messages. 
+ Each of the components is started in separate threads and run asynchronously. In order to interact with support multiple drones, different DroneModules components need to launched.
  */
 
 class Controller: public QObject
@@ -69,7 +73,11 @@ private:
     //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
     DroneModule *configureDrone(DroneModule *drone);
 
+signals:
+    void droneSetupFailed();
+
 public slots:
+    void onResetServicesClicked();
     void onSearchEmitted(Search *s);
     void readPendingDatagrams();
 
@@ -103,4 +111,3 @@ private:
 };
 
 #endif // CONTROLLER_H
-

@@ -10,10 +10,12 @@ Qt, unlike many other modern GUI frameworks, lacks map support. With the brillia
 That's why I start this project. QtMapKit intends to be a works-out-of-the-box library that wraps everyday uses of the Google Map JavaScript API into a QWidget, bridging accessors and events to make it easier for Qt code interact with the JavaScript map. Some data classes are also made to represent geographic information, as an attempt to make the integration more seamless.
 
 ## How to Get Started
+Note: The installation of this library is done automatically in project SHAE. This page is just for documentation purposes.
 
 * Download the source code
 * Run `qmake` and then `make`. This builds both the library and the demo.
 * `make install` to install the library into `/usr/lib`.
+
 
 Note: Currently the installation only works on Unix-like OSs. You need to manually modify `src.pro` to make it work with Windows.
 

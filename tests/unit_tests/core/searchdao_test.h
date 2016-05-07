@@ -26,6 +26,7 @@ private Q_SLOTS:
     /*! \brief Basic searchdao test
      */
     void testSimpleSearchDAO();
+    void testSimpleSearchPolyDAO();
 private:
     QSqlDatabase projectShaeDatabase;
 };

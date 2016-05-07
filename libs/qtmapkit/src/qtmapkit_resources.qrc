@@ -1,9 +1,11 @@
 <RCC>
     <qresource prefix="/qtmapkit/gmap">
         <file>gmap.html</file>
-        <file>MapKit.js</file>
-        <file>MapSelection.js</file>
-        <file>Marker.js</file>
-        <file>main.js</file>
+        <file>js//MapKit.js</file>
+        <file>js/MapSelection.js</file>
+        <file>js/SquareMapSelection.js</file>
+        <file>js/PolygonMapSelection.js</file>
+        <file>js/Marker.js</file>
+        <file>js/main.js</file>
     </qresource>
 </RCC>
