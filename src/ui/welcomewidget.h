@@ -34,6 +34,7 @@ public:
     void setMediator(Mediator *mediator);
 
 private:
+    //! \brief Sets the signal/slots.
     void setSignalSlots();
 
     void setupReady();
@@ -46,7 +47,9 @@ private slots:
     void onDroneStatusReceived(DroneStatus* s);
     void onDroneSetupFailure();
     void on_startSetupButton_clicked();
+    //! \brief Reset picture timer.
     void pictureTimer();
+    //! \brief Change the selected image in the ui.
     void selectedImage(int);
     void connectedToSoloNetwork();
     void notConnectedToSoloNetwork(QString);

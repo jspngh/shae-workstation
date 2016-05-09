@@ -14,10 +14,11 @@
 class SearchDAO : GeneralDAO
 {
 public:
+
+    SearchDAO();
     /**
      * \brief The basic constructor for a SearchDAO needs a database as input.
      */
-    SearchDAO();
     SearchDAO(QSqlDatabase *projectShaeDatabase);
     /**
      * \brief dbSaveSearch saves a detection result into the database.
