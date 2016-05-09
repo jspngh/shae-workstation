@@ -23,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
         qApp->setStyleSheet(file.readAll());
         file.close();
     }
-    connect(ui->connectAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(ui->exportResultsButton, SIGNAL(triggered()), this, SLOT(onSaveSearchClicked()));
     connect(ui->exportFootageButton, SIGNAL(triggered()), this, SLOT(onSaveFootageClicked()));

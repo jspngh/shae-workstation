@@ -1,9 +1,10 @@
 *cm_ready*
+.ycm*
 
 # binary files
 bin/*
 !bin/tests/dependencies/*
-!bin/debug/dependencies/* 
+!bin/debug/dependencies/*
 
 # included files
 libs/*/include
@@ -34,7 +35,6 @@ Makefile*
 *build*
 
 # QtCreator
-
 *.autosave
 
 #QtCtreator Qml
