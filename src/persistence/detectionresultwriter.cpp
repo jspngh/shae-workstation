@@ -19,6 +19,10 @@ void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QLis
     if (file.open(QIODevice::WriteOnly)) {
         QXmlStreamWriter xmlWriter(&file);
         xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("DetectionFile");
+        xmlWriter.writeStartElement("Timestamp");
+        xmlWriter.writeCharacters(QDateTime::currentDateTime().toString());
+        xmlWriter.writeEndElement();
         xmlWriter.writeStartElement("DetectionResults");
         for (DetectionResult *detectionResult : *results) {
             xmlWriter.writeStartElement("DetectionResult");
@@ -34,6 +38,7 @@ void DetectionResultWriter::writeDetectionResultToFileXML(QString fileName, QLis
             xmlWriter.writeEndElement();
         }
         xmlWriter.writeEndElement();
+        xmlWriter.writeEndElement();
         xmlWriter.writeEndDocument();
         file.close();
     }
@@ -44,6 +49,7 @@ void DetectionResultWriter::writeDetectionResultToFileTXT(QString fileName, QLis
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream stream( &file );
+        stream << "Timestamp: " << QDateTime::currentDateTime().toString() << endl;
         stream << "******************************************" << endl;
         stream << "*            DETECTION RESULTS           *" << endl;
         stream << "******************************************" << endl;
