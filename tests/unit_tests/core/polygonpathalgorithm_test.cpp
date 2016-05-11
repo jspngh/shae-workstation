@@ -23,51 +23,36 @@ void PolygonPathAlgorithm_Test::cleanupTestCase()
 
 void PolygonPathAlgorithm_Test::testCalculateWaypoints()
 {
-//    auto algorithm = PolygonPathAlgorithm(QGeoCoordinate(0.0, 0.0));
-//    QList<QGeoCoordinate> coordinates;
-//    coordinates.push_back(QGeoCoordinate(1.0, 1.0));
-//    coordinates.push_back(QGeoCoordinate(3.0, 2.0));
-//    coordinates.push_back(QGeoCoordinate(4.0, 3.0));
-//    coordinates.push_back(QGeoCoordinate(2.5, 4.5));
+    auto algorithm = PolygonPathAlgorithm(QGeoCoordinate(0.0, 0.0));
+    QList<QGeoCoordinate> coordinates;
+    coordinates.push_back(QGeoCoordinate(1.0, 1.0));
+    coordinates.push_back(QGeoCoordinate(2.0, 2.0));
+    coordinates.push_back(QGeoCoordinate(1.0, 3.0));
 
-//    coordinates.push_back(QGeoCoordinate(0.0, 4.1));
-//    coordinates.push_back(QGeoCoordinate(-1.4, 3.40));
-//    coordinates.push_back(QGeoCoordinate(0.0, 2.0));
+    GeoPolygon area = GeoPolygon(coordinates);
+    auto calculatedList = algorithm.calculateWaypoints(area, 0.5);
 
-//    GeoPolygon area = GeoPolygon(coordinates);
-//    auto calculatedList = algorithm.calculateWaypoints(area, 0.4);
+    //would be great to check if every spot is covered (andnot too much outside of the area is covered)
+    //instead of just the calculated waypoints, but thats probably too hard
 
-//    //would be great to check if every spot is covered (andnot too much outside of the area is covered)
-//    //instead of just the calculated waypoints, but thats probably too hard
+    auto testList = new QList<QGeoCoordinate>();
+    testList->push_back(QGeoCoordinate(1.0, 1.0));
+    testList->push_back(QGeoCoordinate(1.5, 1.5));
+    testList->push_back(QGeoCoordinate(1.0, 1.5));
+    testList->push_back(QGeoCoordinate(1.0, 2.0));
+    testList->push_back(QGeoCoordinate(2.0, 2.0));
+    testList->push_back(QGeoCoordinate(1.5, 2.5));
+    testList->push_back(QGeoCoordinate(1.0, 2.5));
+    testList->push_back(QGeoCoordinate(1.0, 3.0));
 
-//    auto testList = new QList<QGeoCoordinate>();
-//    testList->push_back(QGeoCoordinate(1.0, 1.0));
-//    testList->push_back(QGeoCoordinate(1.8, 1.4));
-//    testList->push_back(QGeoCoordinate(0.6, 1.4));
-//    testList->push_back(QGeoCoordinate(0.2, 1.8));
-//    testList->push_back(QGeoCoordinate(2.6, 1.8));
-//    testList->push_back(QGeoCoordinate(3.4, 2.2));
-//    testList->push_back(QGeoCoordinate(-0.2, 2.2));
-//    testList->push_back(QGeoCoordinate(-0.6, 2.6));
-//    testList->push_back(QGeoCoordinate(3.6, 2.6));
-//    testList->push_back(QGeoCoordinate(4.0, 3.0));
-//    testList->push_back(QGeoCoordinate(-1.0, 3.0));
-//    testList->push_back(QGeoCoordinate(-1.4, 3.4));
-//    testList->push_back(QGeoCoordinate(3.6, 3.4));
-//    testList->push_back(QGeoCoordinate(3.2, 3.8));
-//    testList->push_back(QGeoCoordinate(-0.6, 3.8));
-//    testList->push_back(QGeoCoordinate(0.2, 4.2));
-//    testList->push_back(QGeoCoordinate(2.8, 4.2));
-//    testList->push_back(QGeoCoordinate(2.4, 4.6));
+    int n = testList->size();
+    QVERIFY(n == calculatedList->size());
+    for (int i = 0; i < n; i++) {
+        QVERIFY((*testList)[i] == (*calculatedList)[i]);
+    }
 
-//    int n = testList->size();
-//    QVERIFY(n == calculatedList->size());
-//    for (int i = 0; i < n; i++) {
-//        QVERIFY((*testList)[i] == (*calculatedList)[i]);
-//    }
-
-//    delete calculatedList;
-//    delete testList;
+    delete calculatedList;
+    delete testList;
 }
 
 void PolygonPathAlgorithm_Test::testSetWaypointsForDrones()

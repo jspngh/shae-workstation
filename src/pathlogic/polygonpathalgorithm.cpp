@@ -50,8 +50,8 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
         list->push_back(area.getMostWestCoordinate());
 
     }
-     qDebug() << "distance to east" << d1 <<"distance to west" << d2;
-    qDebug() << list->back();
+     //qDebug() << "distance to east" << d1 <<"distance to west" << d2;
+    //qDebug() << list->back();
 
     //while going from wesst to East or vice versa (incrementing by visionWidth)
     do {
@@ -61,7 +61,7 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
         auto pair = getNeighbouringEdges(list->back(), area.getUpperHull());
         list->push_back(toInsidePolygon(PathAlgorithm::goDirectionBetween(list->back(), pair.first,
                         pair.second, visionWidth, direction),area));
-        qDebug() << list->back();
+        //qDebug() << list->back();
         if (list->back().longitude() >= area.getMostEastCoordinate().longitude()
                 || list->back().longitude() <= area.getMostWestCoordinate().longitude())
             break;
@@ -76,7 +76,7 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
                                list->back().longitude() - pair.first.longitude(),
                                EAST),area);
         list->push_back(south);
-        qDebug() << list->back();
+       // qDebug() << list->back();
 
 
 
@@ -85,7 +85,7 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
         pair = getNeighbouringEdges(list->back(), area.getLowerHull());
         list->push_back(toInsidePolygon(PathAlgorithm::goDirectionBetween(list->back(), pair.first,
                         pair.second, visionWidth, direction), area));
-        qDebug() << list->back();
+      //  qDebug() << list->back();
         if (list->back().longitude() >= area.getMostEastCoordinate().longitude()
                 || list->back().longitude() <= area.getMostWestCoordinate().longitude())
             break;
@@ -100,7 +100,7 @@ QList<QGeoCoordinate> *PolygonPathAlgorithm::calculateWaypoints(GeoPolygon area,
                                list->back().longitude() - pair.first.longitude(),
                                EAST), area);
         list->push_back(north);
-        qDebug() << list->back();
+       // qDebug() << list->back();
 
 
 
