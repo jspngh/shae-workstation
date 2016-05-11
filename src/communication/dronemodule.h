@@ -275,7 +275,7 @@ private slots:
     //! connected directly with
     void onDroneStatusReceived(DroneStatus *s);
 
-private:
+public:
     void addSignalSlot(); //!< Helper function for connecting the slots and signals
     void initHeartbeat(); //!< Helper function to initialise the heartbeat connection
 

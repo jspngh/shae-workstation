@@ -244,7 +244,7 @@ DroneModule *Controller::receivedHelloFrom(QString ip)
 }
 
 /*****************
- *    Getters
+ *    Getters    *
  *****************/
 
 Mediator *Controller::getMediator() const
