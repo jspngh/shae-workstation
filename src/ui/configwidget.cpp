@@ -4,7 +4,8 @@
 
 ConfigWidget::ConfigWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ConfigWidget)
+    ui(new Ui::ConfigWidget),
+    timerStatusesRequest(new QTimer())
 {
     this->areaWasSelected = false;
 
@@ -26,6 +27,7 @@ ConfigWidget::ConfigWidget(QWidget *parent) :
     //connect(ui->precisionSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
     initializeMap();
+    initTimers();
     ui->startButton->setDisabled(false);
 }
 
@@ -204,8 +206,14 @@ void ConfigWidget::setSignalSlots()
     qDebug() << "adding slots";
     mediator->addSignal(this, SIGNAL(requestDronesStatus()), QString("requestStatus()"));
     mediator->addSignal(this, SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
+    mediator->addSlot(this, SLOT(onStartSearch(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(updateDroneTable(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
-    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(updateMapCenter(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
+}
+
+void ConfigWidget::onStartSearch(Search *search)
+{
+    timerStatusesRequest->stop();
 }
 
 void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
@@ -248,11 +256,16 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
     if (currentRow == -1) {
         ui->droneTable->insertRow(ui->droneTable->rowCount());
         currentRow = ui->droneTable->rowCount() - 1;
+
+        // create checkbox in the first element of the row
+        QCheckBox *checkbox = new QCheckBox();
+        ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
+
+        // store the dronemodule and it corresponding row in the table
+        dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));
     }
 
     // fill or update row
-    QCheckBox *checkbox = new QCheckBox();
-    ui->droneTable->setCellWidget(currentRow, CHECK, checkbox);
 
     // set type
     if (s->getType().isEmpty()) {
@@ -282,7 +295,13 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
     item->setTextAlignment(Qt::AlignCenter);
     ui->droneTable->setItem(currentRow, IP_PORT, item);
 
-    dronesInTable.append(QPair<int, DroneModule *>(currentRow, d));
+
+
+    if(!timerStatusesRequest->isActive())
+    {
+        qDebug() << "start the timer";
+        timerStatusesRequest->start();
+    }
 }
 
 int ConfigWidget::getDroneInTableIndex(DroneModule *d)
@@ -293,5 +312,19 @@ int ConfigWidget::getDroneInTableIndex(DroneModule *d)
     }
 
     return -1;
+}
+
+void ConfigWidget::initTimers()
+{
+    timerStatusesRequest->setInterval(3000);
+    connect(timerStatusesRequest, SIGNAL(timeout()), this, SLOT(requestStatuses()));
+}
+
+void ConfigWidget::requestStatuses()
+{
+    for(int i=0; i < dronesInTable.size(); i++){
+        dronesInTable[i].second->requestStatus();
+        qDebug() << "requesting drone statuses";
+    }
 }
 
