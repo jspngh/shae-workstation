@@ -10,11 +10,12 @@
 #include "models/drone.h"
 #include "models/search.h"
 
+//! Direction is used to clarify the code used for the implementations of pathalgorithms.
 enum Direction {
     EAST = 1, WEST = -1
 };
 
-/*! PathAlgorithm is an abstract class which can be extended by implementations of an algorithm.
+/*! \brief PathAlgorithm is an abstract class which can be extended by implementations of an algorithm.
  * \ingroup Pathlogic
  * */
 class PathAlgorithm: public QObject
@@ -38,7 +39,7 @@ public:
      */
     virtual QList<QGeoCoordinate> *calculateWaypoints(QGeoRectangle area, double visionWidth) = 0;
 
-    //!The function to calculate waypoints in a polygonial area.
+    //! The function to calculate waypoints in a polygonial area.
     virtual QList<QGeoCoordinate> *calculateWaypoints(GeoPolygon area, double visionWidth) = 0;
 
     /*!
@@ -55,7 +56,7 @@ public:
     // Setter
     void setMediator(Mediator *mediator);
 
-    //! returns a new coordinate based on a certain distance and direction from a previous coordinate.
+    //! returns a new coordinate based on a certain distance and direction from a start coordinate.
     static QGeoCoordinate goDirection(QGeoCoordinate start, Direction direction, double distance);
 
     /*!
@@ -70,12 +71,15 @@ public:
     static QGeoCoordinate goDirectionBetween(QGeoCoordinate start, QGeoCoordinate coordinate1, QGeoCoordinate coordinate2, double distance, Direction direction);
 
 public slots:
+    //! Called when a search is started, so the algorithm can start calculating the waypoints.
     void startSearch(Search *s);
 
 signals:
+    //! This signal is emited when te waypoints are calculated.
     void pathCalculated(Search *s);
 
 private:
+    //! link to mediator used for connecting slots.
     Mediator *mediator;
 };
 

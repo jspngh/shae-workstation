@@ -10,9 +10,9 @@ void SignalSlotPersistenceTest::initTestCase()
     m = new Mediator();
     pc = new PersistenceController();
     pc->setMediator(m);
-
+    qDebug() << "Test Save Search";
     testSaveSearch();
-    qDebug() << "Test";
+    qDebug() << "Test Drone Path";
     testSaveDronePaths();
 }
 
@@ -27,7 +27,6 @@ void SignalSlotPersistenceTest::testSaveSearch()
     QList<DroneModule*> droneList;
     droneList.append(dm);
     s->setDroneList(droneList);
-    emit startSearch(s);
 
     m->addSignal(this, SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
     QGeoCoordinate *start = new QGeoCoordinate(51.022671, 3.709903);
@@ -36,6 +35,8 @@ void SignalSlotPersistenceTest::testSaveSearch()
     QGeoCoordinate *bottomRight = new QGeoCoordinate(51.022367, 3.710182);
     QGeoRectangle *area = new QGeoRectangle(*topLeft, *bottomRight);
     spa->setWaypointsForDrones(*area, droneList);
+    s->setArea(area);
+    emit startSearch(s);
     emit pathCalculated(s);
 
     Search *receivedSearch = pc->retrieveSearch(s->getSearchID());
@@ -83,19 +84,13 @@ void SignalSlotPersistenceTest::testSaveDronePaths()
     dm->addWaypoint(*wp1);
     dm->addWaypoint(*wp2);
     dm->addWaypoint(*wp3);
-    qDebug() << "Done6";
     QList<DroneModule*> droneList;
-    qDebug() << "Done5";
     droneList.append(dm);
-    qDebug() << "Done4";
     s->setDroneList(droneList);
-    qDebug() << "Done3";
     emit pathCalculated(s);
 
-    qDebug() << "Done1";
     QList<QGeoCoordinate>* paths = pc->retrieveDronePaths(d->getGuid(), s->getSearchID());
 
-    qDebug() << "Done2";
     foreach (QGeoCoordinate waypoint, *(dm->getWaypoints()))
     {
         QVERIFY(paths->contains(waypoint));

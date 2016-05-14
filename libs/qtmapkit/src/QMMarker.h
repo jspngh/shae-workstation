@@ -69,7 +69,14 @@ public slots:
     void scale(const double width, const double height);
 
     /*!
-     * Sets the markers icon.
+     * Sets the transparency of the marker.
+     * \param alpha The alpha value, a number between 0 (completely transparent)
+     *              and 1 (no transparency, default).
+     */
+    void setOpacity(const double alpha);
+
+    /*!
+     * Sets the marker's icon.
      * \param resource The resource url to the image file.
      */
     void setIcon(const QString resource);
