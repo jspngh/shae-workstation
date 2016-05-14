@@ -66,6 +66,8 @@ public:
     //! \return A pair containing the coordinates east and west of "from" coordinate, inside the given hull.
     static QPair<QGeoCoordinate, QGeoCoordinate> getNeighbouringEdges(QGeoCoordinate from, QList<QGeoCoordinate> hull);
 
+   QGeoCoordinate toInsidePolygon(QGeoCoordinate coordinate, GeoPolygon area);
+
 
 };
 

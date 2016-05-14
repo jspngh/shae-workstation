@@ -144,10 +144,11 @@ void Controller::onResetServicesClicked()
 void Controller::onSearchEmitted(Search *s)
 {
     search = s;
+    QGeoCoordinate home = drones->front()->getLastReceivedDroneStatus().getCurrentLocation();
     if(s->getArea()->type() == QGeoShape::RectangleType)
-        pathLogicController = new SimplePathAlgorithm();
+        pathLogicController = new SimplePathAlgorithm(home);
     else
-        pathLogicController = new PolygonPathAlgorithm();
+        pathLogicController = new PolygonPathAlgorithm(home);
 
     pathLogicController->moveToThread(&pathLogicThread);
     pathLogicController->setMediator(mediator);
