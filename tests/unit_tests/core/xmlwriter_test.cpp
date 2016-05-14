@@ -74,7 +74,7 @@ void XMLWriter_Test::testSimpleDetectionResultXMLWriter()
 void XMLWriter_Test::testSimpleDetectionResultTXTWriter()
 {
     QString folder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    QString fileName = folder.append("/xmltest.xml");
+    QString fileName = folder.append("/txttest.txt");
 
     QFileInfo checkFile(fileName);
     if (checkFile.exists())
@@ -99,7 +99,7 @@ void XMLWriter_Test::testSimpleDetectionResultTXTWriter()
         {
             QString line = in.readLine();
             count++;
-            if(count > 5)
+            if(count > 6)
             {
                 QList<QString> doubles = line.split("\t\t");
                 expectedResults.push_back(DetectionResult(
