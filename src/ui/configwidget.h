@@ -16,6 +16,7 @@
 #include <QUuid>
 #include <QWidget>
 #include <QtMath>
+#include <QTimer>
 #include "models/search.h"
 #include "core/mediator.h"
 
@@ -72,12 +73,17 @@ private slots:
     void updateDroneTable(DroneStatus* s);
     //! updates the map center
     void updateMapCenter(DroneStatus* s);
+    //! this function will reconfigure the configWidget once a user has configured a search and has pressed start
+    void onStartSearch(Search *search);
+    //! will query all the connected drones for their latest statuses
+    void requestStatuses();
 
 private:
     Ui::ConfigWidget *ui;
     QMMapView *mapView = nullptr;
     Mediator *mediator;
 
+    QTimer *timerStatusesRequest;
     QGeoCoordinate center;
     bool areaWasSelected = false;
     bool mapCentered = false;
@@ -89,7 +95,9 @@ private:
 
     void writeConfigToFile();
     void initializeMap();
-
+    //! simple helper function that will initialize some timers used in the configwidget
+    //! (e.g. watchdog for querying the dronestatuses)
+    void initTimers();
     // connects all the slots and signals with the mediator
     void setSignalSlots();
     // fill the table with the available drones

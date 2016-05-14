@@ -89,7 +89,7 @@ void DroneModule::setMediator(Mediator *med)
     mediator = med;
     videoController->setMediator(med);
     addSignalSlot();
-    initHeartbeat();
+    // initHeartbeat();
 }
 
 void DroneModule::addSignalSlot()
@@ -283,19 +283,20 @@ void DroneModule::onPathCalculated(Search *s)
 
 
         setSettings(settings, values);
-        usleep(1000);
+        usleep(3000);
         startFlight();
-        usleep(1000);
+        usleep(10000);
 
         // add current drone location to waypoint queue to make waypoint loop 'closed'.
         homeLocation = lastReceivedDroneStatus.getCurrentLocation();
         getWaypoints()->append(homeLocation);
 
         sendWaypoints();
-        usleep(1000);
+        usleep(3000);
+
+        initHeartbeat();
 
         qDebug() << "Drone is starting flight";
-
     }
 }
 
