@@ -193,6 +193,11 @@ void Controller::readPendingDatagrams()
     }
 }
 
+QString Controller::getWorkstationBroadcastIp() const
+{
+    return workstationBroadcastIp;
+}
+
 void Controller::processHelloMessage(QByteArray helloRaw)
 {
     HelloMessage hello = HelloMessage::parse(helloRaw);

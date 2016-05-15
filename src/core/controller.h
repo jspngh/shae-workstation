@@ -53,11 +53,16 @@ public:
     Search *getSearch() const;
     DetectionController *getDetectionController() const;
     QString getWorkstationIP() const;
+    QString getWorkstationBroadcastIp() const;
+    QUdpSocket *getUdpSocketLan() const;
+    QUdpSocket *getUdpSocketLo() const;
+
 
     // only used for test purposes
     void setDrones(QList<DroneModule *> *list);
 
-private:
+// made public for testing purposes
+public:
     void processHelloMessage(QByteArray helloRaw);
     //! Will retrieve the ip and broadcast address of the workstation and set in the members
     //! workstationIp and workstionBroadcastIp
@@ -66,12 +71,13 @@ private:
     void startListeningForDrones();
 
     //! return the dronemodule if the drone with the ip has already send a hello message
-    //! if the drone hasn't send hello yet the nullptr is returned
+    //! if the drone hasn't send hello yet a nullptr is returned
     DroneModule *receivedHelloFrom(QString ip);
 
     //! will configure a drone:
     //! set the mediator, place it in a tread, append it to the dronelist, (if possible) request stream
     DroneModule *configureDrone(DroneModule *drone);
+
 
 signals:
     void droneSetupFailed();
@@ -92,14 +98,14 @@ private:
     QString workstationBroadcastIp;
     int helloPort = 4849;
     MainWindow *mainWindow;
-    Mediator *mediator;
-    QList<DroneModule *> *drones;
+    Mediator *mediator = nullptr;
+    QList<DroneModule *> *drones = nullptr;
 
     PersistenceController *persistenceController;
     PathAlgorithm *pathLogicController;
     Search *search;
-    QUdpSocket *udpSocketLan;
-    QUdpSocket *udpSocketLo;
+    QUdpSocket *udpSocketLan = nullptr;
+    QUdpSocket *udpSocketLo = nullptr;
 
     QHostAddress *host;
 
