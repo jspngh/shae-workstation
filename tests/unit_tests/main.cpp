@@ -44,63 +44,63 @@ int main(int argc, char *argv[])
      * Testing pathlogic
      * *****************/
 
-//    tests.append(new Pathalgorithm_Test());
-//    tests.append(new SimplePathAlgorithm_Test());
-//    tests.append(new GeoPolygon_test());
-//    tests.append(new PolygonPathAlgorithm_Test());
+    tests.append(new Pathalgorithm_Test());
+    tests.append(new SimplePathAlgorithm_Test());
+    tests.append(new GeoPolygon_test());
+    tests.append(new PolygonPathAlgorithm_Test());
 
-//    /********************
-//     * Testing jsonstuff
-//     * *****************/
+    /********************
+     * Testing jsonstuff
+     * *****************/
 
-//    // sending using dronemodule (inside communication)
-//    tests.append(new Json_Messages_Test());
-//    // receiving using dronestatus (inside models)
-//    tests.append(new DroneStatus_Test());
-//    tests.append(new HelloMessage_Test());
+    // sending using dronemodule (inside communication)
+    tests.append(new Json_Messages_Test());
+    // receiving using dronestatus (inside models)
+    tests.append(new DroneStatus_Test());
+    tests.append(new HelloMessage_Test());
 
-//    /************************
-//     * Testing communication
-//     * *********************/
+    /************************
+     * Testing communication
+     * *********************/
 
-//    tests.append(new ParseException_Test());
-//    tests.append(new StreamConnection_Test());
-//    tests.append(new DroneHeartbeatReceiver_Test());
-
-
-//    /********************
-//     * Testing persistence
-//     * *****************/
-
-//    tests.append(new SearchDAO_Test());
-
-//    tests.append(new DetectionResultDAO_Test());
-//    tests.append(new DroneDAO_Test());
-//    tests.append(new DroneSearchDAO_Test());
-//    tests.append(new DroneStatusDAO_Test());
-//    tests.append(new VideoSequenceDAO_Test());
+    tests.append(new ParseException_Test());
+    tests.append(new StreamConnection_Test());
+    tests.append(new DroneHeartbeatReceiver_Test());
 
 
-//    /********************
-//     * Testing videostuff
-//     * *****************/
+    /********************
+     * Testing persistence
+     * *****************/
 
-//    tests.append(new VideoController_Test());
-//    tests.append(new DetectionController_Test());
+    tests.append(new SearchDAO_Test());
 
-
-
-//    /********************
-//     * Testing other stuff
-//     * *****************/
-
-//    tests.append(new XMLWriter_Test());
+    tests.append(new DetectionResultDAO_Test());
+    tests.append(new DroneDAO_Test());
+    tests.append(new DroneSearchDAO_Test());
+    tests.append(new DroneStatusDAO_Test());
+    tests.append(new VideoSequenceDAO_Test());
 
 
-//    /*********************
-//     *  Testing core
-//     * *******************/
-//    tests.append(new Mediator_Test());
+    /********************
+     * Testing videostuff
+     * *****************/
+
+    tests.append(new VideoController_Test());
+    tests.append(new DetectionController_Test());
+
+
+
+    /********************
+     * Testing other stuff
+     * *****************/
+
+    tests.append(new XMLWriter_Test());
+
+
+    /*********************
+     *  Testing core
+     * *******************/
+    tests.append(new Mediator_Test());
     tests.append(new Controller_Test());
 
 
