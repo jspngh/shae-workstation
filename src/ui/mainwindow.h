@@ -4,11 +4,14 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QStackedWidget>
+#include <QThread>
 #include "ui_mainwindow.h"
 #include "core/mediator.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
+#include "ui/resetscriptcontroller.h"
+
 /*!
  * \brief The MainWindow class
  * \ingroup Ui
@@ -28,9 +31,14 @@ public:
 private slots:
     void onSaveSearchClicked();
     void onSaveFootageClicked();
+    void onResetDroneClicked();
+    void onResetSuccessful();
 
 private:
     Mediator *mediator;
+    ResetScriptController *resetCtrl;
+    QThread *resetThread;
+    QMessageBox msgBox;
 
     Ui::MainWindow *ui;
     WelcomeWidget *welcomeWidget;

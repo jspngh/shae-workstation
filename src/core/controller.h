@@ -83,7 +83,6 @@ signals:
     void droneSetupFailed();
 
 public slots:
-    void onResetServicesClicked();
     void onSearchEmitted(Search *s);
     void readPendingDatagrams();
 

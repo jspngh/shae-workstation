@@ -1,11 +1,19 @@
 #ifndef RESETSCRIPTCONTROLLER_H
 #define RESETSCRIPTCONTROLLER_H
 
+#include <QObject>
 
-class ResetScriptController
+class ResetScriptController: public QObject
 {
+    Q_OBJECT
 public:
-    ResetScriptController();
+    ResetScriptController(QObject* parent = 0);
+
+signals:
+    void resetSuccessful();
+
+public slots:
+    void reset();
 };
 
 #endif // RESETSCRIPTCONTROLLER_H

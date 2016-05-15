@@ -23,7 +23,7 @@ Controller::Controller(MainWindow *window, QObject *p)
     // add signal/slot
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
     mediator->addSignal(this, SIGNAL(droneSetupFailed()), QString("droneSetupFailed()"));
-    mediator->addSlot(this, SLOT(onResetServicesClicked()), QString("resetServicesClicked()"));
+
 }
 
 Controller::~Controller()
@@ -77,70 +77,6 @@ void Controller::retrieveWorkstationIpAndBroadcast()
     }
 }
 
-void Controller::onResetServicesClicked()
-{
-    QString configFolder = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    QString rsaFileName = "shae_rsa";
-    QString scriptFileName = "reset_services.sh";
-
-    // create folder if not available
-    QDir(QDir::root()).mkpath(configFolder);
-
-    if (!configFolder.endsWith(QDir::separator()))
-        configFolder.append(QDir::separator());
-
-    QString keyPath = configFolder + rsaFileName;
-    QString scriptPath = configFolder + scriptFileName;
-    QFile rsaKey(keyPath);
-    QFile resetScript(scriptPath);
-
-    // if the file already exists nothing needs to be done anymore
-    // in general this function only needs to copy the file once, the first the time the application runs
-    if (!rsaKey.exists()) {
-        QFile srcFile(":/scripts/shae_rsa");
-        srcFile.open(QIODevice::ReadOnly);
-        QTextStream in(&srcFile);
-        rsaKey.open(QIODevice::WriteOnly);
-        QTextStream out(&rsaKey);
-        out << in.readAll();
-
-        /* Close the files */
-        rsaKey.close();
-        srcFile.close();
-
-        /* Set correct permissions */
-        rsaKey.setPermissions(QFile::ReadOwner);
-    }
-    if (!resetScript.exists()) {
-        QFile scriptSrcFile(":/scripts/reset_services.sh");
-        scriptSrcFile.open(QIODevice::ReadOnly);
-        QTextStream in(&scriptSrcFile);
-        resetScript.open(QIODevice::WriteOnly);
-        QTextStream out(&resetScript);
-        out << in.readAll();
-
-        /* Close the files */
-        resetScript.close();
-        scriptSrcFile.close();
-
-        /* Set correct permissions */
-        resetScript.setPermissions(QFile::ExeOwner | QFile::ReadOwner | QFile::WriteOwner);
-    }
-
-    QProcess *proc = new QProcess();
-    QStringList arg;
-    arg << keyPath;
-    QMessageBox msgBox;
-    msgBox.setText("The drone services are resetting.");
-    proc->start(scriptPath, arg);
-    qDebug() << "resetting services";
-    msgBox.showMaximized();
-    msgBox.exec();
-    proc->waitForFinished(-1);
-    proc->close();
-    msgBox.close();
-}
-
 void Controller::onSearchEmitted(Search *s)
 {
     search = s;
@@ -191,6 +127,16 @@ void Controller::readPendingDatagrams()
         udpSocketLo->readDatagram(helloRaw.data(), helloRaw.size(), &sender, &senderPort);
         processHelloMessage(helloRaw);
     }
+}
+
+QUdpSocket *Controller::getUdpSocketLo() const
+{
+    return udpSocketLo;
+}
+
+QUdpSocket *Controller::getUdpSocketLan() const
+{
+    return udpSocketLan;
 }
 
 QString Controller::getWorkstationBroadcastIp() const
