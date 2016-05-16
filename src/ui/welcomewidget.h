@@ -15,8 +15,8 @@
 
 #include "core/mediator.h"
 #include "models/dronestatus.h"
-#include "configscriptscontroller.h"
-#include "progressbarcontroller.h"
+#include "controllers/configscriptscontroller.h"
+#include "controllers/progressbarcontroller.h"
 #include "gatewaydialog.h"
 
 namespace Ui {

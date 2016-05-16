@@ -10,7 +10,7 @@
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
-#include "ui/resetscriptcontroller.h"
+#include "ui/controllers/resetscriptcontroller.h"
 
 /*!
  * \brief The MainWindow class
