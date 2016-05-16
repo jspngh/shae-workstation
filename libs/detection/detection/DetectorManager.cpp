@@ -20,7 +20,7 @@ DetectorManager::DetectorManager(int fps,
     this->resolutionHeight = resolutionHeight;
     std::string videoFile = path + "drone_stream.avi";
     this->videoDetection = cv::VideoWriter(videoFile,
-                                           CV_FOURCC('M','J','P','G'),
+                                           CV_FOURCC('M', 'J', 'P', 'G'),
                                            this->fps,
                                            cv::Size(processWidth, processHeight),
                                            true);
@@ -88,18 +88,18 @@ DetectionList DetectorManager::applyDetector(cv::Mat &frame)
 //dl contains the detections associated with the frame
 //xLUT and yLUT contain lookuptables required to map the pixel locations in the frame on a geocoordinate
 std::vector<std::pair<double, double>> DetectorManager::calculatePositions(DetectionList dl,
-                                                                           std::pair<double, double> location,
-                                                                           std::vector<vector<double>> xLUT,
-                                                                           std::vector<vector<double>> yLUT,
-                                                                           double orientation)
+                                    std::pair<double, double> location,
+                                    std::vector<vector<double>> xLUT,
+                                    std::vector<vector<double>> yLUT,
+                                    double orientation)
 {
     vector<std::pair<double, double>> result;
     for (int i = 0; i < dl.getSize(); i++) {
         Detection D = dl.returnDetections()[i];
         std::pair<double, double> distance = derivePositionFromLUT(D, xLUT, yLUT);
-        distance =  std::pair<double, double>(cos(abs(orientation))*distance.first-sin(abs(orientation))*distance.second, sin(abs(orientation)) * distance.first+cos(abs(orientation))*distance.second);
+        distance =  std::pair<double, double>(cos(abs(orientation)) * distance.first - sin(abs(orientation)) * distance.second, sin(abs(orientation)) * distance.first + cos(abs(orientation)) * distance.second);
         //scale the score based on the relative distance
-        D.setScore(D.getScore()*yLUT[0][1]/distance.second);
+        D.setScore(D.getScore()*yLUT[0][1] / distance.second);
         // distance contains an x,y distance pair,
         // that can be used to calculate a the coordinate of the detection, based on the coordinate of the frame.
         std::pair<double, double> temp1 = changeLatitude(location, distance.first);
@@ -124,11 +124,11 @@ positions are derivde from the LUT based on linear interpolation
     while LUT uses bottom left corner
 */
 std::pair<double, double> DetectorManager::derivePositionFromLUT(Detection d,
-                                                                 std::vector<vector<double>> xLUT,
-                                                                 std::vector<vector<double>> yLUT)
+        std::vector<vector<double>> xLUT,
+        std::vector<vector<double>> yLUT)
 {
     double xPixel = (double)(d.getX());
-    double yPixel = (double)(this->processHeight-(d.getY() + d.getHeight()));
+    double yPixel = (double)(this->processHeight - (d.getY() + d.getHeight()));
     double xLoc = 0.0;
     double yLoc = 0.0;
 

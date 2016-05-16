@@ -26,7 +26,7 @@ void OverviewWidget::setMediator(Mediator *mediator)
     mediator->addSlot(this, SLOT(onSearchStarted(Search *)), QString("startSearch(Search*)"));
     mediator->addSlot(this, SLOT(onHeartBeatReceived(DroneStatus *)), QString("droneHeartBeatReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(updateDroneList(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
-    mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
+    mediator->addSlot(this, SLOT(onNewDetection(QUuid, DetectionResult *)), QString("newDetection(QUuid, DetectionResult*)"));
     mediator->addSlot(this, SLOT(onDroneLanded(DroneModule *)), QString("landed(DroneModule*)"));
 
 }
@@ -67,9 +67,9 @@ void OverviewWidget::onHeartBeatReceived(DroneStatus *heartbeat)
     updateDroneList(heartbeat);
 }
 
-void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
+void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult *result)
 {
-    if(!mapIdListItem.contains(droneId))
+    if (!mapIdListItem.contains(droneId))
         qWarning() << "WARNING: detection from drone " << droneId.toString();
 
     OverviewDroneItem *droneItem = mapIdListItem.value(droneId);
@@ -80,16 +80,16 @@ void OverviewWidget::onNewDetection(QUuid droneId, DetectionResult* result)
 
     // Update map
     QString markerId = droneId.toString() + "-" + QString::number(droneItem->getPeopleLocated());
-    QMMarker& marker = mapView->addMarker(markerId, result->getLocation());
+    QMMarker &marker = mapView->addMarker(markerId, result->getLocation());
     marker.setIcon("qrc:///ui/icons/human");
-    marker.scale(0.1*result->getScore()/100, 0.1*result->getScore()/100);
+    marker.scale(0.1 * result->getScore() / 100, 0.1 * result->getScore() / 100);
     marker.show();
 }
 
 void OverviewWidget::updateDroneList(DroneStatus *s)
 {
     const QUuid droneId = s->getDrone()->getGuid();
-    if(mapIdListItem.contains(droneId))
+    if (mapIdListItem.contains(droneId))
         mapIdListItem.value(droneId)->updateStatus(*s);
 }
 
@@ -98,11 +98,11 @@ void OverviewWidget::onSearchStarted(Search *s)
     this->search = s;
 
     QGeoCoordinate center;
-    if(search->getArea()->type() == QGeoShape::RectangleType) {
-        QGeoRectangle* area = static_cast<QGeoRectangle*> (search->getArea());
+    if (search->getArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle *area = static_cast<QGeoRectangle *>(search->getArea());
         center = area->center();
     } else {
-        GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
+        GeoPolygon *area = static_cast<GeoPolygon *>(search->getArea());
         center = area->center();
     }
 
@@ -142,10 +142,10 @@ void OverviewWidget::fillDroneList()
 void OverviewWidget::onMapLoaded()
 {
     mapView->setSelectionType(QMSelectionType::None);
-    if(search->getArea()->type() == QGeoShape::RectangleType) {
+    if (search->getArea()->type() == QGeoShape::RectangleType) {
         mapView->fitRegion(*(search->getArea()));
     } else {
-        GeoPolygon* area = static_cast<GeoPolygon*>(search->getArea());
+        GeoPolygon *area = static_cast<GeoPolygon *>(search->getArea());
         mapView->fitRegion(area->boundingBox());
     }
 

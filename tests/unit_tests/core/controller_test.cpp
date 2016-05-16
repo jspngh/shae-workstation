@@ -19,10 +19,10 @@ void Controller_Test::cleanupTestCase()
 
 void Controller_Test::testConstructor()
 {
-       Controller *ctrl = new Controller(nullptr);
+    Controller *ctrl = new Controller(nullptr);
 
-       QVERIFY(ctrl->getMediator() != nullptr);
-       QVERIFY(ctrl->getDrones() != nullptr);
+    QVERIFY(ctrl->getMediator() != nullptr);
+    QVERIFY(ctrl->getDrones() != nullptr);
 }
 
 void Controller_Test::testInitWorkstationIp()

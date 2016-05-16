@@ -8,7 +8,7 @@
 #include <QString>
 #include <QDebug>
 
-ResetScriptController::ResetScriptController(QObject* parent): QObject(parent)
+ResetScriptController::ResetScriptController(QObject *parent): QObject(parent)
 {
 
 }

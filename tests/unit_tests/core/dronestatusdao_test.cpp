@@ -62,7 +62,7 @@ void DroneStatusDAO_Test::testSimpleDroneStatusDAO()
 
     QUuid droneID = dm->getGuid();
 
-    QList<DroneStatus*>* sbackone = sd.dbRetrieveDroneStatus(droneID, QDateTime(QDate(2016 , 5, 6), QTime(6, 6, 6)), QDateTime(QDate(2016 , 5, 6), QTime(8, 8, 8)));
+    QList<DroneStatus *> *sbackone = sd.dbRetrieveDroneStatus(droneID, QDateTime(QDate(2016 , 5, 6), QTime(6, 6, 6)), QDateTime(QDate(2016 , 5, 6), QTime(8, 8, 8)));
 
     for (DroneStatus *dstatus : *sbackone) {
         QVERIFY(dstatus->getTimestampDrone() >= QDateTime(QDate(2016 , 5, 6) , QTime(6, 6, 6)));

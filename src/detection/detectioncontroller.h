@@ -79,7 +79,7 @@ signals:
     /*!
      * \brief the signal that is emitted when a new detection result has been found in the footage.
      */
-    void newDetection(QUuid droneId, DetectionResult* result);
+    void newDetection(QUuid droneId, DetectionResult *result);
     /*!
      * \brief the signal that is emitted when the DetectionController is finished. This requires the function streamFinished() to be
      * called beforehand.
@@ -87,7 +87,7 @@ signals:
     void detectionFinished();
 
 private:
-    DetectorManager* manager; //!< a class that provides access to the detectionlibrary. The detectormanager is used to apply the detection modules on a frame and calculate the locations of results.
+    DetectorManager *manager; //!< a class that provides access to the detectionlibrary. The detectormanager is used to apply the detection modules on a frame and calculate the locations of results.
     cv::VideoCapture sequence; //!< the videosequence of the drone footage
     Mediator *mediator;
     double fps; //!< the fps at which the drone footage needs to be processed
@@ -106,9 +106,9 @@ private:
      * \param height is the height of drone during the search
      * \param gimbalAngle is the gimbalAngle of the drone camera.
      */
-    void parseConfiguration(QFile& file);
+    void parseConfiguration(QFile &file);
 
-    void parseLut(QTextStream& in, int length, std::vector<vector<double>>& lut);
+    void parseLut(QTextStream &in, int length, std::vector<vector<double>> &lut);
     /*!
      * \brief analyzes a frame, associated with a given timestamp
      * \param frame is the frame that needs to be analyzed

@@ -53,7 +53,7 @@ DroneModule::DroneModule(int dataPort,
     //connect the dronemodule with the corresponding videocontroller (should not occur via the mediator as it is an 1-1 relation)
     connect(this, SIGNAL(startStream(Drone *)), videoController, SLOT(onStartStream(Drone *)));
     connect(this, SIGNAL(stopStream(Drone *)), videoController, SLOT(onStopStream(Drone *)));
-    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence*)), this, SLOT(initDetection()));
+    connect(videoController, SIGNAL(streamStarted(QUuid, VideoSequence *)), this, SLOT(initDetection()));
 }
 
 DroneModule::DroneModule(const DroneModule &d)
@@ -106,8 +106,8 @@ void DroneModule::addSignalSlot()
     mediator->addSlot(this, (char *) SLOT(requestHeartbeat()), QString("requestHeartbeart()"));
     mediator->addSlot(this, SLOT(onSearchEmitted(Search *)), QString("startSearch(Search*)"));
 
-    connect(this, SIGNAL(droneStatusReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
-    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus*)), this, SLOT(onDroneStatusReceived(DroneStatus*)));
+    connect(this, SIGNAL(droneStatusReceived(DroneStatus *)), this, SLOT(onDroneStatusReceived(DroneStatus *)));
+    connect(this, SIGNAL(droneHeartBeatReceived(DroneStatus *)), this, SLOT(onDroneStatusReceived(DroneStatus *)));
 
 }
 
@@ -229,9 +229,9 @@ void DroneModule::onDroneStatusReceived(DroneStatus *status)
 {
     lastReceivedDroneStatus = *status;
 
-    if( waypoints->size()!=0 &&
-        status->getPreviousWaypointOrder() >= waypoints->size()-1 &&
-        status->getCurrentLocation().distanceTo(homeLocation) < 1 && !returningHome){
+    if (waypoints->size() != 0 &&
+            status->getPreviousWaypointOrder() >= waypoints->size() - 1 &&
+            status->getCurrentLocation().distanceTo(homeLocation) < 1 && !returningHome) {
         // the drone has finished it search and is back to its homelocation
         // issue drone to return to home (this is already done) and then land
         returnToHome();
@@ -346,9 +346,9 @@ void DroneModule::setVideoController(VideoController *value)
 
 void DroneModule::initStream()
 {
-       emit startStream(drone);
-       detectionController = new DetectionController(search, this, persistenceController);
-       detectionController->setMediator(mediator);
+    emit startStream(drone);
+    detectionController = new DetectionController(search, this, persistenceController);
+    detectionController->setMediator(mediator);
 }
 
 void DroneModule::initDetection()
@@ -359,9 +359,9 @@ void DroneModule::initDetection()
 
 void DroneModule::stopStream()
 {
-        emit stopStream(drone);
-        detectionController->streamFinished();
-        stopStreamConnection();
+    emit stopStream(drone);
+    detectionController->streamFinished();
+    stopStreamConnection();
 }
 
 void DroneModule::onSearchEmitted(Search *s)

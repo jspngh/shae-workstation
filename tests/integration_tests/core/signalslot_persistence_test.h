@@ -16,8 +16,8 @@ public:
     explicit SignalSlotPersistenceTest(QObject *parent = 0);
 
 signals:
-    void startSearch(Search*);
-    void pathCalculated(Search*);
+    void startSearch(Search *);
+    void pathCalculated(Search *);
 
 public slots:
     void initTestCase();

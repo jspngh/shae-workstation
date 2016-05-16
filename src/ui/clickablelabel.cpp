@@ -2,7 +2,7 @@
 #include <QLabel>
 #include <QDebug>
 
-ClickableLabel::ClickableLabel(const QString& text, int position, QWidget* parent)
+ClickableLabel::ClickableLabel(const QString &text, int position, QWidget *parent)
     : QLabel(parent)
 {
     setText(text);
@@ -13,7 +13,7 @@ ClickableLabel::~ClickableLabel()
 {
 }
 
-void ClickableLabel::mousePressEvent(QMouseEvent* event)
+void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     emit clicked(position);
 }

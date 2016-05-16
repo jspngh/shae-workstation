@@ -42,9 +42,9 @@ private:
 
     GatewayDialog *gd;
 
-private slots:   
+private slots:
     void on_configSearchButton_clicked();
-    void onDroneStatusReceived(DroneStatus* s);
+    void onDroneStatusReceived(DroneStatus *s);
     void onDroneSetupFailure();
     void on_startSetupButton_clicked();
     //! \brief Reset picture timer.
@@ -68,10 +68,10 @@ private:
     int status;
     bool droneConnected;
     int pictureTimerCounter;
-    QTimer* timer;
+    QTimer *timer;
     QStringList pictures;
-    QHBoxLayout * vLayout;
-    QWidget * mainScrollWidget;
+    QHBoxLayout *vLayout;
+    QWidget *mainScrollWidget;
     QThread csct;
     ConfigScriptsController *csc;
     QThread pbct;

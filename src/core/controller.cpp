@@ -69,7 +69,7 @@ void Controller::retrieveWorkstationIpAndBroadcast()
         foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
             QHostAddress address = entry.ip();
             if (address.protocol() == QAbstractSocket::IPv4Protocol
-                    && address != QHostAddress(QHostAddress::LocalHost)){
+                    && address != QHostAddress(QHostAddress::LocalHost)) {
                 workstationIp = entry.ip().toString();
                 workstationBroadcastIp = entry.broadcast().toString();
             }
@@ -81,7 +81,7 @@ void Controller::onSearchEmitted(Search *s)
 {
     search = s;
     QGeoCoordinate home = drones->front()->getLastReceivedDroneStatus().getCurrentLocation();
-    if(s->getArea()->type() == QGeoShape::RectangleType)
+    if (s->getArea()->type() == QGeoShape::RectangleType)
         pathLogicController = new SimplePathAlgorithm(home);
     else
         pathLogicController = new PolygonPathAlgorithm(home);

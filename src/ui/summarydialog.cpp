@@ -9,7 +9,7 @@ SummaryDialog::SummaryDialog(QWidget *parent) :
 
     connect(ui->saveFootageBtn, SIGNAL(clicked()), this, SLOT(onSaveFootageClicked()));
     connect(ui->saveSearchBtn, SIGNAL(clicked()), this, SLOT(onSaveSearchClicked()));
-    connect(ui->closeAppBtn,SIGNAL(clicked()), this, SLOT(onCloseAppClicked()));
+    connect(ui->closeAppBtn, SIGNAL(clicked()), this, SLOT(onCloseAppClicked()));
 
 
 }
@@ -30,8 +30,8 @@ void SummaryDialog::onSaveFootageClicked()
 {
     QFile stream(streamLocation());
 
-    if(!stream.exists()){
-        QMessageBox::warning(this, "Warning!","The stream has not been created. It is not possible to save it.", "OK");
+    if (!stream.exists()) {
+        QMessageBox::warning(this, "Warning!", "The stream has not been created. It is not possible to save it.", "OK");
         return;
     }
 
@@ -39,8 +39,8 @@ void SummaryDialog::onSaveFootageClicked()
     QString filter = "Video (*.avi);";
     QString saveLocation = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
 
-    if(saveLocation.isNull() || saveLocation.isEmpty()) {
-        QMessageBox::warning(this, "Warning!","Please specify a valid path", "OK");
+    if (saveLocation.isNull() || saveLocation.isEmpty()) {
+        QMessageBox::warning(this, "Warning!", "Please specify a valid path", "OK");
         return;
     }
 
@@ -53,10 +53,10 @@ void SummaryDialog::onSaveSearchClicked()
     QString filter = "XML sheet (*.xml);;Text File (*.txt)";
     QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Detection Results"), QDir::homePath(), filter, &filter);
 
-    if (saveFileName.isNull() || saveFileName.isEmpty() )
+    if (saveFileName.isNull() || saveFileName.isEmpty())
         return;
 
-    if(filter == QString("Text File (*.txt)"))
+    if (filter == QString("Text File (*.txt)"))
         emit printDetectionResultTXT(saveFileName.append(".txt"));
     else
         emit printDetectionResultXML(saveFileName.append(".xml"));

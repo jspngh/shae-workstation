@@ -38,7 +38,7 @@ void DetectionController::run()
 {
     // this->sequence.isOpened() should not be used, since this does not work together with vlc writing to the file.
     // setup variables required for processing
-    if(this->path.isNull()) {
+    if (this->path.isNull()) {
         exit(EXIT_FAILURE); // if we get here, mistakes were made
     }
 
@@ -104,7 +104,7 @@ void DetectionController::run()
 void DetectionController::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
-    mediator->addSignal(this, SIGNAL(newDetection(QUuid, DetectionResult*)), QString("newDetection(QUuid, DetectionResult*)"));
+    mediator->addSignal(this, SIGNAL(newDetection(QUuid, DetectionResult *)), QString("newDetection(QUuid, DetectionResult*)"));
     mediator->addSignal(this, SIGNAL(detectionFinished()), QString("detectionFinished()"));
 }
 
@@ -136,8 +136,7 @@ void DetectionController::setPath(const QString &value)
 
 void DetectionController::extractDetectionsFromFrame(cv::Mat frame, QDateTime time)
 {
-    if(frame.rows != 0 && frame.cols != 0)
-    {
+    if (frame.rows != 0 && frame.cols != 0) {
         DroneStatus *droneStatus = this->persistenceController->retrieveDroneStatus(droneId, time);
         QGeoCoordinate frameLocation = droneStatus->getCurrentLocation();
         double orientation = droneStatus->getOrientation();
@@ -158,11 +157,11 @@ void DetectionController::initSearchConfigFile(int height, int gimbalAngle)
     // the file and path depends on the saerch configuration (the flying height of the drone and the gimbalAngle)
     QString configPrefix = QString(":/detection/dependencies/");
     QString configForSearchPath = configPrefix
-                                    .append("gopro_")
-                                    .append(QString::number(height))
-                                    .append(QString("m_"))
-                                    .append(QString::number(gimbalAngle))
-                                    .append(QString("deg.cfg"));
+                                  .append("gopro_")
+                                  .append(QString::number(height))
+                                  .append(QString("m_"))
+                                  .append(QString::number(gimbalAngle))
+                                  .append(QString("deg.cfg"));
 
     // if the congiguration file for the search options doesn't exists, take the default
     QFileInfo check(configForSearchPath);
@@ -178,7 +177,7 @@ void DetectionController::initSearchConfigFile(int height, int gimbalAngle)
     qFile.close();
 }
 
-void DetectionController::parseConfiguration(QFile& file)
+void DetectionController::parseConfiguration(QFile &file)
 {
     QTextStream in(&file);
     QString line;
@@ -213,7 +212,7 @@ void DetectionController::parseConfiguration(QFile& file)
     }
 }
 
-void DetectionController::parseLut(QTextStream& in, int length, std::vector<vector<double>>& lut)
+void DetectionController::parseLut(QTextStream &in, int length, std::vector<vector<double>> &lut)
 {
     QString line;
     QStringList values;

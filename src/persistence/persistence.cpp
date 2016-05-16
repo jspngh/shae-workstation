@@ -34,7 +34,7 @@ void Persistence::saveSearch(Search *search)
     searchdao.dbSaveSearch(search);
 }
 
-Search* Persistence::retrieveSearch(QUuid searchId)
+Search *Persistence::retrieveSearch(QUuid searchId)
 {
     return searchdao.dbRetrieveSearch(searchId);
 }
@@ -44,17 +44,17 @@ void Persistence::saveDroneStatus(DroneStatus *droneStatus)
     dronestatusdao.dbSaveDroneStatus(droneStatus);
 }
 
-QList<DroneStatus*>* Persistence::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
+QList<DroneStatus *> *Persistence::retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end)
 {
     return dronestatusdao.dbRetrieveDroneStatus(droneId, begin, end);
 }
 
-DroneStatus* Persistence::retrieveDroneStatus(QUuid droneId)
+DroneStatus *Persistence::retrieveDroneStatus(QUuid droneId)
 {
     return dronestatusdao.dbRetrieveDroneStatus(droneId);
 }
 
-DroneStatus* Persistence::retrieveDroneStatus(QUuid droneId, QDateTime time)
+DroneStatus *Persistence::retrieveDroneStatus(QUuid droneId, QDateTime time)
 {
     return dronestatusdao.dbRetrieveDroneStatus(droneId, time);
 }
@@ -64,12 +64,12 @@ void Persistence::saveDrone(Drone *drone)
     dronedao.dbSaveDrone(drone);
 }
 
-Drone* Persistence::retrieveDrone(QUuid droneId)
+Drone *Persistence::retrieveDrone(QUuid droneId)
 {
     return dronedao.dbRetrieveDrone(droneId);
 }
 
-QList<QUuid>* Persistence::retrieveDroneIds(QUuid searchId)
+QList<QUuid> *Persistence::retrieveDroneIds(QUuid searchId)
 {
     return dronesearchdao.dbRetrieveDroneIds(searchId);
 }
@@ -79,7 +79,7 @@ void Persistence::saveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordin
     dronesearchdao.dbSaveDronePath(droneId, searchId, path);
 }
 
-QList<QGeoCoordinate>* Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
+QList<QGeoCoordinate> *Persistence::retrieveDronePath(QUuid droneId, QUuid searchId)
 {
     return dronesearchdao.dbRetrieveDronePath(droneId, searchId);
 }
@@ -89,7 +89,7 @@ void Persistence::saveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence
     videosequencedao.dbSaveVideoSequence(droneId, searchId, sequence);
 }
 
-VideoSequence* Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId)
+VideoSequence *Persistence::retrieveVideoSequence(QUuid droneId, QUuid searchId)
 {
     return videosequencedao.dbRetrieveVideoSequence(droneId, searchId);
 }
@@ -99,25 +99,25 @@ void Persistence::saveDetectionResult(QUuid droneId, QUuid searchId, DetectionRe
     detectionresultdao.dbSaveDetectionResult(droneId, searchId, result);
 }
 
-QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
+QList<DetectionResult *> *Persistence::retrieveDetectionResults(QUuid droneId, QUuid searchId)
 {
     return detectionresultdao.dbRetrieveDetectionResults(droneId, searchId);
 }
 
-QList<DetectionResult*>* Persistence::retrieveDetectionResults(QUuid searchId)
+QList<DetectionResult *> *Persistence::retrieveDetectionResults(QUuid searchId)
 {
     return detectionresultdao.dbRetrieveDetectionResults(searchId);
 }
 
 void Persistence::printDetectionResultXML(QUuid searchId, QString fileName)
 {
-    QList<DetectionResult*>* results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    QList<DetectionResult *> *results = detectionresultdao.dbRetrieveDetectionResults(searchId);
     detectionresultwriter.writeDetectionResultToFileXML(fileName, results);
 }
 
 void Persistence::printDetectionResultTXT(QUuid searchId, QString fileName)
 {
-    QList<DetectionResult*>* results = detectionresultdao.dbRetrieveDetectionResults(searchId);
+    QList<DetectionResult *> *results = detectionresultdao.dbRetrieveDetectionResults(searchId);
     detectionresultwriter.writeDetectionResultToFileTXT(fileName, results);
 }
 

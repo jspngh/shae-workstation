@@ -32,7 +32,7 @@ public:
      * \brief GeoPolygon constructor that copies another GeoPolygon
      * \param other The other GeoPolygon to copy.
      */
-    GeoPolygon(const GeoPolygon& other);
+    GeoPolygon(const GeoPolygon &other);
 
     /*!
      * \brief fromHull returns the field coordinates if upperhull and lowerhull are already calculated.

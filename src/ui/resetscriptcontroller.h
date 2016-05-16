@@ -7,7 +7,7 @@ class ResetScriptController: public QObject
 {
     Q_OBJECT
 public:
-    ResetScriptController(QObject* parent = 0);
+    ResetScriptController(QObject *parent = 0);
 
 signals:
     void resetSuccessful();

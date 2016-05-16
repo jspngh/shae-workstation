@@ -61,7 +61,7 @@ GeoPolygon::GeoPolygon(QList<QGeoCoordinate> coordinates)
 
 }
 
-GeoPolygon::GeoPolygon(const GeoPolygon& other)
+GeoPolygon::GeoPolygon(const GeoPolygon &other)
     : QGeoShape()
 {
     this->coordinates = other.coordinates;
@@ -114,11 +114,11 @@ bool GeoPolygon::isValid() const
     //qDebug() << "isvalid";
 
     foreach (QGeoCoordinate coordinate, coordinates) {
-        if (coordinate.longitude() < mostWestCoordinate.longitude()){
+        if (coordinate.longitude() < mostWestCoordinate.longitude()) {
             qDebug() << "1";
             return false;
         }
-        if (coordinate.longitude() > mostEastCoordinate.longitude()){
+        if (coordinate.longitude() > mostEastCoordinate.longitude()) {
             qDebug() << "2";
             return false;
         }
@@ -126,22 +126,22 @@ bool GeoPolygon::isValid() const
 
 
     //mostleft and most right should be in both hulls at resp. front and back
-    if (upperHull.front() != mostWestCoordinate){
+    if (upperHull.front() != mostWestCoordinate) {
         qDebug() << "6";
         return false;
     }
-    if (lowerHull.front() != mostWestCoordinate){
+    if (lowerHull.front() != mostWestCoordinate) {
         qDebug() << "7";
         return false;
     }
-    if (upperHull.back() != mostEastCoordinate || lowerHull.back() != mostEastCoordinate){
+    if (upperHull.back() != mostEastCoordinate || lowerHull.back() != mostEastCoordinate) {
         qDebug() << "8";
         return false;
     }
 
     //check if upperhull curves clockwise
     for (int i = 2; i < upperHull.size(); i++) {
-        if (crossProduct(upperHull[i - 2], upperHull[i - 1], upperHull[i]) > 0.0){
+        if (crossProduct(upperHull[i - 2], upperHull[i - 1], upperHull[i]) > 0.0) {
             qDebug() << "3";
             return false;
         }
@@ -149,7 +149,7 @@ bool GeoPolygon::isValid() const
 
     //check if lowerhull curves counter-clockwise
     for (int i = 2; i < lowerHull.size(); i++) {
-        if (crossProduct(lowerHull[i - 2], lowerHull[i - 1], lowerHull[i]) < 0.0){
+        if (crossProduct(lowerHull[i - 2], lowerHull[i - 1], lowerHull[i]) < 0.0) {
 
             qDebug() << "4";
             return false;
@@ -251,8 +251,8 @@ QGeoCoordinate GeoPolygon::center() const
 QGeoRectangle GeoPolygon::boundingBox() const
 {
     double topLat = -180, bottomLat = 180;
-    for(QGeoCoordinate coord: coordinates) {
-        if(coord.latitude() > topLat) {
+    for (QGeoCoordinate coord : coordinates) {
+        if (coord.latitude() > topLat) {
             topLat = coord.latitude();
         } else if (coord.latitude() < bottomLat) {
             bottomLat = coord.latitude();
@@ -260,8 +260,8 @@ QGeoRectangle GeoPolygon::boundingBox() const
     }
 
     QGeoRectangle boundingBox(
-            QGeoCoordinate(topLat, mostWestCoordinate.longitude()),
-            QGeoCoordinate(bottomLat, mostWestCoordinate.longitude())
+        QGeoCoordinate(topLat, mostWestCoordinate.longitude()),
+        QGeoCoordinate(bottomLat, mostWestCoordinate.longitude())
     );
     return boundingBox;
 }
