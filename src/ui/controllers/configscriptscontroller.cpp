@@ -23,7 +23,6 @@ void ConfigScriptsController::connectToSoloNetwork()
     arg << file.readAll();
     QString outputPath = standardDataFolder().append("output_solo_network_script.txt");
     arg << outputPath;
-    qDebug() << arg;
 
     if(QFile(outputPath).exists())
     {
@@ -83,7 +82,7 @@ void ConfigScriptsController::setGateway(QString ssid, QString password)
     arg << file.readAll() << ssid << password;
     QString outputPath = standardDataFolder().append("output_set_gateway_script.txt");
     arg << outputPath;
-    qDebug() << arg;
+
     if(QFile(outputPath).exists())
     {
         QFile(outputPath).remove();

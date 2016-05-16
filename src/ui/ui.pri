@@ -9,10 +9,10 @@ SOURCES += \
     $$PWD/overviewsearchitem.cpp \
     $$PWD/overviewdroneitem.cpp \
     $$PWD/clickablelabel.cpp \
-    $$PWD/progressbarcontroller.cpp \
     $$PWD/gatewaydialog.cpp \
-    $$PWD/configscriptscontroller.cpp \
-    $$PWD/summarydialog.cpp
+    $$PWD/summarydialog.cpp \
+    $$PWD/controllers/configscriptscontroller.cpp \
+    $$PWD/controllers/progressbarcontroller.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -22,10 +22,10 @@ HEADERS += \
     $$PWD/overviewsearchitem.h \
     $$PWD/overviewdroneitem.h \
     $$PWD/clickablelabel.h \
-    $$PWD/progressbarcontroller.h \
     $$PWD/gatewaydialog.h \
-    $$PWD/configscriptscontroller.h \
-    $$PWD/summarydialog.h
+    $$PWD/summarydialog.h \
+    $$PWD/controllers/configscriptscontroller.h \
+    $$PWD/controllers/progressbarcontroller.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
