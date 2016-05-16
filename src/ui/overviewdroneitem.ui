@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>990</width>
+    <width>993</width>
     <height>796</height>
    </rect>
   </property>
@@ -111,7 +111,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string/>
+        <string>n.a.</string>
        </property>
       </widget>
      </item>
@@ -149,7 +149,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string/>
+        <string>n.a.</string>
        </property>
       </widget>
      </item>
@@ -209,7 +209,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string/>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -225,7 +225,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string/>
+        <string>0 m²</string>
        </property>
       </widget>
      </item>
@@ -251,7 +251,7 @@
         <string>Emergency Landing</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../../../../Desktop/shae/workstation/src/application.qrc">
+        <iconset resource="../application.qrc">
          <normaloff>:/ui/icons/emergency</normaloff>:/ui/icons/emergency</iconset>
        </property>
       </widget>
@@ -274,7 +274,7 @@
         <string>Go Home</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../../../../Desktop/shae/workstation/src/application.qrc">
+        <iconset resource="../application.qrc">
          <normaloff>:/ui/icons/home</normaloff>:/ui/icons/home</iconset>
        </property>
       </widget>
@@ -284,7 +284,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../../../../Desktop/shae/workstation/src/application.qrc"/>
+  <include location="../application.qrc"/>
  </resources>
  <connections/>
 </ui>
