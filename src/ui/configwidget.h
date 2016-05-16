@@ -79,36 +79,53 @@ private slots:
     void requestStatuses();
 
 private:
+    //! pointer to the ui_configwidget (layout)
     Ui::ConfigWidget *ui;
+    //! pointer to the mapview
     QMMapView *mapView = nullptr;
+    //! pointer to the mediator that connects signals and slots between components
     Mediator *mediator;
 
+    //! a timer between status Requests
     QTimer *timerStatusesRequest;
+    //! the coordinate of the center of the map
     QGeoCoordinate center;
+    //! a bool that is used to check if an area was selected
     bool areaWasSelected = false;
+    //! a bool used to check if the map is centered
     bool mapCentered = false;
-
+    //! a double that contains the area (in m²) used to check if the area is not too big or too small
     double areaOfArea = 0.0;
+    //! maximum size of an area for a 3DR solo drone
     constexpr static double MAX_AREA_OF_AREA = 10000.0;
+    //! minimum size of an area
     constexpr static double MIN_AREA_OF_AREA = 1.0;
+    //! maximum distance to an area for a 3DR solo drone
     constexpr static double MAX_DISTANCE = 500.0;
 
     void writeConfigToFile();
+    //! intializes the mapview
     void initializeMap();
     //! simple helper function that will initialize some timers used in the configwidget
     //! (e.g. watchdog for querying the dronestatuses)
     void initTimers();
-    // connects all the slots and signals with the mediator
+    //! connects all the slots and signals with the mediator
     void setSignalSlots();
-    // fill the table with the available drones
-    // Note: can only be called once a controller is set because only the controller know the drones
+    //! fill the table with the available drones
+    //! Note: can only be called once a controller is set because only the controller know the drones
     void fillDroneTable();
+    //! \return the index of a certain drone inside the table of connected drones
     int getDroneInTableIndex(DroneModule *d);
 
+    //! The table of connected drones
     QList<QPair<int, DroneModule *>> dronesInTable;
 
+    //! An enum used to specify the attributes of the drone in a table
     enum DroneTableCol {
-        CHECK, TYPE, BATTERY, IP_PORT
+        CHECK //!< a checkmark to select the drone
+        , TYPE //!< The type of the drone, e.g. Solo
+        , BATTERY //!< The battery level of the drone
+        , IP_PORT //!< The IP port of the drone
     };
 };
 
