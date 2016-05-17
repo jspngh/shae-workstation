@@ -21,7 +21,6 @@ void ProgressBarController::update(int percentage, int time)
         int value = pb->value();
         while (value < percentage && (!aborted))
         {
-            //pb->setValue(value + 1);
             emit incrementProcessBar();
             QThread::msleep(interval);
             value = pb->value();
