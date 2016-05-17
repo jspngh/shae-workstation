@@ -17,6 +17,7 @@
 /*!
  * \brief The ProgressBarController class keeps track of the progressbar in the welcome screen
  * \ingroup Controllers
+
  */
 class ProgressBarController : public QObject
 {
@@ -26,7 +27,7 @@ public:
     void setProgressBar(QProgressBar *pb);
     bool aborted;
 signals:
-    void incrementProcessBarr();
+    void incrementProcessBar();
 
 public slots:
     void update(int percentage, int time);
