@@ -15,7 +15,7 @@ class GatewayDialog : public QDialog
 public:
     explicit GatewayDialog(QWidget *parent = 0);
     ~GatewayDialog();
-    QDialogButtonBox* getButtonBox();
+    QDialogButtonBox *getButtonBox();
     QString getSSID();
     QString getPassword();
 

@@ -10,7 +10,7 @@ DroneDAO::DroneDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-Drone* DroneDAO::dbSaveDrone(Drone *drone)
+Drone *DroneDAO::dbSaveDrone(Drone *drone)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO drones (droneID, visionWidth, dronePort, streamPort, droneIp, controllerIp, streamPath) "
@@ -30,7 +30,7 @@ Drone* DroneDAO::dbSaveDrone(Drone *drone)
     return drone;
 }
 
-Drone* DroneDAO::dbRetrieveDrone(QUuid droneId)
+Drone *DroneDAO::dbRetrieveDrone(QUuid droneId)
 {
     QSqlQuery query;
     Drone *returnDrone;
@@ -39,8 +39,8 @@ Drone* DroneDAO::dbRetrieveDrone(QUuid droneId)
     if (query.exec()) {
         if (query.next()) {
             returnDrone = new Drone(droneId, query.value(0).toInt(), query.value(1).toInt(),
-                                query.value(2).toString(), query.value(3).toString(),
-                                query.value(4).toString(), query.value(5).toDouble());
+                                    query.value(2).toString(), query.value(3).toString(),
+                                    query.value(4).toString(), query.value(5).toDouble());
         }
     } else {
         qDebug() << "getDrone error:  "

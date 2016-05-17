@@ -47,8 +47,8 @@ void System_Test::initTestCase()
     s->setDroneList((*list));
 
     emit startSearch(s);
-    QTest::qWait(1000 * 10);
-    QTest::qWait(1000 * 60 * 4);
+    // QTest::qWait(1000 * 10);
+    // QTest::qWait(1000 * 60 * 4);
 }
 
 void System_Test::cleanupTestCase()

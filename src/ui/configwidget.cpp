@@ -94,10 +94,10 @@ void ConfigWidget::sliderChanged(int value)
 
 void ConfigWidget::chooseSquare(bool checked)
 {
-    if(!mapView->hasLoaded()) return;
+    if (!mapView->hasLoaded()) return;
 
     mapView->removeAllSelections();
-    if(checked)
+    if (checked)
         mapView->setSelectionType(QMSelectionType::Square);
     else
         mapView->setSelectionType(QMSelectionType::Polygon);
@@ -112,22 +112,22 @@ void ConfigWidget::setMediator(Mediator *mediator)
 
 void ConfigWidget::startButtonPush()
 {
-    if(!areaWasSelected){
-        QMessageBox::warning(this, "Not too fast...","Please select an area before starting the search.", "OK");
+    if (!areaWasSelected) {
+        QMessageBox::warning(this, "Not too fast...", "Please select an area before starting the search.", "OK");
         return;
     }
 
     QGeoCoordinate center;
-    if(mapView->selectedArea()->type() == QGeoShape::RectangleType) {
-        QGeoRectangle* area = static_cast<QGeoRectangle*>(mapView->selectedArea());
+    if (mapView->selectedArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle *area = static_cast<QGeoRectangle *>(mapView->selectedArea());
         this->areaOfArea = area->bottomLeft().distanceTo(area->bottomRight())
-                            * area->bottomLeft().distanceTo(area->topLeft());
+                           * area->bottomLeft().distanceTo(area->topLeft());
         center = area->center();
     } else {
-        GeoPolygon *polygon = static_cast<GeoPolygon*>(mapView->selectedArea());
+        GeoPolygon *polygon = static_cast<GeoPolygon *>(mapView->selectedArea());
         this->areaOfArea = polygon->getArea();
         center = polygon->center();
-        if(!polygon->isValid()) {
+        if (!polygon->isValid()) {
             QMessageBox::warning(this, "Warning!", "The selected polygon is not convex!", "OK");
             delete polygon;
             return;
@@ -135,14 +135,14 @@ void ConfigWidget::startButtonPush()
         delete polygon;
     }
 
-    if(areaOfArea > MAX_AREA_OF_AREA) {
+    if (areaOfArea > MAX_AREA_OF_AREA) {
         QString messageFormat = QString("The selected area is too big to be searched.\nThe area is %1 m² while the max. area allowed is %2 m².");
         QString message = messageFormat.arg(areaOfArea, 0, 'f', 2).arg(MAX_AREA_OF_AREA);
         QMessageBox::warning(this, "Warning: selected area too big!", message, "OK");
         return;
     }
 
-    if(areaOfArea < MIN_AREA_OF_AREA) {
+    if (areaOfArea < MIN_AREA_OF_AREA) {
         QString messageFormat = QString("The selected area is too small to be searched.\nThe area is %1 m² while the min. area allowed is %2 m².");
         QString message = messageFormat.arg(areaOfArea, 0, 'f', 2).arg(MIN_AREA_OF_AREA);
         QMessageBox::warning(this, "Warning: selected area too small!", message, "OK");
@@ -156,13 +156,13 @@ void ConfigWidget::startButtonPush()
             dronesInSearch.append(dronesInTable[i].second);
     }
 
-    if(dronesInSearch.size() == 0) {
+    if (dronesInSearch.size() == 0) {
         QMessageBox::warning(this, "Not too fast...!", "Please select a drone before starting the search", "OK");
         return;
     }
 
     double distanceToArea = center.distanceTo(dronesInSearch.front()->getLastReceivedDroneStatus().getCurrentLocation());
-    if(distanceToArea > MAX_DISTANCE) {
+    if (distanceToArea > MAX_DISTANCE) {
         QString messageFormat = QString("The area selected is too far away %1 for the drone to fly to (max. distance is %2).");
         QString message = messageFormat.arg(distanceToArea, 0, 'f', 2).arg(MAX_DISTANCE);
         QMessageBox::warning(this, "Warning!", message, "OK");
@@ -216,7 +216,7 @@ void ConfigWidget::onStartSearch(Search *search)
     timerStatusesRequest->stop();
 }
 
-void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
+void ConfigWidget::updateMapCenter(DroneStatus *heartbeat)
 {
     if (mapView == nullptr || !mapView->hasLoaded()) return;
 
@@ -225,7 +225,7 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
 
     if (mapView->hasMarker(id)) {
         // only move the center of the map if the drone has moved a large enough distance
-        if(mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
+        if (mapCentered && center.distanceTo(heartbeat->getCurrentLocation()) > 2) {
             center = heartbeat->getCurrentLocation();
             QMMarker &marker = mapView->getMarker(id);
             marker.setOrientation(qRadiansToDegrees(heartbeat->getOrientation()));
@@ -248,7 +248,7 @@ void ConfigWidget::updateMapCenter(DroneStatus* heartbeat)
     }
 }
 
-void ConfigWidget::updateDroneTable(DroneStatus* s)
+void ConfigWidget::updateDroneTable(DroneStatus *s)
 {
     DroneModule *d = s->getDrone();
     int currentRow = getDroneInTableIndex(d);
@@ -269,36 +269,35 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
 
     // set type
     if (s->getType().isEmpty()) {
-        QTableWidgetItem* item = new QTableWidgetItem(QString("Not available"));
+        QTableWidgetItem *item = new QTableWidgetItem(QString("Not available"));
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, TYPE, item);
     } else {
-        QTableWidgetItem* item = new QTableWidgetItem(s->getType());
+        QTableWidgetItem *item = new QTableWidgetItem(s->getType());
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, TYPE, item);
     }
 
     // set battery
     if (s->getBatteryLevel() == -1) {
-        QTableWidgetItem* item = new QTableWidgetItem(QString("Not available"));
+        QTableWidgetItem *item = new QTableWidgetItem(QString("Not available"));
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, BATTERY, item);
     } else {
-        QTableWidgetItem* item = new QTableWidgetItem(QString::number(s->getBatteryLevel()) + " %");
+        QTableWidgetItem *item = new QTableWidgetItem(QString::number(s->getBatteryLevel()) + " %");
         item->setTextAlignment(Qt::AlignCenter);
         ui->droneTable->setItem(currentRow, BATTERY, item);
     }
 
     // set ip and port
     QString ip_port = d->getDroneIp() + QString(':') + QString::number(d->getDronePort());
-    QTableWidgetItem* item = new QTableWidgetItem(ip_port);
+    QTableWidgetItem *item = new QTableWidgetItem(ip_port);
     item->setTextAlignment(Qt::AlignCenter);
     ui->droneTable->setItem(currentRow, IP_PORT, item);
 
 
 
-    if(!timerStatusesRequest->isActive())
-    {
+    if (!timerStatusesRequest->isActive()) {
         qDebug() << "start the timer";
         timerStatusesRequest->start();
     }
@@ -306,7 +305,7 @@ void ConfigWidget::updateDroneTable(DroneStatus* s)
 
 int ConfigWidget::getDroneInTableIndex(DroneModule *d)
 {
-    for (int i = 0; i < dronesInTable.size(); i++){
+    for (int i = 0; i < dronesInTable.size(); i++) {
         if (dronesInTable[i].second->getGuid() == d->getGuid())
             return i;
     }
@@ -322,7 +321,7 @@ void ConfigWidget::initTimers()
 
 void ConfigWidget::requestStatuses()
 {
-    for(int i=0; i < dronesInTable.size(); i++){
+    for (int i = 0; i < dronesInTable.size(); i++) {
         dronesInTable[i].second->requestStatus();
         qDebug() << "requesting drone statuses";
     }

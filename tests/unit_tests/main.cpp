@@ -13,6 +13,7 @@
 #include "core/pathalgorithm_test.h"
 #include "core/dronestatus_test.h"
 #include "core/hellomessage_test.h"
+#include "core/controller_test.h"
 
 #include "core/parseexception_test.h"
 #include "core/streamconnection_test.h"
@@ -94,7 +95,13 @@ int main(int argc, char *argv[])
      * *****************/
 
     tests.append(new XMLWriter_Test());
+
+
+    /*********************
+     *  Testing core
+     * *******************/
     tests.append(new Mediator_Test());
+    tests.append(new Controller_Test());
 
 
 

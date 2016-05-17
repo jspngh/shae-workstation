@@ -27,17 +27,17 @@ public:
     //! \brief Retrieve a drone's path for a search.
     QList<QGeoCoordinate> *retrieveDronePaths(QUuid droneId, QUuid searchId);
     //! \brief Retrieve a drone.
-    Drone* retrieveDrone(QUuid droneId);
+    Drone *retrieveDrone(QUuid droneId);
     //! \brief Retrieve the latests dronestatus.
-    DroneStatus* retrieveDroneStatus(QUuid droneId);
+    DroneStatus *retrieveDroneStatus(QUuid droneId);
     //! \brief Retrieve the latest dronestatus to a timestamp.
-    DroneStatus* retrieveDroneStatus(QUuid droneId, QDateTime time);
+    DroneStatus *retrieveDroneStatus(QUuid droneId, QDateTime time);
     //! \brief Retrieve the dronestatuses between two timestamps.
-    QList<DroneStatus*>* retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
+    QList<DroneStatus *> *retrieveDroneStatus(QUuid droneId, QDateTime begin, QDateTime end);
     //! \brief Retrieve the detection results for a drone and search.
-    QList<DetectionResult*>* retrieveDetectionResults(QUuid droneId, QUuid searchId);
+    QList<DetectionResult *> *retrieveDetectionResults(QUuid droneId, QUuid searchId);
     //! \brief Retrieve videosequence for a drone and search.
-    VideoSequence* retrieveVideoSequence(QUuid droneId, QUuid SearchId);
+    VideoSequence *retrieveVideoSequence(QUuid droneId, QUuid SearchId);
 public slots:
     //! \brief Slot to save a search.
     void saveSearch(Search *s);

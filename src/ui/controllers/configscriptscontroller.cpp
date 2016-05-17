@@ -24,26 +24,22 @@ void ConfigScriptsController::connectToSoloNetwork()
     QString outputPath = standardDataFolder().append("output_solo_network_script.txt");
     arg << outputPath;
 
-    if(QFile(outputPath).exists())
-    {
+    if (QFile(outputPath).exists()) {
         QFile(outputPath).remove();
     }
     proc->start(name, arg);
     proc->waitForFinished(-1);
     proc->close();
     QFile outputFile(outputPath);
-    if(outputFile.open(QIODevice::ReadOnly))
-    {
+    if (outputFile.open(QIODevice::ReadOnly)) {
         QTextStream in(&outputFile);
-            QString line = in.readAll();
-            qDebug() << line;
-            if(line.contains(QRegExp("Not connected:"))||line.contains(QRegExp("Error")))
-            {
-                emit notConnectedToSoloNetwork(line);
-            }else
-            {
-                emit connectedToSoloNetwork();
-            }
+        QString line = in.readAll();
+        qDebug() << line;
+        if (line.contains(QRegExp("Not connected:")) || line.contains(QRegExp("Error"))) {
+            emit notConnectedToSoloNetwork(line);
+        } else {
+            emit connectedToSoloNetwork();
+        }
     }
     outputFile.close();
 }
@@ -92,17 +88,15 @@ void ConfigScriptsController::setGateway(QString ssid, QString password)
 
     proc->close();
     QFile outputFile(outputPath);
-    if(outputFile.open(QIODevice::ReadOnly))
-    {
+    if (outputFile.open(QIODevice::ReadOnly)) {
         QTextStream in(&outputFile);
-            QString line = in.readAll();
-            qDebug() << line;
-            if (line.contains(QRegExp("Error:")))
-            {
-                emit gatewayNotSet(line);
-            } else {
-                emit gatewaySet();
-            }
+        QString line = in.readAll();
+        qDebug() << line;
+        if (line.contains(QRegExp("Error:"))) {
+            emit gatewayNotSet(line);
+        } else {
+            emit gatewaySet();
+        }
     }
     outputFile.close();
 }

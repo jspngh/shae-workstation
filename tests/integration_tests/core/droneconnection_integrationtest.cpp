@@ -19,12 +19,13 @@ void Droneconnection_IntegrationTest::initTestCase()
 
     // wait until a drone is connected to the controller
     // the controller needs to wait until the drone sends a hello message, indicating that it is ready
-    while(controller->numDronesConnected() < 1) {
+    while (controller->numDronesConnected() < 1) {
         qDebug() << "wait until a drone is connected to the controller";
         QTest::qWait(1000 * 5);
     }
 
     drone = (*(controller->getDrones()))[0];
+    drone->initHeartbeat();
     m = controller->getMediator();
 }
 

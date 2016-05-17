@@ -21,10 +21,10 @@ void SignalSlotPersistenceTest::testSaveSearch()
 
     m->addSignal(this, (char *) SIGNAL(startSearch(Search *)), QString("startSearch(Search*)"));
     Search *s = new Search();
-    Drone *d= new Drone();
+    Drone *d = new Drone();
     DroneModule *dm = new DroneModule();
     dm->setDrone(d);
-    QList<DroneModule*> droneList;
+    QList<DroneModule *> droneList;
     droneList.append(dm);
     s->setDroneList(droneList);
 
@@ -47,14 +47,11 @@ void SignalSlotPersistenceTest::testSaveSearch()
     QVERIFY(s->getStartTime() == receivedSearch->getStartTime());
     QVERIFY(s->getDroneList().length() == receivedSearch->getDroneList().length());
 
-    foreach (DroneModule *dm1, droneList)
-    {
+    foreach (DroneModule *dm1, droneList) {
         //QVERIFY(receivedSearch.getDroneList().contains(dm1));
-        foreach (DroneModule *dm2, receivedSearch->getDroneList())
-        {
+        foreach (DroneModule *dm2, receivedSearch->getDroneList()) {
             qDebug() << "dm2" << dm2->getGuid();
-            if (dm1->getGuid() == dm2->getGuid())
-            {
+            if (dm1->getGuid() == dm2->getGuid()) {
                 Drone *d2 = dm2->getDrone();
                 QVERIFY(d->getControllerIp() == d2->getControllerIp());
                 QVERIFY(d->getDroneIp() == d2->getDroneIp());
@@ -75,7 +72,7 @@ void SignalSlotPersistenceTest::testSaveDronePaths()
 {
     m->addSignal(this, (char *) SIGNAL(pathCalculated(Search *)), QString("pathCalculated(Search*)"));
     Search *s = new Search();
-    Drone *d= new Drone();
+    Drone *d = new Drone();
     DroneModule *dm = new DroneModule();
     dm->setDrone(d);
     QGeoCoordinate *wp1 = new QGeoCoordinate(12.34, 34.56);
@@ -84,15 +81,14 @@ void SignalSlotPersistenceTest::testSaveDronePaths()
     dm->addWaypoint(*wp1);
     dm->addWaypoint(*wp2);
     dm->addWaypoint(*wp3);
-    QList<DroneModule*> droneList;
+    QList<DroneModule *> droneList;
     droneList.append(dm);
     s->setDroneList(droneList);
     emit pathCalculated(s);
 
-    QList<QGeoCoordinate>* paths = pc->retrieveDronePaths(d->getGuid(), s->getSearchID());
+    QList<QGeoCoordinate> *paths = pc->retrieveDronePaths(d->getGuid(), s->getSearchID());
 
-    foreach (QGeoCoordinate waypoint, *(dm->getWaypoints()))
-    {
+    foreach (QGeoCoordinate waypoint, *(dm->getWaypoints())) {
         QVERIFY(paths->contains(waypoint));
     }
 

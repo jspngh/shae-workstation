@@ -13,7 +13,7 @@ DroneSearchDAO::DroneSearchDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-QList<QGeoCoordinate>* DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate>* path)
+QList<QGeoCoordinate> *DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid searchId, QList<QGeoCoordinate> *path)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO dronessearches (searchID, droneID, path) "
@@ -38,7 +38,7 @@ QList<QGeoCoordinate>* DroneSearchDAO::dbSaveDronePath(QUuid droneId, QUuid sear
     return path;
 }
 
-QList<QGeoCoordinate>* DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid searchId)
+QList<QGeoCoordinate> *DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid searchId)
 {
     QSqlQuery query;
     QList<QGeoCoordinate> *returnList = new QList<QGeoCoordinate>();
@@ -56,7 +56,7 @@ QList<QGeoCoordinate>* DroneSearchDAO::dbRetrieveDronePath(QUuid droneId, QUuid 
     return returnList;
 }
 
-QList<QUuid>* DroneSearchDAO::dbRetrieveDroneIds(QUuid searchId)
+QList<QUuid> *DroneSearchDAO::dbRetrieveDroneIds(QUuid searchId)
 {
     QSqlQuery query;
     QList<QUuid> *returnList = new QList<QUuid>();

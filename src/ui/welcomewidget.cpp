@@ -38,11 +38,10 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     mainScrollWidget = new QWidget(ui->hintView);
     vLayout = new QHBoxLayout(mainScrollWidget);
 
-    for(int i = 0; i < pictures.size(); i++)
-    {
+    for (int i = 0; i < pictures.size(); i++) {
         ClickableLabel *pictureLabel = new ClickableLabel("", i, this);
         QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(i)));
-        pictureLabel->setPixmap(pic.scaled(100,70,Qt::KeepAspectRatio));
+        pictureLabel->setPixmap(pic.scaled(100, 70, Qt::KeepAspectRatio));
         pictureLabel->setAlignment(Qt::AlignCenter);
         pictureLabel->setMargin(8);
         connect(pictureLabel, SIGNAL(clicked(int)), this, SLOT(selectedImage(int)));
@@ -82,8 +81,7 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
 
 WelcomeWidget::~WelcomeWidget()
 {
-    for(QObject* w : vLayout->children())
-    {
+    for (QObject *w : vLayout->children()) {
         delete w;
     }
     delete vLayout;
@@ -100,20 +98,19 @@ void WelcomeWidget::setMediator(Mediator *mediator)
 
 void WelcomeWidget::setSignalSlots()
 {
-    mediator->addSlot(this, SLOT(onDroneStatusReceived(DroneStatus*)), QString("droneStatusReceived(DroneStatus*)"));
+    mediator->addSlot(this, SLOT(onDroneStatusReceived(DroneStatus *)), QString("droneStatusReceived(DroneStatus*)"));
     mediator->addSlot(this, SLOT(onDroneSetupFailure()), QString("droneSetupFailed()"));
 }
 
 void WelcomeWidget::setupReady()
 {
-     ui->configSearchButton->setEnabled(true);
-     droneConnected = true;
+    ui->configSearchButton->setEnabled(true);
+    droneConnected = true;
 }
 
 void WelcomeWidget::setupFailed()
 {
-    if (this->status >= 0)
-    {
+    if (this->status >= 0) {
         this->status = -1;
         QMessageBox msgBox;
         msgBox.setWindowTitle("An error occured");
@@ -152,7 +149,7 @@ void WelcomeWidget::on_configSearchButton_clicked()
     ((QStackedWidget *) this->parent())->setCurrentIndex(1);
 }
 
-void WelcomeWidget::onDroneStatusReceived(DroneStatus* s)
+void WelcomeWidget::onDroneStatusReceived(DroneStatus *s)
 {
     setupReady();
 }
@@ -164,23 +161,21 @@ void WelcomeWidget::onDroneSetupFailure()
 
 void WelcomeWidget::selectedImage(int file)
 {
-    if(pictures.length()!=0)
-    {
-    QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(file)));
-    ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
-    pictureTimerCounter = (file + 1) % pictures.size();
-    timer->start(30000);
+    if (pictures.length() != 0) {
+        QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(file)));
+        ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
+        pictureTimerCounter = (file + 1) % pictures.size();
+        timer->start(30000);
     }
 }
 
 void WelcomeWidget::pictureTimer()
 {
-    if(pictures.length()!=0)
-    {
-    QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(pictureTimerCounter)));
-    ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
-    pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
-    timer->start(10000);
+    if (pictures.length() != 0) {
+        QPixmap pic = QPixmap(QString(":/ui/screens/").append(pictures.at(pictureTimerCounter)));
+        ui->hintView->setPixmap(pic.scaled(ui->hintView->width() - 60, ui->hintView->height(), Qt::KeepAspectRatio));
+        pictureTimerCounter = (pictureTimerCounter + 1) % pictures.size();
+        timer->start(10000);
     }
 }
 
@@ -203,9 +198,9 @@ void WelcomeWidget::connectedToSoloNetwork()
 
 void WelcomeWidget::notConnectedToSoloNetwork(QString error)
 {
-     ui->statusLabel->setText(error);
-     pbc->aborted = true;
-     pbct.wait(2);
+    ui->statusLabel->setText(error);
+    pbc->aborted = true;
+    pbct.wait(2);
 }
 
 void WelcomeWidget::startSetGateway()
@@ -229,8 +224,7 @@ void WelcomeWidget::gatewaySet()
     // Set statusLabel
     ui->statusLabel->setText("Connected to gateway");
 
-    if(!droneConnected)
-    {
+    if (!droneConnected) {
         ui->configSearchButton->setEnabled(false);
     }
 

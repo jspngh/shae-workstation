@@ -93,6 +93,7 @@ private:
     bool droneConnected;
     //! counter to switch to next screenshot in the welcome screen
     int pictureTimerCounter;
+
     //! A timer to keep time for the current screenshot
     QTimer* timer;
     //! list of names of screenshots

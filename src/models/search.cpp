@@ -26,7 +26,7 @@ Search::Search(const Search &d)
     speed = d.speed;
 }
 
-Search::Search(QUuid searchID, QTime start, QGeoShape* area, int height, int gimbalAngle, int fpsProcessing):
+Search::Search(QUuid searchID, QTime start, QGeoShape *area, int height, int gimbalAngle, int fpsProcessing):
     searchID(searchID),
     startTime(start),
     area(area),
@@ -37,7 +37,7 @@ Search::Search(QUuid searchID, QTime start, QGeoShape* area, int height, int gim
 {
 }
 
-Search::Search(QUuid searchID, QTime start, QGeoShape* area, int height, double speed, int gimbalAngle, int fpsProcessing):
+Search::Search(QUuid searchID, QTime start, QGeoShape *area, int height, double speed, int gimbalAngle, int fpsProcessing):
     searchID(searchID),
     startTime(start),
     area(area),
@@ -58,7 +58,7 @@ void Search::setStartTime(QTime start)
     startTime = start;
 }
 
-QGeoShape* Search::getArea() const
+QGeoShape *Search::getArea() const
 {
     return area;
 }

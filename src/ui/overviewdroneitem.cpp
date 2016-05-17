@@ -49,7 +49,7 @@ void OverviewDroneItem::setBatteryLevel(double level)
 void OverviewDroneItem::setSearchedArea(double area)
 {
     ui->searchAreaValue->setText(
-        QString("%1 m²").arg( (int) area)
+        QString("%1 m²").arg((int) area)
     );
 }
 
@@ -160,5 +160,5 @@ void OverviewDroneItem::addSignalSlots()
 {
     connect(ui->emergencyButton, SIGNAL(clicked()), drone, SLOT(emergencyLanding()));
     connect(ui->returnHomeButton, SIGNAL(clicked()), drone, SLOT(returnToHome()));
-    connect(drone, SIGNAL(landed(DroneModule*)), this, SLOT(onDroneLanded(DroneModule*)));
+    connect(drone, SIGNAL(landed(DroneModule *)), this, SLOT(onDroneLanded(DroneModule *)));
 }

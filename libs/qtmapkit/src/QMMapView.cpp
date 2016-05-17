@@ -176,7 +176,7 @@ QMMapView::MapType QMMapView::mapType() const
 QGeoRectangle QMMapView::region() const
 {
     QVariant result = d_ptr->evaluateJavaScript("mapKit.getMapBounds();");
-    QGeoRectangle* bounds = jsonObjectToQGeoRectangle(result);
+    QGeoRectangle *bounds = jsonObjectToQGeoRectangle(result);
     QGeoRectangle retValue = *bounds;
     delete bounds;
     return retValue;
@@ -204,20 +204,20 @@ qreal QMMapView::tilt() const
     return d_ptr->evaluateJavaScript("mapKit.map.getTilt();").toReal();
 }
 
-QGeoShape* QMMapView::selectedArea() const
+QGeoShape *QMMapView::selectedArea() const
 {
     QString script = QString("mapKit.mapSelection.getSelectedArea();");
     QVariant result = d_ptr->evaluateJavaScript(script);
-    if(selectionType() == QMSelectionType::Square)
+    if (selectionType() == QMSelectionType::Square)
         return jsonObjectToQGeoRectangle(result);
 
-    if(selectionType() == QMSelectionType::Polygon)
+    if (selectionType() == QMSelectionType::Polygon)
         return jsonObjectToGeoPolygon(result);
 
     throw new EmptyAreaException();
 }
 
-QGeoRectangle* QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
+QGeoRectangle *QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) const
 {
     if (jsObject.isNull() || !jsObject.isValid())
         throw new EmptyAreaException();
@@ -235,7 +235,7 @@ QGeoRectangle* QMMapView::jsonObjectToQGeoRectangle(const QVariant jsObject) con
     return new QGeoRectangle(topLeft, bottomRight);
 }
 
-GeoPolygon* QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
+GeoPolygon *QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
 {
     if (jsObject.isNull() || !jsObject.isValid())
         throw new EmptyAreaException();
@@ -243,19 +243,19 @@ GeoPolygon* QMMapView::jsonObjectToGeoPolygon(const QVariant jsObject) const
     QVariantMap jsMap = jsObject.toMap();
     QVariant cornersObj = jsMap["corners"];
 
-    if(!cornersObj.canConvert(QVariant::List))
+    if (!cornersObj.canConvert(QVariant::List))
         throw new EmptyAreaException();
 
     QList<QGeoCoordinate> coordinates;
     QList<QVariant> cornerList = cornersObj.toList();
-    for(QVariant jsCoord: cornerList) {
+    for (QVariant jsCoord : cornerList) {
         QVariantMap coordLiteral = jsCoord.toMap();
         QGeoCoordinate point(coordLiteral["lat"].toDouble(),
                              coordLiteral["lng"].toDouble());
         coordinates.append(point);
     }
 
-    GeoPolygon* result = new GeoPolygon(coordinates);
+    GeoPolygon *result = new GeoPolygon(coordinates);
     result->setArea(jsMap["area"].toDouble());
     return result;
 }
@@ -330,16 +330,16 @@ void QMMapView::setSelectionType(const QMSelectionType selectionType)
     QString format = QString("mapKit.setSelectable(\"%1\");");
 
     QString typeName;
-    switch(selectionType) {
-        case QMSelectionType::Polygon:
-            typeName = "polygon";
-            break;
-        case QMSelectionType::Square:
-            typeName = "square";
-            break;
-        default:
-            typeName = "";
-            break;
+    switch (selectionType) {
+    case QMSelectionType::Polygon:
+        typeName = "polygon";
+        break;
+    case QMSelectionType::Square:
+        typeName = "square";
+        break;
+    default:
+        typeName = "";
+        break;
     }
 
     QString js = format.arg(typeName);
@@ -361,27 +361,27 @@ void QMMapView::shiftKeyPressed(bool down)
     }
 }
 
-void QMMapView::selectArea(QGeoShape* area)
+void QMMapView::selectArea(QGeoShape *area)
 {
     Q_D(QMMapView);
     QString format = QString("mapKit.selectAreaOnMap([%1]);");
 
     QStringList coordinates;
     QString coordinateFormat = QString("{lat: %1, lng: %2}");
-    if(area->type() == QGeoShape::RectangleType) {
+    if (area->type() == QGeoShape::RectangleType) {
         this->setSelectionType(QMSelectionType::Square);
-        QGeoRectangle *rectangle = static_cast<QGeoRectangle*>(area);
+        QGeoRectangle *rectangle = static_cast<QGeoRectangle *>(area);
         coordinates << coordinateFormat.arg(rectangle->topLeft().latitude())
-                                       .arg(rectangle->topLeft().longitude());
+                    .arg(rectangle->topLeft().longitude());
         coordinates << coordinateFormat.arg(rectangle->bottomRight().latitude())
-                                       .arg(rectangle->bottomRight().longitude());
+                    .arg(rectangle->bottomRight().longitude());
         this->setSelectionType(QMSelectionType::None);
     } else {
         this->setSelectionType(QMSelectionType::Polygon);
-        GeoPolygon *polygon = static_cast<GeoPolygon*>(area);
-        for(QGeoCoordinate coord: polygon->getCoordinates())
+        GeoPolygon *polygon = static_cast<GeoPolygon *>(area);
+        for (QGeoCoordinate coord : polygon->getCoordinates())
             coordinates << coordinateFormat.arg(coord.latitude())
-                                           .arg(coord.longitude());
+                        .arg(coord.longitude());
         this->setSelectionType(QMSelectionType::None);
     }
     QString js = format.arg(coordinates.join(","));
@@ -429,7 +429,7 @@ QMMarker &QMMapView::addMarker(const QString markerId, const QGeoCoordinate &poi
     QString format = QString("mapKit.addMarker(\"%1\", %2, %3);");
     QString js = format
                  .arg(markerId)
-                 .arg(point.latitude(),0,'f',15).arg(point.longitude(),0,'f',15);
+                 .arg(point.latitude(), 0, 'f', 15).arg(point.longitude(), 0, 'f', 15);
     d->evaluateJavaScript(js);
     d->markers[markerId] = new QMMarker(markerId, point, d->frame(), this);
 

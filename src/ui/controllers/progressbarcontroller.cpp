@@ -15,10 +15,10 @@ void ProgressBarController::update(int percentage, int time)
     aborted = false;
     int current = pb->value();
     int difference = percentage - current;
-    if (difference > 0)
-    {
+    if (difference > 0) {
         long interval = (float) time / (float) difference * 1000;
         int value = pb->value();
+
         while (value < percentage && (!aborted))
         {
             emit incrementProcessBar();

@@ -57,11 +57,11 @@ QGeoCoordinate PathAlgorithm::goDirectionBetween(QGeoCoordinate start, QGeoCoord
 void PathAlgorithm::startSearch(Search *s)
 {
     qDebug() << "PathAlgorithm::onStartSearch(Search *s)";
-    if(s->getArea()->type() == QGeoShape::RectangleType) {
-        QGeoRectangle* area = static_cast<QGeoRectangle*>(s->getArea());
+    if (s->getArea()->type() == QGeoShape::RectangleType) {
+        QGeoRectangle *area = static_cast<QGeoRectangle *>(s->getArea());
         setWaypointsForDrones(*area, s->getDroneList());
     } else {
-        GeoPolygon* area = static_cast<GeoPolygon*>(s->getArea());
+        GeoPolygon *area = static_cast<GeoPolygon *>(s->getArea());
         setWaypointsForDrones(*area, s->getDroneList());
     }
     emit pathCalculated(s);

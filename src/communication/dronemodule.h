@@ -289,7 +289,7 @@ private:
     DetectionController *detectionController; //!< a pointer to the detectionController
     PersistenceController *persistenceController; //!< a pointer to the persistenceController
     DroneHeartBeatReceiver *heartbeatReceiver = nullptr; //!< a pointer to the heartbeatReceiver
-    Search* search; //!< a pointer to the search object this DroneModule object belongs to
+    Search *search; //!< a pointer to the search object this DroneModule object belongs to
     QThread *connectionThread; //!< a pointer to the connectionThread
     DroneConnection *droneConnection; //!< a pointer to the droneConnection object, used for receiving and sending messages to the drone.
     QThread *streamThread; //!< a pointer to the streamThread

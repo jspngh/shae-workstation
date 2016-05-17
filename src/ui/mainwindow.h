@@ -4,11 +4,14 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QStackedWidget>
+#include <QThread>
 #include "ui_mainwindow.h"
 #include "core/mediator.h"
 #include "configwidget.h"
 #include "overviewwidget.h"
 #include "welcomewidget.h"
+#include "ui/controllers/resetscriptcontroller.h"
+
 /*!
  * \brief The MainWindow class represents the window the user sees the whole time
  * \ingroup Ui
@@ -34,10 +37,16 @@ private slots:
     void onSaveSearchClicked();
     //! links the slot from the menu to the saveFootage slot from the summary dialog
     void onSaveFootageClicked();
+    void onResetDroneClicked();
+    void onResetSuccessful();
 
 private:
     //! a pointer to the mediator that connects all signals and slots between components
     Mediator *mediator;
+    ResetScriptController *resetCtrl;
+    QThread *resetThread;
+    QMessageBox msgBox;
+
     //! a pointer to the ui_mainwindow
     Ui::MainWindow *ui;
     //! a pointer to the welcomewidget (the first screen of the app)

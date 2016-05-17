@@ -12,7 +12,8 @@ SOURCES += \
     $$PWD/gatewaydialog.cpp \
     $$PWD/summarydialog.cpp \
     $$PWD/controllers/configscriptscontroller.cpp \
-    $$PWD/controllers/progressbarcontroller.cpp
+    $$PWD/controllers/progressbarcontroller.cpp \
+    $$PWD/controllers/resetscriptcontroller.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -25,7 +26,8 @@ HEADERS += \
     $$PWD/gatewaydialog.h \
     $$PWD/summarydialog.h \
     $$PWD/controllers/configscriptscontroller.h \
-    $$PWD/controllers/progressbarcontroller.h
+    $$PWD/controllers/progressbarcontroller.h \
+    $$PWD/controllers/resetscriptcontroller.h
 
 FORMS += \
     $$PWD/mainwindow.ui \

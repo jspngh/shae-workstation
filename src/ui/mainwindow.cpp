@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     welcomeWidget = new WelcomeWidget(this);
     configWidget = new ConfigWidget(this);
     overviewWidget = new OverviewWidget(this);
+
+
     ui->stackedWidget->addWidget(welcomeWidget);
     ui->stackedWidget->addWidget(configWidget);
     ui->stackedWidget->addWidget(overviewWidget);
@@ -23,9 +25,20 @@ MainWindow::MainWindow(QWidget *parent) :
         qApp->setStyleSheet(file.readAll());
         file.close();
     }
+
+    //configure reset that needs to run in different thread
+    resetCtrl = new ResetScriptController();
+    resetThread = new QThread();
+    resetCtrl->moveToThread(resetThread);
+    connect(ui->resetAction, SIGNAL(triggered()), resetCtrl, SLOT(reset()));
+    connect(resetCtrl, SIGNAL(resetSuccessful()), this, SLOT(onResetSuccessful()));
+    resetThread->start();
+    msgBox.setText("The drone services are resetting.");
+
     connect(ui->exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(ui->exportResultsButton, SIGNAL(triggered()), this, SLOT(onSaveSearchClicked()));
     connect(ui->exportFootageButton, SIGNAL(triggered()), this, SLOT(onSaveFootageClicked()));
+    connect(ui->resetAction, SIGNAL(triggered()), this, SLOT(onResetDroneClicked()));
 
     ui->exportFootageButton->setEnabled(true);
     ui->exportFootageButton->setEnabled(true);
@@ -39,10 +52,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setMediator(Mediator* mediator)
+void MainWindow::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
-    mediator->addSignal(ui->resetAction, SIGNAL(triggered()), QString("resetServicesClicked()"));
 
     configWidget->setMediator(mediator);
     welcomeWidget->setMediator(mediator);
@@ -72,4 +84,14 @@ void MainWindow::onSaveSearchClicked()
 void MainWindow::onSaveFootageClicked()
 {
     overviewWidget->getSummaryDialog()->onSaveFootageClicked();
+}
+
+void MainWindow::onResetDroneClicked()
+{
+    msgBox.exec();
+}
+
+void MainWindow::onResetSuccessful()
+{
+    msgBox.close();
 }

@@ -44,7 +44,7 @@ void DroneDAO_Test::testSimpleDroneDAO()
 {
     DroneDAO sd = DroneDAO(&projectShaeDatabase);
 
-    Drone *s = new Drone(1, 2, "3", "4", "6",5.6);
+    Drone *s = new Drone(1, 2, "3", "4", "6", 5.6);
 
     sd.dbSaveDrone(s);
 
