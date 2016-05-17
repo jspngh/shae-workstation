@@ -8,7 +8,10 @@
 #include <QDebug>
 #include <QDir>
 
-
+/*!
+ * \brief The ConfigScriptsController class controls the configuration scripts for e.g. setting the gateway of the controller
+ * \ingroup Controllers
+ */
 class ConfigScriptsController : public QObject
 {
     Q_OBJECT
