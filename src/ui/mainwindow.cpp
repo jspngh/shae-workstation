@@ -52,7 +52,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setMediator(Mediator* mediator)
+void MainWindow::setMediator(Mediator *mediator)
 {
     this->mediator = mediator;
 

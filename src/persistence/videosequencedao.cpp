@@ -11,7 +11,7 @@ VideoSequenceDAO::VideoSequenceDAO(QSqlDatabase *projectShaeDatabase)
     this->projectShaeDatabase = projectShaeDatabase;
 }
 
-VideoSequence* VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence *sequence)
+VideoSequence *VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid searchId, VideoSequence *sequence)
 {
     // todo check if args are ok
     QSqlQuery query;
@@ -32,7 +32,7 @@ VideoSequence* VideoSequenceDAO::dbSaveVideoSequence(QUuid droneId, QUuid search
     return sequence;
 }
 
-VideoSequence* VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid searchId)
+VideoSequence *VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid searchId)
 {
     VideoSequence *sequence;
     QSqlQuery query;
@@ -42,11 +42,10 @@ VideoSequence* VideoSequenceDAO::dbRetrieveVideoSequence(QUuid droneId, QUuid se
     if (query.exec()) {
         if (query.next()) {
             sequence = new VideoSequence(query.value(0).toUuid() , query.value(1).toTime(),
-                                     query.value(2).toTime(),
-                                     query.value(3).toInt(),
-                                     query.value(4).toString());
-        }else
-        {
+                                         query.value(2).toTime(),
+                                         query.value(3).toInt(),
+                                         query.value(4).toString());
+        } else {
             qDebug() << "a bogus VideoSequence was created, which is necessary for unit and integration tests";
             sequence = new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 2, QString("dependencies/drone_stream.mpg"));
         }

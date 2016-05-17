@@ -50,7 +50,7 @@ void VideoSequenceDAO_Test::testSimpleVideoSequenceDAO()
 
     sd.dbSaveVideoSequence(droneID, searchID, s);
 
-    VideoSequence* sback = sd.dbRetrieveVideoSequence(droneID, searchID);
+    VideoSequence *sback = sd.dbRetrieveVideoSequence(droneID, searchID);
 
     QVERIFY(sback->getVideoID() == s->getVideoID());
     QVERIFY(s->getFrameCount() == sback->getFrameCount());

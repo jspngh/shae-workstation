@@ -31,7 +31,7 @@ void XMLWriter_Test::testSimpleDetectionResultXMLWriter()
     if (checkFile.exists())
         QFile::remove(fileName);
 
-    QList<DetectionResult*>* results = new QList<DetectionResult*>();
+    QList<DetectionResult *> *results = new QList<DetectionResult *>();
 
     results->push_front(new DetectionResult(QGeoCoordinate(5, 5), 5.5));
     results->push_front(new DetectionResult(QGeoCoordinate(6, 6), 6.6));
@@ -80,7 +80,7 @@ void XMLWriter_Test::testSimpleDetectionResultTXTWriter()
     if (checkFile.exists())
         QFile::remove(fileName);
 
-    QList<DetectionResult*>* results = new QList<DetectionResult*>();
+    QList<DetectionResult *> *results = new QList<DetectionResult *>();
 
     results->push_front(new DetectionResult(QGeoCoordinate(5, 5), 5.5));
     results->push_front(new DetectionResult(QGeoCoordinate(6, 6), 6.6));
@@ -95,16 +95,14 @@ void XMLWriter_Test::testSimpleDetectionResultTXTWriter()
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream in(&file);
-        while (!in.atEnd())
-        {
+        while (!in.atEnd()) {
             QString line = in.readLine();
             count++;
-            if(count > 6)
-            {
+            if (count > 6) {
                 QList<QString> doubles = line.split("\t\t");
                 expectedResults.push_back(DetectionResult(
-                                              QGeoCoordinate(doubles.at(1).toDouble(),doubles.at(2).toDouble())
-                                              ,doubles.at(0).toDouble()));
+                                              QGeoCoordinate(doubles.at(1).toDouble(), doubles.at(2).toDouble())
+                                              , doubles.at(0).toDouble()));
             }
         }
         file.close();

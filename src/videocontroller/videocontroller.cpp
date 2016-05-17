@@ -19,12 +19,12 @@ void VideoController::setSequencePath(QString sp)
 void VideoController::setMediator(Mediator *m)
 {
     this->mediator = m;
-    mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence*)), QString("streamStarted(QUuid, VideoSequence*)"));
+    mediator->addSignal(this, SIGNAL(streamStarted(QUuid, VideoSequence *)), QString("streamStarted(QUuid, VideoSequence*)"));
     mediator->addSignal(this, SIGNAL(streamStopped()), QString("streamStopped()"));
 }
 
 
-VideoSequence* VideoController::onStartStream(Drone *drone)
+VideoSequence *VideoController::onStartStream(Drone *drone)
 {
     // all the param steps are required, they can not be combined into one statement
     QString params1 = QString("--sout=file/ps:") + streamMpgLocation();
@@ -40,13 +40,13 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     if (drone->getStreamPath().contains(QString("rtp"))) {
         qDebug("started stream from rtp address");
         m = libvlc_media_new_location(inst, drone->getStreamPath().toStdString().c_str());
-    } else if(drone->getStreamPath().contains(QString("sdp"))) {
+    } else if (drone->getStreamPath().contains(QString("sdp"))) {
         qDebug("started stream from sdp file");
         m = libvlc_media_new_path(inst, streamSdpLocation().toStdString().c_str());
         bufferSize /= 2;
     } else {
         qDebug("started stream from video file");
-        VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
+        VideoSequence *sequence =  new VideoSequence(QUuid::createUuid(), QTime::currentTime(), QTime::currentTime(), 0, QString(drone->getStreamPath()));
         this->sequence_path = sequence->getPath();
         QThread::sleep(10);
         emit this->streamStarted(drone->getGuid(), sequence);
@@ -78,7 +78,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
     qDebug() << "Videocontroller: File has been created by vlc.";
     qDebug() << "Videocontroller: File has a size of " << size;
 
-    VideoSequence* sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, streamMpgLocation());
+    VideoSequence *sequence =  new VideoSequence(QUuid::createUuid(), startStreamTime, startStreamTime, 0, streamMpgLocation());
     this->sequence_path = sequence->getPath();
     emit this->streamStarted(drone->getGuid(), sequence);
     return sequence;
@@ -88,7 +88,7 @@ VideoSequence* VideoController::onStartStream(Drone *drone)
 void VideoController::onStopStream(Drone *drone)
 {
 
-    if(mp != nullptr){
+    if (mp != nullptr) {
         /* Stop playing */
         libvlc_media_player_stop(mp);
 
@@ -96,7 +96,7 @@ void VideoController::onStopStream(Drone *drone)
         libvlc_media_player_release(mp);
     }
 
-    if(inst != nullptr){
+    if (inst != nullptr) {
         libvlc_release(inst);
 
         libvlc_release(inst);

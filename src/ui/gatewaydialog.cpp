@@ -13,7 +13,7 @@ GatewayDialog::~GatewayDialog()
     delete ui;
 }
 
-QDialogButtonBox* GatewayDialog::getButtonBox()
+QDialogButtonBox *GatewayDialog::getButtonBox()
 {
     return ui->buttonBox;
 }

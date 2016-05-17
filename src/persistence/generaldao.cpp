@@ -5,7 +5,7 @@ GeneralDAO::GeneralDAO()
 
 }
 
-QList<QGeoCoordinate>* GeneralDAO::uncypherPathString(QString pathString)
+QList<QGeoCoordinate> *GeneralDAO::uncypherPathString(QString pathString)
 {
     QList<QGeoCoordinate> *returnList = new QList<QGeoCoordinate>();
     QList<QString> coordinates = pathString.split(":");

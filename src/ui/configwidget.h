@@ -70,9 +70,9 @@ private slots:
     //! When an area is selected, this slot is called. It will set the boolean areaWasSelected to true.
     void areaSelected();
     //! a slot that will listen to incoming DroneStatuses and then update the dronetable
-    void updateDroneTable(DroneStatus* s);
+    void updateDroneTable(DroneStatus *s);
     //! updates the map center
-    void updateMapCenter(DroneStatus* s);
+    void updateMapCenter(DroneStatus *s);
     //! this function will reconfigure the configWidget once a user has configured a search and has pressed start
     void onStartSearch(Search *search);
     //! will query all the connected drones for their latest statuses

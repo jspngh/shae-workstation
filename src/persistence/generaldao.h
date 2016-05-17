@@ -18,7 +18,7 @@ public:
     /**
      * \brief UncypherPathString: Method for decyphering a path string.
      */
-    QList<QGeoCoordinate>* uncypherPathString(QString pathString);
+    QList<QGeoCoordinate> *uncypherPathString(QString pathString);
 };
 
 #endif // GENERALDAO_H
