@@ -24,6 +24,7 @@ void DroneHeartbeat_IntegrationTest::initTestCase()
     }
 
     drone = (*(controller->getDrones()))[0];
+    drone->initHeartbeat();
     m = controller->getMediator();
 }
 
@@ -39,6 +40,16 @@ void DroneHeartbeat_IntegrationTest::cleanupTestCase()
 
 void DroneHeartbeat_IntegrationTest::testReceiveHeartbeat()
 {
+    QList<QGeoCoordinate> *list = new QList<QGeoCoordinate>();
+    list->append(drone->getLastReceivedDroneStatus().getCurrentLocation());
+    list->append(drone->getLastReceivedDroneStatus().getCurrentLocation());
+    list->append(drone->getLastReceivedDroneStatus().getCurrentLocation());
+    drone->setWaypoints(list);
+    drone->sendWaypoints();
+    drone->startFlight();
+    qDebug() << "drone is flying...";
+    QTest::qWait(15000);
+
     DroneHeartBeatReceiver *receiver = drone->getHeartbeatReceiver();
     connect(receiver, SIGNAL(droneHeartBeat(QString)), this, SLOT(onDroneHeartbeatReceived(QString)));
 

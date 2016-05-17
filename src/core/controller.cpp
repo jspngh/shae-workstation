@@ -43,7 +43,7 @@ Controller::~Controller()
     drones->clear();
 
     // delete persistenceController;
-    delete pathLogicController;
+    // delete pathLogicController;
 }
 
 void Controller::init()

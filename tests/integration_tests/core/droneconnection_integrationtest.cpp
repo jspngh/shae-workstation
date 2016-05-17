@@ -25,6 +25,7 @@ void Droneconnection_IntegrationTest::initTestCase()
     }
 
     drone = (*(controller->getDrones()))[0];
+    drone->initHeartbeat();
     m = controller->getMediator();
 }
 
